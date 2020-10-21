@@ -128,7 +128,8 @@ export default {
     email: 'Email | Emails',
     phone: 'Phone | Phones',
     birthday: 'Birthday',
-    text : 'Text | Texts'
+    text : 'Text | Texts',
+    value: 'Value | Values',
   },
   message: {
     notFound: 'Sorry, nothing here',

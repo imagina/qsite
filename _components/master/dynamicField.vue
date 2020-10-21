@@ -23,6 +23,14 @@
             :type="field.props.crudType || 'select'" ref="crudComponent"
             v-if="loadField('crud') || (field.props && field.props.crudData)"
             :class="`q-mb-xs ${(field.props && field.props.crudType == 'button-create') ? 'absolute-right' : ''}`"/>
+      <!--Text with Options-->
+      <text-with-options
+          v-if="loadField('textWithOptions')"
+          class="q-my-sm"
+          v-model="responseValue"
+          :label="fieldLabel"
+          :options="options || {}"
+      />
       <!--Input-->
       <q-input v-model="responseValue" @keyup.enter="$emit('enter')" v-if="loadField('input')"
                :label="fieldLabel" v-bind="fieldProps">
@@ -135,6 +143,11 @@
                v-bind="fieldProps.fieldComponent">
         <media v-model="responseValue" class="bg-white" v-bind="fieldProps.field"/>
       </q-field>
+      <!--Signature-->
+      <q-field v-model="responseValue" v-if="loadField('signature')" class="field-image" label=""
+               v-bind="fieldProps.fieldComponent">
+        <signaturePad v-model="responseValue"/>
+      </q-field>
       <!--Manage Permission-->
       <manage-permissions v-model="responseValue" class="q-mb-sm" v-if="loadField('permissions')"
                           @input="watchValue" :allow-inherit="field.allowInherit ? true : false"/>
@@ -169,6 +182,8 @@
   import uploadImage from '@imagina/qsite/_components/master/uploadImage'
   import schedulesForm from '@imagina/qsite/_components/master/schedules'
   import ckEditor from '@imagina/qsite/_components/master/ckEditor'
+  import signaturePad from '@imagina/qsite/_components/customFields/signaturePad'
+  import textWithOptions from "@imagina/qsite/_components/customFields/textWithOptions";
 
   export default {
     name: 'dynamicField',
@@ -192,7 +207,9 @@
       media,
       uploadImage,
       schedulesForm,
-      ckEditor
+      ckEditor,
+      signaturePad,
+      textWithOptions,
     },
     watch: {
       value: {
@@ -281,7 +298,7 @@
 
         //Case per type field
         switch (this.field.type) {
-          case'crud':
+          case'crud': case 'textWithOptions':
             props = {...props}
             break;
           case'input':
@@ -572,7 +589,7 @@
           this.listenEventCrud()//config dynamic component
           this.success = true//sucess
           //Set options if is type select
-          if (['treeSelect', 'select', 'multiSelect'].indexOf(this.field.type) != -1) {
+          if (['treeSelect', 'select', 'multiSelect', 'textWithOptions'].indexOf(this.field.type) != -1) {
             if (this.field.loadOptions) {
               await this.getOptions()
             }//Get options
@@ -619,7 +636,7 @@
           case 'checkbox':
             this.responseValue = propValue || false
             break
-          case 'media':
+          case 'media': case 'textWithOptions':
             this.responseValue = propValue || {}
             break
           case 'permissions':
@@ -755,7 +772,6 @@
         if (field.permission && !this.$auth.hasAccess(field.permission)) response = false
         //Validate vIf prop
         if (response && field.props && (field.props.vIf != undefined)) response = field.props.vIf
-
         //Response
         return response
       },

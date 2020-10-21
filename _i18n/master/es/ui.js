@@ -132,7 +132,8 @@ export default {
     accept: 'Aceptar',
     reject: 'Rechazar',
     rejected: 'Rechazado',
-    text: 'Texto | Textos'
+    text: 'Texto | Textos',
+    value: 'Valor | Valores',
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
