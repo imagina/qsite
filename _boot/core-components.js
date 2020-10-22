@@ -1,5 +1,5 @@
 import treeSelect from '@riophae/vue-treeselect'
-import signaturePad from 'vue-signature-pad'
+import VueSignaturePad from 'vue-signature-pad'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import crud from '@imagina/qcrud/_components/crud'
 import innerLoading from '@imagina/qsite/_components/master/innerLoading'
@@ -30,7 +30,7 @@ export default ({app, router, store, Vue}) => {
     {name: 'header-app', component: headerToApp},
     {name: 'sub-header', component: subHeader},
     {name: 'share-link', component: shareLink},
-    {name: 'signature-pad', component: signaturePad},
+    {name: 'vue-signature-pad', component: VueSignaturePad},
   ]
 
   //Register components

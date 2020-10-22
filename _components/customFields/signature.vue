@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="row">
       <div class="rounded-borders shadow-1 col-12">
-        <signature-pad
+        <VueSignaturePad
             ref="signature"
             :options="options"
         />
@@ -27,7 +27,7 @@
 <script>
     import { colors } from 'quasar'
     export default {
-      name: 'signaturePad',
+      name: 'signature',
       props: {
         value: null,
       },

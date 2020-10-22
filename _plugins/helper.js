@@ -64,6 +64,13 @@ class Helper {
     return str;
   }
 
+  convertStringToCamelCase(str) {
+    return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, function(match, chr)
+    {
+      return chr.toUpperCase();
+    });
+  }
+
   //Return range date
   rangeDate(type) {
     type ? true : type = 'today'
