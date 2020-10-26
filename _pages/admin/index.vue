@@ -5,23 +5,28 @@
     <!--Content-->
     <div class="row q-col-gutter-md" v-else>
       <!--Menu settings-->
-      <div class="col-12 col-md-3">
-        <div class="box">
+      <div id="menuContent" class="col-12 col-md-3">
+        <div class="box" style="padding: 15px 0 !important;">
           <!--Title-->
-          <div class="text-primary text-subtitle1 row items-center q-mb-sm">
+          <div class="text-primary text-subtitle1 row items-center q-mb-sm q-px-md">
             <q-icon name="fas fa-boxes" class="q-mr-sm"/>
             {{$trp('ui.label.module')}}
           </div>
           <!--List Modules-->
           <q-list separator>
-            <q-item v-for="(module, key) in dataSettings" :key="key" clickable v-ripple dense
-                    @click.native="moduleSelected = key" :active="moduleSelected == key"
-                    active-class="bg-primary text-white" class="q-pl-sm q-pr-md">
-              <q-item-section>{{key}}</q-item-section>
-              <q-item-section side :class="(moduleSelected == key) ? 'text-white' : 'text-grey-8'">
-                {{Object.keys(module).length}}
-              </q-item-section>
-            </q-item>
+            <q-expansion-item v-for="(item, moduleName) in settingsGroup" :key="moduleName" expand-separator
+                              :label="moduleName" header-style="min-height: 38px" group="menuSettings"
+                              :header-class="`q-pr-sm q-pl-md ${moduleSelected == moduleName ? 'q-item--active' : ''}`">
+              <q-list separator class="q-pl-md">
+                <q-item v-for="(group, groupName) in settingsGroup[moduleName]" :key="groupName" clickable v-ripple
+                        :active="groupSelected == groupName && moduleSelected == moduleName" class="q-pl-sm q-pr-md"
+                        @click.native="moduleSelected = moduleName, groupSelected = groupName, setLocaleConfig()"
+                        dense v-if="Object.keys(group).length">
+                  <q-item-section>{{groupName}}</q-item-section>
+                  <q-item-section side> {{Object.keys(group).length}}</q-item-section>
+                </q-item>
+              </q-list>
+            </q-expansion-item>
           </q-list>
         </div>
       </div>
@@ -31,21 +36,42 @@
           <!--Title-->
           <div class="text-primary text-subtitle1 row items-center q-mb-sm">
             <q-icon name="fas fa-cog" class="q-mr-sm"/>
-            {{moduleSelected || ''}}
+            {{moduleSelected || ''}} - {{groupSelected || ''}}
           </div>
           <!--Language-->
-          <locales v-model="locale" class="q-mb-md"
+          <locales v-model="locale" class="q-mb-md" ref="localesComponent"
                    v-show="locale.fieldsTranslatable && Object.keys(locale.fieldsTranslatable).length"/>
           <!--Fields content-->
-          <div class="row full-width q-mb-md" v-if="locale.success">
-            <div v-for="(field, key) in dataSettings[moduleSelected]" :key="key" :ref="key" class="col-12 q-mb-sm">
+          <div class="row full-width q-mb-md q-col-gutter-sm" v-if="locale.success && settingsGroup[moduleSelected]">
+            <div v-for="(field, key) in settingsGroup[moduleSelected][groupSelected]" :key="key" :ref="key"
+                 :class="field.columns || 'col-12'">
               <!--Dynamic field-->
-              <dynamic-field v-if="!field.fakeFieldName" :field="field" :item-id="getSettingId(field,key)"
-                             v-model="locale.formTemplate[field.name || key]" :language="locale.language"/>
+              <dynamic-field v-if="!field.fakeFieldName && !field.children" :field="field" :language="locale.language"
+                             :item-id="getSettingId(field,key)" v-model="locale.formTemplate[field.name || key]"/>
               <!--Dynamic fake field-->
-              <dynamic-field v-else-if="locale.formTemplate[field.fakeFieldName]"
+              <dynamic-field v-else-if="field.fakeFieldName"
                              :language="locale.language" :field="field" :item-id="getSettingId(field,key)"
                              v-model="locale.formTemplate[field.fakeFieldName][field.name || key]"/>
+              <!--Dynamic Children fields-->
+              <div v-else-if="field.children">
+                <!--Title-->
+                <div class="text-grey-8">{{field.label}}</div>
+                <!---Child fields-->
+                <div class="row full-width">
+                  <div v-for="(chieldField, childKey) in field.children" :key="childKey" :ref="childKey"
+                       :class="chieldField.columns || 'col-12'">
+                    <!--Dynamic field-->
+                    <dynamic-field v-if="!chieldField.fakeFieldName" :field="chieldField"
+                                   :language="locale.language" :item-id="getSettingId(field,key)"
+                                   v-model="locale.formTemplate[field.name || key][chieldField.name || childKey]"/>
+                    <!--Dynamic fake field-->
+                    <dynamic-field
+                      v-else-if="chieldField.fakeFieldName"
+                      :language="locale.language" :field="chieldField" :item-id="getSettingId(field,key)"
+                      v-model="locale.formTemplate[field.name || key][chieldField.fakeFieldName][chieldField.name || childKey]"/>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <!--Actions-->
@@ -68,11 +94,7 @@
     },
     props: {},
     components: {},
-    watch: {
-      moduleSelected(newValue) {
-        if (newValue) this.setLocaleConfig()
-      }
-    },
+    watch: {},
     mounted() {
       this.$nextTick(function () {
         this.init()
@@ -83,46 +105,26 @@
         loading: false,
         locale: {fields: {}, fieldsTranslatable: {}},
         dataSettings: false,
-        moduleSelected: false
+        moduleSelected: false,
+        groupSelected: false
       }
     },
     computed: {
-      //Return current settings values
-      settingsValuesToLocale() {
-        let response = {}//Default response
-        let selectedLocales = this.$clone(this.$store.state.qsiteApp.selectedLocales)//Get selected locales
-        selectedLocales.forEach(item => response[item] = {})//set locales to response
-        let settingValues = this.$clone(this.$store.state.qsiteApp.settings)//Get all setting values
-        let fields = this.$clone(Object.values(this.dataSettings[this.moduleSelected]))//Get current fields
+      //Return settings group
+      settingsGroup() {
+        let settings = this.$clone(this.dataSettings)
+        let response = {} //Default response
 
-        //Set values to response
-        fields.forEach(field => {
-          //Get setting value
-          let settingValue = settingValues.find(item => {
-            if (field.fakeFieldName && (item.name == field.fakeFieldName)) return item
-            if (item.name == field.name) return item
+        //Group fields
+        Object.keys(settings).forEach(moduleName => {
+          response[moduleName] = {General: {}}//Default module
+          Object.keys(settings[moduleName]).forEach(fieldName => {
+            let field = settings[moduleName][fieldName]//Get field
+            //Create group fields
+            if (!response[moduleName][field.group || 'General']) response[moduleName][field.group || 'General'] = {}
+            //Add field
+            response[moduleName][field.group || 'General'][fieldName] = field
           })
-
-          //Set translatable value
-          if (field.isTranslatable) {
-            selectedLocales.forEach(lang => {
-              //Search translatables values
-              let langValue = settingValue ? settingValue.translations.find(item => item.locale == lang) : false
-              //Set value per locale
-              response[lang][field.name] = langValue ? langValue.value : field.value
-            })
-          } else {//Set no translatable value
-            if (field.fakeFieldName) {
-              //Define response
-              if (!response[field.fakeFieldName]) response[field.fakeFieldName] = {}
-              //Set value
-              if (settingValue && settingValue.value && settingValue.value[field.name])
-                response[field.fakeFieldName][field.name] = settingValue.value[field.name]
-              else response[field.fakeFieldName][field.name] = field.value
-            } else {
-              response[field.name] = settingValue ? settingValue.value : field.value
-            }
-          }
         })
 
         //Response
@@ -142,8 +144,12 @@
           this.$store.dispatch('qsiteApp/GET_SITE_SETTINGS'),//Get settings
           this.getSettingFields()//Get setting fields
         ])
-        //Set module selected
-        if (!this.moduleSelected && this.dataSettings) this.moduleSelected = Object.keys(this.dataSettings)[0]
+        //Set Default selected
+        if (!this.moduleSelected && this.dataSettings) {
+          this.moduleSelected = Object.keys(this.settingsGroup)[0]//Set module selected
+          //Set group selected
+          if (!this.groupSelected) this.groupSelected = Object.keys(this.settingsGroup[this.moduleSelected])[0]
+        }
         this.$store.dispatch('qsiteApp/SET_SITE_COLORS')//Set colors
         this.setLocaleConfig()//Set locale data
         this.loading = false
@@ -167,32 +173,78 @@
           })
         })
       },
-      //Set locale config
+      //Set locale configuration
       setLocaleConfig() {
-        let fieldLocale = {fields: {}, fieldsTranslatable: {}}
+        let formData = {}//Default form data
+        let fieldLocale = {fields: {}, fieldsTranslatable: {}}//Default field locale
+        let settingValues = this.$clone(this.$store.state.qsiteApp.settings)//Get all setting values
+        let selectedLocales = this.$clone(this.$store.state.qsiteApp.selectedLocales)//Get selected locales
+        selectedLocales.forEach(item => formData[item] = {})//set locales to formData
+        this.$refs.localesComponent.vReset()//Reset locale component
+
         //Set field to locale
         if (this.moduleSelected) {
-          let fields = this.$clone(this.dataSettings[this.moduleSelected])//Get fields
-          //Set fields
-          Object.keys(fields).forEach(itemName => {
-            let field = fields[itemName]//Get field data
-            //Set translatables fields
-            if (field.isTranslatable) {
-              fieldLocale.fieldsTranslatable[field.name] = field.value
-            } else {//SEt plain fields
-              //Set fake fields
-              if (field.fakeFieldName) {
-                if (!fieldLocale.fields[field.fakeFieldName]) fieldLocale.fields[field.fakeFieldName] = {}
-                fieldLocale.fields[field.fakeFieldName][field.name] = {}
+          //Get fields
+          let fields = this.$clone(this.settingsGroup[this.moduleSelected][this.groupSelected])
+          //Order fields
+          Object.values(fields).forEach(field => {
+            //Get setting value
+            let settingValue = settingValues.find(item => item.name == (field.fakeFieldName || field.name))
+
+            if (field.isTranslatable) {//Set translatables fields
+              fieldLocale.fieldsTranslatable[field.name] = field.value//Set translatable field
+              //Set translatables values to formData
+              selectedLocales.forEach(lang => {
+                let langValue = settingValue ? settingValue.translations.find(item => item.locale == lang) : false
+                formData[lang][field.name] = langValue ? langValue.value : field.value//Set value per locale
+              })
+            } else {//Set plain fields
+              if (field.fakeFieldName || field.children) {//Set fake fields
+                let fakeFieldName = field.fakeFieldName || field.name
+                if (!fieldLocale.fields[fakeFieldName]) fieldLocale.fields[fakeFieldName] = {}//Create fake field
+                if (!formData[fakeFieldName]) formData[fakeFieldName] = {}//Create child fake field in formData
+                //Add child fake field
+                if (field.children) {
+                  Object.values(field.children).forEach(childField => {
+                    let childSettingValue = settingValue ? settingValue.value : null
+                    // add child fake field
+                    if (childField.fakeFieldName) {
+                      let childFakeField = childField.fakeFieldName
+                      //Create child fake field if not exist
+                      if (!fieldLocale.fields[fakeFieldName][childFakeField])
+                        fieldLocale.fields[fakeFieldName][childFakeField] = {}
+                      //Create child fake field in form data
+                      if (!formData[fakeFieldName][childFakeField]) formData[fakeFieldName][childFakeField] = {}
+                      //Set child field value
+                      fieldLocale.fields[fakeFieldName][childFakeField][childField.name] = childField.value
+                      //Set child field value to form data
+                      formData[fakeFieldName][childFakeField][childField.name] = (!childField.type || !childSettingValue) ? childField.value :
+                        ((childSettingValue && childSettingValue[childFakeField]) ?
+                          childSettingValue[childFakeField][childField.name] : childField.value)
+                    } else {//Add field
+                      fieldLocale.fields[fakeFieldName][childField.name] = childField.value//Set child fake field
+                      //Set child fake field value to formData
+                      formData[fakeFieldName][childField.name] = (!childField.type || !childSettingValue) ? childField.value :
+                        (childSettingValue[childField.name] || childField.value)
+                    }
+                  })
+                } else {
+                  fieldLocale.fields[fakeFieldName][field.name] = field.value//Set fake field
+                  //Set fake field value to formData
+                  formData[fakeFieldName][field.name] = !field.type ? field.value :
+                    (settingValue ? (settingValue.value[field.name] || field.value) : field.value)
+                }
               } else {//Set plain field
-                fieldLocale.fields[field.name] = field.value
+                fieldLocale.fields[field.name] = field.value//Set plain field
+                //Set field value to formData
+                formData[field.name] = !field.type ? field.value : (settingValue ? settingValue.value : field.value)
               }
             }
           })
         }
 
         //Set data
-        this.locale.form = this.$clone(this.settingsValuesToLocale)
+        this.locale.form = this.$clone(formData)
         this.locale.fields = this.$clone(fieldLocale.fields)
         this.locale.fieldsTranslatable = this.$clone(fieldLocale.fieldsTranslatable)
       },
@@ -242,4 +294,14 @@
   }
 </script>
 <style lang="stylus">
+  #settingPage
+    .q-item
+      font-size 14px
+      color $grey-9
+
+      &.q-item--active
+        color $primary
+
+        .q-icon
+          color $primary
 </style>

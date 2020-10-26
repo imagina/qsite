@@ -1,9 +1,5 @@
 <template>
   <div id="settingIndex">
-    <div class="col-12 q-mb-lg">
-      <new-index />
-    </div>
-
     <q-no-ssr>
       <div class="col-12 backend-page relative-position">
         <div class="row q-col-gutter-x-sm">
@@ -58,7 +54,6 @@
 
   /*Components*/
   import siteForm from '@imagina/qsite/_components/form'
-  import newIndex from '@imagina/qsite/_pages/admin/newIndex'
 
 
   export default {
@@ -67,8 +62,7 @@
     },
     props: {},
     components: {
-      siteForm,
-      newIndex
+      siteForm
     },
     watch: {},
     mounted() {
