@@ -23,14 +23,6 @@
             :type="field.props.crudType || 'select'" ref="crudComponent"
             v-if="loadField('crud') || (field.props && field.props.crudData)"
             :class="`q-mb-xs ${(field.props && field.props.crudType == 'button-create') ? 'absolute-right' : ''}`"/>
-      <!--Text with Options-->
-      <text-with-options
-          v-if="loadField('textWithOptions')"
-          class="q-my-sm"
-          v-model="responseValue"
-          :label="fieldLabel"
-          :options="options || {}"
-      />
       <!--Input-->
       <q-input v-model="responseValue" @keyup.enter="$emit('enter')" v-if="loadField('input')"
                :label="fieldLabel" v-bind="fieldProps">
@@ -169,6 +161,14 @@
       <q-field v-model="responseValue" v-if="loadField('signature')" v-bind="fieldProps.fieldComponent" borderless>
         <signature v-model="responseValue"/>
       </q-field>
+      <!--Text with Options-->
+      <text-with-options
+          v-if="loadField('textWithOptions')"
+          class="q-my-sm"
+          v-model="responseValue"
+          :label="fieldLabel"
+          :options="options || {}"
+      />
     </div>
   </div>
 </template>
