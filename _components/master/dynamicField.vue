@@ -157,6 +157,11 @@
       </q-input>
       <!--Toogle-->
       <q-toggle v-model="responseValue" :label="fieldLabel" v-if="loadField('toggle')" v-bind="fieldProps.field"/>
+      <!--position Marker (MAP)-->
+      <q-field v-model="responseValue" v-if="loadField('positionMarkerMap')" label="" class="field-no-padding no-border"
+               v-bind="fieldProps.fieldComponent">
+        <map-leaflet v-model="responseValue" type="positionMarkerMap" v-bind="fieldProps.field"/>
+      </q-field>
       <!--Signature-->
       <q-field v-model="responseValue" v-if="loadField('signature')" v-bind="fieldProps.fieldComponent" borderless>
         <signature v-model="responseValue"/>
@@ -173,112 +178,114 @@
   </div>
 </template>
 <script>
-//Component
-import recursiveSelect from '@imagina/qsite/_components/master/recursiveListSelect'
-import managePermissions from '@imagina/qsite/_components/master/managePermissions'
-import manageSettings from '@imagina/qsite/_components/master/manageSettings'
-import media from '@imagina/qmedia/_components/form'
-import uploadImage from '@imagina/qsite/_components/master/uploadImage'
-import schedulesForm from '@imagina/qsite/_components/master/schedules'
-import ckEditor from '@imagina/qsite/_components/master/ckEditor'
-import signature from '@imagina/qsite/_components/customFields/signature'
-import textWithOptions from "@imagina/qsite/_components/customFields/textWithOptions";
+  //Component
+  import recursiveSelect from '@imagina/qsite/_components/master/recursiveListSelect'
+  import managePermissions from '@imagina/qsite/_components/master/managePermissions'
+  import manageSettings from '@imagina/qsite/_components/master/manageSettings'
+  import media from '@imagina/qmedia/_components/form'
+  import uploadImage from '@imagina/qsite/_components/master/uploadImage'
+  import schedulesForm from '@imagina/qsite/_components/master/schedules'
+  import ckEditor from '@imagina/qsite/_components/master/ckEditor'
+  import mapLeaflet from '@imagina/qsite/_components/master/mapLeaflet'
+  import signature from '@imagina/qsite/_components/customFields/signature'
+  import textWithOptions from "@imagina/qsite/_components/customFields/textWithOptions";
 
-export default {
-  name: 'dynamicField',
-  beforeDestroy() {
-    //Close listen event
-    if (this.$refs.crudComponent) {
-      this.$root.$off(`crudForm${this.$refs.crudComponent.params.apiRoute}Created`)
-    }
-  },
-  props: {
-    value: {default: null},
-    field: {default: false},
-    language: {default: false},
-    itemId: {default: ''},
-    readOnly: {type: Boolean, default: false}
-  },
-  components: {
-    managePermissions,
-    manageSettings,
-    recursiveSelect,
-    media,
-    uploadImage,
-    schedulesForm,
-    ckEditor,
-    signature,
-    textWithOptions,
-  },
-  watch: {
-    value: {
-      deep: true,
-      handler: function (newValue, oldValue) {
-        if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
-          this.setDefaultVModel(newValue)//Order Value
+  export default {
+    name: 'dynamicField',
+    beforeDestroy() {
+      //Close listen event
+      if (this.$refs.crudComponent) {
+        this.$root.$off(`crudForm${this.$refs.crudComponent.params.apiRoute}Created`)
+      }
+    },
+    props: {
+      value: {default: null},
+      field: {default: false},
+      language: {default: false},
+      itemId: {default: ''},
+      readOnly: {type: Boolean, default: false}
+    },
+    components: {
+      managePermissions,
+      manageSettings,
+      recursiveSelect,
+      media,
+      uploadImage,
+      schedulesForm,
+      ckEditor,
+      signature,
+      textWithOptions,
+      mapLeaflet,
+    },
+    watch: {
+      value: {
+        deep: true,
+        handler: function (newValue, oldValue) {
+          if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
+            this.setDefaultVModel(newValue)//Order Value
+          }
+        }
+      },
+      responseValue(newValue, oldValue) {
+        this.watchValue(newValue)
+      },
+      rootOptions(newValue) {
+        this.options = this.rootOptions
+      },
+      'field.props.options'(newValue, oldValue) {
+        if (JSON.stringify(newValue) != JSON.stringify(oldValue))
+          if (typeof newValue == 'object') this.rootOptions = newValue
+      },
+      'field.loadOptions': {
+        deep: true,
+        handler: function (newValue, oldValue) {
+          if (JSON.stringify(newValue) != JSON.stringify(oldValue))
+            this.getOptions()
         }
       }
     },
-    responseValue(newValue, oldValue) {
-      this.watchValue(newValue)
+    mounted() {
+      this.$nextTick(function () {
+        this.init()
+      })
     },
-    rootOptions(newValue) {
-      this.options = this.rootOptions
-    },
-    'field.props.options'(newValue, oldValue) {
-      if (JSON.stringify(newValue) != JSON.stringify(oldValue))
-        if (typeof newValue == 'object') this.rootOptions = newValue
-    },
-    'field.loadOptions': {
-      deep: true,
-      handler: function (newValue, oldValue) {
-        if (JSON.stringify(newValue) != JSON.stringify(oldValue))
-          this.getOptions()
+    data() {
+      return {
+        success: false,//global component status
+        loading: false,
+        responseValue: null,//value to response
+        options: [],//Options
+        rootOptions: [],//Options
+        rootOptionsData: [],//Options
+        editorText: {
+          toolbar: [
+            ['bold', 'italic', 'strike', 'underline', 'removeFormat'],
+            ['link'],
+            [
+              {
+                label: 'Font Size',
+                icon: 'format_size',
+                fixedLabel: true,
+                fixedIcon: true,
+                list: 'no-icons',
+                options: ['size-1', 'size-2', 'size-3', 'size-4', 'size-5', 'size-6', 'size-7']
+              }
+            ],
+            ['quote', 'unordered', 'ordered'],
+            ['fullscreen']
+          ]
+        }
       }
-    }
-  },
-  mounted() {
-    this.$nextTick(function () {
-      this.init()
-    })
-  },
-  data() {
-    return {
-      success: false,//global component status
-      loading: false,
-      responseValue: null,//value to response
-      options: [],//Options
-      rootOptions: [],//Options
-      rootOptionsData: [],//Options
-      editorText: {
-        toolbar: [
-          ['bold', 'italic', 'strike', 'underline', 'removeFormat'],
-          ['link'],
-          [
-            {
-              label: 'Font Size',
-              icon: 'format_size',
-              fixedLabel: true,
-              fixedIcon: true,
-              list: 'no-icons',
-              options: ['size-1', 'size-2', 'size-3', 'size-4', 'size-5', 'size-6', 'size-7']
-            }
-          ],
-          ['quote', 'unordered', 'ordered'],
-          ['fullscreen']
-        ]
-      }
-    }
-  },
-  computed: {
-    //Return label to field
-    fieldLabel() {
-      let response = ''
-      if (this.field.props && this.field.props.label) {
-        response = this.field.props.label
-        if (this.field.isTranslatable) response = `${response} (${this.language})`
-      } else if (this.field.type == 'search')
-        return `${this.$tr('ui.label.search', {capitalize: true})}`
+    },
+    computed: {
+      //Return label to field
+      fieldLabel() {
+        let response = ''
+        if (this.field.props && this.field.props.label) {
+          response = this.field.props.label
+          if (this.field.isTranslatable) response = `${response} (${this.language})`
+        } else if (this.field.type == 'search')
+          return `${this.$tr('ui.label.search', {capitalize: true})}`
 
       //Set tree data
       if (this.field.type == 'treeSelect' && this.responseValue && !Array.isArray(this.responseValue)) {
@@ -308,548 +315,566 @@ export default {
             ...props
           }
 
-          //Add rule to validate field
-          if (this.field.validateField && this.field.validateField.apiRoute) {
-            if (!props.debounce) props.debounce = '800' //Add debounce
-            props.rules = [...(props.rules || []), this.validateField]//Add rule to validate field
-          }
-          break;
-        case'search':
-          props = {
-            bgColor: 'white',
-            debounce: '800',
-            outlined: true,
-            dense: true,
-            clearable: true,
-            label: this.fieldLabel,
-            ...props
-          }
-          break;
-        case'date':
-          props = {
-            field: {
-              bgColor: 'white',
-              color: 'primary',
-              outlined: true,
-              dense: true,
-              readonly: true,
-              //...props
-            },
-            slot: {
-              ...props
+            //Add rule to validate field
+            if (this.field.validateField && this.field.validateField.apiRoute) {
+              if (!props.debounce) props.debounce = '800' //Add debounce
+              props.rules = [...(props.rules || []), this.validateField]//Add rule to validate field
             }
-          }
-          break;
-        case'hour':
-          props = {
-            field: {
-              bgColor: 'white',
-              color: 'primary',
-              outlined: true,
-              dense: true,
-              readonly: true,
-              ...props
-            },
-            slot: {
-              ...props
-            }
-          }
-          break;
-        case'select':
-          props = {
-            emitValue: true,
-            mapOptions: true,
-            outlined: true,
-            dense: true,
-            bgColor: 'white',
-            style: 'width: 100%',
-            behavior: "menu",
-            ...props
-          }
-          props.loading = props.loading || this.loading
-          break;
-        case'treeSelect':
-          props = {
-            field: {
-              appendToBody: true,
-              sortValueBy: 'INDEX',
-              ...props
-            },
-            fieldComponent: {
-              outlined: true,
-              dense: true,
-              ...props
-            }
-          }
-          break;
-        case'html':
-          props = {
-            field: {
-              toolbar: this.editorText.toolbar,
-              contentClass: 'text-grey-9',
-              toolbarTextColor: 'grey-9',
-              ...props
-            },
-            fieldComponent: {
-              outlined: true,
-              dense: true,
-              ...props
-            }
-          }
-          break;
-        case'multiSelect':
-          props = {
-            field: {
-              ...props
-            },
-            fieldComponent: {
-              outlined: true,
-              dense: true,
-              ...props
-            }
-          }
-          break;
-        case'checkbox':
-          props = {
-            field: {
-              ...props
-            }
-          }
-          break;
-        case'image':
-          props = {
-            field: {
-              ...props
-            },
-            fieldComponent: {
-              outlined: true,
-              dense: true,
-              ...props
-            }
-          }
-          break;
-        case'media':
-          props = {
-            field: {
-              multiple: (this.field.props.zone == 'gallery') ? true : false,
-              ...props,
-              entityId: this.$clone(this.itemId)
-            },
-            fieldComponent: {
-              borderless: true,
-              dense: true,
-              ...props
-            }
-          }
-          break;
-        case'permissions':
-          props = {
-            ...props
-          }
-          break;
-        case'settings':
-          props = {
-            ...props
-          }
-          break;
-        case'inputColor':
-          props = {
-            field: {
-              bgColor: 'white',
-              color: 'primary',
-              outlined: true,
-              dense: true,
-              readonly: true,
-              ...props
-            },
-            slot: {
-              ...props
-            }
-          }
-          break;
-        case'toggle':
-          props = {
-            field: {
-              falseValue: "0",
-              trueValue: "1",
-              ...props
-            },
-          }
-          break;
-        case'signature':
-          props = {
-            ...props
-          }
-          break;
-        case'textWithOptions':
-          props = {
-            ...props
-          }
-          break;
-      }
-
-      //Response
-      return props
-    },
-    //Return format of datetime
-    formatDateTime() {
-      let response = ''
-
-      if (this.field.type == 'date') response = 'MMM DD, YYYY'
-      if (this.field.type == 'time') response = 'HH:mm a'
-      if (this.field.type == 'datetime') response = 'MMM DD, YYYY - HH:mm a'
-
-      return response
-    },
-    //Convert value of options to string
-    formatOptions() {
-      //Convert value/id to string
-      const toString = (items) => {
-        items.forEach(item => {
-          //Convert value and id to string
-          if (item.value || item.value >= 0) item.value = item.value.toString()
-          if (item.id || item.id >= 0) item.id = item.id.toString()
-          //convert children
-          if (item.children) item.children = toString(item.children)
-        })
-        //response
-        return items
-      }
-
-      //response
-      return toString(this.$clone(this.options))
-    },
-    //Return info fields readOnly
-    infoReadOnly() {
-      let currenResponse = this.$clone(this.responseValue)
-      let response = currenResponse
-
-      //Function to get value from select
-      let valueFromSelect = () => {
-        if (currenResponse && (typeof currenResponse == 'object')) {
-          response = []
-          currenResponse.forEach(itemValue => {
-            let value = this.formatOptions.find(item => item.value == itemValue)
-            if (value && value.label) response.push(value.label)
-          })
-          response = response.length ? response.join(', ') : false
-        } else {
-          response = this.formatOptions.find(item => item.value == response)
-          response ? response = response.label : false
-        }
-      }
-
-      //Swith type response
-      switch (this.field.type) {
-        case 'select':
-          valueFromSelect()
-          break;
-        case 'treeSelect':
-          valueFromSelect()
-          break;
-        case 'date':
-          response = response ? this.$trd(response) : false
-          break;
-        case 'hour':
-          response = response ? this.$trd(response, {type: 'time'}) : false
-          break;
-      }
-
-      return response//Response
-    },
-    //Crud info
-    crudInfo() {
-      //Default response
-      let response = {}
-
-      //Get crud info
-      if (this.field.validateField && this.field.validateField.crudId)
-        response = this.$store.state.qcrudComponent.component[this.field.validateField.crudId] || {}
-
-      //Response
-      return response
-    },
-    //Custom value to response value
-    customValue: {
-      get() {
-        let response = ''//Defualt response
-        let currentValue = this.$clone(this.responseValue)
-
-        switch (this.field.type) {
-          case 'date':
-            response = currentValue ? this.$trd(currentValue) : ''
             break;
-          case 'hour':
-            let date = this.$moment().format('Y-MM-DD')
-            response = currentValue ? this.$trd(`${date} ${currentValue}`, {type: 'time'}) : ''
+          case'search':
+            props = {
+              bgColor: 'white',
+              debounce: '800',
+              outlined: true,
+              dense: true,
+              clearable: true,
+              label: this.fieldLabel,
+              ...props
+            }
+            break;
+          case'date':
+            props = {
+              field: {
+                bgColor: 'white',
+                color: 'primary',
+                outlined: true,
+                dense: true,
+                readonly: true,
+                //...props
+              },
+              slot: {
+                ...props
+              }
+            }
+            break;
+          case'hour':
+            props = {
+              field: {
+                bgColor: 'white',
+                color: 'primary',
+                outlined: true,
+                dense: true,
+                readonly: true,
+                ...props
+              },
+              slot: {
+                ...props
+              }
+            }
+            break;
+          case'select':
+            props = {
+              emitValue: true,
+              mapOptions: true,
+              outlined: true,
+              dense: true,
+              bgColor: 'white',
+              style: 'width: 100%',
+              behavior: "menu",
+              ...props
+            }
+            props.loading = props.loading || this.loading
+            break;
+          case'treeSelect':
+            props = {
+              field: {
+                appendToBody: true,
+                sortValueBy: 'INDEX',
+                ...props
+              },
+              fieldComponent: {
+                outlined: true,
+                dense: true,
+                ...props
+              }
+            }
+            break;
+          case'html':
+            props = {
+              field: {
+                toolbar: this.editorText.toolbar,
+                contentClass: 'text-grey-9',
+                toolbarTextColor: 'grey-9',
+                ...props
+              },
+              fieldComponent: {
+                outlined: true,
+                dense: true,
+                ...props
+              }
+            }
+            break;
+          case'multiSelect':
+            props = {
+              field: {
+                ...props
+              },
+              fieldComponent: {
+                outlined: true,
+                dense: true,
+                ...props
+              }
+            }
+            break;
+          case'checkbox':
+            props = {
+              field: {
+                ...props
+              }
+            }
+            break;
+          case'image':
+            props = {
+              field: {
+                ...props
+              },
+              fieldComponent: {
+                outlined: true,
+                dense: true,
+                ...props
+              }
+            }
+            break;
+          case'media':
+            props = {
+              field: {
+                multiple: (this.field.props.zone == 'gallery') ? true : false,
+                ...props,
+                entityId: this.$clone(this.itemId)
+              },
+              fieldComponent: {
+                borderless: true,
+                dense: true,
+                ...props
+              }
+            }
+            break;
+          case'permissions':
+            props = {
+              ...props
+            }
+            break;
+          case'settings':
+            props = {
+              ...props
+            }
+            break;
+          case'inputColor':
+            props = {
+              field: {
+                bgColor: 'white',
+                color: 'primary',
+                outlined: true,
+                dense: true,
+                readonly: true,
+                ...props
+              },
+              slot: {
+                ...props
+              }
+            }
+            break;
+          case'toggle':
+            props = {
+              field: {
+                falseValue: "0",
+                trueValue: "1",
+                ...props
+              },
+            }
+            break;
+          case'signature':
+            props = {
+              ...props
+            }
+            break;
+          case'textWithOptions':
+            props = {
+              ...props
+            }
+            break;
+          case'positionMarkerMap':
+            props = {
+              field: {
+                ...props
+              },
+              fieldComponent: {
+                borderless: true,
+                dense: true,
+                ...props
+              }
+            }
             break;
         }
 
         //Response
+        return props
+      },
+      //Return format of datetime
+      formatDateTime() {
+        let response = ''
+
+        if (this.field.type == 'date') response = 'MMM DD, YYYY'
+        if (this.field.type == 'time') response = 'HH:mm a'
+        if (this.field.type == 'datetime') response = 'MMM DD, YYYY - HH:mm a'
+
         return response
-      }
-    }
-  },
-  methods: {
-    //initi
-    async init() {
-      if (this.field.type) {
-        this.setDefaultVModel((this.value != undefined) ? this.value : this.field.value)//Set default values by field type
-        this.listenEventCrud()//config dynamic component
-        this.success = true//sucess
-        //Set options if is type select
-        if (['treeSelect', 'select', 'multiSelect', 'textWithOptions'].indexOf(this.field.type) != -1) {
-          if (this.field.loadOptions) {
-            await this.getOptions()
-          }//Get options
-          else if (this.field.props && this.field.props.options) this.rootOptions = this.field.props.options
-        }
-      }
-    },
-    //Set default values by type
-    setDefaultVModel(value) {
-      let propValue = this.$clone(value)
-      switch (this.field.type) {
-        case 'crud':
-          //Get crudProps
-          let crudProps = (this.field.props && this.field.props.crudProps) ? this.field.props.crudProps : {}
-          //Validate if select is multiple
-          if (crudProps.multiple) {
-            this.responseValue = []
-            //Get filter options
-            let filterField = (crudProps.config && crudProps.config.options) ?
-                crudProps.config.options : {label: 'title', value: 'id'}
-            //if value is array, get id option
-            if (propValue && (typeof (propValue) == 'object'))
-              propValue.forEach(item => {
-                if (item[filterField.value]) this.responseValue.push(item[filterField.value])
-                else this.responseValue.push(item)
-              })
-          } else this.responseValue = (propValue && propValue.id) ? propValue.id : propValue
-          break;
-        case 'input':
-          this.responseValue = propValue || null
-          break
-        case 'html':
-          this.responseValue = propValue || ''
-          break
-        case 'treeSelect':
-          this.orderOptions(propValue)
-          break
-        case 'select':
-          this.orderOptions(propValue)
-          break
-        case 'multiSelect':
-          this.responseValue = propValue || []
-          break
-        case 'checkbox':
-          this.responseValue = propValue || false
-          break
-        case 'media':
-          this.responseValue = propValue || {}
-          break
-        case 'permissions':
-          this.responseValue = (propValue.length == undefined) ? propValue : {}
-          break
-        case 'settings':
-          this.responseValue = propValue || {}
-          break
-        case 'search':
-          this.responseValue = propValue || null
-          break
-        case 'toggle':
-          this.responseValue = (propValue || 0).toString()
-          break
-        case 'signature':
-          this.responseValue = propValue || null
-          break
-        case 'textWithOptions':
-          this.responseValue = propValue || {}
-          break
-        default :
-          this.responseValue = propValue || null
-          break
-      }
-
-    },
-    //Order options
-    orderOptions(propValue) {
-      if (propValue !== undefined) {
-        if (Array.isArray(propValue)) {
-          this.responseValue = []
-          propValue.forEach(item => {
-            let value = (typeof item == 'object') ? item.id : item
-            this.responseValue.push(value.toString())
+      },
+      //Convert value of options to string
+      formatOptions() {
+        //Convert value/id to string
+        const toString = (items) => {
+          items.forEach(item => {
+            //Convert value and id to string
+            if (item.value || item.value >= 0) item.value = item.value.toString()
+            if (item.id || item.id >= 0) item.id = item.id.toString()
+            //convert children
+            if (item.children) item.children = toString(item.children)
           })
-        } else {
-          this.responseValue = propValue ? this.$clone(propValue.toString()) : propValue
+          //response
+          return items
+        }
+
+        //response
+        return toString(this.$clone(this.options))
+      },
+      //Return info fields readOnly
+      infoReadOnly() {
+        let currenResponse = this.$clone(this.responseValue)
+        let response = currenResponse
+
+        //Function to get value from select
+        let valueFromSelect = () => {
+          if (currenResponse && (typeof currenResponse == 'object')) {
+            response = []
+            currenResponse.forEach(itemValue => {
+              let value = this.formatOptions.find(item => item.value == itemValue)
+              if (value && value.label) response.push(value.label)
+            })
+            response = response.length ? response.join(', ') : false
+          } else {
+            response = this.formatOptions.find(item => item.value == response)
+            response ? response = response.label : false
+          }
+        }
+
+        //Swith type response
+        switch (this.field.type) {
+          case 'select':
+            valueFromSelect()
+            break;
+          case 'treeSelect':
+            valueFromSelect()
+            break;
+          case 'date':
+            response = response ? this.$trd(response) : false
+            break;
+          case 'hour':
+            response = response ? this.$trd(response, {type: 'time'}) : false
+            break;
+        }
+
+        return response//Response
+      },
+      //Crud info
+      crudInfo() {
+        //Default response
+        let response = {}
+
+        //Get crud info
+        if (this.field.validateField && this.field.validateField.crudId)
+          response = this.$store.state.qcrudComponent.component[this.field.validateField.crudId] || {}
+
+        //Response
+        return response
+      },
+      //Custom value to response value
+      customValue: {
+        get() {
+          let response = ''//Defualt response
+          let currentValue = this.$clone(this.responseValue)
+
+          switch (this.field.type) {
+            case 'date':
+              response = currentValue ? this.$trd(currentValue) : ''
+              break;
+            case 'hour':
+              let date = this.$moment().format('Y-MM-DD')
+              response = currentValue ? this.$trd(`${date} ${currentValue}`, {type: 'time'}) : ''
+              break;
+          }
+
+          //Response
+          return response
         }
       }
     },
-    //Config dynamic component
-    listenEventCrud() {
-      setTimeout(() => {
-        if (this.field.create && this.field.create.component) {
-          let componentCrud = this.$refs.crudComponent
-          if (componentCrud) {
-            //Activate listen to chanel
-            this.$root.$on(`crudForm${componentCrud.params.apiRoute}Created`, async () => {
-              this.getOptions()//Get options
-            })
+    methods: {
+      //initi
+      async init() {
+        if (this.field.type) {
+          this.setDefaultVModel((this.value != undefined) ? this.value : this.field.value)//Set default values by field type
+          this.listenEventCrud()//config dynamic component
+          this.success = true//sucess
+          //Set options if is type select
+          if (['treeSelect', 'select', 'multiSelect', 'textWithOptions'].indexOf(this.field.type) != -1) {
+            if (this.field.loadOptions) {
+              await this.getOptions()
+            }//Get options
+            else if (this.field.props && this.field.props.options) this.rootOptions = this.field.props.options
           }
         }
-      }, 500)
-    },
-    //Get options if is load options
-    getOptions() {
-      return new Promise((resolve, reject) => {
-        let loadOptions = this.$clone(this.field.loadOptions)
-        this.loading = true//Open loading
+      },
+      //Set default values by type
+      setDefaultVModel(value) {
+        let propValue = this.$clone(value)
+        switch (this.field.type) {
+          case 'crud':
+            //Get crudProps
+            let crudProps = (this.field.props && this.field.props.crudProps) ? this.field.props.crudProps : {}
+            //Validate if select is multiple
+            if (crudProps.multiple) {
+              this.responseValue = []
+              //Get filter options
+              let filterField = (crudProps.config && crudProps.config.options) ?
+                crudProps.config.options : {label: 'title', value: 'id'}
+              //if value is array, get id option
+              if (propValue && (typeof (propValue) == 'object'))
+                propValue.forEach(item => {
+                  if (item[filterField.value]) this.responseValue.push(item[filterField.value])
+                  else this.responseValue.push(item)
+                })
+            } else this.responseValue = (propValue && propValue.id) ? propValue.id : propValue
+            break;
+          case 'input':
+            this.responseValue = propValue || null
+            break
+          case 'html':
+            this.responseValue = propValue || ''
+            break
+          case 'treeSelect':
+            this.orderOptions(propValue)
+            break
+          case 'select':
+            this.orderOptions(propValue)
+            break
+          case 'multiSelect':
+            this.responseValue = propValue || []
+            break
+          case 'checkbox':
+            this.responseValue = propValue || false
+            break
+          case 'media':
+            this.responseValue = propValue || {}
+            break
+          case 'permissions':
+            this.responseValue = (propValue.length == undefined) ? propValue : {}
+            break
+          case 'settings':
+            this.responseValue = propValue || {}
+            break
+          case 'search':
+            this.responseValue = propValue || null
+            break
+          case 'toggle':
+            this.responseValue = (propValue || 0).toString()
+            break
+          case 'positionMarkerMap':
+            this.responseValue = propValue || false
+            break
+          case 'signature':
+            this.responseValue = propValue || null
+            break
+          case 'textWithOptions':
+            this.responseValue = propValue || {}
+            break
+          default :
+            this.responseValue = propValue || null
+            break
+        }
 
-        //==== Request options
-        if (loadOptions.apiRoute) {
-          this.rootOptions = []//Reset options
-          let fieldSelect = {label: 'title', id: 'id'}
-
-          let params = {//Params to request
-            refresh: true,
-            params: loadOptions.requestParams || {}
+      },
+      //Order options
+      orderOptions(propValue) {
+        if (propValue !== undefined) {
+          if (Array.isArray(propValue)) {
+            this.responseValue = []
+            propValue.forEach(item => {
+              let value = (typeof item == 'object') ? item.id : item
+              this.responseValue.push(value.toString())
+            })
+          } else {
+            this.responseValue = propValue ? this.$clone(propValue.toString()) : propValue
           }
+        }
+      },
+      //Config dynamic component
+      listenEventCrud() {
+        setTimeout(() => {
+          if (this.field.create && this.field.create.component) {
+            let componentCrud = this.$refs.crudComponent
+            if (componentCrud) {
+              //Activate listen to chanel
+              this.$root.$on(`crudForm${componentCrud.params.apiRoute}Created`, async () => {
+                this.getOptions()//Get options
+              })
+            }
+          }
+        }, 500)
+      },
+      //Get options if is load options
+      getOptions() {
+        return new Promise((resolve, reject) => {
+          let loadOptions = this.$clone(this.field.loadOptions)
+          this.loading = true//Open loading
 
-          //add filter
-          if (!params.params.filter) params.params.filter = {}
-          params.params.filter.allTranslations = true
-          //Request
-          this.$crud.index(loadOptions.apiRoute, params).then(response => {
-            this.rootOptionsData = this.$clone(response.data)
-            let formatedOptions = []
-            //Format response
-            formatedOptions = this.field.type == 'select' ?
+          //==== Request options
+          if (loadOptions.apiRoute) {
+            this.rootOptions = []//Reset options
+            let fieldSelect = {label: 'title', id: 'id'}
+
+            let params = {//Params to request
+              refresh: true,
+              params: loadOptions.requestParams || {}
+            }
+
+            //add filter
+            if (!params.params.filter) params.params.filter = {}
+            params.params.filter.allTranslations = true
+            //Request
+            this.$crud.index(loadOptions.apiRoute, params).then(response => {
+              this.rootOptionsData = this.$clone(response.data)
+              let formatedOptions = []
+              //Format response
+              formatedOptions = this.field.type == 'select' ?
                 this.$array.select(response.data, loadOptions.select || fieldSelect) :
                 this.$array.tree(response.data, loadOptions.select || fieldSelect)
 
-            //Assign options
-            this.rootOptions = (this.field.props && this.field.props.options) ?
+              //Assign options
+              this.rootOptions = (this.field.props && this.field.props.options) ?
                 this.$clone((this.field.props.options || []).concat(formatedOptions)) : formatedOptions
+              this.loading = false
+              resolve(true)
+            }).catch(error => {
+              this.$alert.error({message: this.$tr('ui.message.errorRequest'), pos: 'bottom'})
+              this.loading = false
+              reject(true)
+            })
+            //==== Delayed loading options
+          } else if (loadOptions.delayed) {
+            loadOptions.delayed.then(response => {
+              this.rootOptions = this.$clone(response)
+              this.loading = false
+              resolve(true)
+            }).catch(error => {
+              this.loading = false
+              resolve(true)
+            })
+          } else {
             this.loading = false
             resolve(true)
-          }).catch(error => {
-            this.$alert.error({message: this.$tr('ui.message.errorRequest'), pos: 'bottom'})
-            this.loading = false
-            reject(true)
-          })
-          //==== Delayed loading options
-        } else if (loadOptions.delayed) {
-          loadOptions.delayed.then(response => {
-            this.rootOptions = this.$clone(response)
-            this.loading = false
-            resolve(true)
-          }).catch(error => {
-            this.loading = false
-            resolve(true)
-          })
-        } else {
-          this.loading = false
-          resolve(true)
-        }
-      })
-    },
-    //Reges to tags
-    matchTags(field) {
-      if (field.props.useChips && field.matchTags) {
-        let tags = []
-        //only letters and spaces
-        this.responseValue.forEach((tag, index) => {
-          let tagString = tag.trim()//Trim
-          tagString = tagString.match(/^[a-zA-Z\-\s]*$/)//Regex
-          if (tagString && tagString.length) tags.push(tagString.join(''))
-        })
-        this.responseValue = this.$clone(tags)
-      }
-    },
-    //Check if value change
-    watchValue() {
-      let value = this.$clone(this.value)
-      let response = this.$clone(this.responseValue)
-
-      if (JSON.stringify(value) !== JSON.stringify(response)) {
-        this.$emit('input', response)
-      }
-    },
-    //Validate if show  field
-    loadField(name) {
-      let response = true
-      let field = this.$clone(this.field)
-
-      //Validate type field
-      if (field.type !== name) response = false
-      //Validate permission
-      if (field.permission && !this.$auth.hasAccess(field.permission)) response = false
-      //Validate vIf prop
-      if (response && field.props && (field.props.vIf != undefined)) response = field.props.vIf
-      //Response
-      return response
-    },
-    //Validate fields
-    validateField(val) {
-      return new Promise((resolve, reject) => {
-        let ruleResponse = true || 'update'//Default rule response
-        let crudInfo = this.$store.state.qcrudComponent.component[this.crudId] || {}
-        //Request Params
-        let requestParams = {
-          refresh: true,
-          params: this.field.validateField.requestParams || {}
-        }
-        //Set default filter
-        requestParams.params.filter = {field: 'title', ...(requestParams.params.filter || {})}
-
-        //Request
-        this.$crud.show(this.field.validateField.apiRoute, val, requestParams).then(response => {
-          if (response.status == 200) {
-            //Already exist
-            ruleResponse = false || this.$tr('ui.message.fieldAlreadyExist')
-            //Validate if compare with crudInfo
-            if (this.crudInfo && (this.crudInfo.typeForm == 'update') && (this.crudInfo.id == response.data.id))
-              ruleResponse = true || 'update'
           }
-          resolve(ruleResponse)
-        }).catch(error => {
-          console.error(error)
-          resolve(ruleResponse)
         })
-      })
+      },
+      //Reges to tags
+      matchTags(field) {
+        if (field.props.useChips && field.matchTags) {
+          let tags = []
+          //only letters and spaces
+          this.responseValue.forEach((tag, index) => {
+            let tagString = tag.trim()//Trim
+            tagString = tagString.match(/^[a-zA-Z\-\s]*$/)//Regex
+            if (tagString && tagString.length) tags.push(tagString.join(''))
+          })
+          this.responseValue = this.$clone(tags)
+        }
+      },
+      //Check if value change
+      watchValue() {
+        let value = this.$clone(this.value)
+        let response = this.$clone(this.responseValue)
+
+        if (JSON.stringify(value) !== JSON.stringify(response)) {
+          this.$emit('input', response)
+        }
+      },
+      //Validate if show  field
+      loadField(name) {
+        let response = true
+        let field = this.$clone(this.field)
+
+        //Validate type field
+        if (field.type !== name) response = false
+        //Validate permission
+        if (field.permission && !this.$auth.hasAccess(field.permission)) response = false
+        //Validate vIf prop
+        if (response && field.props && (field.props.vIf != undefined)) response = field.props.vIf
+
+        //Response
+        return response
+      },
+      //Validate fields
+      validateField(val) {
+        return new Promise((resolve, reject) => {
+          let ruleResponse = true || 'update'//Default rule response
+          let crudInfo = this.$store.state.qcrudComponent.component[this.crudId] || {}
+          //Request Params
+          let requestParams = {
+            refresh: true,
+            params: this.field.validateField.requestParams || {}
+          }
+          //Set default filter
+          requestParams.params.filter = {field: 'title', ...(requestParams.params.filter || {})}
+
+          //Request
+          this.$crud.show(this.field.validateField.apiRoute, val, requestParams).then(response => {
+            if (response.status == 200) {
+              //Already exist
+              ruleResponse = false || this.$tr('ui.message.fieldAlreadyExist')
+              //Validate if compare with crudInfo
+              if (this.crudInfo && (this.crudInfo.typeForm == 'update') && (this.crudInfo.id == response.data.id))
+                ruleResponse = true || 'update'
+            }
+            resolve(ruleResponse)
+          }).catch(error => {
+            console.error(error)
+            resolve(ruleResponse)
+          })
+        })
+      }
     }
   }
-}
 </script>
 <style lang="stylus">
-#dynamicFieldComponent
-  .checkbox-field
-    .q-field__control-container
-      padding-top 0 !important
-
-  .field-no-padding
-    .q-field__control
-      padding 0 !important
-
+  #dynamicFieldComponent
+    .checkbox-field
       .q-field__control-container
+        padding-top 0 !important
+
+    .field-no-padding
+      .q-field__control
         padding 0 !important
 
-  .vue-treeselect
-    .vue-treeselect__control
-      background transparent
-      border 0
-      max-height 26px
-      padding 0
+        .q-field__control-container
+          padding 0 !important
 
-      .vue-treeselect__single-value
-        line-height 1.9
+    .vue-treeselect
+      .vue-treeselect__control
+        background transparent
+        border 0
+        max-height 26px
         padding 0
-  .q-field--error
-    .q-field__append
-      position absolute
-      right -8px
-      top -15px
-#ckEditorComponent
-  width 100%
+
+        .vue-treeselect__single-value
+          line-height 1.9
+          padding 0
+
+    .q-field--error
+      .q-field__append
+        position absolute
+        right -8px
+        top -15px
+
+  #ckEditorComponent
+    width 100%
 </style>

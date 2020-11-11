@@ -133,6 +133,8 @@ export default {
     reject: 'Rechazar',
     rejected: 'Rechazado',
     text: 'Texto | Textos',
+    file: 'Archivo | Archivos',
+    location: 'Ubicación | Ubicaciones',
     value: 'Valor | Valores',
   },
   message: {
