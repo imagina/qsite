@@ -1,10 +1,40 @@
 <template>
   <div id="mapLeafletcomponent" class="full-width">
-    <!--Label-->
-    <div class="text-grey-9 text-capitalize" v-if="label">{{label}}</div>
+    <!-- search geolocation -->
+    <q-input
+        v-if="markPoint"
+        v-model="address.title"
+        @input="emitResponseValue"
+        dense
+        outlined
+        :label="label"
+        :rules="[val => !!val || $tr('ui.message.fieldRequired')]"
+    >
+      <template v-slot:append>
+        <q-btn dense flat icon="close" @click="markPoint = false" />
+      </template>
+    </q-input>
+    <q-select
+        :options="geolocations"
+        v-model="address"
+        use-chips
+        emit-value
+        behavior="menu"
+        input-debounce="1000"
+        use-input
+        map-options
+        outlined
+        dense
+        bg-color="white"
+        :label="label"
+        @filter="filterFn"
+        @input="emitResponseValue"
+        :rules="[val => !!val || $tr('ui.message.fieldRequired')]"
+        v-else
+    />
     <!--Map-->
-    <l-map id="lMap" v-if="success && center" :zoom="mapZoom" :center="center" @click="mapClickEvent"
-           :style="`height : ${height}`">
+    <l-map id="lMap" v-if="success && center" :zoom="mapZoom" :center="center"
+           :style="`height : ${height}`" ref="map" @click="mapClickEvent">
       <!--Layer-->
       <l-tile-layer name="OpenStreetMap" layer-type="base" :token="token"
                     attribution='&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -19,6 +49,7 @@
   import {latLng, Icon} from "leaflet";
   import {LMap, LTileLayer, LMarker} from 'vue2-leaflet';
   import 'leaflet/dist/leaflet.css';
+  import { OpenStreetMapProvider } from 'leaflet-geosearch'
 
   export default {
     components: {LMap, LTileLayer, LMarker},
@@ -26,7 +57,7 @@
       value: {default: false},
       type: {default: 'positionMarkerMap'},
       height: {default: '400px'},
-      label: {default: false}
+      label: {default: false},
     },
     watch: {
       value: {
@@ -47,7 +78,12 @@
         responseValue: false,
         center: false,
         mapZoom: 8,
-        marker: false
+        marker: false,
+        searchLoading: false,
+        searchProvider: new OpenStreetMapProvider(),
+        address: null,
+        geolocations: [],
+        markPoint: false,
       }
     },
     computed: {
@@ -57,8 +93,13 @@
       },
       //Emit response value
       emitResponseValue() {
-        this.$emit('input', this.$clone(this.responseValue))
+        if (this.address){
+          this.marker = latLng(this.address.lat, this.address.lng)//Set default marker value
+          this.center = this.$clone(this.marker)//Set default center
+          this.mapZoom = 15//Change map zoom
+          this.$emit('input', this.$clone(this.address))
       }
+    },
     },
     methods: {
       init() {
@@ -66,7 +107,7 @@
         this.fixMarkerIconImage()//Fix marker icon
       },
       //Set default values
-      setDefaultValue() {
+      async setDefaultValue() {
         if (!this.marker) this.success = false//Reset map
         let center = ['4.642129714308486', '-74.11376953125001']//Default center
 
@@ -75,10 +116,18 @@
           //Set default value and response value
           case 'positionMarkerMap':
             if (this.value) {
-              this.responseValue = this.$clone(this.value)//Set default value
-              this.marker = this.$clone(this.value)//Set default marker value
-              center = this.$clone(this.value)//Set default center
+              this.address = this.$clone(this.value)//Set default value
+              if(this.address.lat) {
+                this.marker = latLng(this.address.lat, this.address.lng)//Set default marker value
+                center = this.$clone(this.marker)//Set default center
+              }else{
+                this.address = {title: this.value, lat: center[0], lng: center[1]}
+              }
               this.mapZoom = 15//Change map zoom
+              this.geolocations.push({
+                label: this.address.title,
+                value: this.address,
+              })
             }
             break;
         }
@@ -97,12 +146,36 @@
           shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
         });
       },
+      filterFn (val, update, abort) {
+        update(async ()=>{
+          await this.searchLocations(val)
+        })
+      },
+      async searchLocations(val){
+        this.searchLoading = true
+        await this.searchProvider.search({query: val}).then((results)=>{
+          this.geolocations = results.map(item =>{
+            return {
+              label: item.label,
+              value: {
+                title: item.label,
+                lat: item.y,
+                lng: item.x,
+              }
+            }
+          })
+          this.searchLoading = false
+        }).catch(e =>{
+          this.searchLoading = false
+        })
+      },
       //Handler to click over map
       mapClickEvent(event) {
         switch (this.type) {
           //Set lat-lng to response value
           case 'positionMarkerMap':
-            this.responseValue = [event.latlng.lat, event.latlng.lng]
+            this.markPoint = true
+            this.address = {title: '', lat: event.latlng.lat, lng: event.latlng.lng}
             this.marker = this.$clone(event.latlng)
             break;
         }
