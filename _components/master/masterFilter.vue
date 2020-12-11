@@ -1,21 +1,15 @@
 <template>
   <div id="masterFilterComponent" v-if="filter">
     <!-- Header -->
-    <div ref="headerContent">
+    <div id="masterFilterContent">
       <!--Title-->
-      <div class="q-pt-sm">
-        <q-item class="text-primary">
-          <q-item-section avatar>
-            <q-icon name="fas fa-filter"></q-icon>
-          </q-item-section>
-          <q-item-section class="text-h6">
-            {{$trp('ui.label.filter', {capitalize : true})}}
-          </q-item-section>
-        </q-item>
+      <div class="text-subtitle1 row items-center q-pa-md">
+        <q-icon name="fas fa-filter" color="primary" size="20px" class="q-mr-sm"/>
+        <label>{{$trp('ui.label.filter', {capitalize : true})}}</label>
       </div>
 
       <!--Tabs-->
-      <q-separator class="q-mt-sm"/>
+      <q-separator class="q-mb-sm" inset/>
       <div id="tabsContent" class="full-width">
         <q-tabs v-model="tabName" dense class="text-grey" active-color="primary" indicator-color="primary"
                 align="justify" v-if="filter.hasValues" :breakpoint="0">

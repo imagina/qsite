@@ -101,14 +101,14 @@ class Array {
    * }
    *
    */
-  parents(dataArray, id) {
+  parents(dataArray, id, field = 'id') {
     id = parseInt(id)
 
     let response = {name: [], id: []}
 
     if (dataArray) {
       while (id >= 1) {
-        let parent = dataArray.find(item => item.id === id)
+        let parent = dataArray.find(item => item[field] === id)
         if (parent) {
           response.name.unshift(parent.title)
           response.id.unshift(parent.id)
@@ -211,6 +211,34 @@ class Array {
         response = [...response, item]
       }
     })
+    //Response
+    return response
+  }
+
+  //Get parents
+  getParents(params = {}) {
+    //Get default params
+    let dataItems = params.dataItems || []
+    let compareId = params.compareId || 0
+    let idfield = params.idField || 'id'
+    let parentField = params.parentField || 'parentId'
+    let labelField = params.labelField || 'title'
+    //Default response
+    let response = {items: [], itemNames: []}
+
+    if (dataItems && compareId) {
+      while ((compareId != '0') || (compareId != 0)) {
+        //Find parent
+        let parentItem = dataItems.find(item => item[idfield] === compareId)
+        //Set parent to response
+        if (parentItem) {
+          response.items.unshift(parentItem)
+          response.itemNames.unshift(parentItem[labelField])
+          compareId = parentItem[parentField]
+        }
+      }
+    }
+
     //Response
     return response
   }

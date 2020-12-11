@@ -96,6 +96,7 @@ class Alert {
       textColor: params.textColor,
       position: params.pos,
       actions: params.actions,
+      html : true
     })
   }
 }

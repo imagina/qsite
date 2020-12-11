@@ -11,7 +11,6 @@ import captcha from '@imagina/qsite/_components/master/captcha'
 import locales from '@imagina/qsite/_components/master/locales'
 import avatarImage from '@imagina/qsite/_components/master/avatarImage'
 import headerToApp from '@imagina/qsite/_components/master/headerToApp'
-import subHeader from '@imagina/qsite/_components/master/subHeader'
 import shareLink from '@imagina/qsite/_components/master/shareLink'
 
 export default ({app, router, store, Vue}) => {
@@ -28,7 +27,6 @@ export default ({app, router, store, Vue}) => {
     {name: 'locales', component: locales},
     {name: 'avatar-image', component: avatarImage},
     {name: 'header-app', component: headerToApp},
-    {name: 'sub-header', component: subHeader},
     {name: 'share-link', component: shareLink},
     {name: 'vue-signature-pad', component: VueSignaturePad},
   ]

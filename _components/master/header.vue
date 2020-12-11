@@ -1,217 +1,199 @@
 <template>
   <div id="masterHeader">
     <!-- HEADER -->
-    <q-header>
-      <q-toolbar color="primary">
-        <!--= TITLE =-->
-        <q-toolbar-title class="items-center q-pl-none">
-          <!--Toogle Menu-->
-          <div>
-            <q-icon :name="$route.meta.icon"/>
-            {{$tr($route.meta.headerTitle || $route.meta.title)}}
-          </div>
-        </q-toolbar-title>
-        <!--Search-->
-        <dynamic-field v-if="false" :field="fields.search"/>
-        <!--== Button User ==-->
-        <q-no-ssr>
-          <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated">
-            <q-avatar size="25px">
-              <img :src="quserState.userData.mainImage">
-            </q-avatar>
-            <div class="q-ml-xs">{{quserState.userData.firstName}}</div>
-          </q-btn>
-        </q-no-ssr>
-
-        <!--== Button Config ==-->
-        <q-btn round dense flat icon="fas fa-cog"
-               @click="()=> {drawer.config = !drawer.config; $refs.subHeader.drawer.filter = false}"/>
-      </q-toolbar>
-
-      <!--Sub header--->
-      <q-toolbar class="q-pa-none" style="min-height: auto">
-        <sub-header ref="subHeader" @openFilter="drawer.config = false"/>
-      </q-toolbar>
-    </q-header>
-
-    <!-- MENU -->
-    <q-drawer id="menuMaster" class="no-shadow" v-model="drawer.menu" bordered
-              :mini="miniState" @click.capture="miniState = false" behavior="desktop">
-      <!--Actions-->
-      <div class="text-white">
-        <!--Menu buttom-->
-        <q-item clickable class="bg-primary q-pa-none text-weight-bold" v-if="miniState"
-                style="min-height: 50px">
-          <!--Menu buttom-->
-          <q-item-section avatar>
-            <q-icon size="18px" color="white" name="fas fa-bars"/>
-          </q-item-section>
-        </q-item>
-        <!--Opened menu header-->
-        <div v-else style="min-height: 50px">
-          <!--Information-->
-          <div class="bg-primary q-pl-sm q-pr-sm row items-center justify-between full-width" style="min-height: 50px">
-            <!--Title-->
-            <div class="ellipsis" style="max-width: calc(100% - 50px)">{{projectName}}</div>
-            <!--Button close-->
-            <q-btn dense round flat unelevated color="white" icon="fas fa-bars" size="12px"
-                   @click="miniState = true"/>
-          </div>
+    <q-header class="bg-white">
+      <!-- Toolbar header -->
+      <div id="toolbarTop" class="q-hide q-md-show bg-primary">
+        <q-toolbar color="primary">
           <!--Logo-->
-          <div class="q-pa-md">
-            <q-img contain :src="logo" style="height: 120px; min-height: 120px"/>
-          </div>
-          <q-separator/>
-        </div>
+          <q-avatar><img :src="logo"></q-avatar>
+          <!--Project name-->
+          <q-toolbar-title>{{ projectName }}</q-toolbar-title>
+          <!--== Button User ==-->
+          <q-no-ssr>
+            <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated">
+              <q-avatar size="25px">
+                <img :src="quserState.userData.mainImage">
+              </q-avatar>
+              <div class="q-ml-xs">{{ quserState.userData.firstName }}</div>
+            </q-btn>
+          </q-no-ssr>
+          <!--== Button Config ==-->
+          <q-btn round dense flat icon="fas fa-cog"
+                 @click="$eventBus.$emit('toggleMasterDrawer','config')"/>
+        </q-toolbar>
       </div>
-      <!--= MENU =-->
-      <menu-list ref="menuList" group :menu="menu"/>
-    </q-drawer>
 
-    <!-- Config -->
-    <q-drawer bordered id="configMaster" :overlay="true" v-model="drawer.config" side="right">
-      <config-list/>
-    </q-drawer>
+      <!--Toolbar Sub header--->
+      <div id="toolbarBottom">
+        <q-toolbar id="contentSubHeader" class="q-pa-none row justify-between items-center">
+          <!--Left content-->
+          <div id="leftContent" class="row items-center">
+            <!--== Menu Button ==-->
+            <q-btn id="buttonToogleMenu" icon="fas fa-bars" unelevated flat color="primary"
+                   class="q-mr-md q-hide q-md-show" @click="$eventBus.$emit('toggleMasterDrawer','menu')"/>
+            <!--== Back Button ==-->
+            <q-btn icon="fas fa-arrow-left" unelevated round color="primary" class="btn-action q-mr-md"
+                   @click="$helper.backHistory()">
+              <q-tooltip>{{ $tr('ui.label.back') }}</q-tooltip>
+            </q-btn>
+            <!--Breadcrum-->
+            <div id="breadCrumbContent" class="q-hide q-md-show">
+              <q-breadcrumbs>
+                <q-breadcrumbs-el v-for="(item, key) in breadcrumbs" :key="key" :label="item.label" :icon="item.icon"
+                                  :to="item.to ? {name : item.to} : false"/>
+              </q-breadcrumbs>
+            </div>
+          </div>
+          <!--Center content-->
+          <div id="centerContent" class="q-md-hide text-white text-h6 ellipsis">
+            {{ breadcrumbs[breadcrumbs.length - 1].label }}
+          </div>
+          <!--Right content-->
+          <div id="rightContent" class="row items-center q-gutter-x-sm">
+            <!--== Button filter ==-->
+            <q-btn icon="fas fa-filter" unelevated round v-if="filter.load" color="primary" class="btn-action"
+                   @click="$eventBus.$emit('toggleMasterDrawer','filter')">
+              <q-tooltip>{{ $tr('ui.label.filter') }}</q-tooltip>
+            </q-btn>
+            <!--== Button refresh ==-->
+            <q-btn icon="fas fa-redo" unelevated round v-if="params.refresh" color="primary" class="btn-action"
+                   @click="$root.$emit('page.data.refresh')">
+              <q-tooltip>{{ $tr('ui.label.refresh') }}</q-tooltip>
+            </q-btn>
+          </div>
+          <!--Message if page has filter-->
+          <div id="messageFilter" class="cursor-pointer text-caption" v-if="filter.hasValues"
+               @click="$eventBus.$emit('toggleMasterDrawer','filter')">
+            <q-icon name="fas fa-exclamation" size="12px" color="warning"/>
+            {{ $tr('ui.message.pageDataWithFilter') }}
+          </div>
+        </q-toolbar>
+      </div>
+    </q-header>
   </div>
 </template>
 <script>
-  //Components
-  import configList from '@imagina/qsite/_components/master/configList'
-  import menuList from '@imagina/qsite/_components/master/recursiveItem'
-
-  export default {
-    props: {},
-    components: {configList, menuList},
-    watch: {},
-    mounted() {
-      this.$nextTick(function () {
-      })
-    },
-    data() {
-      return {
-        projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
-        miniState: true,
-        drawer: {
-          menu: true,
-          config: false,
-        },
-        menu: config('sidebar'),
-        logo: this.$store.getters['qsiteApp/getSettingMediaByName']('isite::logo1').path
-      }
-    },
-    computed: {
-      quserState() {
-        return this.$store.state.quserAuth
-      },
-      fields() {
-        return {
-          search: {
-            value: null,
-            type: 'search',
-            props: {
-              label: this.$tr('ui.form.globalSearch'),
-              dark: true,
-              standout: true,
-              outlined: false,
-              bgColor: '',
-            }
-          }
-        }
-      }
-    },
-    methods: {
-      //Show drawer specific
-      toggleDrawer(name, show) {
-        //Hidden all drawers
-        for (var drawer in this.drawer) {
-          this.drawer[drawer] = false
-        }
-        this.drawer[name] = show//Show only drawer specific
-      },
+export default {
+  props: {},
+  components: {},
+  watch: {},
+  mounted() {
+    this.$nextTick(function () {
+    })
+  },
+  data() {
+    return {
+      projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
+      logo: this.$store.getters['qsiteApp/getSettingMediaByName']('isite::logo1').path,
+      filter: this.$filter
     }
-  }
+  },
+  computed: {
+    quserState() {
+      return this.$store.state.quserAuth
+    },
+    //Current route
+    currentRoute() {
+      return this.$route
+    },
+    //Return all data in extra state store "subHeaderData" merged with currernt data
+    subHeaderData() {
+      return this.$clone(this.$store.getters['qsiteApp/getExtra']('subHeaderData') || {})
+    },
+    //Return params of subHeader
+    params() {
+      return this.currentRoute.meta.subHeader || {}
+    },
+    //Return data breadcrumd
+    breadcrumbs() {
+      let response = []
+      //Get breadcrumbs from params
+      let breadcrumbs = this.params.breadcrumb ? this.$clone(this.params.breadcrumb) : []
+      breadcrumbs = this.$clone(breadcrumbs.reverse())
+
+      //Set Home page and current page
+      let pages = (this.currentRoute.name.indexOf('app.home') == -1) ?
+        [config(`pages.app.home`), this.currentRoute.meta] : [config(`pages.app.home`)]
+
+      //Get page from breadcrum
+      breadcrumbs.forEach(pageName => pages.splice(1, 0, config(`pages.${pageName}`)))
+
+      //Format all routes to breadcrum
+      pages.forEach(page => {
+        if (page.activated && this.$auth.hasAccess(page.permission))
+          response.push({
+            label: this.$tr(page.headerTitle || page.title),
+            icon: page.icon,
+            to: page.name
+          })
+      })
+
+      //Response
+      return response
+    }
+  },
+  methods: {}
+}
 </script>
 <style lang="stylus">
-  #masterHeader
-    img
-      max-width 100% !important
+#masterHeader
+  #toolbarBottom
+    width 100%
+    color $grey-9
+    position relative
 
-    .q-toolbar-title
-      padding 0 5px
+  #contentSubHeader
+    padding 5px 10px 5px 70px
+    border-bottom 1px solid $grey-4
+    width 100%
+    min-height 48px
+    position relative
+    background-color white
 
-      .btn-page-title
+    @media screen and (max-width: $breakpoint-md)
+      padding 5px 10px
+      background-color $primary
+      border-radius 0 0 15px 15px
+
+
+    #buttonToogleMenu
+      position absolute
+      left 0
+      top 0
+      height 48px
+      width 57px
+      border-radius 0
+      background-color white
+      border-right 1px solid $grey-4
+
+    .btn-action
+      .q-btn__wrapper
+        min-height 30px !important
+        min-width 30px !important
         padding 5px
 
         .q-icon
-          background-color white
-          border-radius 50%
-          height 25px
-          width 25px
-          color $primary
-          font-size 15px
-          padding 5px
-          margin-right 5px
-          transition .5s
+          font-size 16px !important
 
-          &.on-right
-            margin-left 5px
-          @media screen and (max-width: $breakpoint-xs)
-            display none
+    .q-breadcrumbs
+      .q-breadcrumbs__el
+        font-size 14px
 
-        &.menu-openend
-          .q-icon
-            transform rotate(90deg)
+      .q-icon
+        font-size 15px
 
-    .q-layout-drawer-delimiter
-      box-shadow $shadow-1
-
-    .button-profile-image
-      height 25px
-      width 25px
-      border-radius 50%
-      background-repeat no-repeat
-      background-position center
-      background-size cover
-      margin-right 5px
-
-    .q-drawer--mini
-      width 57px !important
-
-      .q-item__section
-        padding 0px 20px !important
-
-    #menuMaster
-      hr
-        background-color $grey-3
-
-      .q-expansion-item
-        background-color $grey-3
-
-      .q-expansion-item__container
-        .q-expansion-item__content
-          padding 0 0 0 1px
-          border-left 15px solid white
-
-      .q-item
-        padding-left 0px
-        min-height 40px
-
-        .q-item__section--avatar
-          padding 0 8px 0 20px
-
-        &:hover
-          background-color $grey-4
-          color $primary
-
-          .q-icon
-            color $primary
-
-        &.item-is-active
-          background-color white
-
-          .q-item__section, .q-icon
-            color $primary
-
-      .expansion-selected
-        background-color $primary
+    #messageFilter
+      background white
+      border 2px solid $warning
+      border-top none
+      border-radius 0 0 10px 10px
+      padding 0 6px 1px 6px
+      position absolute
+      margin-right auto
+      margin-left auto
+      left 0
+      right 0
+      bottom -23px
+      width max-content
 </style>

@@ -11,6 +11,7 @@ import {uid} from 'quasar'
 import { openURL } from 'quasar'
 import eventBus from '@imagina/qsite/_plugins/eventBus'
 import filter from '@imagina/qsite/_plugins/filter'
+import VueSignaturePad from 'vue-signature-pad';
 
 export default function ({app, router, store, Vue, ssrContext}) {
   Vue.prototype.$alert = alert
@@ -34,4 +35,5 @@ export default function ({app, router, store, Vue, ssrContext}) {
   Vue.prototype.$uid = uid
   Vue.use(moment)
   Vue.use(Vuelidate)
+  Vue.use(VueSignaturePad)
 }

@@ -131,7 +131,11 @@ export default {
     text: 'Text | Texts',
     file: 'File | Files',
     location: 'Location | Locations',
-    value: 'Value | Values',
+    small: 'Small',
+    big: 'Big',
+    step: 'Step | Steps',
+    session: 'Session | Sessions',
+    simplified : 'Simplified'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -271,7 +275,8 @@ export default {
     priceOffer: 'Offert price',
     onOffer: 'On offert',
     createdBy: 'Created by',
-    systemName: 'System name'
+    systemName: 'System name',
+    externalId: 'External ID'
   },
   configList: {
     loggedAs: 'logged as',

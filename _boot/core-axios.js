@@ -1,4 +1,5 @@
 import axios from 'axios'
+import alert from '@imagina/qsite/_plugins/alert'
 
 export default function ({app, router, store, Vue, ssrContext}) {
   //=========== Set base url to axios
@@ -22,10 +23,19 @@ export default function ({app, router, store, Vue, ssrContext}) {
   //========== Set default params: setting
   axios.defaults.params = {setting: {}}
 
+  //========== Show alert from interceptor
+  function showMessages(messages = []) {
+    messages.forEach(item => {
+      alert[item.type || 'info']({message: item.message, timeOut: 8000})
+    })
+  }
+
   //========== Response interceptor
   axios.interceptors.response.use((response) => {
+    if (response.data && response.data.messages) showMessages(response.data.messages)//Show messages
     return response;
   }, (error) => {
+    if (error.response.data && error.response.data.messages) showMessages(error.response.data.messages)//Show messages
     if (error.response) {
       let status = error.response.status;
       switch (status) {

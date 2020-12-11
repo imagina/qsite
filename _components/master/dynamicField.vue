@@ -1,5 +1,6 @@
 <template>
-  <div id="dynamicFieldComponent" class="relative-position" v-if="success">
+  <div class="relative-position" v-if="success">
+    <div id="dynamicFieldComponent">
     <!--Read Only-->
     <div v-if="readOnly">
       <div v-if="infoReadOnly">
@@ -163,17 +164,11 @@
         <map-leaflet v-model="responseValue" type="positionMarkerMap" v-bind="fieldProps.field"/>
       </q-field>
       <!--Signature-->
-      <q-field v-model="responseValue" v-if="loadField('signature')" v-bind="fieldProps.fieldComponent" borderless>
-        <signature v-model="responseValue"/>
+      <q-field v-model="responseValue" v-if="loadField('signature')"
+               v-bind="fieldProps.fieldComponent" stack-label>
+        <signature v-model="responseValue" v-bind="fieldProps.field"/>
       </q-field>
-      <!--Text with Options-->
-      <text-with-options
-          v-if="loadField('textWithOptions')"
-          class="q-my-sm"
-          v-model="responseValue"
-          :label="fieldLabel"
-          :options="options || {}"
-      />
+      </div>
     </div>
   </div>
 </template>
@@ -187,8 +182,7 @@
   import schedulesForm from '@imagina/qsite/_components/master/schedules'
   import ckEditor from '@imagina/qsite/_components/master/ckEditor'
   import mapLeaflet from '@imagina/qsite/_components/master/mapLeaflet'
-  import signature from '@imagina/qsite/_components/customFields/signature'
-  import textWithOptions from "@imagina/qsite/_components/customFields/textWithOptions";
+  import signature from '@imagina/qsite/_components/master/signature'
 
   export default {
     name: 'dynamicField',
@@ -213,9 +207,8 @@
       uploadImage,
       schedulesForm,
       ckEditor,
-      signature,
-      textWithOptions,
       mapLeaflet,
+      signature
     },
     watch: {
       value: {
@@ -340,12 +333,14 @@
                 outlined: true,
                 dense: true,
                 readonly: true,
-                //...props
+                ...props
               },
               slot: {
                 ...props
               }
             }
+            //Remove mask from prop field
+            delete props.field.mask
             break;
           case'hour':
             props = {
@@ -483,20 +478,22 @@
               },
             }
             break;
-          case'signature':
-            props = {
-              ...props
-            }
-            break;
-          case'textWithOptions':
-            props = {
-              ...props
-            }
-            break;
           case'positionMarkerMap':
             props = {
               field: {
                 ...props
+              },
+              fieldComponent: {
+                borderless: true,
+                dense: true,
+                ...props
+              }
+            }
+            break;
+          case'signature':
+            props = {
+              field: {
+                ...props,
               },
               fieldComponent: {
                 borderless: true,
@@ -639,11 +636,12 @@
               let filterField = (crudProps.config && crudProps.config.options) ?
                 crudProps.config.options : {label: 'title', value: 'id'}
               //if value is array, get id option
-              if (propValue && (typeof (propValue) == 'object'))
+              if (propValue && Array.isArray(propValue)) {
                 propValue.forEach(item => {
                   if (item[filterField.value]) this.responseValue.push(item[filterField.value])
                   else this.responseValue.push(item)
                 })
+              }
             } else this.responseValue = (propValue && propValue.id) ? propValue.id : propValue
             break;
           case 'input':
@@ -681,12 +679,6 @@
             break
           case 'positionMarkerMap':
             this.responseValue = propValue || false
-            break
-          case 'signature':
-            this.responseValue = propValue || null
-            break
-          case 'textWithOptions':
-            this.responseValue = propValue || {}
             break
           default :
             this.responseValue = propValue || null
@@ -860,7 +852,7 @@
 
     .vue-treeselect
       .vue-treeselect__control
-        background transparent
+        background transparent !important
         border 0
         max-height 26px
         padding 0

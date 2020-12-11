@@ -135,7 +135,11 @@ export default {
     text: 'Texto | Textos',
     file: 'Archivo | Archivos',
     location: 'Ubicación | Ubicaciones',
-    value: 'Valor | Valores',
+    small: 'Pequeño | Pequeños',
+    big: 'Grande | Grandes',
+    step: 'Paso | Pasos',
+    session: 'Sesión | Sesiones',
+    simplified : 'Simplificado'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -272,6 +276,7 @@ export default {
     onOffer: 'En oferta',
     createdBy: 'Creado por',
     systemName: 'Nombre de sistema',
+    externalId: 'ID Externo'
   },
   configList: {
     loggedAs: 'Registrado como',

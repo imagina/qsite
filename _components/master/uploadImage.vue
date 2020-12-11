@@ -79,7 +79,7 @@
       },
       //Default image
       defaultImg() {
-        return `${this.$store.state.qsiteApp.baseUrl}/modules/iprofile/img/default.jpg`
+        return `${this.$store.state.qsiteApp.baseUrl}/modules/iblog/img/post/default.jpg`
       }
     },
     methods: {
@@ -142,6 +142,7 @@
   #uploadImageComponent
     margin 0 auto
     position relative
+    width 100%
 
     .img-file
       position relative
@@ -164,4 +165,9 @@
       height 100%
       width 100%
       overflow hidden
+  #avatarImageComponent
+    width 100% !important
+    .avatar-img-content
+      border-radius 0px !important
+      width 100% !important
 </style>

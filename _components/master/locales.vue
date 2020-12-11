@@ -259,7 +259,7 @@
       },
       //Change data of form template about locale
       updateFormTempleate() {
-        const locale = this.interfaceGet
+        const locale = this.$clone(this.interfaceGet)
         //Change fields by locale of form template
         Object.keys(locale.fieldsTranslatable).forEach(fieldName => {
           locale.formTemplate[fieldName] = locale.form[locale.language][fieldName]
@@ -267,8 +267,19 @@
 
         //Change fields of form template
         Object.keys(locale.fields).forEach(fieldName => {
+            if ((typeof locale.formTemplate[fieldName] == 'object') && (locale.formTemplate[fieldName] !== null)) {
+              if (Array.isArray(locale.formTemplate[fieldName])) {
+                locale.formTemplate[fieldName] = this.$clone(locale.form[fieldName])
+              } else {
+                locale.formTemplate[fieldName] = {
+                  ...locale.formTemplate[fieldName], ...(this.$clone(locale.form[fieldName] || {}))
+                }
+              }
+            } else {
           locale.formTemplate[fieldName] = this.$clone(locale.form[fieldName])
-        })
+            }
+          }
+        )
 
         this.setFormTemplate(locale.formTemplate)//Set form template
         this.interfaceEmit//Emit data
