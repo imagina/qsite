@@ -280,33 +280,33 @@
         } else if (this.field.type == 'search')
           return `${this.$tr('ui.label.search', {capitalize: true})}`
 
-      //Set tree data
-      if (this.field.type == 'treeSelect' && this.responseValue && !Array.isArray(this.responseValue)) {
-        if (this.rootOptionsData && this.rootOptionsData.length) {
-          let infoSelected = this.$array.parents(this.rootOptionsData, this.responseValue)
-          if (infoSelected) response += ` | ${infoSelected.parents}`
-        }
-      }
-
-      return response
-    },
-    //Return field props
-    fieldProps() {
-      //Default props
-      let props = {...this.field.props || {}}
-
-      //Case per type field
-      switch (this.field.type) {
-        case'crud':
-          props = {...props}
-          break;
-        case'input':
-          props = {
-            bgColor: 'white',
-            outlined: true,
-            dense: true,
-            ...props
+        //Set tree data
+        if (this.field.type == 'treeSelect' && this.responseValue && !Array.isArray(this.responseValue)) {
+          if (this.rootOptionsData && this.rootOptionsData.length) {
+            let infoSelected = this.$array.parents(this.rootOptionsData, this.responseValue)
+            if (infoSelected) response += ` | ${infoSelected.parents}`
           }
+        }
+
+        return response
+      },
+      //Return field props
+      fieldProps() {
+        //Default props
+        let props = {...this.field.props || {}}
+
+        //Case per type field
+        switch (this.field.type) {
+          case'crud':
+            props = {...props}
+            break;
+          case'input':
+            props = {
+              bgColor: 'white',
+              outlined: true,
+              dense: true,
+              ...props
+            }
 
             //Add rule to validate field
             if (this.field.validateField && this.field.validateField.apiRoute) {
@@ -614,7 +614,7 @@
           this.listenEventCrud()//config dynamic component
           this.success = true//sucess
           //Set options if is type select
-          if (['treeSelect', 'select', 'multiSelect', 'textWithOptions'].indexOf(this.field.type) != -1) {
+          if (['treeSelect', 'select', 'multiSelect'].indexOf(this.field.type) != -1) {
             if (this.field.loadOptions) {
               await this.getOptions()
             }//Get options
