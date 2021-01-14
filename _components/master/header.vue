@@ -3,24 +3,33 @@
     <!-- HEADER -->
     <q-header class="bg-white">
       <!-- Toolbar header -->
-      <div id="toolbarTop" class="q-hide q-md-show bg-primary">
-        <q-toolbar color="primary">
+      <div class="q-hide q-md-show bg-primary">
+        <q-toolbar id="toolbarTop" color="primary">
           <!--Logo-->
-          <q-avatar><img :src="logo"></q-avatar>
+          <div id="logoImage" :style="`background-image: url('${logo}')`"
+               class="img-as-bg"></div>
           <!--Project name-->
           <q-toolbar-title>{{ projectName }}</q-toolbar-title>
-          <!--== Button User ==-->
-          <q-no-ssr>
-            <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated">
-              <q-avatar size="25px">
-                <img :src="quserState.userData.mainImage">
-              </q-avatar>
-              <div class="q-ml-xs">{{ quserState.userData.firstName }}</div>
+          <!--Actions-->
+          <div class="row q-gutter-x-sm items-center">
+            <!--== Button User ==-->
+            <q-no-ssr>
+              <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated" padding="5px"
+                     rounded>
+                <div id="profileImage" :style="`background-image: url('${quserState.userData.mainImage}')`"
+                     class="img-as-bg"></div>
+                <div class="q-ml-xs">{{ quserState.userData.firstName }}</div>
+              </q-btn>
+            </q-no-ssr>
+            <!--== Button Go to site ==-->
+            <q-btn round dense icon="far fa-eye" color="white" unelevated class="btn-action"
+                   type="a" :href="$store.state.qsiteApp.baseUrl" target="_blank" text-color="primary">
+              <q-tooltip>{{ $tr('ui.configList.goToSite') }}</q-tooltip>
             </q-btn>
-          </q-no-ssr>
-          <!--== Button Config ==-->
-          <q-btn round dense flat icon="fas fa-cog"
-                 @click="$eventBus.$emit('toggleMasterDrawer','config')"/>
+            <!--== Button Config ==-->
+            <q-btn round dense icon="fas fa-cog" color="white" unelevated class="btn-action" text-color="primary"
+                   @click="$eventBus.$emit('toggleMasterDrawer','config')" size="14px"/>
+          </div>
         </q-toolbar>
       </div>
 
@@ -138,6 +147,19 @@ export default {
 </script>
 <style lang="stylus">
 #masterHeader
+  #toolbarTop
+    padding-left 8px
+    padding-right 10px
+    #logoImage
+      height 40px
+      width 40px
+      border-radius 5px
+
+    #profileImage
+      height 30px
+      width 30px
+      border-radius 50%
+
   #toolbarBottom
     width 100%
     color $grey-9
@@ -154,7 +176,6 @@ export default {
     @media screen and (max-width: $breakpoint-md)
       padding 5px 10px
       background-color $primary
-      border-radius 0 0 15px 15px
 
 
     #buttonToogleMenu
@@ -166,15 +187,6 @@ export default {
       border-radius 0
       background-color white
       border-right 1px solid $grey-4
-
-    .btn-action
-      .q-btn__wrapper
-        min-height 30px !important
-        min-width 30px !important
-        padding 5px
-
-        .q-icon
-          font-size 16px !important
 
     .q-breadcrumbs
       .q-breadcrumbs__el
@@ -196,4 +208,12 @@ export default {
       right 0
       bottom -23px
       width max-content
+  .btn-action
+    .q-btn__wrapper
+      min-height 30px !important
+      min-width 30px !important
+      padding 5px
+
+      .q-icon
+        font-size 16px !important
 </style>

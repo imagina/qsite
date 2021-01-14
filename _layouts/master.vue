@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh LpR lFf" class="bg-grey-1">
+  <q-layout id="layoutMaster" view="hHh LpR lFf">
     <!-- HEADER -->
     <header-component v-if="appState.loadPage"/>
 
@@ -59,3 +59,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+#layoutMaster
+  background-color #eef5f9
+</style>

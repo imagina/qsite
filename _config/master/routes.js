@@ -58,6 +58,7 @@ class AutoLoadRoutes {
     return {
       name: routeName,
       meta: {
+        ...page,
         permission: (page.permission ? page.permission : null),
         activated: page.activated,
         path: locale ? `${locale}.${page.path}` : page.path,

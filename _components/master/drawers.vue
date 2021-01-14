@@ -8,7 +8,9 @@
         <q-img contain :src="logo" style="height: 120px; min-height: 120px"/>
       </div>
       <!--List-->
-      <menu-list ref="menuList" group :menu="menu"/>
+      <q-scroll-area :style="`height: calc(100vh - ${this.windowSize == 'mobile' ? '152' : '250'}px`">
+        <menu-list ref="menuList" group :menu="menu"/>
+      </q-scroll-area>
     </q-drawer>
 
     <!-- Config -->
@@ -42,11 +44,13 @@ export default {
   },
   data() {
     return {
+      windowHeight: window.innerHeight,
+      windowWith: window.innerWidth,
       projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
       logo: this.$store.getters['qsiteApp/getSettingMediaByName']('isite::logo1').path,
-      miniState: this.$q.platform.is.mobile ? false : true,
+      miniState: this.windowSize == 'mobile' ? false : true,
       drawer: {
-        menu: this.$q.platform.is.mobile ? false : true,
+        menu: this.windowSize == 'mobile' ? false : true,
         config: false,
         filter: false
       },
@@ -54,20 +58,34 @@ export default {
       filter: this.$filter
     }
   },
-  computed: {},
+  computed: {
+    windowSize() {
+      return this.windowWith >= '992' ? 'desktop' : 'mobile'
+    }
+  },
   methods: {
     //init
     init() {
       this.$eventBus.$on('toggleMasterDrawer', (drawerName) => this.toggleDrawer(drawerName))
+      //Watch window size
+      window.addEventListener('resize', () => {
+        this.windowHeight = window.innerHeight
+        this.windowWith = window.innerWidth
+      })
     },
     //Show drawer specific
     toggleDrawer(drawerName) {
       //Hidden all drawers
-      for (var drawer in this.drawer)
-        if (drawer != drawerName) this.drawer[drawer] = false
+      for (var drawer in this.drawer) {
+        if (drawer != drawerName) {
+          if ((drawer == 'menu') && (this.windowSize != 'mobile')) {
+            this.miniState = true
+          } else this.drawer[drawer] = false
+        }
+      }
       //Toogle drawer
       if (drawerName == 'menu') {
-        if (this.$q.platform.is.mobile) {
+        if (this.windowSize == 'mobile') {
           this.miniState = false
           this.drawer.menu = !this.drawer.menu
         } else {

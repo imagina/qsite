@@ -1,3 +1,6 @@
+import alert from '@imagina/qsite/_plugins/alert'
+import Vue from 'vue'
+
 class Helper {
   constructor() {
   }
@@ -328,6 +331,28 @@ class Helper {
   //Back history
   backHistory() {
     window.history.back()
+  }
+
+  //Copy to clipboard
+  copyToClipboard(text = '') {
+    try {
+      navigator.clipboard.writeText(text).then(function () {
+        alert.info({
+          icon: 'fas fa-copy',
+          message: Vue.prototype.$tr('qsite.layout.messages.copyToClipboard')
+        });
+      }, function (err) {
+        alert.error({
+          icon: 'fas fa-copy',
+          message: Vue.prototype.$tr('qsite.layout.messages.failedCopyToClipboard')
+        });
+      });
+    } catch (error) {
+      alert.error({
+        icon: 'fas fa-copy',
+        message: Vue.prototype.$tr('qsite.layout.messages.failedCopyToClipboard')
+      });
+    }
   }
 }
 

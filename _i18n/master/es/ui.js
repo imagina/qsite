@@ -2,6 +2,7 @@ export default {
   label: {
     delete: 'Eliminar',
     cancel: 'Cancelar',
+    cancelled: 'Cancelado',
     open: 'Abierto',
     close: 'Cerrar',
     closed: 'Cerrado',
@@ -96,8 +97,11 @@ export default {
     chat: 'Chat | Chats',
     pagination: 'Paginación',
     page: 'Pagína | Paginas',
+    year: 'Año | Años',
+    month: 'Mes | Meses',
+    week: 'Semana | Semanas',
+    day: 'Día | Dias',
     today: 'Hoy',
-    yesterday: 'Ayer',
     tomorrow: 'Mañana',
     LastNumDays: 'Ultimos {numDays} dias',
     currentWeek: 'Semana actual',
@@ -139,7 +143,11 @@ export default {
     big: 'Grande | Grandes',
     step: 'Paso | Pasos',
     session: 'Sesión | Sesiones',
-    simplified : 'Simplificado'
+    simplified: 'Simplificado',
+    public: 'Publico | Publicos',
+    private: 'Privado | Privados',
+    list : 'Lista | Listas',
+    category: 'Categoría | Categorías'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -282,6 +290,9 @@ export default {
     loggedAs: 'Registrado como',
     fullScreen: 'Pantalla completa',
     signOut: 'Cerrar sesión',
-    leaveImpersonating: 'Dejar de suplantar'
+    leaveImpersonating: 'Dejar de suplantar',
+    clearCache: 'Limpiar cache',
+    goToSite : 'Ver el sitio'
   },
 }
+

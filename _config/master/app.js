@@ -17,6 +17,7 @@ export default {
     'qdocument',
     'qplace',
     'qlocations',
+    'qevent',
     'qpage',
     'qredirect',
     'qmenu',

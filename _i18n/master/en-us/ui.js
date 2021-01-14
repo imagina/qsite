@@ -2,6 +2,7 @@ export default {
   label: {
     delete: 'Delete',
     cancel: 'Cancel',
+    cancelled: 'Cancelled',
     open: 'Open',
     close: 'Close',
     closed: 'Closed',
@@ -50,6 +51,9 @@ export default {
     allow: 'Allow',
     deny: 'Deny',
     inherit: 'Inherit',
+    year: 'Year | Years',
+    month: 'Month | Months',
+    week: 'Week | Weeks',
     day: 'Day | Days',
     monday: 'Monday',
     tuesday: 'Tuesday',
@@ -135,7 +139,11 @@ export default {
     big: 'Big',
     step: 'Step | Steps',
     session: 'Session | Sessions',
-    simplified : 'Simplified'
+    simplified: 'Simplified',
+    public: 'Public',
+    private: 'Private',
+    list: 'List | List',
+    category: 'Category | Categories'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -194,7 +202,7 @@ export default {
     email: 'Email | Emails',
     slug: 'Slug',
     summary: 'Summary | Summaries',
-    description: 'Description Descriptions',
+    description: 'Description | Descriptions',
     category: 'Category | Categories',
     parent: 'Parent | Parents',
     status: 'status | Statuses',
@@ -282,6 +290,8 @@ export default {
     loggedAs: 'logged as',
     fullScreen: 'show in full screen',
     signOut: 'sign out',
-    leaveImpersonating: 'Leave impersonating'
+    leaveImpersonating: 'Leave impersonating',
+    clearCache: 'Clear cache',
+    goToSite : 'Go to site'
   },
 }

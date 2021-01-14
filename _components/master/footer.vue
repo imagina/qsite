@@ -4,28 +4,28 @@
     <q-footer class="shadow-5">
       <div id="footerContent" class="row q-md-hide items-center">
         <!-- Menu -->
-        <div class="item-footer col" @click="$eventBus.$emit('toggleMasterDrawer','menu')">
+        <div class="item-footer col cursor-pointer" @click="$eventBus.$emit('toggleMasterDrawer','menu')">
           <q-icon class="item-icon" name="fas fa-bars"/>
           <div>Menu</div>
         </div>
         <!-- Search -->
-        <div class="item-footer col">
+        <div class="item-footer col cursor-pointer">
           <q-icon class="item-icon" name="fas fa-search"/>
           <div>{{ $tr('ui.label.search') }}</div>
         </div>
         <!-- Main -->
         <div class="col" @click="doMainAction()">
-          <div id="item-main" :class="`row items-center justify-center bg-${mainAction.color}`">
+          <div id="item-main" :class="`cursor-pointer row items-center justify-center bg-${mainAction.color}`">
             <q-icon class="item-icon" :name="mainAction.icon"/>
           </div>
         </div>
         <!-- Settings -->
-        <div class="item-footer col" @click="$eventBus.$emit('toggleMasterDrawer','config')">
+        <div class="item-footer col cursor-pointer" @click="$eventBus.$emit('toggleMasterDrawer','config')">
           <q-icon class="item-icon" name="fas fa-cog"/>
           <div>{{ $tr('ui.label.setting') }}</div>
         </div>
         <!-- Profile -->
-        <div class="item-footer col">
+        <div class="item-footer col cursor-pointer">
           <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated"
                  class="item-icon" padding="none">
             <q-avatar size="20px">

@@ -2,7 +2,7 @@
   <div id="avatarImageComponent" class="inline-block"
        @click="() => {dialog.show = true; $emit('click')}">
     <!--Avatar-->
-    <div v-if="src" class="avatar-img-content"
+    <div v-if="src" :class="`avatar-img-content ${!noOpen ? 'cursor-pointer' : ''}`"
          :style="`background-image: url('${src}'); ${defaultSize}`"></div>
 
     <!--Full screen-->

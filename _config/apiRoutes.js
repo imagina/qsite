@@ -9,5 +9,6 @@ export default {
   configFields: `${urlBase}/fields`,
   appVersion: `${urlBase}/site/version`,
   siteSettings: `${urlBase}/site/settings`,
-  permissions: `${urlBase}/site/permissions`
+  permissions: `${urlBase}/site/permissions`,
+  cacheClear: `${urlBase}/site/cache-clear`
 }
