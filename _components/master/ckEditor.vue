@@ -35,6 +35,7 @@
           filebrowserBrowseUrl: this.$router.resolve({name: 'app.media.select'}).href,
           extraPlugins: 'embed,autoembed,colorbutton,colordialog',
           embed_provider: '//iframe.ly/api/oembed?url={url}&callback={callback}&api_key=7e0aa12b0cd2c01651346b',
+          allowedContent: 'iframe[*]'
         }
       }
     },

@@ -38,8 +38,8 @@
       <div class="q-mt-xs q-px-sm">
         <!-- Title -->
         <div class="text-primary">
-          <q-icon name="fas fa-globe"/>
-          {{ $trp('ui.label.department') }}
+          <q-icon name="fas fa-people-arrows"/>
+          {{ this.$trp('quser.layout.label.userGroup') }}
         </div>
 
         <!--Departments-->

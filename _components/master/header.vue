@@ -26,9 +26,17 @@
                    type="a" :href="$store.state.qsiteApp.baseUrl" target="_blank" text-color="primary">
               <q-tooltip>{{ $tr('ui.configList.goToSite') }}</q-tooltip>
             </q-btn>
+            <!--== Button Chat ==-->
+            <q-btn v-if="$auth.hasAccess('ichat.conversations.index')" color="white" unelevated
+                   :class="`btn-action ${badge.chat ? 'active-badge' : ''}`" round dense icon="far fa-comment-alt"
+                   @click="$eventBus.$emit('toggleMasterDrawer','chat')" text-color="primary">
+              <q-tooltip>Chat</q-tooltip>
+            </q-btn>
             <!--== Button Config ==-->
             <q-btn round dense icon="fas fa-cog" color="white" unelevated class="btn-action" text-color="primary"
-                   @click="$eventBus.$emit('toggleMasterDrawer','config')" size="14px"/>
+                   @click="$eventBus.$emit('toggleMasterDrawer','config')" size="14px">
+              <q-tooltip>{{ $trp('ui.label.setting') }}</q-tooltip>
+            </q-btn>
           </div>
         </q-toolbar>
       </div>
@@ -84,18 +92,25 @@
 </template>
 <script>
 export default {
+  beforeDestroy() {
+    this.$eventBus.$off('header.badge.manage')
+  },
   props: {},
   components: {},
   watch: {},
   mounted() {
     this.$nextTick(function () {
+      this.init()
     })
   },
   data() {
     return {
       projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
       logo: this.$store.getters['qsiteApp/getSettingMediaByName']('isite::logo1').path,
-      filter: this.$filter
+      filter: this.$filter,
+      badge: {
+        chat: false
+      }
     }
   },
   computed: {
@@ -142,7 +157,14 @@ export default {
       return response
     }
   },
-  methods: {}
+  methods: {
+    init() {
+      //Manage badges to button actions
+      this.$eventBus.$on('header.badge.manage', (response) => {
+        Object.keys(response).forEach(name => this.badge[name] = response[name])
+      })
+    }
+  }
 }
 </script>
 <style lang="stylus">
@@ -150,6 +172,7 @@ export default {
   #toolbarTop
     padding-left 8px
     padding-right 10px
+
     #logoImage
       height 40px
       width 40px
@@ -208,6 +231,7 @@ export default {
       right 0
       bottom -23px
       width max-content
+
   .btn-action
     .q-btn__wrapper
       min-height 30px !important
@@ -216,4 +240,15 @@ export default {
 
       .q-icon
         font-size 16px !important
+
+    &.active-badge
+      &:after
+        position absolute
+        content ''
+        height 12px
+        width 12px
+        background red
+        border-radius 50%
+        right -2px
+        top -2px
 </style>

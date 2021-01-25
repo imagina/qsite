@@ -29,7 +29,10 @@ class AutoLoadPages {
           page: () => import('@imagina/qsite/_pages/master/index.vue'),
           title: 'sidebar.pageHome',
           icon: 'fas fa-home',
-          authenticated: appConfig.isBackend
+          authenticated: appConfig.isBackend,
+          subHeader: {
+            refresh: true
+          }
         }
       }
     }

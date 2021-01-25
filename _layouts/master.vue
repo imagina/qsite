@@ -21,6 +21,8 @@
 import headerComponent from '@imagina/qsite/_components/master/header'
 import drawersComponent from '@imagina/qsite/_components/master/drawers'
 import footerComponen from '@imagina/qsite/_components/master/footer'
+import Vue from 'vue'
+import notificationPlugin from '@imagina/qnotification/_plugins/notification'
 
 export default {
   meta() {
@@ -41,6 +43,7 @@ export default {
   components: {headerComponent, drawersComponent, footerComponen},
   mounted() {
     this.$nextTick(async function () {
+      this.init()
     })
   },
   data() {
@@ -52,6 +55,10 @@ export default {
     }
   },
   methods: {
+    init() {
+      Vue.prototype.$notification = new notificationPlugin(this.$store)//Echo plugin
+    },
+    //Refresh page
     async refreshPage(done) {
       await this.$store.dispatch('qsiteApp/REFRESH_PAGE')
       done()

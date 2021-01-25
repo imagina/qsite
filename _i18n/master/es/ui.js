@@ -146,8 +146,12 @@ export default {
     simplified: 'Simplificado',
     public: 'Publico | Publicos',
     private: 'Privado | Privados',
-    list : 'Lista | Listas',
-    category: 'Categoría | Categorías'
+    list: 'Lista | Listas',
+    category: 'Categoría | Categorías',
+    setup: 'Configurar',
+    other: 'Otro | Otros',
+    internal : 'Interno | Internos',
+    external : 'Externo | Externos'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -292,7 +296,7 @@ export default {
     signOut: 'Cerrar sesión',
     leaveImpersonating: 'Dejar de suplantar',
     clearCache: 'Limpiar cache',
-    goToSite : 'Ver el sitio'
+    goToSite: 'Ver el sitio'
   },
 }
 

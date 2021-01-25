@@ -8,10 +8,15 @@
           <q-icon class="item-icon" name="fas fa-bars"/>
           <div>Menu</div>
         </div>
-        <!-- Search -->
+        <!-- Profile -->
         <div class="item-footer col cursor-pointer">
-          <q-icon class="item-icon" name="fas fa-search"/>
-          <div>{{ $tr('ui.label.search') }}</div>
+          <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated"
+                 class="item-icon" padding="none">
+            <q-avatar size="20px">
+              <img :src="quserState.userData.mainImage">
+            </q-avatar>
+          </q-btn>
+          <div>{{ $tr('ui.label.profile') }}</div>
         </div>
         <!-- Main -->
         <div class="col" @click="doMainAction()">
@@ -24,18 +29,48 @@
           <q-icon class="item-icon" name="fas fa-cog"/>
           <div>{{ $tr('ui.label.setting') }}</div>
         </div>
-        <!-- Profile -->
-        <div class="item-footer col cursor-pointer">
-          <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated"
-                 class="item-icon" padding="none">
-            <q-avatar size="20px">
-              <img :src="quserState.userData.mainImage">
-            </q-avatar>
-          </q-btn>
-          <div>{{ $tr('ui.label.profile') }}</div>
+        <!-- Others -->
+        <div class="item-footer col cursor-pointer" @click="modal.show = true">
+          <q-icon class="item-icon" name="fas fa-ellipsis-h"/>
+          <div>{{ $trp('ui.label.other') }}</div>
         </div>
       </div>
     </q-footer>
+    <!--Dialog other actions-->
+    <q-dialog v-model="modal.show" position="bottom">
+      <q-card style="width: 350px">
+        <!--Toolbar-->
+        <q-toolbar>
+          <q-icon class="item-icon" name="fas fa-ellipsis-v"/>
+          <q-toolbar-title> {{ $trp('ui.label.other') }}</q-toolbar-title>
+          <!--Close bottom-->
+          <q-btn flat round dense icon="close" v-close-popup/>
+        </q-toolbar>
+
+        <!--Separator-->
+        <q-separator/>
+
+        <q-card-section class="row items-center no-wrap q-pa-none">
+          <q-list separator class="full-width" v-close-popup>
+            <!--Go to site action-->
+            <q-item clickable v-ripple @click.native="$helper.openExternalURL($store.state.qsiteApp.baseUrl)">
+              <q-item-section avatar>
+                <q-icon color="primary" name="far fa-eye"/>
+              </q-item-section>
+              <q-item-section class="ellipsis">{{ $tr('ui.configList.goToSite') }}</q-item-section>
+            </q-item>
+            <!--Chat action-->
+            <q-item clickable v-ripple v-if="$auth.hasAccess('ichat.conversations.index')"
+                    @click.native="$eventBus.$emit('toggleMasterDrawer','chat')">
+              <q-item-section avatar>
+                <q-icon color="primary" name="far fa-comment-alt"/>
+              </q-item-section>
+              <q-item-section class="ellipsis">Chat</q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
@@ -60,7 +95,10 @@ export default {
   },
   data() {
     return {
-      mainAction: config('app.mobilMainAction')
+      mainAction: config('app.mobilMainAction'),
+      modal: {
+        show: false
+      }
     }
   },
   computed: {

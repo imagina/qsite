@@ -8,6 +8,7 @@ export default function (value = '', fallback = null) {
   let sidebar = require('src/config/sidebar').default
   let routes = require('@imagina/qsite/_config/master/routes').default
   let stores = require('@imagina/qsite/_config/master/stores').default
+  let main = require('@imagina/qsite/_config/master/main').default
 
   //Create constante
   const values = {
@@ -16,7 +17,8 @@ export default function (value = '', fallback = null) {
     pages: orderPages(pages),
     sidebar,
     routes,
-    stores
+    stores,
+    main
   }
 
   return findValue(value, values) || fallback

@@ -11,6 +11,7 @@ export default {
   modules: [
     'qcrud',
     'quser',
+    'qnotification',
     'qblog',
     'qcommerce',
     'qform',
@@ -25,6 +26,7 @@ export default {
     'qslider',
     'qbanner',
     'qsite',
+    'qchat'
   ],
   //Cache
   saveCache: {
