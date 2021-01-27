@@ -319,6 +319,7 @@ export default {
       //Request
       this.$crud.post('apiRoutes.qsite.cacheClear').then(response => {
         this.loadingCacheClear = false
+        this.$store.dispatch('qsiteApp/REFRESH_PAGE')
       }).catch(error => this.loadingCacheClear = false)
     }
   }

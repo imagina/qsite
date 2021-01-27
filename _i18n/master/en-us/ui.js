@@ -146,8 +146,13 @@ export default {
     category: 'Category | Categories',
     setup: 'Setup',
     other: 'Other | Others',
-    internal : 'Internal',
-    external : 'External'
+    internal: 'Internal',
+    external: 'External',
+    quantity: 'Quantity | Quanitities',
+    folder: 'Folder | Folders',
+    file: 'File | Files',
+    order : 'Order',
+    recent : 'Recent'
   },
   message: {
     notFound: 'Sorry, nothing here',

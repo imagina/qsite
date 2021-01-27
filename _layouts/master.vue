@@ -4,7 +4,7 @@
     <header-component v-if="appState.loadPage"/>
 
     <!-- Drawers -->
-    <drawers-component/>
+    <drawers-component v-if="appState.loadPage"/>
 
     <!-- ROUTER VIEW -->
     <q-page-container>

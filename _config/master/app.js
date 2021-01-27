@@ -12,8 +12,8 @@ export default {
     'qcrud',
     'quser',
     'qnotification',
-    'qblog',
     'qcommerce',
+    'qblog',
     'qform',
     'qdocument',
     'qplace',
@@ -34,7 +34,6 @@ export default {
       'sessionData',
       'auth.department.id',
       'auth.role.id',
-      'site.default.locale',
       'impersonatorData',
       'app.state.extra',
       'app.data.filters'

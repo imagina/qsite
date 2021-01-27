@@ -15,32 +15,39 @@
         <div id="itemsContent" class="q-mb-md">
           <!--List-v-->
           <div id="itemsListV" v-if="cardParams.type == 'list-v'">
-            <q-list v-for="(item, key) in items" :key="key">
-              <q-item class="q-pa-none q-pb-lg">
-                <!--Side content-->
-                <q-item-section class="sideItem" side>
-                  <!--Image-->
-                  <div class="itemImage img-as-bg" v-if="getInformation(item,'image')"
-                       :style="`background-image: url('${getInformation(item,'image')}')`"></div>
-                  <!--Image-->
-                  <q-icon class="itemIcon" v-if="!getInformation(item,'image') && cardParams.icon"
-                          :name="cardParams.icon"/>
-                </q-item-section>
-                <!--Information-->
-                <q-item-section>
-                  <q-item-label caption class="ellipsis">{{ getInformation(item, 'text1') }}</q-item-label>
-                  <q-item-label class="ellipsis text-grey-8 q-my-xs">
-                    <b>{{ getInformation(item, 'text2') }}</b>
-                  </q-item-label>
-                  <q-item-label caption lines="2">{{ getInformation(item, 'text3') }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
+            <q-scroll-area style="height: 260px; width: 100%">
+              <q-list v-for="(item, key) in items" :key="key">
+                <q-item class="q-px-none"
+                        @click.native="cardParams.itemAction ? cardParams.itemAction(item) : false"
+                        :clickable="(cardParams.itemAction ? true : false)"
+                        :v-ripple="(cardParams.itemAction ? true : false)">
+                  <!--Side content-->
+                  <q-item-section class="sideItem" side>
+                    <!--Image-->
+                    <div class="itemImage img-as-bg" v-if="getInformation(item,'image')"
+                         :style="`background-image: url('${getInformation(item,'image')}')`"></div>
+                    <!--Image-->
+                    <q-icon class="itemIcon" v-if="!getInformation(item,'image') && cardParams.icon"
+                            :name="cardParams.icon"/>
+                  </q-item-section>
+                  <!--Information-->
+                  <q-item-section>
+                    <q-item-label caption class="ellipsis">{{ getInformation(item, 'text1') }}</q-item-label>
+                    <q-item-label class="ellipsis text-grey-8 q-my-xs">
+                      <b>{{ getInformation(item, 'text2') }}</b>
+                    </q-item-label>
+                    <q-item-label caption lines="2">{{ getInformation(item, 'text3') }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-scroll-area>
           </div>
           <!--List-h-->
           <div id="itemsListH" v-if="cardParams.type == 'list-h'">
             <div class="row q-col-gutter-md">
-              <div v-for="(item, key) in items" :key="key" class="col-6 col-md-4">
+              <div v-for="(item, key) in items" :key="key"
+                   :class="`col-6 col-md-4 ${(cardParams.itemAction ? 'cursor-pointer' : '')}`"
+                   @click="cardParams.itemAction ? cardParams.itemAction(item) : false">
                 <!--Side item-->
                 <div class="itemSide">
                   <!--Image-->
@@ -104,7 +111,7 @@ export default {
         type: 'list-v',
         ...this.params,
         requestParams: {
-          take: 3,
+          take: (this.params.type == 'list-v') ? 10 : 6,
           page: 1,
           ...(this.params.requestParams || {})
         }
