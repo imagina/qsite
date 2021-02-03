@@ -155,8 +155,9 @@ export default {
     quantity: 'Cantidad | Cantidades',
     folder: 'Carpeta | Carpetas',
     file: 'Archivo | Archivos',
-    order : 'Ordenar',
-    recent : 'Reciente | Recientes'
+    order: 'Ordenar',
+    recent: 'Reciente | Recientes',
+    size : 'Tamaño | Tamaños'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -197,7 +198,9 @@ export default {
     copiedToClipboard: 'Copiado en el portapapeles',
     preview: 'Vista previa',
     showMore: 'Ver más',
-    changeTo: 'Cambiar a {text}'
+    changeTo: 'Cambiar a {text}',
+    listView: 'Vista de lista',
+    gribView: 'Vista de cuadricula'
   },
   form: {
     id: 'ID',

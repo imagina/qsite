@@ -152,7 +152,8 @@ export default {
     folder: 'Folder | Folders',
     file: 'File | Files',
     order : 'Order',
-    recent : 'Recent'
+    recent : 'Recent',
+    size : 'Size | Sizes'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -197,7 +198,9 @@ export default {
     accept: 'Accept',
     reject: 'Reject',
     rejected: 'Rejected',
-    changeTo: 'Change to {text}'
+    changeTo: 'Change to {text}',
+    listView : 'List View',
+    gribView : 'Grib view'
   },
   form: {
     id: 'ID',

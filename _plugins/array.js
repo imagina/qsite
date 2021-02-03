@@ -3,18 +3,19 @@ class Array {
   }
 
   //Order array as tree
-  tree(elements, fields = {label: 'title', id: 'id'}) {
+  tree(elements, fields = {}) {
     var trees = []
     var response = []
+    fields = {label: 'title', id: 'id', parentId: 'parentId', ...fields}
 
     //Get parents ID
     elements.forEach(item => {
-      if (!item.parentId) item.parentId = 0//Default parent ID
+      if (!item[fields.parentId]) item[fields.parentId] = 0//Default parent ID
       let findId = false
       elements.forEach(j => {
-        if (parseInt(j.id) == parseInt(item.parentId)) findId = j
+        if (parseInt(j.id) == parseInt(item[fields.parentId])) findId = j
       })
-      if (!findId) trees[item.parentId] = item.parentId
+      if (!findId) trees[item[fields.parentId]] = item[fields.parentId]
     })
 
     //Recursive funtion to order items
@@ -30,7 +31,7 @@ class Array {
 
     //Build tree items
     trees.forEach((tree, index) => {
-      this.builTree(elements, tree).forEach(element => {
+      this.builTree(elements, tree, fields).forEach(element => {
         let itemOrder = {
           label: element[fields.label],
           id: element[fields.id],
@@ -44,12 +45,14 @@ class Array {
     return response//Response
   }
 
-  builTree(elements, parentId = 0) {
+  builTree(elements, parentId = 0, fields = {}) {
     var branch = []
+    fields = {parentId: 'parentId', ...fields}
+
     elements.forEach(element => {
-      element.parentId ? false : element.parentId = 0
-      if (element.parentId == parentId) {
-        var children = this.builTree(elements, element.id)
+      element[fields.parentId] ? false : element[fields.parentId] = 0
+      if (element[fields.parentId] == parentId) {
+        var children = this.builTree(elements, element.id, fields)
         let record = element
         if (children.length) {
           record['children'] = children
