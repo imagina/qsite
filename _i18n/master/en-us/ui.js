@@ -153,7 +153,8 @@ export default {
     file: 'File | Files',
     order : 'Order',
     recent : 'Recent',
-    size : 'Size | Sizes'
+    size : 'Size | Sizes',
+    shareWith : 'Share with'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -200,7 +201,9 @@ export default {
     rejected: 'Rejected',
     changeTo: 'Change to {text}',
     listView : 'List View',
-    gribView : 'Grib view'
+    gribView : 'Grib view',
+    uploadFile : 'Upload File | Upload Files',
+    editFile : 'Edit File | Edit File'
   },
   form: {
     id: 'ID',

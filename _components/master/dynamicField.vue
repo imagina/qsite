@@ -169,6 +169,10 @@
                  v-bind="fieldProps.fieldComponent" stack-label>
           <signature v-model="responseValue" v-bind="fieldProps.field"/>
         </q-field>
+        <!--Uploader-->
+        <q-field v-model="responseValue" v-if="loadField('uploader')" v-bind="fieldProps.fieldComponent" stack-label>
+          <uploader v-model="responseValue" v-bind="fieldProps.field"/>
+        </q-field>
       </div>
     </div>
   </div>
@@ -184,6 +188,7 @@ import schedulesForm from '@imagina/qsite/_components/master/schedules'
 import ckEditor from '@imagina/qsite/_components/master/ckEditor'
 import mapLeaflet from '@imagina/qsite/_components/master/mapLeaflet'
 import signature from '@imagina/qsite/_components/master/signature'
+import uploader from '@imagina/qsite/_components/master/uploader'
 
 export default {
   name: 'dynamicField',
@@ -209,7 +214,8 @@ export default {
     schedulesForm,
     ckEditor,
     mapLeaflet,
-    signature
+    signature,
+    uploader
   },
   watch: {
     value: {
@@ -503,6 +509,19 @@ export default {
             }
           }
           break;
+        case'uploader':
+          props = {
+            field: {
+              emitFile: true,
+              ...props,
+            },
+            fieldComponent: {
+              borderless: true,
+              dense: true,
+              ...props
+            }
+          }
+          break;
       }
 
       //Response
@@ -661,7 +680,7 @@ export default {
           this.responseValue = propValue || []
           break
         case 'checkbox':
-          this.responseValue = propValue || false
+          this.responseValue = (propValue !== undefined) ? propValue : null
           break
         case 'media':
           this.responseValue = propValue || {}
@@ -680,6 +699,9 @@ export default {
           break
         case 'positionMarkerMap':
           this.responseValue = propValue || false
+          break
+        case 'uploader':
+          this.responseValue = (propValue !== undefined) ? propValue : null
           break
         default :
           this.responseValue = propValue || null

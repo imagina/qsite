@@ -219,6 +219,26 @@ class Helper {
     return convertObject(object)//Return response
   }
 
+  //Convert object keys to snake_case
+  objToArrayDeep(object) {
+    //function recursive to loop all items from object
+    let convertToArray = (dataObject) => {
+      let response = []//Array to save fields vonverted
+      //Loop all items for convert
+      for (var itemName in dataObject) {
+        let itemValue = dataObject[itemName]//Value from item
+        //If value is object, also convert value
+        if ((typeof itemValue === 'object' && itemValue !== null)) {
+          itemValue = convertToArray(dataObject[itemName])
+        }
+        //Add to response new Key with Value
+        response[itemName] = (itemValue !== undefined) ? itemValue : null
+      }
+      return response
+    }
+    return convertToArray(object)//Return response
+  }
+
   checkPassword(password) {
     // Must be at least 8 characters and contain a at least 1 lowercase character, at least 1 uppercase character and a number.
     return password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
@@ -353,6 +373,34 @@ class Helper {
         message: Vue.prototype.$tr('qsite.layout.messages.failedCopyToClipboard')
       });
     }
+  }
+
+  //get base 64 from file
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      //Validate blob file (images)
+      if (file.__img) {
+        let srcFile = file.__img.src
+        if (srcFile.indexOf('blob') == -1) return resolve(srcFile)
+      }
+      //Get base 64 from file
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function (event) {
+        resolve(reader.result);
+      };
+    })
+  }
+
+  //Convert data url to file
+  urltoFile(url, filename, mimeType) {
+    return (
+      fetch(url).then(function (res) {
+        return res.arrayBuffer();
+      }).then(function (buf) {
+        return new File([buf], filename, {type: mimeType});
+      })
+    );
   }
 }
 

@@ -40,7 +40,7 @@ export default {
     available: 'Disponible',
     soldOut: 'Agotado',
     all: 'Todo | Todos',
-    data: 'Dato',
+    data: 'Dato | Datos',
     link: 'Enlazar',
     image: 'Imagen | Imagenes',
     add: 'Agregar',
@@ -157,7 +157,8 @@ export default {
     file: 'Archivo | Archivos',
     order: 'Ordenar',
     recent: 'Reciente | Recientes',
-    size : 'Tamaño | Tamaños'
+    size : 'Tamaño | Tamaños',
+    shareWith : 'Compartir con'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -200,7 +201,9 @@ export default {
     showMore: 'Ver más',
     changeTo: 'Cambiar a {text}',
     listView: 'Vista de lista',
-    gribView: 'Vista de cuadricula'
+    gribView: 'Vista de cuadricula',
+    uploadFile : 'Cargar Archivo | Cargar Archivos',
+    editFile : 'Editar Archivo | Editar Archivos'
   },
   form: {
     id: 'ID',

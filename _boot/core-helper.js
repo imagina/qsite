@@ -4,11 +4,11 @@ import date from '@imagina/qsite/_plugins/date'
 import helper from '@imagina/qsite/_plugins/helper'
 import cache from '@imagina/qsite/_plugins/cache'
 import crud from '@imagina/qcrud/_services/baseService'
-import cloneDeep from 'lodash.clonedeep'
+import lodash from 'lodash'
 import moment from 'vue-moment'
 import Vuelidate from 'vuelidate'
 import {uid} from 'quasar'
-import { openURL } from 'quasar'
+import {openURL} from 'quasar'
 import eventBus from '@imagina/qsite/_plugins/eventBus'
 import filter from '@imagina/qsite/_plugins/filter'
 import VueSignaturePad from 'vue-signature-pad';
@@ -19,7 +19,15 @@ export default function ({app, router, store, Vue, ssrContext}) {
   Vue.prototype.$date = date
   Vue.prototype.$helper = helper
   Vue.prototype.$cache = cache
-  Vue.prototype.$clone = cloneDeep
+  Vue.prototype.$lodash = lodash
+  Vue.prototype.$clone = (dataToClone) => {
+    return lodash.cloneDeepWith(dataToClone, value => {
+      //Not clone File or Blob  type
+      if (value instanceof File || value instanceof Blob) {
+        return value
+      }
+    })
+  }
   Vue.prototype.$crud = crud
   Vue.prototype.$openUrl = openURL
   Vue.prototype.$eventBus = eventBus

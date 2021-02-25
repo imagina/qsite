@@ -11,6 +11,9 @@
       <router-view v-if="appState.loadPage" class="layout-padding"/>
     </q-page-container>
 
+    <!---Cropper-->
+    <cropper-component ref="cropperComponent"/>
+
     <!-- FOOTER -->
     <footer-componen v-if="appState.loadPage"/>
   </q-layout>
@@ -23,6 +26,7 @@ import drawersComponent from '@imagina/qsite/_components/master/drawers'
 import footerComponen from '@imagina/qsite/_components/master/footer'
 import Vue from 'vue'
 import notificationPlugin from '@imagina/qnotification/_plugins/notification'
+import cropperComponent from '@imagina/qsite/_components/master/cropper'
 
 export default {
   meta() {
@@ -40,7 +44,7 @@ export default {
       link: [{rel: 'icon', href: iconHref, id: 'icon'}],
     }
   },
-  components: {headerComponent, drawersComponent, footerComponen},
+  components: {headerComponent, drawersComponent, footerComponen, cropperComponent},
   mounted() {
     this.$nextTick(async function () {
       this.init()
