@@ -15,6 +15,8 @@ export default {
     'qcommerce',
     'qblog',
     'qform',
+    'qplan',
+    'qad',
     'qdocument',
     'qplace',
     'qlocations',

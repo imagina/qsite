@@ -11,15 +11,15 @@ import('@riophae/vue-treeselect/dist/vue-treeselect.css')
 
   .layout-padding
     @media (max-width: 767px)
-      padding 1.5rem 0.5rem
+      padding 15px
     @media (min-width: 768px) and (max-width: 991px)
-      padding 1.5rem 2rem
+      padding 15px
       margin auto
     @media (min-width: 992px) and (max-width: 1199px)
-      padding 2.5rem 3rem
+      padding 30px 20px
       margin auto
     @media (min-width: 1200px)
-      padding 3rem 4rem
+      padding 30px 20px
       margin auto
 
   //=================== responsive visibilities
@@ -100,6 +100,25 @@ import('@riophae/vue-treeselect/dist/vue-treeselect.css')
     background-color white
     padding 15px
     min-height 150px
+
+  .box-collapse
+    border-radius 5px
+    box-shadow 0px 5px 20px rgba(0, 0, 0, 0.05)
+    background-color white
+    overflow hidden
+
+    .q-expansion-item__border
+      display none
+
+    .header-container
+      border-bottom 1px solid $grey-4
+
+      .q-item__section
+        padding 0
+        min-width auto
+        margin-right 10px
+        color $blue-grey
+        font-weight bold
 
   .box-table
     border-radius 5px

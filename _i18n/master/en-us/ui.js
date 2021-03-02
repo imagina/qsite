@@ -154,7 +154,8 @@ export default {
     order : 'Order',
     recent : 'Recent',
     size : 'Size | Sizes',
-    shareWith : 'Share with'
+    shareWith : 'Share with',
+    map : 'Map | Maps'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -203,7 +204,8 @@ export default {
     listView : 'List View',
     gribView : 'Grib view',
     uploadFile : 'Upload File | Upload Files',
-    editFile : 'Edit File | Edit File'
+    editFile : 'Edit File | Edit File',
+    checked : 'Checked'
   },
   form: {
     id: 'ID',

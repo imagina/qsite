@@ -158,7 +158,9 @@ export default {
     order: 'Ordenar',
     recent: 'Reciente | Recientes',
     size : 'Tamaño | Tamaños',
-    shareWith : 'Compartir con'
+    shareWith : 'Compartir con',
+    checked : 'Validado | Validados',
+    map : 'Mapa | Mapas'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
