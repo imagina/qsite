@@ -1,4 +1,5 @@
 import helper from '@imagina/qsite/_plugins/helper'
+import cache from '@imagina/qsite/_plugins/cache'
 import {Loading} from "quasar";
 
 class Middleware {
@@ -10,6 +11,28 @@ class Middleware {
     this.redirectTo = false
     this.allowNavigate = true
     this.historyPage()//Handler to history page
+  }
+
+  //Check bearer on URL
+  checkBearer(fullPath) {
+    return new Promise(async resolve => {
+      //Validate if already exista a session
+      let sessionData = await cache.get.item('sessionData')
+      if (sessionData) return resolve(true)
+      //Search bearer on url
+      let bearer = helper.getUrlParamByName('authbearer', fullPath)
+      //Validate if exist bearer
+      if (!bearer) return resolve(true)
+      //Set bearer on cache
+      await cache.set('sessionData', {
+        userToken: 'Bearer ' + bearer,
+        expiresIn: helper.getUrlParamByName('expiresatbearer', fullPath)
+      })
+      //Auth update
+      await this.store.dispatch('quserAuth/AUTH_UPDATE')
+      //Resolve
+      resolve(true)
+    })
   }
 
   //CHeck login
@@ -100,8 +123,16 @@ class Middleware {
     this.store.commit('qsiteApp/SET_CURRENT_ROUTE', (nextRoute))//Update current route
 
     //Validate if require locale
-    if (locale && !helper.getLocaleRouteName(nextRoute.name))
+    if (locale && !helper.getLocaleRouteName(nextRoute.name)) {
       nextRoute = {...nextRoute, name: `${locale}.${nextRoute.name}`}
+    }
+
+    //Remove authbearer from url
+    if (to.query.authbearer) {
+      delete to.query.expiresatbearer
+      delete to.query.authbearer
+      return this.router.push(to)
+    }
 
     //Go to route
     if (nextRoute.name == to.name) return next()
@@ -110,8 +141,9 @@ class Middleware {
 }
 
 //Boot
-export default async ({router, store, Vue, app}) => {
+export default async ({router, store, Vue, app, ssrContext}) => {
   let middleware = new Middleware(router, store)//Define class middleware
+  await middleware.checkBearer(ssrContext ? ssrContext.req.get('href') : window.location.href)//Check bearer
   await middleware.checkLogin()//Check login
 
   //Handler to any route

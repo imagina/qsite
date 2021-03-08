@@ -2,7 +2,7 @@ import {Notify, Loading} from 'quasar'
 
 export default async ({app, router, store, Vue}) => {
   //Loading
-  Loading.show()
+  if(!process.env.isExtension) Loading.show()
   //====== Reset Service Worker
   if (navigator && navigator.serviceWorker && navigator.serviceWorker.controller
     && navigator.serviceWorker.controller.postMessage) {//Reset Service Worker

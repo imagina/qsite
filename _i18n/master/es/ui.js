@@ -157,10 +157,16 @@ export default {
     file: 'Archivo | Archivos',
     order: 'Ordenar',
     recent: 'Reciente | Recientes',
-    size : 'Tamaño | Tamaños',
-    shareWith : 'Compartir con',
-    checked : 'Validado | Validados',
-    map : 'Mapa | Mapas'
+    size: 'Tamaño | Tamaños',
+    shareWith: 'Compartir con',
+    checked: 'Validado | Validados',
+    map: 'Mapa | Mapas',
+    ad: 'Anuncio | Anuncios',
+    price: 'Precio | Precios',
+    new: 'Nuevo | Nuevos',
+    old: 'Viejo | Viejos',
+    country: 'Pais | Paises',
+    mainImage : 'Imagen Principal'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -204,8 +210,8 @@ export default {
     changeTo: 'Cambiar a {text}',
     listView: 'Vista de lista',
     gribView: 'Vista de cuadricula',
-    uploadFile : 'Cargar Archivo | Cargar Archivos',
-    editFile : 'Editar Archivo | Editar Archivos'
+    uploadFile: 'Cargar Archivo | Cargar Archivos',
+    editFile: 'Editar Archivo | Editar Archivos'
   },
   form: {
     id: 'ID',

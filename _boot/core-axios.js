@@ -3,16 +3,16 @@ import alert from '@imagina/qsite/_plugins/alert'
 
 export default function ({app, router, store, Vue, ssrContext}) {
   //=========== Set base url to axios
+  let baseUrl = config('app.baseUrl')
   let tagsToParceHost = ['http://', 'https://', ':8080', ':3000', 'www.']
   //Get base url
-  let rootHost = env('BASE_URL') || (ssrContext ? ssrContext.req.get('host') : window.location.host)
+  let rootHost = baseUrl || (ssrContext ? ssrContext.req.get('host') : window.location.host)
   let host = rootHost
   //Parse host if not exist in .env
-  if (!env('BASE_URL')) {
+  if (!baseUrl) {
     tagsToParceHost.forEach(tagToReplace => host = host.replace(tagToReplace, ''))
-    if (env('SET_PREFIX_HOST')) host = `${env('SET_PREFIX_HOST')}.${host}`//Add prefix to baseURl
     if (rootHost.indexOf('www') != -1) host = `www.${host}`//Set again WWW
-    host = env('NO_HTTPS') ? `http://${host}` : `https://${host}` //Define protocol
+    host = `https://${host}` //Add protocol
   }
 
   store.commit('qsiteApp/SET_BASE_URL', host) //Set base Url in store

@@ -155,7 +155,13 @@ export default {
     recent : 'Recent',
     size : 'Size | Sizes',
     shareWith : 'Share with',
-    map : 'Map | Maps'
+    map : 'Map | Maps',
+    ad : 'Ad | Ads',
+    price : 'Price | Prices',
+    new : 'New',
+    old : 'Old',
+    country: 'Country | Countries',
+    mainImage : 'Main Image'
   },
   message: {
     notFound: 'Sorry, nothing here',

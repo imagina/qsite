@@ -1,10 +1,11 @@
-const appConfig = config('app')
+import appConfig from 'src/config/app'
+import pagesConfig from 'src/config/pages'
 
 class AutoLoadSidebar {
   constructor() {
     this.sidebar = {}
-    this.modules = config('app.modules')
-    this.pages = config('pages')
+    this.modules = appConfig.modules
+    this.pages = pagesConfig
     this.addDefaultItems()
     this.loadModulesSidebar()
   }

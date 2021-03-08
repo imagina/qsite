@@ -31,7 +31,7 @@
 
     <!--Edit button--->
     <div class="text-right q-pa-sm">
-      <q-btn icon="fas fa-pen" @click="modal.show = true" color="positive" size="11px" padding="sm"
+      <q-btn @click="modal.show = true" color="positive" size="10px" padding="sm"
              rounded unelevated :label="$tr('ui.label.update')"/>
     </div>
 
@@ -223,7 +223,7 @@ export default {
         }
       })
       this.modal.schedules = this.$clone(schedules)
-      this.$emit('input', this.response)//Emit response
+      this.emitResponse()
     },
     //check if Last Schedule is completed
     successLastSchedule(key) {
@@ -249,8 +249,38 @@ export default {
         this.response[index].schedules = this.$clone(response[item.name])
       })
 
-      this.$emit('input', this.response)//Emit response
+      this.emitResponse()
       this.modal.show = false//hide modal
+    },
+    //Emit Value
+    emitResponse() {
+      let transformedSchedule = []
+
+      //Transfor data to schedules
+      Object.values(this.response).forEach(day => {
+        if (Array.isArray(day.schedules)) {
+          day.schedules.forEach(item => {
+            transformedSchedule.push({
+              iso: day.iso,
+              name: day.name,
+              startTime: this.$moment(item.from).format('HH:mm:00'),
+              endTime: this.$moment(item.to).format('HH:mm:00'),
+            })
+          })
+        } else {
+          if (day.schedules == 1) {
+            transformedSchedule.push({
+              iso: day.iso,
+              name: day.name,
+              startTime: '00:00:00',
+              endTime: '23:59:00'
+            })
+          }
+        }
+      })
+
+      this.$emit('converted', transformedSchedule)//Emit response
+      this.$emit('input', this.response)//Emit response
     }
   }
 }

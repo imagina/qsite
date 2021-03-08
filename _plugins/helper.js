@@ -288,7 +288,7 @@ class Helper {
   openExternalURL(url, newWindow = true) {
     if (url.indexOf('http') == -1) url = `https://${url}`
     if (newWindow) window.open(url, '_blank')
-    else window.open(url)
+    else window.location.href = url
   }
 
   //Get locale from route name
@@ -401,6 +401,16 @@ class Helper {
         return new File([buf], filename, {type: mimeType});
       })
     );
+  }
+
+  //Get params from url
+  getUrlParamByName(name, url) {
+    if (!url) url = location.href;
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(url);
+    return results == null ? null : results[1];
   }
 }
 

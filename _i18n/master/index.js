@@ -24,11 +24,13 @@ class AutoLoadTranslations {
       }
 
       //Load locale translations
-      try {
-        let folderName = this.modules.indexOf('app') >= 0 ? lang : `i18n/${lang}`
-        let locale = require(`src/${folderName}/index`).default
-        this.languages[lang]['app'] = {...this.languages[lang]['app'], ...locale}
-      } catch (e) {
+      if (!process.env.isExtension) {
+        try {
+          let folderName = this.modules.indexOf('app') >= 0 ? lang : `i18n/${lang}`
+          let locale = require(`src/${folderName}/index`).default
+          this.languages[lang]['app'] = {...this.languages[lang]['app'], ...locale}
+        } catch (e) {
+        }
       }
     })
   }
@@ -45,10 +47,12 @@ class AutoLoadTranslations {
         }
 
         //Search module in project
-        try {
-          let translation = require(`src/modules/${moduleName}/_i18n/${lang}/index`).default
-          this.languages[lang][moduleName] = translation
-        } catch (e) {
+        if (!process.env.isExtension) {
+          try {
+            let translation = require(`src/modules/${moduleName}/_i18n/${lang}/index`).default
+            this.languages[lang][moduleName] = translation
+          } catch (e) {
+          }
         }
       })
     })

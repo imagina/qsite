@@ -5,7 +5,7 @@ class localCache {
     if (process.env.CLIENT) {
       //Order config to localForage
       let configDrivers = () => {
-        let drivers = env('LOCALFORAGE_DRIVERS', 'INDEXEDDB,LOCALSTORAGE,WEBSQL').split(',')
+        let drivers = ['INDEXEDDB', 'LOCALSTORAGE', 'WEBSQL']
         let data = []
         drivers.forEach((driver) => {
           data.push(LocalForage[driver])

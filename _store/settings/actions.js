@@ -1,4 +1,4 @@
-import cache from '@imagina/qhelper/_plugins/cache'
+import cache from '@imagina/qsite/_plugins/cache'
 import axios from 'axios'
 import config from '@imagina/qsite/_config/master/index'
 import crud from '@imagina/qcrud/_services/baseService'

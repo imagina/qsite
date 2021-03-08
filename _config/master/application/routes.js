@@ -1,10 +1,12 @@
 import Route from 'vue-routisan'
+import appConfig from 'src/config/app'
+import pagesConfig from 'src/config/pages'
 
 class AutoLoadRoutes {
   constructor() {
-    this.availablesLanguages = config('app.languages.availables')
-    this.defaultLanguage = config('app.languages.default')
-    this.pages = config('pages')
+    this.availablesLanguages = appConfig.languages.availables
+    this.defaultLanguage = appConfig.languages.default
+    this.pages = pagesConfig
     this.loadRoutes()
     this.addExtraRoutes()
   }

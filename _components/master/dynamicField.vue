@@ -26,7 +26,7 @@
               :class="`q-mb-xs ${(field.props && field.props.crudType == 'button-create') ? 'absolute-right' : ''}`"/>
         <!--Input-->
         <q-input v-model="responseValue" @keyup.enter="$emit('enter')" v-if="loadField('input')"
-                 :label="fieldLabel" v-bind="fieldProps">
+                 :label="fieldLabel" v-bind="fieldProps" style="padding-bottom: 20px">
           <template v-slot:prepend v-if="fieldProps.icon">
             <q-icon :name="fieldProps.icon" size="18px"/>
           </template>
@@ -74,7 +74,7 @@
         </q-input>
         <!--Select-->
         <q-select v-model="responseValue" :options="formatOptions" :label="fieldLabel" use-input v-bind="fieldProps"
-                  @input="matchTags(field)" v-if="loadField('select')"
+                  @input="matchTags(field)" v-if="loadField('select')" style="padding-bottom: 20px"
                   @filter="(val, update)=>update(()=>{options = $helper.filterOptions(val,rootOptions,responseValue)})">
           <!--No options slot-->
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
@@ -143,7 +143,8 @@
         <manage-settings v-model="responseValue" class="q-mb-sm" :settings="field.settings"
                          v-if="loadField('settings')" @input="watchValue"/>
         <!--Schedules form-->
-        <schedules-form v-model="responseValue" @input="watchValue" class="q-mb-sm" v-if="loadField('schedule')"/>
+        <schedules-form v-model="responseValue" @input="watchValue" class="q-mb-sm" v-if="loadField('schedule')"
+                        @converted="value => $emit('converted', value)"/>
         <!--input color-->
         <q-input v-model="responseValue" :label="fieldLabel" v-if="loadField('inputColor')" v-bind="fieldProps.field"
                  @click="$refs.qColorProxi.show()">
@@ -160,8 +161,7 @@
         <q-toggle v-model="responseValue" :label="fieldLabel" v-if="loadField('toggle')" v-bind="fieldProps.field"/>
         <!--position Marker (MAP)-->
         <q-field v-model="responseValue" v-if="loadField('positionMarkerMap')" label=""
-                 class="field-no-padding no-border"
-                 v-bind="fieldProps.fieldComponent">
+                 class="field-no-padding no-border" v-bind="fieldProps.fieldComponent">
           <map-leaflet v-model="responseValue" type="positionMarkerMap" v-bind="fieldProps.field"/>
         </q-field>
         <!--Signature-->
@@ -522,6 +522,12 @@ export default {
             }
           }
           break;
+      }
+
+      //Add ruler to required field
+      if (this.field.required) {
+        if (!props.rules) props.rules = []
+        props.rules.push(val => !!val || this.$tr('ui.message.fieldRequired'))
       }
 
       //Response
