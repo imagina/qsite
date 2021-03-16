@@ -21,6 +21,7 @@
       value: null,
       width : {default : '100%'},
       height : {default : '150px'},
+    emitFile: {type: Boolean, default: false}
     },
     watch: {
       value() {

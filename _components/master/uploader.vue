@@ -49,6 +49,7 @@ export default {
     maxFiles: {default: 1},
     emitBase64: {type: Boolean, default: false},
     emitFile: {type: Boolean, default: false},
+    helpText : {default : false}
   },
   components: {},
   watch: {
@@ -96,8 +97,7 @@ export default {
             index: fileIndex,
             icon: file ? (file.isImage ? false : 'task') :
               (this.accept == 'images' ? 'add_a_photo' : 'note_add'),
-            label: file ? false :
-              this.$tr(`qmedia.layout.messages.${this.accept == 'images' ? 'addYourImages' : 'addYourFiles'}`),
+            label: file ? false : this.helpText || this.$tr('ui.message.addFile'),
             style: (file && file.isImage) ? `background-image: url('${file.base64}')` : '',
             class: file ? 'file-block_loaded' : '',
             columns: (files.length && this.maxFiles >= 2) ? 'col-6 col-md-3 col-lg-2' : 'col-12',
@@ -188,6 +188,10 @@ export default {
       response = this.$clone((this.maxFiles >= 2) ? response : (response[0] || null))
       //Emit response
       this.$emit('input', response)
+    },
+    //Reset
+    reset(){
+      this.filesData = []
     }
   }
 }

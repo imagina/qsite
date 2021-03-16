@@ -166,7 +166,8 @@ export default {
     new: 'Nuevo | Nuevos',
     old: 'Viejo | Viejos',
     country: 'Pais | Paises',
-    mainImage : 'Imagen Principal'
+    mainImage : 'Imagen Principal',
+    amount : 'Monto | Cantidades'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -211,7 +212,8 @@ export default {
     listView: 'Vista de lista',
     gribView: 'Vista de cuadricula',
     uploadFile: 'Cargar Archivo | Cargar Archivos',
-    editFile: 'Editar Archivo | Editar Archivos'
+    editFile: 'Editar Archivo | Editar Archivos',
+    addFile : 'Agregar Archivo | Agregar Archivos'
   },
   form: {
     id: 'ID',

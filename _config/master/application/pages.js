@@ -19,8 +19,8 @@ class AutoLoadPages {
   addDefaultPages() {
     //Add page home when it's backend
     if (appConfig.isBackend) {
-      this.pages.app = {
-        home: {//Page home
+      if (!this.pages.app) this.pages.app = {}
+      this.pages.app.home = {//Page home
           permission: null,
           activated: true,
           path: '/',
@@ -36,7 +36,6 @@ class AutoLoadPages {
         }
       }
     }
-  }
 
   //Load modules backend page
   loadPages(params = {}) {

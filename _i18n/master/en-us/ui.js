@@ -161,7 +161,8 @@ export default {
     new : 'New',
     old : 'Old',
     country: 'Country | Countries',
-    mainImage : 'Main Image'
+    mainImage : 'Main Image',
+    amount : 'Amount | Amounts'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -211,7 +212,8 @@ export default {
     gribView : 'Grib view',
     uploadFile : 'Upload File | Upload Files',
     editFile : 'Edit File | Edit File',
-    checked : 'Checked'
+    checked : 'Checked',
+    addFile : 'Add File | Add Files'
   },
   form: {
     id: 'ID',

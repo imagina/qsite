@@ -112,7 +112,8 @@
         <!--tree select-->
         <q-field v-model="responseValue" v-if="loadField('treeSelect')" :label="fieldLabel"
                  v-bind="fieldProps.fieldComponent">
-          <tree-select v-model="responseValue" :options="formatOptions" placeholder="" v-bind="fieldProps.field"/>
+          <tree-select v-model="responseValue" :options="formatOptions" placeholder="" v-bind="fieldProps.field"
+                       @select="(node, instanceId) => $emit('select', {node, instanceId})"/>
         </q-field>
         <!--HTML-->
         <q-field v-model="responseValue" v-if="loadField('html')" label="" class="field-no-padding"
