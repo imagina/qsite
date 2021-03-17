@@ -7,7 +7,10 @@ class AutoLoadSidebar {
     this.modules = appConfig.modules
     this.pages = pagesConfig
     this.addDefaultItems()
-    this.loadModulesSidebar()
+    //Load iadmin sidebar
+    if (appConfig.mode == 'iadmin') this.loadModulesSidebar({name: 'adminSidebar'})
+    //Load ipanel sidebar
+    if (appConfig.mode == 'ipanel') this.loadModulesSidebar({name: 'panelSidebar'})
   }
 
   //Add extra fields to sidebar
@@ -18,18 +21,18 @@ class AutoLoadSidebar {
 
 
   //Load node_modules sidebar
-  loadModulesSidebar() {
+  loadModulesSidebar(params = {}) {
     this.modules.forEach((name) => {
       let sidebarNode = false
       //Search module in node_modules
       try {
-        sidebarNode = require(`@imagina/${name}/_config/sidebar`).default
+        sidebarNode = require(`@imagina/${name}/_config/${params.name}`).default
       } catch (e) {
       }
 
       //Search module in project
       try {
-        sidebarNode = require(`src/modules/${name}/_config/sidebar`).default
+        sidebarNode = require(`src/modules/${name}/_config/${params.name}`).default
       } catch (e) {
       }
 

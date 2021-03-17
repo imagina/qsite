@@ -30,6 +30,10 @@
           <template v-slot:prepend v-if="fieldProps.icon">
             <q-icon :name="fieldProps.icon" size="18px"/>
           </template>
+          <template v-slot:append v-if="isFieldPassword">
+            <q-icon :name="showPassword ? 'visibility' : 'visibility_off'" class="cursor-pointer"
+                    @click="showPassword = !showPassword"/>
+          </template>
         </q-input>
         <!--Search-->
         <q-input v-model="responseValue" @keyup.enter="$emit('enter')" v-if="loadField('search')"
@@ -255,6 +259,7 @@ export default {
       success: false,//global component status
       loading: false,
       responseValue: null,//value to response
+      showPassword: false,//to show password
       options: [],//Options
       rootOptions: [],//Options
       rootOptionsData: [],//Options
@@ -321,6 +326,10 @@ export default {
             if (!props.debounce) props.debounce = '800' //Add debounce
             props.rules = [...(props.rules || []), this.validateField]//Add rule to validate field
           }
+
+          //Extra logic to input type password
+          if (this.isFieldPassword) props.type = this.showPassword ? 'text' : 'password'
+
           break;
         case'search':
           props = {
@@ -631,6 +640,11 @@ export default {
         //Response
         return response
       }
+    },
+    //Validate if field is password
+    isFieldPassword() {
+      let field = this.$clone(this.field)
+      return (field.props.type && (field.props.type == 'password')) ? true : false
     }
   },
   methods: {
@@ -714,7 +728,6 @@ export default {
           this.responseValue = propValue || null
           break
       }
-
     },
     //Order options
     orderOptions(propValue) {
@@ -797,7 +810,7 @@ export default {
         }
       })
     },
-    //Reges to tags
+    //Regex to tags
     matchTags(field) {
       if (field.props.useChips && field.matchTags) {
         let tags = []
@@ -889,12 +902,6 @@ export default {
       .vue-treeselect__single-value
         line-height 1.9
         padding 0
-
-  .q-field--error
-    .q-field__append
-      position absolute
-      right -8px
-      top -15px
 
 #ckEditorComponent
   width 100%

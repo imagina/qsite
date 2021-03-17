@@ -5,7 +5,7 @@ export default {
     activated: true,
     path: '/site/index',
     name: 'app.site.index',
-    page: () => import('@imagina/qsite/_pages/admin/index'),
+    page: () => import('@imagina/qsite/_pages/admin/settings/index'),
     layout: () => import('@imagina/qsite/_layouts/master.vue'),
     title: 'qsite.sidebar.adminIndex',
     icon: 'fas fa-cog',

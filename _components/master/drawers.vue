@@ -15,7 +15,8 @@
     </q-drawer>
 
     <!-- Config -->
-    <q-drawer bordered id="configMaster" overlay v-model="drawer.config" side="right">
+    <q-drawer bordered id="configMaster" overlay v-model="drawer.config" side="right"
+              v-if="appConfig.mode == 'iadmin' ? true : false">
       <config-list/>
     </q-drawer>
 
@@ -26,7 +27,7 @@
     </q-drawer>
 
     <!--Master filter-->
-    <q-drawer bordered id="menuMaster" v-model="drawer.filter" side="right" v-if="filter.load" overlay>
+    <q-drawer bordered id="drawerFilterMaster" v-model="drawer.filter" side="right" v-if="filter.load" overlay>
       <master-filter/>
     </q-drawer>
   </div>
@@ -64,6 +65,7 @@ export default {
         filter: false
       },
       menu: config('sidebar'),
+      appConfig: config('app'),
       filter: this.$filter
     }
   },
@@ -131,11 +133,15 @@ export default {
       border-left 15px solid white
 
   .q-item
-    padding-left 0px
+    padding-left 0
     min-height 40px
-
+    color $blue-grey
     .q-item__section--avatar
-      padding 0 8px 0 20px
+      padding 0 18px !important
+
+      .q-icon
+        font-size 20px
+        color $blue-grey
 
     &:hover
       background-color $grey-4
@@ -143,6 +149,7 @@ export default {
 
       .q-icon
         color $primary
+        font-size 22px
 
     &.item-is-active
       background-color white

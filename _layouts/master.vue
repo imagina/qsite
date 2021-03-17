@@ -15,7 +15,7 @@
     <cropper-component ref="cropperComponent"/>
 
     <!-- FOOTER -->
-    <footer-componen v-if="appState.loadPage"/>
+    <footer-component v-if="appState.loadPage"/>
   </q-layout>
 </template>
 
@@ -23,28 +23,28 @@
 /*Components*/
 import headerComponent from '@imagina/qsite/_components/master/header'
 import drawersComponent from '@imagina/qsite/_components/master/drawers'
-import footerComponen from '@imagina/qsite/_components/master/footer'
+import footerComponent from '@imagina/qsite/_components/master/footer'
 import Vue from 'vue'
 import notificationPlugin from '@imagina/qnotification/_plugins/notification'
 import cropperComponent from '@imagina/qsite/_components/master/cropper'
 
 export default {
   meta() {
-    let routetitle = ((this.$route.meta && this.$route.meta.title) ? this.$route.meta.title : '')
-    if (this.$route.meta && this.$route.meta.headerTitle) routetitle = this.$route.meta.headerTitle
+    let routeTitle = ((this.$route.meta && this.$route.meta.title) ? this.$route.meta.title : '')
+    if (this.$route.meta && this.$route.meta.headerTitle) routeTitle = this.$route.meta.headerTitle
     let siteName = this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name')
     let siteDescription = this.$store.getters['qsiteApp/getSettingValueByName']('core::site-description')
     let iconHref = this.$store.getters['qsiteApp/getSettingMediaByName']('isite::favicon').path
 
     return {
-      title: `${this.$tr(routetitle)} | ${siteName}`,
+      title: `${this.$tr(routeTitle)} | ${siteName}`,
       meta: {
         description: {name: 'description', content: siteDescription || siteName},
       },
       link: [{rel: 'icon', href: iconHref, id: 'icon'}],
     }
   },
-  components: {headerComponent, drawersComponent, footerComponen, cropperComponent},
+  components: {headerComponent, drawersComponent, footerComponent, cropperComponent},
   mounted() {
     this.$nextTick(async function () {
       this.init()

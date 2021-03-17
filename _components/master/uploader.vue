@@ -12,7 +12,7 @@
             <!--Information-->
             <div class="text-center">
               <!--Icon-->
-              <q-icon v-if="!loading && file.icon" class="file-block_icon" :name="file.icon" @added="setFile"/>
+              <q-icon v-if="!loading && file.icon" class="file-block_icon" :name="file.icon" @added="setFiles"/>
               <!--Helper label-->
               <div v-if="!loading && file.label" class="text-caption text-grey-7 q-mt-md">{{ file.label }}</div>
             </div>
@@ -34,25 +34,31 @@
       </div>
     </div>
     <!--Uploader image-->
-    <q-uploader ref="qUploaderComponent" v-show="false" :accept="acceptFiles" @added="setFile"
+    <q-uploader ref="qUploaderComponent" v-show="false" :accept="acceptFiles" @added="setFiles"
                 :max-files="maxFiles - filesData.length" :multiple="maxFiles >= 2 ? true : false"/>
-
     <!--Image preview-->
     <avatar-image ref="avatarImage" no-preview/>
   </div>
 </template>
 <script>
 export default {
-  name: 'uploaderComponentmaster',
+  name: 'uploaderComponentMaster',
   props: {
+    value: {default: false},
     accept: {default: '.pdf, .xlsx, .docx, .pptx, .mp4, .mp3, .jpg, image/*'},
     maxFiles: {default: 1},
     emitBase64: {type: Boolean, default: false},
     emitFile: {type: Boolean, default: false},
-    helpText : {default : false}
+    helpText: {default: false}
   },
   components: {},
   watch: {
+    value: {
+      deep: true,
+      handler: function (newValue, oldValue) {
+        this.setValueToFileData()
+      }
+    },
     filesData() {
       this.emitFiles()
     }
@@ -90,15 +96,19 @@ export default {
 
       for (var fileIndex = 0; fileIndex < (files.length + 1); fileIndex++) {
         if ((fileIndex + 1) <= this.maxFiles) {
-          let file = files[fileIndex]
+          let file = files[fileIndex]//Get file
+          let fileIsImage = !file ? false : (file.isImage || (typeof file == 'string') ? true : false)
+          let filePath = fileIsImage ? (file.base64 || file) : false
+
           //Add data
           response.push({
-            ...(file || {}),
+            ...(file && (typeof file != 'string') ? file : {}),
             index: fileIndex,
-            icon: file ? (file.isImage ? false : 'task') :
+            name: file ? (file.name || filePath) : false,
+            icon: file ? (fileIsImage ? false : 'task') :
               (this.accept == 'images' ? 'add_a_photo' : 'note_add'),
             label: file ? false : this.helpText || this.$tr('ui.message.addFile'),
-            style: (file && file.isImage) ? `background-image: url('${file.base64}')` : '',
+            style: filePath ? `background-image: url('${filePath}')` : '',
             class: file ? 'file-block_loaded' : '',
             columns: (files.length && this.maxFiles >= 2) ? 'col-6 col-md-3 col-lg-2' : 'col-12',
             tooltip: file ? file.name : false,
@@ -121,48 +131,71 @@ export default {
   },
   methods: {
     init() {
+      this.setValueToFileData()
       this.emitFiles()
     },
+    //Set value to file data
+    setValueToFileData() {
+      if (this.value) {
+        let newFilesData = this.$clone(Array.isArray(this.value) ? this.value : [this.value])
+        let filesData = this.$clone(this.filesData)
+        //Default condition to set new files
+        let setFiles = newFilesData.length != filesData.length ? true : false
+        //Set files
+        if (setFiles) this.setFiles(this.$clone(newFilesData), true)
+      }
+    },
     //Get file information
-    setFile(files) {
+    setFiles(files, replacing = false) {
       this.loading = true
       setTimeout(async () => {
+        //Clear file data
+        if (replacing) this.filesData = []
+        //default files data
+        let filesData = this.$clone(this.filesData)
         //Transform file information
         for (const file of files) {
-          //Get base 64
-          let base64 = await this.$helper.getBase64(file)
-          //File data
-          let fileData = {
-            file: file,
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            base64: base64,
-            isImage: file.__img ? true : false,
-            width: file.__img ? file.__img.naturalWidth : 0,
-            height: file.__img ? file.__img.naturalHeight : 0,
-            extension: file.name.split('.').pop()
-          }
-          //Crop image
-          if (file.__img) {
-            await new Promise((resolve, reject) => {
-              this.$eventBus.$emit('master.cropper.image', {
-                src: base64,
-                type: fileData.type,
-                callBack: async (fileCropped) => {
-                  //Merge data
-                  fileData = {...fileData, ...fileCropped}
-                  //Get file
-                  fileData.file = await this.$helper.urltoFile(fileData.base64, file.name, file.type)
-                  //Resolve
-                  resolve(true)
-                }
+          //Default file data
+          let fileData = file
+          //If file isn't a string
+          if (typeof file !== 'string') {
+            //Get base 64
+            let base64 = await this.$helper.getBase64(file)
+            //File data
+            fileData = {
+              file: file,
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              base64: base64,
+              isImage: file.__img ? true : false,
+              width: file.__img ? file.__img.naturalWidth : 0,
+              height: file.__img ? file.__img.naturalHeight : 0,
+              extension: file.name.split('.').pop()
+            }
+            //Crop image
+            if (file.__img) {
+              await new Promise((resolve, reject) => {
+                this.$eventBus.$emit('master.cropper.image', {
+                  src: base64,
+                  type: fileData.type,
+                  callBack: async (fileCropped) => {
+                    //Merge data
+                    fileData = {...fileData, ...fileCropped}
+                    //Get file
+                    fileData.file = await this.$helper.urltoFile(fileData.base64, file.name, file.type)
+                    //Resolve
+                    resolve(true)
+                  }
+                })
               })
-            })
+            }
           }
           //Set file data
-          this.filesData.push(fileData)
+          filesData.push(fileData)
         }
+        //Set to files data
+        this.filesData = this.$clone(filesData)
         //Reset uploader
         this.$refs.qUploaderComponent.reset()
         //Hide loading
@@ -172,8 +205,8 @@ export default {
     //File action
     fileAction(file) {
       //Action if is image
-      if (file.isImage) {
-        this.$refs.avatarImage.open(file.base64)
+      if (file.isImage || (typeof file == 'string')) {
+        this.$refs.avatarImage.open(file.base64 || file)
       }
     },
     //Emit response
@@ -181,16 +214,16 @@ export default {
       let files = this.$clone(this.filesData)//Files
       let response = this.$clone(files)//Default response
       //Get only file
-      if (this.emitFile) response = files.map(file => file.file)
+      if (this.emitFile) response = files.map(file => file.file || file)
       //Get only base64
-      if (this.emitBase64) response = files.map(file => file.base64)
+      if (this.emitBase64) response = files.map(file => file.base64 || file)
       //Filter response quantity
       response = this.$clone((this.maxFiles >= 2) ? response : (response[0] || null))
       //Emit response
       this.$emit('input', response)
     },
     //Reset
-    reset(){
+    reset() {
       this.filesData = []
     }
   }
@@ -199,6 +232,7 @@ export default {
 <style lang="stylus">
 #uploaderMasterComponent
   color $grey-9
+  display inline-grid
 
   #contentUploader
     .file-block

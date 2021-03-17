@@ -162,7 +162,8 @@ export default {
     old : 'Old',
     country: 'Country | Countries',
     mainImage : 'Main Image',
-    amount : 'Amount | Amounts'
+    amount : 'Amount | Amounts',
+    photo : 'Photo | Photos'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -267,7 +268,7 @@ export default {
     resolution: 'Resolution',
     autoincrement: 'autoincrement',
     default: 'Default',
-    percentage: 'Porcentage',
+    percentage: 'Percentage',
     address: 'Address | Addresses',
     phone: 'Phone | Phones',
     schedule: 'Schedule | Schedules',
@@ -277,6 +278,7 @@ export default {
     masterRecord: 'Master record',
     birthday: 'Birthday',
     identification: 'Identification',
+    identificationType : 'Documentation Type',
     city: 'City | cities',
     state: 'State | State',
     province: 'Province | Provinces',
@@ -309,7 +311,8 @@ export default {
     onOffer: 'On offert',
     createdBy: 'Created by',
     systemName: 'System name',
-    externalId: 'External ID'
+    externalId: 'External ID',
+    company : 'Company | Companies'
   },
   configList: {
     loggedAs: 'logged as',

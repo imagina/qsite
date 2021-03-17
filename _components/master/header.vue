@@ -4,7 +4,8 @@
     <q-header class="bg-white">
       <!-- Toolbar header -->
       <div class="q-hide q-md-show bg-primary">
-        <q-toolbar id="toolbarTop" color="primary">
+        <!--Toolbar admin-->
+        <q-toolbar id="toolbarTop" color="primary" v-if="appConfig.mode == 'iadmin' ? true : false">
           <!--Logo-->
           <div id="logoImage" :style="`background-image: url('${logo}')`"
                class="img-as-bg"></div>
@@ -39,6 +40,10 @@
             </q-btn>
           </div>
         </q-toolbar>
+        <!--Toolbar panel-->
+        <div v-else class="text-center q-py-sm">
+          Ipanel | Header
+        </div>
       </div>
 
       <!--Toolbar Sub header--->
@@ -56,7 +61,7 @@
             </q-btn>
             <!--Breadcrum-->
             <div id="breadCrumbContent" class="q-hide q-md-show">
-              <q-breadcrumbs>
+              <q-breadcrumbs class="text-blue-grey">
                 <q-breadcrumbs-el v-for="(item, key) in breadcrumbs" :key="key" :label="item.label" :icon="item.icon"
                                   :to="item.to ? {name : item.to} : false"/>
               </q-breadcrumbs>
@@ -75,7 +80,7 @@
             </q-btn>
             <!--== Button refresh ==-->
             <q-btn icon="fas fa-redo" unelevated round v-if="params.refresh" color="primary" class="btn-action"
-                   @click="$root.$emit('page.data.refresh')">
+                   @click="$root.$emit('page.data.refresh'), $root.$emit('crud.data.refresh')">
               <q-tooltip>{{ $tr('ui.label.refresh') }}</q-tooltip>
             </q-btn>
           </div>
@@ -108,6 +113,7 @@ export default {
       projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
       logo: this.$store.getters['qsiteApp/getSettingMediaByName']('isite::logo1').path,
       filter: this.$filter,
+      appConfig: config('app'),
       badge: {
         chat: false
       }

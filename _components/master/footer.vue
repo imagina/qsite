@@ -1,7 +1,7 @@
 <template>
   <div id="masterFooter">
     <!-- === FOOTER === -->
-    <q-footer class="shadow-5">
+    <q-footer class="shadow-5" v-if="appConfig.mode == 'iadmin' ? true : false">
       <div id="footerContent" class="row q-md-hide items-center">
         <!-- Menu -->
         <div class="item-footer col cursor-pointer" @click="$eventBus.$emit('toggleMasterDrawer','menu')">
@@ -37,7 +37,7 @@
       </div>
     </q-footer>
     <!--Dialog other actions-->
-    <q-dialog v-model="modal.show" position="bottom">
+    <q-dialog v-model="modal.show" position="bottom" v-if="appConfig.mode == 'iadmin' ? true : false">
       <q-card style="width: 350px">
         <!--Toolbar-->
         <q-toolbar>
@@ -96,6 +96,7 @@ export default {
   data() {
     return {
       mainAction: config('app.mobilMainAction'),
+      appConfig: config('app'),
       modal: {
         show: false
       }

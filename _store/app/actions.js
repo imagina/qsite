@@ -46,7 +46,8 @@ export const GET_SITE_SETTINGS = ({commit, dispatch, state}) => {
       filter.setFilters(data.filters)
 
       //Set setting if is admin
-      axios.defaults.params.setting.fromAdmin = configApp.isBackend
+      axios.defaults.params.setting.fromAdmin = (configApp.mode == 'iadmin' ? true : false)
+      axios.defaults.params.setting.appMode = configApp.mode
 
       resolve(true)
     }).catch(error => {

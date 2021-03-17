@@ -2,7 +2,7 @@ import {Notify, Loading} from 'quasar'
 
 export default async ({app, router, store, Vue}) => {
   //Loading
-  if(!process.env.isExtension) Loading.show()
+  if (!process.env.isExtension) Loading.show()
   //====== Reset Service Worker
   if (navigator && navigator.serviceWorker && navigator.serviceWorker.controller
     && navigator.serviceWorker.controller.postMessage) {//Reset Service Worker
@@ -15,12 +15,6 @@ export default async ({app, router, store, Vue}) => {
   store.dispatch('qsiteApp/SET_SITE_COLORS')
   //====== Load extra state in store
   store.dispatch('qsiteApp/SET_EXTRA')
-
-  if (!config('app.isBackend')) {
-    //====== Load Tawk
-    let scriptString = store.getters['qsiteApp/getSettingValueByName']('core::analytics-script')
-    if (scriptString && (typeof (scriptString) == 'string')) eval(scriptString.replace(/<\/?script>/g, ""))
-  }
 
   //======= Load message Install as native APP(PWA)
   /*window.addEventListener('beforeinstallprompt', (e) => {
