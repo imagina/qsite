@@ -169,7 +169,8 @@ export default {
     mainImage : 'Imagen Principal',
     amount : 'Monto | Cantidades',
     photo : 'Foto | Fotos',
-    company : 'Comañia | Compañias'
+    company : 'Comañia | Compañias',
+    customer : 'Cliente | Clientes'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',

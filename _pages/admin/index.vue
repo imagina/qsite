@@ -11,7 +11,7 @@
         <div v-for="(groupQuickCard, key) in quickCards" :key="key" class="col-12 col-lg-6">
           <div class="row q-col-gutter-y-md full-width">
             <div v-for="(item, keyItem) in groupQuickCard" :key="keyItem" class="col-12">
-              <component :is="item.component" :key="`component${keyItem}`"/>
+              <component :is="item.component" :key="`component${keyItem}`" v-bind="item.props || {}"/>
             </div>
           </div>
         </div>
@@ -41,7 +41,7 @@ export default {
       //Validate Permissions
       let quickCardsToShow = []
       quickCards.forEach((card, index) => {
-        if (card.permission && this.$auth.hasAccess(card.permission)) quickCardsToShow.push(card)
+        if (!card.permission || this.$auth.hasAccess(card.permission)) quickCardsToShow.push(card)
       })
       //Divide quick cards
       let response = {

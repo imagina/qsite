@@ -40,11 +40,6 @@
             </div>
             <!--Date-->
             <div v-if="filter.fields && filter.fields.date" class="q-mb-sm">
-              <!--Label-->
-              <div class="full-width text-primary q-mb-xs">
-                <q-icon name="far fa-calendar-check" class="q-mr-xs"/>
-                {{ $tr('ui.form.date', {capitalize: true}) }}
-              </div>
               <!--Fields date-->
               <dynamic-field v-for="(fieldDate, key) in dateFields" :key="key" :field="fieldDate" class="q-mb-sm"
                              v-model="filterValues.date[fieldDate.name || key]"/>
@@ -60,7 +55,6 @@
               <dynamic-field v-for="(fieldPagination, key) in paginationFields" :field="fieldPagination" class="q-mb-sm"
                              v-model="pagination[fieldPagination.name || key]" :key="key"/>
             </div>
-            <q-separator class="q-my-md" v-if="filter.fields.search || filter.fields.date || filter.fields.pagination"/>
             <!--others Fields-->
             <dynamic-field v-for="(field, key) in filter.fields" :key="key" v-model="filterValues[field.name || key]"
                            v-if="['search','pagination'].indexOf(key) == -1" class="q-mb-sm" :field="field"/>
@@ -142,7 +136,7 @@ export default {
           value: this.filterValues.date.type || null,
           type: 'select',
           props: {
-            label: this.$tr('ui.form.type'),
+            label: this.$tr('ui.form.date'),
             clearable: true,
             options: [
               {label: this.$tr('ui.label.customRange'), value: 'customRange'},

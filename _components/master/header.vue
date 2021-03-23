@@ -5,7 +5,7 @@
       <!-- Toolbar header -->
       <div class="q-hide q-md-show bg-primary">
         <!--Toolbar admin-->
-        <q-toolbar id="toolbarTop" color="primary" v-if="appConfig.mode == 'iadmin' ? true : false">
+        <q-toolbar id="toolbarTop" color="primary" v-if="(appConfig.mode == 'iadmin') ? true : false">
           <!--Logo-->
           <div id="logoImage" :style="`background-image: url('${logo}')`"
                class="img-as-bg"></div>
@@ -41,8 +41,9 @@
           </div>
         </q-toolbar>
         <!--Toolbar panel-->
-        <div v-else class="text-center q-py-sm">
-          Ipanel | Header
+        <div v-else id="headerIpanel" class="text-primary text-center q-py-sm">
+          <!--          <iframe src="https://todotintasysuministros.com"></iframe>-->
+<!--          <embedded-webview v-if="headerIpanel" :html="headerIpanel"></embedded-webview>-->
         </div>
       </div>
 
@@ -96,6 +97,19 @@
   </div>
 </template>
 <script>
+class EmbeddedWebview extends HTMLElement {
+  connectedCallback() {
+    const shadow = this.attachShadow({mode: 'closed'});
+    shadow.innerHTML = this.getAttribute('html');
+  }
+}
+
+window.customElements.define(
+  'embedded-webview',
+  EmbeddedWebview
+);
+
+
 export default {
   beforeDestroy() {
     this.$eventBus.$off('header.badge.manage')
@@ -116,7 +130,8 @@ export default {
       appConfig: config('app'),
       badge: {
         chat: false
-      }
+      },
+      headerIpanel: false
     }
   },
   computed: {
@@ -169,6 +184,18 @@ export default {
       this.$eventBus.$on('header.badge.manage', (response) => {
         Object.keys(response).forEach(name => this.badge[name] = response[name])
       })
+      //Get header ipanel
+      this.getHeaderIpanel()
+    },
+    getHeaderIpanel() {
+      if (config('app.mode') == 'ipanel') {
+        this.$axios.get('https://sexy-latinas.imaginacolombia.com/isite/header').then(response => {
+          console.warn(response.data)
+          this.headerIpanel = response.data
+        }).catch(error => {
+          console.warn('error', error)
+        })
+      }
     }
   }
 }
@@ -188,6 +215,15 @@ export default {
       height 30px
       width 30px
       border-radius 50%
+
+  #headerIpanel
+    background-color white
+    border-bottom 1px solid $grey-4
+    max-height 150px
+
+    iframe
+      width 100%
+      height 100%
 
   #toolbarBottom
     width 100%

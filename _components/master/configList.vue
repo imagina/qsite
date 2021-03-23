@@ -93,19 +93,22 @@
 
         <!--Leave impersonating-->
         <q-item tag="label" link v-else @click.native="impersonate">
-          <q-item-section avatar>
-            <!--Icon-->
-            <q-icon v-if="!loadingImpersonate" color="negative" name="fas fa-sign-out-alt" size="20px"/>
-            <!--Loading-->
-            <div v-if="loadingImpersonate" class="q-py-sm">
-              <q-spinner class="q-mr-sm"/>
-              {{ `${$tr('ui.label.loading')}...` }}
-            </div>
-          </q-item-section>
           <q-item-section>
-            <q-item-label v-if="!loadingImpersonate" color="grey-10" style="text-decoration: none">
-              {{ $t('ui.configList.leaveImpersonating', {capitalize: true}) }}
-            </q-item-label>
+            <div class="row items-center">
+              <!--Icon-->
+              <div v-if="!loadingImpersonate">
+                <q-icon color="negative" class="q-mr-sm" name="fas fa-sign-out-alt"
+                        size="20px"/>
+              </div>
+              <!--Loading-->
+              <div v-if="loadingImpersonate" class="q-py-sm">
+                <q-spinner class="q-mr-sm"/>
+                {{ `${$tr('ui.label.loading')}...` }}
+              </div>
+              <div v-if="!loadingImpersonate" color="grey-10" style="text-decoration: none">
+                {{ $t('ui.configList.leaveImpersonating', {capitalize: true}) }}
+              </div>
+            </div>
           </q-item-section>
         </q-item>
       </div>

@@ -2,11 +2,10 @@
   <div id="quickCardComponent">
     <div class="box">
       <!--Title-->
-      <div id="titleQuickCard" class="text-grey-7 text-subtitle1 text-uppercase">
-        <b>{{ cardParams.title }}</b>
+      <div class="box-title">
+        <q-icon v-if="cardParams.icon" :name="cardParams.icon" class="q-mr-sm"/>
+        {{ cardParams.title }}
       </div>
-      <!---Icon-->
-      <q-icon id="iconQuickCard" v-if="cardParams.icon" :name="cardParams.icon"/>
       <!--Separator-->
       <q-separator class="q-my-md"/>
       <!--Content-->
@@ -68,6 +67,25 @@
               </div>
             </div>
           </div>
+          <!--list-ranking-->
+          <div id="itemsListRankin" v-if="cardParams.type == 'list-ranking'">
+            <q-scroll-area v-if="!loading && items && items.length" style="height: 350px">
+              <q-list bordered separator>
+                <q-item v-for="(item, keyItem) in items" :key="keyItem" class="bg-grey-2">
+                  <!--Text 1-->
+                  <q-item-section>{{ getInformation(item, 'text1') }}</q-item-section>
+                  <!--Text 2-->
+                  <q-item-section side>
+                    <q-chip :label="getInformation(item, 'text2')"
+                            color="white" text-color="blue-grey" class="text-weight-bold"/>
+                  </q-item-section>
+                  <!--Percentage-->
+                  <q-linear-progress v-if="getInformation(item, 'percentage')" color="green"
+                                     :value="getInformation(item, 'percentage')"/>
+                </q-item>
+              </q-list>
+            </q-scroll-area>
+          </div>
         </div>
         <!--Empty results-->
         <div class="text-center" v-if="!items.length && !loading">
@@ -102,12 +120,13 @@ export default {
   data() {
     return {
       loading: false,
-      items: []
+      items: [],
+      filterValues: false
     }
   },
   computed: {
     cardParams() {
-      return {
+      let response = {
         type: 'list-v',
         ...this.params,
         requestParams: {
@@ -116,12 +135,20 @@ export default {
           ...(this.params.requestParams || {})
         }
       }
+
+      //Set filters
+      if (this.params.filters && this.filterValues) {
+        response.requestParams.filter = {...(response.requestParams.filter || {}), ...this.filterValues}
+      }
+
+      //Response
+      return response
     },
   },
   methods: {
-    init() {
-      //Get data
-      this.getData()
+    async init() {
+      if (this.params.filters) this.setFilters()//Set filters
+      else this.getData()//Get data
       //Listen refresh page event
       this.$root.$on('page.data.refresh', () => this.getData())
     },
@@ -138,9 +165,27 @@ export default {
         this.$crud.index(this.cardParams.apiRoute, requestParams).then(response => {
           this.items = response.data
           this.loading = false
+          resolve(response.data)
         }).catch(error => {
           this.loading = false
+          resolve(error)
         })
+      })
+    },
+    //Set filters
+    setFilters() {
+      return new Promise(async resolve => {
+        //Set filters
+        await this.$filter.setFilter({
+          name: this.$route.name,
+          fields: this.$clone(this.params.filters || {}),
+          callBack: () => {
+            this.filterValues = this.$clone(this.$filter.values)
+            this.getData()//Get data
+          }
+        })
+        //Resolve
+        resolve(true)
       })
     },
     //Get information
@@ -191,4 +236,13 @@ export default {
       border-radius 10px
       font-size 30px
       color $grey-7
+
+  #itemsListRankin
+    .q-item
+      position relative
+
+      .q-linear-progress
+        position absolute
+        bottom 0
+        left 0
 </style>
