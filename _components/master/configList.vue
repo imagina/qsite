@@ -54,7 +54,7 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating"/>
 
     <!--Impersonate-->
     <q-no-ssr>
@@ -115,7 +115,7 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating"/>
 
     <!-- Language -->
     <div>

@@ -42,8 +42,7 @@
         </q-toolbar>
         <!--Toolbar panel-->
         <div v-else id="headerIpanel" class="text-primary text-center q-py-sm">
-          <!--          <iframe src="https://todotintasysuministros.com"></iframe>-->
-<!--          <embedded-webview v-if="headerIpanel" :html="headerIpanel"></embedded-webview>-->
+          <embedded-webview v-if="headerIpanel" :html="headerIpanel"></embedded-webview>
         </div>
       </div>
 
@@ -99,7 +98,7 @@
 <script>
 class EmbeddedWebview extends HTMLElement {
   connectedCallback() {
-    const shadow = this.attachShadow({mode: 'closed'});
+    const shadow = this.attachShadow({mode: 'open'});
     shadow.innerHTML = this.getAttribute('html');
   }
 }
@@ -189,8 +188,7 @@ export default {
     },
     getHeaderIpanel() {
       if (config('app.mode') == 'ipanel') {
-        this.$axios.get('https://sexy-latinas.imaginacolombia.com/isite/header').then(response => {
-          console.warn(response.data)
+        this.$axios.get('https://sexy-latinas.imaginacolombia.com/isite/header?fromIpanle').then(response => {
           this.headerIpanel = response.data
         }).catch(error => {
           console.warn('error', error)

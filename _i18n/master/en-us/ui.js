@@ -165,7 +165,8 @@ export default {
     amount: 'Amount | Amounts',
     photo: 'Photo | Photos',
     company: 'Comany | Companies',
-    customer : 'Customer | Customers'
+    customer: 'Customer | Customers',
+    source: 'Source | Sources'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -216,7 +217,8 @@ export default {
     uploadFile: 'Upload File | Upload Files',
     editFile: 'Edit File | Edit File',
     checked: 'Checked',
-    addFile: 'Add File | Add Files'
+    addFile: 'Add File | Add Files',
+    swUpdateAvailable : 'We have new features for you, please update'
   },
   form: {
     id: 'ID',

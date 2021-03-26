@@ -1,7 +1,11 @@
-let loadFrom = (window.location.hash || '').split('/')[0]
+//Parse domain to know from where is loading
+let tagsToParceHost = ['http://', 'https://', ':8080', ':3000', 'www.']
+let host = window.location.href
+tagsToParceHost.forEach(tagToReplace => host = host.replace(tagToReplace, ''))
+let loadFrom = host.split('/')[1]
 
 export default {
-  version: '2.3.31',
+  version: '2.3.34',
   mode: (loadFrom && (['iadmin', 'ipanel'].indexOf(loadFrom) != -1)) ? loadFrom : 'iadmin',//Define load mode
   forceRoleAndDepartment: false,//Force to select role and department
   //UI Languages

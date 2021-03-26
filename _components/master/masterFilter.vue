@@ -167,7 +167,7 @@ export default {
             vIf: (filterDate && (filterDate.type == 'customRange')) ? true : false,
             label: this.$tr('ui.form.startDate'),
             clearable: true,
-            options: (date) => filterDate.to ? (date < this.$moment(filterDate.to).format('YYYY/MM/DD')) : true,
+            options: (date) => filterDate.to ? (date < this.$moment(filterDate.to).format('YYYY-MM-DD')) : true,
           }
         },
         to: {
@@ -177,7 +177,7 @@ export default {
             vIf: (filterDate && (filterDate.type == 'customRange')) ? true : false,
             label: this.$tr('ui.form.endDate'),
             clearable: true,
-            options: (date) => filterDate.from ? (date > this.$moment(filterDate.from).format('YYYY/MM/DD')) : true,
+            options: (date) => filterDate.from ? (date > this.$moment(filterDate.from).format('YYYY-MM-DD')) : true,
           }
         }
       }
@@ -250,78 +250,78 @@ export default {
           //Case values
           switch (typeDate) {
             case 'today':
-              fromDate = this.$moment().format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().format('YYYY-MM-DD 23:59:59')
               break;
             case 'yesterday':
-              fromDate = this.$moment().subtract(1, 'd').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().subtract(1, 'd').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(1, 'd').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().subtract(1, 'd').format('YYYY-MM-DD 23:59:59')
               break;
             case 'tomorrow':
-              fromDate = this.$moment().add(1, 'd').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().add(1, 'd').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().add(1, 'd').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().add(1, 'd').format('YYYY-MM-DD 23:59:59')
               break;
             case 'lastSevenDays':
-              fromDate = this.$moment().subtract(6, 'd').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(6, 'd').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().format('YYYY-MM-DD 23:59:59')
               break;
             case 'currentWeek':
-              fromDate = this.$moment().startOf('isoWeek').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().endOf('isoWeek').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().startOf('isoWeek').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().endOf('isoWeek').format('YYYY-MM-DD 23:59:59')
               break;
             case 'lastWeek':
-              fromDate = this.$moment().subtract(1, 'weeks').startOf('isoWeek').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().subtract(1, 'weeks').endOf('isoWeek').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(1, 'weeks').startOf('isoWeek').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().subtract(1, 'weeks').endOf('isoWeek').format('YYYY-MM-DD 23:59:59')
               break;
             case 'nextWeek':
-              fromDate = this.$moment().add(1, 'weeks').startOf('isoWeek').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().add(1, 'weeks').endOf('isoWeek').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().add(1, 'weeks').startOf('isoWeek').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().add(1, 'weeks').endOf('isoWeek').format('YYYY-MM-DD 23:59:59')
               break;
             case 'lastThirtyDays':
-              fromDate = this.$moment().subtract(29, 'd').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(29, 'd').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().format('YYYY-MM-DD 23:59:59')
               break;
             case 'lastSixtyDays':
-              fromDate = this.$moment().subtract(59, 'd').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(59, 'd').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().format('YYYY-MM-DD 23:59:59')
               break;
             case 'currentMonth':
-              fromDate = this.$moment().startOf('month').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().endOf('month').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().startOf('month').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().endOf('month').format('YYYY-MM-DD 23:59:59')
               break;
             case 'lastMonth':
-              fromDate = this.$moment().subtract(1, 'months').startOf('month').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().subtract(1, 'months').endOf('month').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD 23:59:59')
               break;
             case 'nextMonth':
-              fromDate = this.$moment().add(1, 'months').startOf('month').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().add(1, 'months').endOf('month').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().add(1, 'months').startOf('month').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().add(1, 'months').endOf('month').format('YYYY-MM-DD 23:59:59')
               break;
             case 'twoMonthsAgo':
-              fromDate = this.$moment().subtract(2, 'months').startOf('month').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().subtract(2, 'months').endOf('month').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(2, 'months').startOf('month').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().subtract(2, 'months').endOf('month').format('YYYY-MM-DD 23:59:59')
               break;
             case 'twoYearsAgo':
-              fromDate = this.$moment().subtract(2, 'year').startOf('year').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().subtract(2, 'year').endOf('year').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(2, 'year').startOf('year').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().subtract(2, 'year').endOf('year').format('YYYY-MM-DD 23:59:59')
               break;
             case 'lastYear':
-              fromDate = this.$moment().subtract(1, 'year').startOf('year').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().subtract(1, 'year').endOf('year').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD 23:59:59')
               break;
             case 'lastTwoYears':
-              fromDate = this.$moment().subtract(1, 'year').startOf('year').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().endOf('year').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().endOf('year').format('YYYY-MM-DD 23:59:59')
               break;
             case 'currentYear':
-              fromDate = this.$moment().startOf('year').format('YYYY/MM/DD 00:00:00')
-              toDate = this.$moment().endOf('year').format('YYYY/MM/DD 23:59:59')
+              fromDate = this.$moment().startOf('year').format('YYYY-MM-DD 00:00:00')
+              toDate = this.$moment().endOf('year').format('YYYY-MM-DD 23:59:59')
               break;
             case 'customRange':
               if (fromDate)
-                fromDate = this.$moment(fromDate).format('YYYY/MM/DD 00:00:00')
+                fromDate = this.$moment(fromDate).format('YYYY-MM-DD 00:00:00')
               if (toDate)
-                toDate = this.$moment(toDate).format('YYYY/MM/DD 23:59:59')
+                toDate = this.$moment(toDate).format('YYYY-MM-DD 23:59:59')
               break;
           }
           //Set new Date

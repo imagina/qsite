@@ -328,6 +328,13 @@ class Helper {
     document.head.appendChild(autocompleteGoogle)
   }
 
+  //Load CDN
+  loadCDN(path) {
+    let scripToCDN = document.createElement('script')
+    scripToCDN.setAttribute('src', path)
+    document.head.appendChild(scripToCDN)
+  }
+
   //validate rules
   validateRules(params = {}) {
     let response = true

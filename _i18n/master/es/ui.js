@@ -166,11 +166,12 @@ export default {
     new: 'Nuevo | Nuevos',
     old: 'Viejo | Viejos',
     country: 'Pais | Paises',
-    mainImage : 'Imagen Principal',
-    amount : 'Monto | Cantidades',
-    photo : 'Foto | Fotos',
-    company : 'Comañia | Compañias',
-    customer : 'Cliente | Clientes'
+    mainImage: 'Imagen Principal',
+    amount: 'Monto | Cantidades',
+    photo: 'Foto | Fotos',
+    company: 'Comañia | Compañias',
+    customer: 'Cliente | Clientes',
+    source: 'Fuente | Fuentes'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -216,7 +217,8 @@ export default {
     gribView: 'Vista de cuadricula',
     uploadFile: 'Cargar Archivo | Cargar Archivos',
     editFile: 'Editar Archivo | Editar Archivos',
-    addFile : 'Agregar Archivo | Agregar Archivos',
+    addFile: 'Agregar Archivo | Agregar Archivos',
+    swUpdateAvailable: 'Tenemos nuevas caracteristicas para ti, por favor actualiza'
   },
   form: {
     id: 'ID',
@@ -280,7 +282,7 @@ export default {
     masterRecord: 'Registro maestro',
     birthday: 'Cumpleaños',
     identification: 'Identificación',
-    identificationType : 'Tipo de Documento',
+    identificationType: 'Tipo de Documento',
     city: 'Ciudad | Ciudades',
     state: 'Departamento | Departamentos',
     province: 'Provincia | Provincias',
