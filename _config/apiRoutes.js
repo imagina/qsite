@@ -10,5 +10,6 @@ export default {
   appVersion: `${urlBase}/site/version`,
   siteSettings: `${urlBase}/site/settings`,
   permissions: `${urlBase}/site/permissions`,
-  cacheClear: `${urlBase}/site/cache-clear`
+  cacheClear: `${urlBase}/site/cache-clear`,
+  export: `${urlBase}/export`,
 }

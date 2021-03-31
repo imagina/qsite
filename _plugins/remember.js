@@ -37,7 +37,7 @@ class Remember {
           //Transform response data
           if (!dataError)
             responseData = {
-              data: response.data.data,
+              data: response.data.data || response.data,
               meta: response.data.meta || {},
               status: response.status,
               expiresIn: (currentDateInSeconds += params.seconds)

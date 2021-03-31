@@ -177,7 +177,7 @@
       </q-no-ssr>
     </div>
 
-    <div class="text-subtitle2 fixed fixed-bottom text-primary q-px-md q-py-sm text-right">
+    <div class="text-subtitle2 fixed fixed-bottom text-blue-grey q-px-md q-py-sm text-right">
       <q-icon name="fas fa-code-branch" class="q-mr-xs"/>
       {{ versionText }}
     </div>
@@ -218,7 +218,7 @@ export default {
   },
   computed: {
     versionText() {
-      return 'version ' + config('app.version')
+      return 'v' + config('app.version')
     },
     quserState() {
       return this.$store.state.quserAuth

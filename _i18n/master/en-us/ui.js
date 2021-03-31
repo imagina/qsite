@@ -166,7 +166,9 @@ export default {
     photo: 'Photo | Photos',
     company: 'Comany | Companies',
     customer: 'Customer | Customers',
-    source: 'Source | Sources'
+    source: 'Source | Sources',
+    export : 'Export',
+    download : 'Download'
   },
   message: {
     notFound: 'Sorry, nothing here',

@@ -171,7 +171,9 @@ export default {
     photo: 'Foto | Fotos',
     company: 'Comañia | Compañias',
     customer: 'Cliente | Clientes',
-    source: 'Fuente | Fuentes'
+    source: 'Fuente | Fuentes',
+    export : 'Exportar',
+    download : 'Descargar'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',

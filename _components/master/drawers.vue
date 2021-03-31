@@ -4,14 +4,25 @@
     <q-drawer id="menuMaster" class="no-shadow" v-model="drawer.menu" bordered ref="menuMaster"
               :mini="miniState" @click.capture="miniState = false">
       <!--Logo-->
-      <div class="q-pa-md" v-if="!miniState && drawer.menu">
+      <div class="q-pa-md" v-if="(appConfig.mode == 'iadmin') && !miniState && drawer.menu">
         <q-img contain :src="logo" style="height: 120px; min-height: 120px"/>
       </div>
-      <!--List-->
-      <q-scroll-area
-        :style="`height: calc(100vh - ${this.windowSize == 'mobile' ? '152' : (miniState ? '100' : '250')}px`">
+      <!--List iadmin-->
+      <q-scroll-area v-if="(appConfig.mode == 'iadmin') ? true : false"
+                     :style="`height: calc(100vh - ${this.windowSize == 'mobile' ? '152' : (miniState ? '100' : '250')}px`">
         <menu-list ref="menuList" group :menu="menu"/>
       </q-scroll-area>
+      <!--list Ipanel-->
+      <div v-else class="q-py-md">
+        <!--Menu-->
+        <menu-list ref="menuList" group :menu="menu"/>
+        <!--Version-->
+        <div class="text-subtitle2 fixed fixed-bottom text-blue-grey q-px-md q-py-sm text-right"
+             v-if="!miniState && drawer.menu">
+          <q-icon name="fas fa-code-branch" class="q-mr-xs"/>
+          {{ 'v' + appConfig.version }}
+        </div>
+      </div>
     </q-drawer>
 
     <!-- Config -->
@@ -136,6 +147,7 @@ export default {
     padding-left 0
     min-height 40px
     color $blue-grey
+
     .q-item__section--avatar
       padding 0 18px !important
 

@@ -1,8 +1,9 @@
 <template>
   <div id="masterFooter">
     <!-- === FOOTER === -->
-    <q-footer class="shadow-5" v-if="appConfig.mode == 'iadmin' ? true : false">
-      <div id="footerContent" class="row q-md-hide items-center">
+    <q-footer class="bg-white">
+      <!--Footer admin-->
+      <div id="footerContent" class="row q-md-hide items-center" v-if="appConfig.mode == 'iadmin'">
         <!-- Menu -->
         <div class="item-footer col cursor-pointer" @click="$eventBus.$emit('toggleMasterDrawer','menu')">
           <q-icon class="item-icon" name="fas fa-bars"/>
@@ -33,6 +34,12 @@
         <div class="item-footer col cursor-pointer" @click="modal.show = true">
           <q-icon class="item-icon" name="fas fa-ellipsis-h"/>
           <div>{{ $trp('ui.label.other') }}</div>
+        </div>
+      </div>
+      <!--Footer panel-->
+      <div id="footerIpanel" v-else>
+        <div id="webComponent">
+          <embedded-footer-ipanel v-if="loadFooterIpanel"></embedded-footer-ipanel>
         </div>
       </div>
     </q-footer>
@@ -97,6 +104,7 @@ export default {
     return {
       mainAction: config('app.mobilMainAction'),
       appConfig: config('app'),
+      loadFooterIpanel: false,
       modal: {
         show: false
       }
@@ -112,6 +120,46 @@ export default {
       this.$eventBus.$on('setMobileMainAction', (data) => {
         this.mainAction = {...this.mainAction, ...data}
       })
+      //Get footer ipanel
+      this.getFooterIpanel()
+    },
+    getFooterIpanel() {
+      if (config('app.mode') == 'ipanel') {
+        this.$remember.async({
+          key: 'footerIpanelHTML',
+          seconds: (3600 * 3),
+          refresh: false,
+          callBack: () => {
+            return new Promise((resolve, reject) => {
+              let baseUrl = this.$store.state.qsiteApp.baseUrl
+              this.$axios.get(baseUrl + '/isite/footer').then(response => {
+                resolve(response)
+              }).catch(error => {
+                console.error('[FOOTER-IPANEL]', error.response)
+                reject(error.response)
+              })
+            })
+          }
+        }).then(response => {
+          //Define Template
+          var template = document.createElement('template')
+          template.innerHTML = response.data
+
+          //Load weeb component
+          window.customElements.define('embedded-footer-ipanel', class EmbeddedWebview extends HTMLElement {
+              connectedCallback() {
+                const shadow = this.attachShadow({mode: 'open'});
+                shadow.appendChild(document.importNode(template.content, true))
+              }
+            }
+          );
+
+          //Allow load header web component
+          this.loadFooterIpanel = true
+        }).catch(error => {
+          console.error('[FOOTER-IPANEL]', error)
+        })
+      }
     },
     //Do main action
     doMainAction() {
@@ -146,4 +194,11 @@ export default {
     margin auto
     font-size 26px
     color white
+
+#footerIpanel
+  background-color transparent
+  border-top 1px solid $grey-4
+
+  #webComponent
+    all initial
 </style>

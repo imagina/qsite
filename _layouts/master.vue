@@ -1,5 +1,5 @@
 <template>
-  <q-layout id="layoutMaster" view="hHh LpR lFf">
+  <q-layout id="layoutMaster" :view="(appConfig.mode == 'iadmin') ? 'hHh LpR lFf' : 'hhh LpR fff'">
     <!-- HEADER -->
     <header-component v-if="appState.loadPage"/>
 
@@ -51,7 +51,9 @@ export default {
     })
   },
   data() {
-    return {}
+    return {
+      appConfig: config('app'),
+    }
   },
   computed: {
     appState() {

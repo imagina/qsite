@@ -3,9 +3,9 @@
     <!-- HEADER -->
     <q-header class="bg-white">
       <!-- Toolbar header -->
-      <div class="q-hide q-md-show bg-primary">
+      <div :class="(appConfig.mode == 'iadmin') ? 'q-hide q-md-show bg-primary' : ''">
         <!--Toolbar admin-->
-        <q-toolbar id="toolbarTop" color="primary" v-if="(appConfig.mode == 'iadmin') ? true : false">
+        <q-toolbar id="toolbarTop" color="primary" v-if="appConfig.mode == 'iadmin'">
           <!--Logo-->
           <div id="logoImage" :style="`background-image: url('${logo}')`"
                class="img-as-bg"></div>
@@ -41,8 +41,10 @@
           </div>
         </q-toolbar>
         <!--Toolbar panel-->
-        <div v-else id="headerIpanel" class="text-primary text-center q-py-sm">
-          <embedded-webview v-if="headerIpanel" :html="headerIpanel"></embedded-webview>
+        <div v-else id="headerIpanel">
+          <div id="webComponent">
+            <embedded-header-ipanel v-if="loadHeaderIpanel"></embedded-header-ipanel>
+          </div>
         </div>
       </div>
 
@@ -53,10 +55,11 @@
           <div id="leftContent" class="row items-center">
             <!--== Menu Button ==-->
             <q-btn id="buttonToogleMenu" icon="fas fa-bars" unelevated flat color="primary"
-                   class="q-mr-md q-hide q-md-show" @click="$eventBus.$emit('toggleMasterDrawer','menu')"/>
+                   :class="appConfig.mode == 'iadmin' ? 'q-mr-md q-hide q-md-show' : 'q-mr-md'"
+                   @click="$eventBus.$emit('toggleMasterDrawer','menu')"/>
             <!--== Back Button ==-->
             <q-btn icon="fas fa-arrow-left" unelevated round color="primary" class="btn-action q-mr-md"
-                   @click="$helper.backHistory()">
+                   v-if="appConfig.mode == 'iadmin'" @click="$helper.backHistory()">
               <q-tooltip>{{ $tr('ui.label.back') }}</q-tooltip>
             </q-btn>
             <!--Breadcrum-->
@@ -73,6 +76,8 @@
           </div>
           <!--Right content-->
           <div id="rightContent" class="row items-center q-gutter-x-sm">
+            <!--== Button export ==-->
+            <master-export/>
             <!--== Button filter ==-->
             <q-btn icon="fas fa-filter" unelevated round v-if="filter.load" color="primary" class="btn-action"
                    @click="$eventBus.$emit('toggleMasterDrawer','filter')">
@@ -80,7 +85,7 @@
             </q-btn>
             <!--== Button refresh ==-->
             <q-btn icon="fas fa-redo" unelevated round v-if="params.refresh" color="primary" class="btn-action"
-                   @click="$root.$emit('page.data.refresh'), $root.$emit('crud.data.refresh')">
+                   @click="$root.$emit('page.data.refresh'), $root.$emit('crud.data.refresh'), $root.$emit('export.data.refresh')">
               <q-tooltip>{{ $tr('ui.label.refresh') }}</q-tooltip>
             </q-btn>
           </div>
@@ -96,25 +101,16 @@
   </div>
 </template>
 <script>
-class EmbeddedWebview extends HTMLElement {
-  connectedCallback() {
-    const shadow = this.attachShadow({mode: 'open'});
-    shadow.innerHTML = this.getAttribute('html');
-  }
-}
-
-window.customElements.define(
-  'embedded-webview',
-  EmbeddedWebview
-);
-
+import {remember} from "@imagina/qsite/_plugins/remember";
+//Components
+import masterExport from "@imagina/qsite/_components/master/masterExport"
 
 export default {
   beforeDestroy() {
     this.$eventBus.$off('header.badge.manage')
   },
   props: {},
-  components: {},
+  components: {masterExport},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -130,7 +126,7 @@ export default {
       badge: {
         chat: false
       },
-      headerIpanel: false
+      loadHeaderIpanel: false
     }
   },
   computed: {
@@ -186,12 +182,42 @@ export default {
       //Get header ipanel
       this.getHeaderIpanel()
     },
+    //Get html header ipanel
     getHeaderIpanel() {
       if (config('app.mode') == 'ipanel') {
-        this.$axios.get('https://sexy-latinas.imaginacolombia.com/isite/header?fromIpanle').then(response => {
-          this.headerIpanel = response.data
+        this.$remember.async({
+          key: 'headerIpanelHTML',
+          seconds: (3600 * 3),
+          refresh: false,
+          callBack: () => {
+            return new Promise((resolve, reject) => {
+              let baseUrl = this.$store.state.qsiteApp.baseUrl
+              this.$axios.get(baseUrl + '/isite/header').then(response => {
+                resolve(response)
+              }).catch(error => {
+                console.error('[HEADER-IPANEL]', error.response)
+                reject(error.response)
+              })
+            })
+          }
+        }).then(response => {
+          //Define Template
+          var template = document.createElement('template')
+          template.innerHTML = response.data
+
+          //Load weeb component
+          window.customElements.define('embedded-header-ipanel', class EmbeddedWebview extends HTMLElement {
+              connectedCallback() {
+                const shadow = this.attachShadow({mode: 'closed'});
+                shadow.appendChild(document.importNode(template.content, true))
+              }
+            }
+          );
+
+          //Allow load header web component
+          this.loadHeaderIpanel = true
         }).catch(error => {
-          console.warn('error', error)
+          console.error('[HEADER-IPANEL]', error)
         })
       }
     }
@@ -215,13 +241,11 @@ export default {
       border-radius 50%
 
   #headerIpanel
-    background-color white
+    background-color transparent
     border-bottom 1px solid $grey-4
-    max-height 150px
 
-    iframe
-      width 100%
-      height 100%
+    #webComponent
+      all initial
 
   #toolbarBottom
     width 100%
