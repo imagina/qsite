@@ -32,7 +32,7 @@
     <!--Edit button--->
     <div class="text-right q-pa-sm">
       <q-btn @click="modal.show = true" color="positive" size="10px" padding="sm"
-             rounded unelevated :label="$tr('ui.label.update')"/>
+             rounded unelevated :label="$tr('ui.label.edit')"/>
     </div>
 
     <!--Form - Modal-->

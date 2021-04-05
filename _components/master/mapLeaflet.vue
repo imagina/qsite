@@ -3,7 +3,8 @@
     <!-- search geolocation -->
     <q-select :options="geolocations" v-model="address" emit-value behavior="menu" input-debounce="700"
               use-input map-options outlined dense bg-color="white" :label="label" clearable class="q-mb-md"
-              @filter="filterFn" @input="emitResponseValue" :loading="searchLoading"/>
+              @filter="filterFn" @input="emitResponseValue" :loading="searchLoading"
+              hint="eg. Avenida la francia, calle San Bernando 34..."/>
 
     <!--Map-->
     <l-map id="lMap" v-if="success && center" :zoom="mapZoom" :center="center"
@@ -47,6 +48,7 @@ export default {
   },
   data() {
     return {
+      selectValue: null,
       success: false,
       responseValue: false,
       center: false,
@@ -55,7 +57,7 @@ export default {
       searchLoading: false,
       searchProvider: new OpenStreetMapProvider(),
       address: null,
-      searchAddressValue : null,
+      searchAddressValue: null,
       geolocations: [],
       markPoint: false,
     }

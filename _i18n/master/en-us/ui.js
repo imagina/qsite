@@ -167,8 +167,8 @@ export default {
     company: 'Comany | Companies',
     customer: 'Customer | Customers',
     source: 'Source | Sources',
-    export : 'Export',
-    download : 'Download'
+    export: 'Export',
+    download: 'Download'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -180,6 +180,8 @@ export default {
     fieldCheckPassword: 'Does not match the password',
     fieldMinLeng: 'Must contain at least {num} characters',
     fieldMaxLeng: 'Please use maximum {num} characters',
+    fieldMinValue: 'Must contain values greater than {num}',
+    fieldMaxValue: 'Must contain values less than {num}',
     updatePassword: 'Update password',
     recordCreated: 'Record created',
     recordUpdated: 'Record updated',
@@ -220,7 +222,7 @@ export default {
     editFile: 'Edit File | Edit File',
     checked: 'Checked',
     addFile: 'Add File | Add Files',
-    swUpdateAvailable : 'We have new features for you, please update'
+    swUpdateAvailable: 'We have new features for you, please update'
   },
   form: {
     id: 'ID',
