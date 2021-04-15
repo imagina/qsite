@@ -3,10 +3,10 @@ const moduleVersion = 'v1';
 const urlBase = `/${moduleName}/${moduleVersion}`
 
 export default {
-  urlBase : urlBase,
+  urlBase: urlBase,
   version: moduleVersion,
   settings: `${urlBase}/settings`,
-  configFields: `${urlBase}/fields`,
+  configs: `${urlBase}/configs`,
   appVersion: `${urlBase}/site/version`,
   siteSettings: `${urlBase}/site/settings`,
   permissions: `${urlBase}/site/permissions`,

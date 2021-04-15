@@ -76,7 +76,7 @@ class AutoLoadRoutes {
     }
   }
 
-  //Addd extra routes
+  //Add extra routes
   addExtraRoutes() {
     //Add not found page
     if (process.env.MODE !== 'ssr') {

@@ -173,7 +173,11 @@ export default {
     customer: 'Cliente | Clientes',
     source: 'Fuente | Fuentes',
     export : 'Exportar',
-    download : 'Descargar'
+    download : 'Descargar',
+    boost : 'Impulsar',
+    since: 'Desde',
+    until: 'Hasta',
+    recommendation : 'Recomendación | Recomendaciones'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -222,7 +226,9 @@ export default {
     uploadFile: 'Cargar Archivo | Cargar Archivos',
     editFile: 'Editar Archivo | Editar Archivos',
     addFile: 'Agregar Archivo | Agregar Archivos',
-    swUpdateAvailable: 'Tenemos nuevas caracteristicas para ti, por favor actualiza'
+    swUpdateAvailable: 'Tenemos nuevas caracteristicas para ti, por favor actualiza',
+    backToSite : 'Volver al sitio',
+    notAuthorized: "Lo sentimos, No estas autorizad@ para estar aquí"
   },
   form: {
     id: 'ID',

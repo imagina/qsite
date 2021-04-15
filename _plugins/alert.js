@@ -39,7 +39,7 @@ class Alert {
     this.show(params)
   }
 
-  //ALert Error
+  //Alert Error
   error(params = {}) {
     if (!params.message) params = {message: params}
     params = {...this.defaultParams, ...params}
@@ -48,7 +48,7 @@ class Alert {
     this.show(params)
   }
 
-  //ALert info
+  //Alert info
   info(params = {}) {
     if (!params.message) params = {message: params}
     params = {...this.defaultParams, ...params}
@@ -57,7 +57,7 @@ class Alert {
     this.show(params)
   }
 
-  //ALert warning
+  //Alert warning
   warning(params = {}) {
     if (!params.message) params = {message: params}
     params = {...this.defaultParams, ...params}
@@ -66,7 +66,7 @@ class Alert {
     this.show(params)
   }
 
-  //ALert light
+  //Alert light
   light(params = {}) {
     if (!params.message) params = {message: params}
     params = {...this.defaultParams, ...params}
@@ -75,7 +75,7 @@ class Alert {
     this.show(params)
   }
 
-  //ALert dark
+  //Alert dark
   dark(params = {}) {
     if (!params.message) params = {message: params}
     params = {...this.defaultParams, ...params}

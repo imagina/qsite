@@ -1,4 +1,4 @@
-import appConfig from '@imagina/qsite/_config/master/extension/app'
+import appConfig from 'src/config/app'
 
 class AutoLoadMainConfig {
   constructor() {

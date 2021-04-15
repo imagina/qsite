@@ -3,7 +3,7 @@
     <q-icon name="power_off" color="grey-7" size="100px"/>
     <p class="text-faded">{{labelText}}<strong>(404)</strong></p>
     <q-btn color="primary" style="width:200px;" @click="$router.push({name : routeName})"
-           v-if="showButton" :label="buttonText"/>
+           v-if="showButton" :label="buttonText" rounded unelevated/>
   </div>
 </template>
 

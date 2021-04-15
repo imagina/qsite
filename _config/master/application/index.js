@@ -1,9 +1,9 @@
 //Order pages
 function orderPages(pages) {
   //=== Set app pages in last position
-  let appPages = pages.app || {}
-  delete pages.app
-  pages.app = appPages
+  let appPages = pages.mainqsite || {}
+  delete pages.mainqsite
+  pages.mainqsite = appPages
   return pages
 }
 

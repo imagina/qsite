@@ -168,7 +168,11 @@ export default {
     customer: 'Customer | Customers',
     source: 'Source | Sources',
     export: 'Export',
-    download: 'Download'
+    download: 'Download',
+    boost : 'Boost',
+    since : 'Since',
+    until : 'Until',
+    recommendation : 'Recommendation | Recommendations'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -222,7 +226,9 @@ export default {
     editFile: 'Edit File | Edit File',
     checked: 'Checked',
     addFile: 'Add File | Add Files',
-    swUpdateAvailable: 'We have new features for you, please update'
+    swUpdateAvailable: 'We have new features for you, please update',
+    backToSite : 'Back to site',
+    notAuthorized: "Sorry, You are not authorized to be here"
   },
   form: {
     id: 'ID',

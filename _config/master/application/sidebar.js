@@ -15,8 +15,8 @@ class AutoLoadSidebar {
 
   //Add extra fields to sidebar
   addDefaultItems() {
-    if (this.pages.app)
-      this.sidebar['app'] = this.pages.app.home || {}
+    if (this.pages.mainqsite)
+      this.sidebar['app'] = this.pages.mainqsite.home || {}
   }
 
 

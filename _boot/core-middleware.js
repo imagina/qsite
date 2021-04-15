@@ -1,5 +1,6 @@
 import helper from '@imagina/qsite/_plugins/helper'
 import cache from '@imagina/qsite/_plugins/cache'
+import appConfig from 'src/config/app'
 import {Loading} from "quasar";
 
 class Middleware {
@@ -105,8 +106,16 @@ class Middleware {
           if (to.meta && to.meta.permission)
             if (!this.store.getters['quserAuth/hasAccess'](to.meta.permission)) this.redirectTo = {name: 'app.home'}
 
+          //Validate mode access permission
+          if (!this.store.getters['quserAuth/hasAccess'](`profile.api.login-${appConfig.mode}`)) {
+            this.redirectTo = {name: 'app.not.authorized'}
+            //this.store.dispatch('quserAuth/AUTH_LOGOUT')
+          } else if (to.name == 'app.not.authorized') {//Back to home if is authorized
+            this.redirectTo = {name: 'app.home'}
+          }
+
           //If is authenticated, redirec page from login to home
-          if (!this.redirectTo && to.name == 'auth.login') this.redirectTo = {name: 'app.home'}
+          if (!this.redirectTo && (to.name == 'auth.login')) this.redirectTo = {name: 'app.home'}
         } else {//If user not is authenticate
           if (to.name != 'auth.login') this.redirectTo = {name: 'auth.login'}
         }
