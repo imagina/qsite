@@ -5,7 +5,7 @@ tagsToParceHost.forEach(tagToReplace => host = host.replace(tagToReplace, ''))
 let loadFrom = host.split('/')[1]
 
 export default {
-  version: '2.3.38',
+  version: '2.3.39',
   mode: (loadFrom && (['iadmin', 'ipanel'].indexOf(loadFrom) != -1)) ? loadFrom : 'iadmin',//Define load mode
   forceRoleAndDepartment: false,//Force to select role and department
   //UI Languages
