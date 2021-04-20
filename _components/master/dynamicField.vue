@@ -178,6 +178,11 @@
         <q-field v-model="responseValue" v-if="loadField('uploader')" v-bind="fieldProps.fieldComponent" stack-label>
           <uploader v-model="responseValue" v-bind="fieldProps.field"/>
         </q-field>
+        <!--Radio-->
+        <div v-if="loadField('radio')">
+          <div class="q-pb-sm text-caption">{{ fieldProps.label }}</div>
+          <q-radio :key="index" v-for="(option, index) in formatOptions" :val="option.value" :label="option.label" v-model="responseValue" />
+        </div>
       </div>
     </div>
   </div>
@@ -386,6 +391,7 @@ export default {
             ...props
           }
           props.loading = props.loading || this.loading
+          props.loading = props.loading || this.loading
           break;
         case'treeSelect':
           props = {
@@ -532,6 +538,12 @@ export default {
             }
           }
           break;
+        case'radio':
+          props = {
+            ...props
+          }
+          props.loading = props.loading || this.loading
+          break;
       }
 
       //Add ruler to required field
@@ -593,7 +605,7 @@ export default {
 
       //Swith type response
       switch (this.field.type) {
-        case 'select':
+        case 'select','radio':
           valueFromSelect()
           break;
         case 'treeSelect':
@@ -655,7 +667,7 @@ export default {
         this.listenEventCrud()//config dynamic component
         this.success = true//sucess
         //Set options if is type select
-        if (['treeSelect', 'select', 'multiSelect'].indexOf(this.field.type) != -1) {
+        if (['treeSelect', 'select', 'multiSelect','radio'].indexOf(this.field.type) != -1) {
           if (this.field.loadOptions) {
             await this.getOptions()
           }//Get options
@@ -694,7 +706,7 @@ export default {
         case 'treeSelect':
           this.orderOptions(propValue)
           break
-        case 'select':
+        case 'select','radio':
           this.orderOptions(propValue)
           break
         case 'multiSelect':
