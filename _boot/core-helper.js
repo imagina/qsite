@@ -4,6 +4,7 @@ import date from '@imagina/qsite/_plugins/date'
 import helper from '@imagina/qsite/_plugins/helper'
 import cache from '@imagina/qsite/_plugins/cache'
 import {remember} from '@imagina/qsite/_plugins/remember'
+import hook from '@imagina/qsite/_plugins/hook'
 import crud from '@imagina/qcrud/_services/baseService'
 import lodash from 'lodash'
 import moment from 'vue-moment'
@@ -22,6 +23,9 @@ export default function ({app, router, store, Vue, ssrContext}) {
   Vue.prototype.$cache = cache
   Vue.prototype.$lodash = lodash
   Vue.prototype.$remember = remember
+  //Create hook
+
+  Vue.prototype.$hook = new hook(store)
   Vue.prototype.$clone = (dataToClone) => {
     return lodash.cloneDeepWith(dataToClone, value => {
       //Not clone File or Blob  type

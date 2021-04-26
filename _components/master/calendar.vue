@@ -282,7 +282,7 @@ export default {
 
       .event-content
         margin 5px
-        background-color #eef5f9
+        background-color $custom-accent-color
         cursor pointer
         color $grey-9
 

@@ -121,7 +121,7 @@ export default {
         this.mainAction = {...this.mainAction, ...data}
       })
       //Get footer ipanel
-      this.getFooterIpanel()
+      //this.getFooterIpanel()
     },
     getFooterIpanel() {
       if (config('app.mode') == 'ipanel') {

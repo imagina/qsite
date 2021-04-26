@@ -31,22 +31,31 @@ export function SET_DEFAULT_LOCALE(state, data) {
   state.defaultLocale = data;
 }
 
-export function LOAD_PAGE(state,data) {
+export function LOAD_PAGE(state, data) {
   state.loadPage = data
 }
 
-export function SET_BASE_URL(state,data) {
+export function SET_BASE_URL(state, data) {
   state.baseUrl = data
 }
 
-export function SET_ORIGIN_URL(state,data) {
+export function SET_ORIGIN_URL(state, data) {
   state.originURL = data
 }
 
-export function SET_CURRENT_ROUTE(state,data) {
+export function SET_CURRENT_ROUTE(state, data) {
   state.currentRoute = data
 }
 
-export function SET_EXTRA(state,data){
+export function SET_EXTRA(state, data) {
   state.extra = data
+}
+
+export function SET_SITE_HOOKS(state, data) {
+  //Init hooks data
+  state.hooks = []
+  //Set to hook data to state
+  Object.values(data).forEach(item => {
+    if (item && Array.isArray(item) && item.length) state.hooks = state.hooks.concat(item)
+  })
 }

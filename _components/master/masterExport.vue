@@ -9,7 +9,7 @@
     <!--Content-->
     <q-dialog id="contentMasterExportComponent" @hide="reset()" @show="init()"
               v-model="showModal" persistent transition-show="slide-up" transition-hide="slide-down">
-      <q-card id="cardContent" style="max-width: 350px; background-color: #eef5f9">
+      <q-card id="cardContent">
         <!--Header-->
         <q-toolbar class="bg-primary text-white">
           <q-toolbar-title>
@@ -221,4 +221,8 @@ export default {
   .q-btn-dropdown
     .q-btn-dropdown__arrow
       display none
+#contentMasterExportComponent
+  #cardContent
+    background-color $custom-accent-color
+    max-width: 350px
 </style>

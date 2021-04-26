@@ -117,6 +117,8 @@ class localCache {
           })
         }
 
+        if(!keysToRemove.length) return resolve(true)
+
         //Remove keys
         keysToRemove.forEach(key => {
           LocalForage.removeItem(key).then(value => resolve(true)).catch(error => resolve(false))
@@ -125,7 +127,7 @@ class localCache {
     }
   }
 
-  //Return all keys fron storage
+  //Return all storage keys
   keys() {
     return new Promise((resolve, reject) => {
       if (!process.env.CLIENT) return resolve(undefined) //Validate if is side Server

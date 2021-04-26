@@ -75,5 +75,5 @@ export default {
 
 <style lang="stylus">
 #layoutMaster
-  background-color #eef5f9
+  background-color $custom-accent-color
 </style>

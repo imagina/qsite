@@ -13,6 +13,7 @@ export default {
     crudData() {
       return {
         crudId: this.crudId,
+        entityName: config("main.qsite.entityNames.setting"),
         apiRoute: 'apiRoutes.qsite.siteSettings',
         permission: 'isite.settings',
         create: {

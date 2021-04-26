@@ -1,4 +1,9 @@
+//Plugins
 import {Notify} from 'quasar'
+import {Dialog} from 'quasar'
+
+//Components
+import alertModal from '@imagina/qsite/_components/master/alertModal'
 
 class Alert {
   constructor() {
@@ -8,18 +13,18 @@ class Alert {
       pos: 'bottom-right',
       action: false,
       timeOut: 4000,
-      actions : [
+      actions: [
         {
           label: 'Ok',
           icon: '',
-          color : 'white',
+          color: 'white',
           handler: () => {
             false
           }
         }
       ],
-      color : 'primary',
-      textColor : 'white',
+      color: 'primary',
+      textColor: 'white',
       ...config('app.alert')
     }
   }
@@ -27,7 +32,9 @@ class Alert {
   //custom Alert
   custom(params = {}) {
     params = {...this.defaultParams, ...params}
-    this.show(params)
+    //Show
+    if (params.mode && (params.mode == 'modal')) this.showModal(params)
+    else this.showNotify(params)
   }
 
   //Alert success
@@ -36,7 +43,9 @@ class Alert {
     params = {...this.defaultParams, ...params}
     params.icon = params.icon || 'notifications'
     params.color = 'positive'
-    this.show(params)
+    //Show
+    if (params.mode && (params.mode == 'modal')) this.showModal(params)
+    else this.showNotify(params)
   }
 
   //Alert Error
@@ -45,7 +54,9 @@ class Alert {
     params = {...this.defaultParams, ...params}
     params.icon = params.icon || 'error'
     params.color = 'negative'
-    this.show(params)
+    //Show
+    if (params.mode && (params.mode == 'modal')) this.showModal(params)
+    else this.showNotify(params)
   }
 
   //Alert info
@@ -54,7 +65,9 @@ class Alert {
     params = {...this.defaultParams, ...params}
     params.icon = params.icon || 'info'
     params.color = 'cyan'
-    this.show(params)
+    //Show
+    if (params.mode && (params.mode == 'modal')) this.showModal(params)
+    else this.showNotify(params)
   }
 
   //Alert warning
@@ -63,7 +76,9 @@ class Alert {
     params = {...this.defaultParams, ...params}
     params.icon = params.icon || 'warning'
     params.color = 'warning'
-    this.show(params)
+    //Show
+    if (params.mode && (params.mode == 'modal')) this.showModal(params)
+    else this.showNotify(params)
   }
 
   //Alert light
@@ -72,7 +87,9 @@ class Alert {
     params = {...this.defaultParams, ...params}
     params.icon = params.icon || 'notifications'
     params.color = 'faded'
-    this.show(params)
+    //Show
+    if (params.mode && (params.mode == 'modal')) this.showModal(params)
+    else this.showNotify(params)
   }
 
   //Alert dark
@@ -81,11 +98,13 @@ class Alert {
     params = {...this.defaultParams, ...params}
     params.icon = params.icon || 'notifications'
     params.color = 'black'
-    this.show(params)
+    //Show
+    if (params.mode && (params.mode == 'modal')) this.showModal(params)
+    else this.showNotify(params)
   }
 
-  //Show alert
-  show(params) {
+  //Show Notify
+  showNotify(params) {
     Notify.create({
       ...params,
       message: params.message,
@@ -96,7 +115,15 @@ class Alert {
       textColor: params.textColor,
       position: params.pos,
       actions: params.actions,
-      html : true
+      html: true
+    })
+  }
+
+  //Show modal
+  showModal(params) {
+    Dialog.create({
+      component: alertModal,
+      params: params
     })
   }
 }

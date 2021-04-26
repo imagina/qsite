@@ -698,7 +698,7 @@ export default {
           } else this.responseValue = (propValue && propValue.id) ? propValue.id : propValue
           break;
         case 'input':
-          this.responseValue = propValue || null
+          this.responseValue = (propValue != undefined) ? propValue : null
           break
         case 'html':
           this.responseValue = propValue || ''

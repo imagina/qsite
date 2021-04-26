@@ -3,7 +3,7 @@
     <!-- HEADER -->
     <q-header class="bg-white">
       <!-- Toolbar header -->
-      <div :class="(appConfig.mode == 'iadmin') ? 'q-hide q-md-show bg-primary' : ''">
+      <div :class="'q-hide q-md-show bg-primary'">
         <!--Toolbar admin-->
         <q-toolbar id="toolbarTop" color="primary" v-if="appConfig.mode == 'iadmin'">
           <!--Logo-->
@@ -41,11 +41,58 @@
           </div>
         </q-toolbar>
         <!--Toolbar panel-->
-        <div v-else id="headerIpanel">
+        <q-toolbar v-else id="toolbarTop" color="primary">
+          <!--Logo-->
+          <div id="logoImage" :style="`background-image: url('${logo}')`"
+               class="img-as-bg"></div>
+          <!--Project name-->
+          <q-toolbar-title>{{ projectName }}</q-toolbar-title>
+          <!--Actions-->
+          <div class="row q-gutter-x-sm items-center">
+            <!--== Button User ==-->
+            <q-no-ssr>
+              <!--Drop down button-->
+              <q-btn-dropdown color="primary" rounded unelevated padding="xs sm">
+                <!--Top Slot-->
+                <template v-slot:label>
+                  <div id="profileImage" :style="`background-image: url('${quserState.userData.mainImage}')`"
+                       class="img-as-bg"></div>
+                  <div class="q-ml-xs">{{ quserState.userData.firstName }}</div>
+                </template>
+                <!--Actions-->
+                <q-list dense>
+                  <!--Go to profile-->
+                  <q-item clickable v-close-popup :to="{name: 'user.profile.me'}">
+                    <q-item-section>
+                      <q-item-label>
+                        <div class="row items-center text-blue-grey">
+                          <q-icon name="fas fa-user-circle" class="q-mr-sm" size="16px"/>
+                          {{ $tr('quser.sidebar.panelProfile') }}
+                        </div>
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <!--Log out-->
+                  <q-item clickable v-close-popup :to="{name: 'auth.logout'}">
+                    <q-item-section>
+                      <q-item-label>
+                        <div class="row items-center text-blue-grey">
+                          <q-icon name="fas fa-sign-out-alt" class="q-mr-sm" size="16px"/>
+                          {{ $tr('ui.configList.signOut') }}
+                        </div>
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </q-no-ssr>
+          </div>
+        </q-toolbar>
+        <!--<div v-else id="headerIpanel">
           <div id="webComponent">
             <embedded-header-ipanel v-if="loadHeaderIpanel"></embedded-header-ipanel>
           </div>
-        </div>
+        </div>-->
       </div>
 
       <!--Toolbar Sub header--->
@@ -180,7 +227,7 @@ export default {
         Object.keys(response).forEach(name => this.badge[name] = response[name])
       })
       //Get header ipanel
-      this.getHeaderIpanel()
+      //this.getHeaderIpanel()
     },
     //Get html header ipanel
     getHeaderIpanel() {

@@ -26,7 +26,7 @@ export default function ({app, router, store, Vue, ssrContext}) {
   //========== Show alert from interceptor
   function showMessages(messages = []) {
     messages.forEach(item => {
-      alert[item.type || 'info']({message: item.message, timeOut: 8000})
+      alert[item.type || 'info'](item)
     })
   }
 

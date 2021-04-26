@@ -169,3 +169,19 @@ export const SET_EXTRA = ({state, commit, dispatch}, params = false) => {
     resolve(true)
   })
 }
+
+//Get site hooks
+export const GET_SITE_HOOKS = ({commit, dispatch, state}) => {
+  return new Promise((resolve, reject) => {
+    //Request params
+    let requestParams = {refresh: true, params: {filter: {configNameByModule: 'config.frontendHooks'}}}
+    //Request
+    crud.index('apiRoutes.qsite.configs', requestParams).then(async response => {
+      commit('SET_SITE_HOOKS', response.data)
+      resolve(true)
+    }).catch(error => {
+      console.error('[store-qsite]Error:: Store getting site hooks - ', error)
+      reject(error)
+    })
+  })
+}

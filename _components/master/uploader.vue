@@ -183,7 +183,7 @@ export default {
                     //Merge data
                     fileData = {...fileData, ...fileCropped}
                     //Get file
-                    fileData.file = await this.$helper.urltoFile(fileData.base64, file.name, file.type)
+                    fileData.file = await this.$helper.urlToFile(fileData.base64, file.name, file.type)
                     //Resolve
                     resolve(true)
                   }
