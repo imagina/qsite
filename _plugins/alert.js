@@ -17,7 +17,7 @@ class Alert {
         {
           label: 'Ok',
           icon: '',
-          color: 'white',
+          color: 'green',
           handler: () => {
             false
           }

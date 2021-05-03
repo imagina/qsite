@@ -77,7 +77,6 @@ export default {
     module: 'Module | Modules',
     entity: 'Entity',
     change: 'Change',
-    socialNetwork: 'Social Network | Social Networks',
     logo: 'Logo | Logos',
     pending: 'Pending | Pendings',
     notification: 'Notification | Notifications',
@@ -150,7 +149,6 @@ export default {
     external: 'External',
     quantity: 'Quantity | Quanitities',
     folder: 'Folder | Folders',
-    file: 'File | Files',
     order: 'Order',
     recent: 'Recent',
     size: 'Size | Sizes',
@@ -228,7 +226,8 @@ export default {
     addFile: 'Add File | Add Files',
     swUpdateAvailable: 'We have new features for you, please update',
     backToSite : 'Back to site',
-    notAuthorized: "Sorry, You are not authorized to be here"
+    notAuthorized: "Sorry, You are not authorized to be here",
+    noValue : 'No Value'
   },
   form: {
     id: 'ID',

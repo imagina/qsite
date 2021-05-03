@@ -17,7 +17,7 @@
         <!--button Actions-->
         <div id="actions" class="row justify-end q-gutter-sm">
           <q-btn v-for="(actionProps, keyAction) in actionsModal" :key="keyAction" v-bind="actionProps" v-close-popup
-                 @click="actionProps.toUrl ? $helper.openExternalURL(actionProps.toUrl, false) : false"/>
+                 @click="callBack(actionProps)"/>
         </div>
       </q-card-section>
     </q-card>
@@ -59,7 +59,8 @@ export default {
           unelevated: true,
           rounded: true,
           color: action.color || 'green',
-          toUrl: action.toUrl || false
+          toUrl: action.toUrl || false,
+          handler: action.handler || false
         }
         //Dynamics props
         if (action.label) response.label = action.label
@@ -81,6 +82,11 @@ export default {
     hide() {
       this.$refs.alertModalComponent.hide()
     },
+    //Callback
+    callBack(action) {
+      if (action.toUrl) return this.$helper.openExternalURL(action.toUrl, false)
+      if (action.handler) return action.handler()
+    }
   }
 }
 </script>

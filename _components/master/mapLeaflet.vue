@@ -3,7 +3,7 @@
     <!-- search geolocation -->
     <q-select :options="geolocations" v-model="address" emit-value behavior="menu" input-debounce="700"
               use-input map-options outlined dense bg-color="white" :label="label" clearable class="q-mb-md"
-              @filter="filterFn" @input="emitResponseValue" :loading="searchLoading"
+              @filter="filterFn" @input="emitResponseValue" :loading="searchLoading" v-if="!readOnly"
               hint="eg. Avenida la francia, calle San Bernando 34..."/>
 
     <!--Map-->
@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import {latLng, Icon} from "leaflet";
-import {LMap, LTileLayer, LMarker} from 'vue2-leaflet';
+import {Icon, latLng} from "leaflet";
+import {LMap, LMarker, LTileLayer} from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {OpenStreetMapProvider} from 'leaflet-geosearch'
 
@@ -32,6 +32,7 @@ export default {
     type: {default: 'positionMarkerMap'},
     height: {default: '400px'},
     label: {default: ''},
+    readOnly: {type: Boolean, default: false}
   },
   watch: {
     value: {

@@ -5,7 +5,7 @@ tagsToParceHost.forEach(tagToReplace => host = host.replace(tagToReplace, ''))
 let loadFrom = host.split('/')[1]
 
 export default {
-  version: '2.3.40',
+  version: '2.3.42',
   mode: (loadFrom && (['iadmin', 'ipanel'].indexOf(loadFrom) != -1)) ? loadFrom : 'iadmin',//Define load mode
   validateModeAccess: true,//Define if validate app mode access
   forceRoleAndDepartment: false,//Force to select role and department
@@ -26,6 +26,7 @@ export default {
     'qad',
     'qdocument',
     'qplace',
+    'qcheckin',
     'qlocations',
     'qevent',
     'qpage',

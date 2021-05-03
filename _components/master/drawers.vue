@@ -63,7 +63,8 @@ export default {
         menu: this.windowSize == 'mobile' ? false : true,
         config: false,
         chat: false,
-        filter: false
+        filter: false,
+        checkin : false
       },
       menu: config('sidebar'),
       appConfig: config('app'),

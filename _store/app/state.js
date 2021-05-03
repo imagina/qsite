@@ -9,5 +9,6 @@ export default {
   availableThemes: [],
   selectedLocales: [],
   defaultLocale: '',
-  hooks: []
+  hooks: [],
+  configs: []
 }

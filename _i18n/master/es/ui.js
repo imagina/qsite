@@ -51,7 +51,6 @@ export default {
     allow: 'Permitir',
     deny: 'Negar',
     inherit: 'Heredar',
-    day: 'Día | Dias',
     monday: 'Lunes',
     tuesday: 'Martes',
     wednesday: 'Miercoles',
@@ -74,7 +73,6 @@ export default {
     module: 'Modulo | Modulos',
     entity: 'Entidad',
     change: 'Cambiar',
-    socialNetwork: 'Red social | Redes sociales',
     logo: 'Logo | Logos',
     pending: 'Pendiente | Pendientes',
     notification: 'Notificación | Notificaciones',
@@ -137,7 +135,6 @@ export default {
     reject: 'Rechazar',
     rejected: 'Rechazado',
     text: 'Texto | Textos',
-    file: 'Archivo | Archivos',
     location: 'Ubicación | Ubicaciones',
     small: 'Pequeño | Pequeños',
     big: 'Grande | Grandes',
@@ -228,7 +225,8 @@ export default {
     addFile: 'Agregar Archivo | Agregar Archivos',
     swUpdateAvailable: 'Tenemos nuevas caracteristicas para ti, por favor actualiza',
     backToSite : 'Volver al sitio',
-    notAuthorized: "Lo sentimos, No estas autorizad@ para estar aquí"
+    notAuthorized: "Lo sentimos, No estas autorizad@ para estar aquí",
+    noValue : 'Sin Valor'
   },
   form: {
     id: 'ID',

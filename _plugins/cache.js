@@ -103,28 +103,25 @@ class localCache {
 
   //Remove an item from storage
   remove(index = {}) {
-    if (index) {
-      return new Promise(async (resolve, reject) => {
-        if (!process.env.CLIENT) return resolve(undefined) //Validate if is side Server
-        //Default keys to delete
-        let keysToRemove = (index && index.allKey) ? [] : [index]
+    return new Promise(async (resolve, reject) => {
+      if (!index || !process.env.CLIENT) return resolve(undefined) //Validate if is side Server
+      //Default keys to delete
+      let keysToRemove = (index && index.allKey) ? [] : [index]
 
-        //Search similar keys to remove
-        if (index && index.allKey) {
-          let cacheKeys = await this.keys()
-          cacheKeys.forEach(key => {
-            if (key.indexOf(index.allKey) != -1) keysToRemove.push(key)
-          })
-        }
-
-        if(!keysToRemove.length) return resolve(true)
-
-        //Remove keys
-        keysToRemove.forEach(key => {
-          LocalForage.removeItem(key).then(value => resolve(true)).catch(error => resolve(false))
+      //Search similar keys to remove
+      if (index && index.allKey) {
+        let cacheKeys = await this.keys()
+        cacheKeys.forEach(key => {
+          if (key.indexOf(index.allKey) != -1) keysToRemove.push(key)
         })
-      })
-    }
+      }
+
+      if (!keysToRemove.length) return resolve(true)
+
+      //Remove keys
+      keysToRemove.forEach(key => LocalForage.removeItem(key))
+      resolve(true)
+    })
   }
 
   //Return all storage keys

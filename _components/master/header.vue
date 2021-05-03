@@ -22,6 +22,12 @@
                 <div class="q-ml-xs">{{ quserState.userData.firstName }}</div>
               </q-btn>
             </q-no-ssr>
+            <!--== Button checking ==-->
+            <q-btn icon="fas fa-stopwatch" unelevated round color="white" text-color="primary" class="btn-action"
+                   @click="$eventBus.$emit('toggleMasterDrawer','checkin')"
+                   v-if="$auth.hasAccess('icheckin.shifts.create')">
+              <q-tooltip>{{ $tr('qcheckin.sidebar.checkin') }}</q-tooltip>
+            </q-btn>
             <!--== Button Go to site ==-->
             <q-btn round dense icon="far fa-eye" color="white" unelevated class="btn-action"
                    type="a" :href="$store.state.qsiteApp.baseUrl" target="_blank" text-color="primary">
@@ -148,7 +154,6 @@
   </div>
 </template>
 <script>
-import {remember} from "@imagina/qsite/_plugins/remember";
 //Components
 import masterExport from "@imagina/qsite/_components/master/masterExport"
 

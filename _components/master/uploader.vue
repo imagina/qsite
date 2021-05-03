@@ -87,7 +87,8 @@ export default {
       if (this.accept == 'media') return '.mp4, .mp3, .jpg, image/*'
 
       //Default
-      return this.$clone(this.accept)
+      let mediaConfig = this.$store.state.qsiteApp.configs.Media
+      return this.$clone(mediaConfig ? mediaConfig['allowed-types'] : this.accept)
     },
     //Order Show Files
     showFiles() {

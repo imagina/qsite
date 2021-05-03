@@ -5,6 +5,7 @@ export const RESET = (state) => {
   state.selectedLocales = [];
   state.defaultLocale = '';
   state.filters = {};
+  state.configs = [];
 };
 
 export function SET_SITE_SETTINGS(state, data) {
@@ -58,4 +59,8 @@ export function SET_SITE_HOOKS(state, data) {
   Object.values(data).forEach(item => {
     if (item && Array.isArray(item) && item.length) state.hooks = state.hooks.concat(item)
   })
+}
+
+export function SET_MODULE_CONFIGS(state, data) {
+  state.configs = data
 }

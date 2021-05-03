@@ -74,6 +74,15 @@
               </q-item-section>
               <q-item-section class="ellipsis">Chat</q-item-section>
             </q-item>
+            <!--Checking action-->
+            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','checkin')"
+                    v-if="$auth.hasAccess('icheckin.shifts.create')">
+              <q-item-section avatar>
+                <q-icon color="primary" name="fas fa-stopwatch"/>
+              </q-item-section>
+              <q-item-section class="ellipsis">{{ $tr('qcheckin.sidebar.checkin') }}</q-item-section>
+            </q-item>
+            <!---->
           </q-list>
         </q-card-section>
       </q-card>
