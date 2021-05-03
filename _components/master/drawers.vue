@@ -31,6 +31,13 @@
     <q-drawer bordered id="drawerFilterMaster" v-model="drawer.filter" side="right" v-if="filter.load" overlay>
       <master-filter/>
     </q-drawer>
+
+    <!--checking-->
+    <q-drawer bordered id="drawerCheckinMaster" v-model="drawer.checkin" side="right" overlay
+              v-if="$auth.hasAccess('icheckin.shifts.create')">
+      <checkin/>
+    </q-drawer>
+
   </div>
 </template>
 <script>
@@ -39,13 +46,14 @@ import configList from '@imagina/qsite/_components/master/configList'
 import chatList from '@imagina/qchat/_components/drawerChatList'
 import menuList from '@imagina/qsite/_components/master/recursiveItem'
 import masterFilter from '@imagina/qsite/_components/master/masterFilter'
+import checkin from '@imagina/qcheckin/_components/checkin'
 
 export default {
   beforeDestroy() {
     this.$eventBus.$off('toggleMasterDrawer')
   },
   props: {},
-  components: {menuList, configList, chatList, masterFilter},
+  components: {menuList, configList, chatList, masterFilter, checkin},
   watch: {},
   mounted() {
     this.$nextTick(function () {

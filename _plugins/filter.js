@@ -66,8 +66,18 @@ class Filter {
 
   //Set values to filter
   setValues(values) {
-    this.values = {}//Reset values
-    if (values && Object.keys(values).length) this.values = clone(values)//Set data
+    //values temporary
+    let tmpValues = {}
+
+    //filter only values distinc of null an undefined
+    if (values && Object.keys(values).length) {
+      for (var itemName in values) {
+        let itemValue = values[itemName]
+        if ((itemValue !== null) && (itemValue !== undefined)) tmpValues[itemName] = itemValue
+      }
+    }
+
+    this.values = clone(tmpValues)// Set values
     this.cacheValuesFilter()//Cache data
     this.validateHasValues()//Validate if has selected values
   }
@@ -186,14 +196,14 @@ class Filter {
       let value = this.values[nameValue]//Get value
       //Validate if value is array
       if (Array.isArray(value)) {
-        if(value.length) this.hasValues = true
+        if (value.length) this.hasValues = true
       }
       //Validate if value is Object
       else if (value && Object.is(value)) {
-        if(Object.keys(value).length) this.hasValues = true
+        if (Object.keys(value).length) this.hasValues = true
       }
       //Validate value
-      else if ((value !== undefined) && (value !== null)) {
+      else if ((value !== undefined) && (value !== null) && (value !== false)) {
         this.hasValues = true
       }
     }

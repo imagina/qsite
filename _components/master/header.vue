@@ -49,10 +49,12 @@
         <!--Toolbar panel-->
         <q-toolbar v-else id="toolbarTop" color="primary">
           <!--Logo-->
-          <div id="logoImage" :style="`background-image: url('${logo}')`"
-               class="img-as-bg"></div>
+          <div id="logoImage" :style="`background-image: url('${logo}')`" class="img-as-bg cursor-pointer"
+               @click="$helper.openExternalURL($store.state.qsiteApp.baseUrl, false)"></div>
           <!--Project name-->
-          <q-toolbar-title>{{ projectName }}</q-toolbar-title>
+          <q-toolbar-title class="cursor-pointer" @click="$helper.openExternalURL($store.state.qsiteApp.baseUrl, false)">
+            {{ projectName }}
+          </q-toolbar-title>
           <!--Actions-->
           <div class="row q-gutter-x-sm items-center">
             <!--== Button User ==-->
