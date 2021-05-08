@@ -1,5 +1,7 @@
 export default {
   newRecommendation : 'New Recommendation',
+  updateRecommendation: 'Update Recomendation',
+  deleteRecommendation: 'Delete Recommendation',
   messages: {
     replaceLang: 'Replace all languages with <b class="text-primary">{lang}</b>',
     duplicateLang: 'Replace <b class="text-primary">{lang}</b> with...',

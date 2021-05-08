@@ -12,4 +12,5 @@ export default {
   permissions: `${urlBase}/site/permissions`,
   cacheClear: `${urlBase}/site/cache-clear`,
   export: `${urlBase}/export`,
+  recommendations: `${urlBase}/recommendations`,
 }

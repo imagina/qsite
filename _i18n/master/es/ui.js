@@ -174,7 +174,8 @@ export default {
     boost : 'Impulsar',
     since: 'Desde',
     until: 'Hasta',
-    recommendation : 'Recomendación | Recomendaciones'
+    recommendation : 'Recomendación | Recomendaciones',
+    form: 'Formulario | Formularios'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',

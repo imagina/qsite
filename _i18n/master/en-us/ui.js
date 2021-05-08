@@ -170,7 +170,8 @@ export default {
     boost : 'Boost',
     since : 'Since',
     until : 'Until',
-    recommendation : 'Recommendation | Recommendations'
+    recommendation : 'Recommendation | Recommendations',
+    form: 'Form | Forms'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -244,7 +245,7 @@ export default {
     description: 'Description | Descriptions',
     category: 'Category | Categories',
     parent: 'Parent | Parents',
-    status: 'status | Statuses',
+    status: 'Status | Statuses',
     image: 'Image | Images',
     video: 'Video | Videos',
     firstImage: 'First Image',

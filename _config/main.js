@@ -1,6 +1,6 @@
 export default {
   //Entities
   entityNames: {
-    setting: 'setting',
+    recommendation: 'recommendation',
   },
 }

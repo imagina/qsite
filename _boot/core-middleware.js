@@ -107,7 +107,7 @@ class Middleware {
             if (!this.store.getters['quserAuth/hasAccess'](to.meta.permission)) this.redirectTo = {name: 'app.home'}
 
           //Validate mode access permission
-          if (appConfig.validateModeAccess && !this.store.getters['quserAuth/hasAccess'](`profile.api.login-${appConfig.mode}`)) {
+          if (appConfig.validateModeAccess && !this.store.getters['quserAuth/hasAccess'](`profile.access.${appConfig.mode}`)) {
             this.redirectTo = {name: 'app.not.authorized'}
             //this.store.dispatch('quserAuth/AUTH_LOGOUT')
           } else if (to.name == 'app.not.authorized') {//Back to home if is authorized

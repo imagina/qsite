@@ -93,5 +93,6 @@ export default {
 <style lang="stylus">
 #alertModalComponent
   #cardContent
-    min-width 400px
+    width 400px
+    max-width 99%
 </style>
