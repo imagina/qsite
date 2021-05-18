@@ -175,7 +175,9 @@ export default {
     since: 'Desde',
     until: 'Hasta',
     recommendation : 'Recomendación | Recomendaciones',
-    form: 'Formulario | Formularios'
+    form: 'Formulario | Formularios',
+    block: 'Bloque',
+    field: 'Campo | Campos'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -275,6 +277,7 @@ export default {
     actions: 'Acciones',
     sort: 'Ordenar',
     prefix: 'Prefijo',
+    suffix: 'Sufijo',
     currentNumber: 'Numero actual',
     firstNumber: 'Numero inicial',
     lastNumber: 'Numero final',
@@ -324,7 +327,8 @@ export default {
     onOffer: 'En oferta',
     createdBy: 'Creado por',
     systemName: 'Nombre de sistema',
-    externalId: 'ID Externo'
+    externalId: 'ID Externo',
+    company: 'Compañia | Compañias',
   },
   configList: {
     loggedAs: 'Registrado como',

@@ -167,11 +167,13 @@ export default {
     source: 'Source | Sources',
     export: 'Export',
     download: 'Download',
-    boost : 'Boost',
-    since : 'Since',
-    until : 'Until',
-    recommendation : 'Recommendation | Recommendations',
-    form: 'Form | Forms'
+    boost: 'Boost',
+    since: 'Since',
+    until: 'Until',
+    recommendation: 'Recommendation | Recommendations',
+    form: 'Form | Forms',
+    block: 'Block',
+    field: 'Field | Fields'
   },
   message: {
     notFound: 'Sorry, nothing here',
@@ -226,9 +228,9 @@ export default {
     checked: 'Checked',
     addFile: 'Add File | Add Files',
     swUpdateAvailable: 'We have new features for you, please update',
-    backToSite : 'Back to site',
+    backToSite: 'Back to site',
     notAuthorized: "Sorry, You are not authorized to be here",
-    noValue : 'No Value'
+    noValue: 'No Value'
   },
   form: {
     id: 'ID',
@@ -276,6 +278,7 @@ export default {
     actions: 'Actions',
     sort: 'Sort',
     prefix: 'Prefix',
+    suffix: 'suffix',
     currentNumber: 'Current number',
     firstNumber: 'First number',
     lastNumber: 'Last number',
@@ -326,7 +329,7 @@ export default {
     createdBy: 'Created by',
     systemName: 'System name',
     externalId: 'External ID',
-    company: 'Company | Companies'
+    company: 'Company | Companies',
   },
   configList: {
     loggedAs: 'logged as',

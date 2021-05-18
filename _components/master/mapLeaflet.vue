@@ -56,7 +56,7 @@ export default {
       mapZoom: 8,
       marker: false,
       searchLoading: false,
-      searchProvider: new OpenStreetMapProvider(),
+      searchProvider: new OpenStreetMapProvider({params: {countrycodes: "co"}}),
       address: null,
       searchAddressValue: null,
       geolocations: [],

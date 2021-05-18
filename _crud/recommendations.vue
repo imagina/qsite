@@ -14,6 +14,7 @@ export default {
         entityName: config("main.qsite.entityNames.recommendation"),
         apiRoute: 'apiRoutes.qsite.recommendations',
         permission: 'isite.recommendations',
+        extraFormFields: 'isite.crud-fields.recommendations',
         create: {
           title: this.$tr('qsite.layout.newRecommendation'),
         },

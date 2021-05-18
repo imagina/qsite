@@ -34,7 +34,7 @@
 
     <!--checking-->
     <q-drawer bordered id="drawerCheckinMaster" v-model="drawer.checkin" side="right" overlay
-              v-if="$auth.hasAccess('icheckin.shifts.create')">
+              v-if="(appConfig.mode == 'iadmin') && $auth.hasAccess('icheckin.shifts.create')">
       <checkin/>
     </q-drawer>
 
