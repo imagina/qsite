@@ -98,7 +98,7 @@
         <!--Select-->
         <q-select v-model="responseValue" :options="formatOptions" :label="fieldLabel" use-input v-bind="fieldProps"
                   @input="matchTags(field)" v-if="loadField('select')" style="padding-bottom: 20px"
-                  @filter="(val, update)=>update(()=>{options = $helper.filterOptions(val,rootOptions,responseValue)})">
+                  @filter="filterSelectOptions">
           <!--No options slot-->
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
             <q-item>
@@ -809,7 +809,7 @@ export default {
       }, 500)
     },
     //Get options if is load options
-    getOptions() {
+    getOptions(query = false) {
       return new Promise((resolve, reject) => {
         let loadOptions = this.$clone(this.field.loadOptions || {})
         this.loading = true//Open loading
@@ -826,6 +826,18 @@ export default {
           //add filter
           if (!params.params.filter) params.params.filter = {}
           params.params.filter.allTranslations = true
+
+          //Add Params to get options by query
+          if (loadOptions && loadOptions.filterByQuery) {
+            if (query && (query.length > 2)) {
+              params.params.filter.search = query
+              params.params.take = 25
+            } else {
+              this.loading = false
+              return resolve(false)
+            }
+          }
+
           //Request
           this.$crud.index(loadOptions.apiRoute, params).then(response => {
             this.rootOptionsData = this.$clone(response.data)
@@ -926,6 +938,21 @@ export default {
           resolve(ruleResponse)
         })
       })
+    },
+    //filter Select
+    async filterSelectOptions(val, update, abort) {
+      //Get params
+      let loadOptions = this.field.loadOptions
+
+      //Filter By Query
+      if (loadOptions && loadOptions.filterByQuery) {
+        await this.getOptions(val)
+        update()
+      } else {//Filter current options
+        update(async () => {
+          this.options = this.$helper.filterOptions(val, this.rootOptions, this.responseValue)
+        })
+      }
     }
   }
 }

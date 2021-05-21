@@ -329,6 +329,7 @@ export default {
     systemName: 'Nombre de sistema',
     externalId: 'ID Externo',
     company: 'Compañia | Compañias',
+    customUrl: 'Url Personalizada'
   },
   configList: {
     loggedAs: 'Registrado como',

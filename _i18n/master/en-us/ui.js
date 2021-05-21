@@ -330,6 +330,7 @@ export default {
     systemName: 'System name',
     externalId: 'External ID',
     company: 'Company | Companies',
+    customUrl: 'Custom Url'
   },
   configList: {
     loggedAs: 'logged as',
