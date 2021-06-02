@@ -13,5 +13,5 @@ export default {
     subHeader: {
       refresh: true,
     }
-  },
+  }
 }

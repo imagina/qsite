@@ -7,6 +7,7 @@ import notAuthorized from '@imagina/qsite/_components/master/notAuthorized'
 import notResult from '@imagina/qsite/_components/master/notResults'
 import uploadImg from '@imagina/qsite/_components/master/uploadImage'
 import dynamicField from '@imagina/qsite/_components/master/dynamicField'
+import dynamicForm from '@imagina/qsite/_components/master/dynamicForm'
 import captcha from '@imagina/qsite/_components/master/captcha'
 import locales from '@imagina/qsite/_components/master/locales'
 import avatarImage from '@imagina/qsite/_components/master/avatarImage'
@@ -24,6 +25,7 @@ export default ({app, router, store, Vue}) => {
     {name: 'not-result', component: notResult},
     {name: 'upload-image', component: uploadImg},
     {name: 'dynamic-field', component: dynamicField},
+    {name: 'dynamic-form', component: dynamicForm},
     {name: 'captcha', component: captcha},
     {name: 'locales', component: locales},
     {name: 'avatar-image', component: avatarImage},

@@ -97,7 +97,7 @@ class Middleware {
   }
 
   //Validate if route require authentication
-  async validateRoute(to) {
+  async validateRoute(to, from) {
     return new Promise(async (resolve, reject) => {
       if (to.meta.authenticated) {
         //If user is authenticated
@@ -112,6 +112,31 @@ class Middleware {
             //this.store.dispatch('quserAuth/AUTH_LOGOUT')
           } else if (to.name == 'app.not.authorized') {//Back to home if is authorized
             this.redirectTo = {name: 'app.home'}
+          }
+
+          //Validate redirect from URL
+          let routeNamesFromRedirect = ['auth.login', 'auth.register']
+          if (routeNamesFromRedirect.includes(from.name) || routeNamesFromRedirect.includes(to.name)) {
+            //get local origin Url
+            let origenUrl = this.store.state.qsiteApp.baseUrl
+            //Define last navigator history route
+            let windowLastRoute = from.query ? from.query.redirectTo : false
+            if (!windowLastRoute) windowLastRoute = to.query ? to.query.redirectTo : false
+            //Define from vue route
+            let fromVueRoute = from.query ? from.query.fromVueRoute : false
+            if (!fromVueRoute) fromVueRoute = to.query ? to.query.fromVueRoute : false
+
+            //validate last navigator history route to redirect
+            if (windowLastRoute && windowLastRoute.length &&
+              (windowLastRoute.indexOf(origenUrl) >= 0) && (windowLastRoute.indexOf("login") == -1) &&
+              (windowLastRoute.indexOf("logout") == -1)) {
+              //Redirect last
+              return location.href = windowLastRoute;
+              //validate last vue router history route to rediret
+            } else if (fromVueRoute && !["auth.logout", "auth.login", "auth.register"].includes(fromVueRoute)) {
+              //Redirect last
+              this.redirectTo = {name: fromVueRoute};
+            }
           }
 
           //If is authenticated, redirect page from login to home
@@ -166,7 +191,7 @@ export default async ({router, store, Vue, app, ssrContext}) => {
     }
 
     //Validate route authentication and permissions
-    await middleware.validateRoute(to)
+    await middleware.validateRoute(to, from)
 
     //Go to next route
     middleware.goToNextRoute(to, from, next)

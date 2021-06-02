@@ -1,3 +1,6 @@
+import Vue from "vue";
+import moment from "moment";
+
 class DatePlugin {
 
   constructor() {
@@ -72,8 +75,7 @@ class DatePlugin {
   /**
    * Get diference bettewn two dates
    *
-   * @param futureDate
-   * @param currentDate
+   * @params futureDate,currentDate
    * @returns {{hours: number, seconds: number, minutes: number, day: number}}
    */
   getDiff(futureDate, currentDate) {
@@ -122,6 +124,21 @@ class DatePlugin {
     }
 
     return new Date(date).addHours(hours)
+  }
+
+  /**
+   * Return human diff date from current date
+   * @param date
+   */
+  getHumanCalendar(date, optionsCalendar = {}) {
+    return moment(date).calendar(null, {
+      sameDay: 'hh:mm a',
+      nextDay: `[${Vue.prototype.$tr('ui.label.tomorrow')}]`,
+      lastDay: `[${Vue.prototype.$tr('ui.label.yesterday')}]`,
+      lastWeek: 'dddd',
+      sameElse: 'MM/DD/YYYY',
+      ...optionsCalendar
+    })
   }
 }
 

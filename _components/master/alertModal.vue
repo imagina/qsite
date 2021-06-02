@@ -1,17 +1,24 @@
 <template>
   <q-dialog id="alertModalComponent" ref="alertModalComponent" persistent
             transition-show="slide-up" transition-hide="slide-down">
-    <q-card id="cardContent">
+    <div id="cardContent" class="box">
       <!--Header-->
-      <q-toolbar :class="`bg-${paramsModal.color} text-white`">
-        <q-toolbar-title>
-          <q-icon :name="paramsModal.icon"/>
+      <q-toolbar :class="`bgg-${paramsModal.color} q-px-none`" style="min-height: auto">
+        <q-toolbar-title class="box-title row items-center">
+          <q-icon size="25px" :name="paramsModal.icon" :color="paramsModal.color"/>
           {{ paramsModal.title }}
         </q-toolbar-title>
+        <q-btn size="sm" icon="fas fa-times" round color="blue-grey-5" text-color="white" v-close-popup unelevated
+               v-if="!actionsModal || !actionsModal.length">
+          <q-tooltip>{{ $tr('ui.label.close') }}</q-tooltip>
+        </q-btn>
       </q-toolbar>
 
+      <!--Separator-->
+      <q-separator class="q-mt-sm"/>
+
       <!--Content-->
-      <q-card-section class="relative-position col-12">
+      <q-card-section class="relative-position col-12 q-px-none q-pb-none">
         <!--Message-->
         <div v-html="paramsModal.message" class="q-mb-lg"></div>
         <!--button Actions-->
@@ -20,7 +27,7 @@
                  @click="callBack(actionProps)"/>
         </div>
       </q-card-section>
-    </q-card>
+    </div>
   </q-dialog>
 </template>
 <script>
@@ -48,7 +55,7 @@ export default {
         color: 'cyan',
         title: this.$tr('ui.label.notification'),
         message: 'Message...',
-        actions: [{label: this.$tr('ui.label.accept')}],
+        actions: [{label: this.$tr('ui.label.ok')}],
         ...this.params
       }
     },

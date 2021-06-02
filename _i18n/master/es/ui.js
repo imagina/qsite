@@ -101,6 +101,7 @@ export default {
     day: 'Día | Dias',
     today: 'Hoy',
     tomorrow: 'Mañana',
+    yesterday: 'Ayer',
     LastNumDays: 'Ultimos {numDays} dias',
     currentWeek: 'Semana actual',
     lastWeek: 'Ultima semana',
@@ -169,15 +170,22 @@ export default {
     company: 'Comañia | Compañias',
     customer: 'Cliente | Clientes',
     source: 'Fuente | Fuentes',
-    export : 'Exportar',
-    download : 'Descargar',
-    boost : 'Impulsar',
+    export: 'Exportar',
+    download: 'Descargar',
+    boost: 'Impulsar',
     since: 'Desde',
     until: 'Hasta',
-    recommendation : 'Recomendación | Recomendaciones',
+    recommendation: 'Recomendación | Recomendaciones',
     form: 'Formulario | Formularios',
     block: 'Bloque',
-    field: 'Campo | Campos'
+    field: 'Campo | Campos',
+    next: 'Siguiente | Siguientes',
+    previous: 'Anterior | Anteriores',
+    steps: 'Pasos',
+    collapsible: 'Plegable',
+    room: 'Sala | Salas',
+    rating: 'Calificación | Calificaciones',
+    appointment: 'Cita | Citas'
   },
   message: {
     notFound: 'Lo sentimos, no hay nada aquí',
@@ -220,6 +228,7 @@ export default {
     copiedToClipboard: 'Copiado en el portapapeles',
     preview: 'Vista previa',
     showMore: 'Ver más',
+    showLess: 'Ver menos',
     changeTo: 'Cambiar a {text}',
     listView: 'Vista de lista',
     gribView: 'Vista de cuadricula',
@@ -227,9 +236,10 @@ export default {
     editFile: 'Editar Archivo | Editar Archivos',
     addFile: 'Agregar Archivo | Agregar Archivos',
     swUpdateAvailable: 'Tenemos nuevas caracteristicas para ti, por favor actualiza',
-    backToSite : 'Volver al sitio',
+    backToSite: 'Volver al sitio',
     notAuthorized: "Lo sentimos, No estas autorizad@ para estar aquí",
-    noValue : 'Sin Valor'
+    noValue: 'Sin Valor',
+    rateYour: 'Califica tu <b>{name}</b>'
   },
   form: {
     id: 'ID',
@@ -329,7 +339,13 @@ export default {
     systemName: 'Nombre de sistema',
     externalId: 'ID Externo',
     company: 'Compañia | Compañias',
-    customUrl: 'Url Personalizada'
+    customUrl: 'Url Personalizada',
+    maritalStatus: 'Estatus Civil',
+    language: 'Lenguaje',
+    homePhone: 'Teléfono de Casa',
+    appointmentDate: 'Día de la cita',
+    appointmentTime: 'Hora de la cita',
+    product: 'Producto'
   },
   configList: {
     loggedAs: 'Registrado como',

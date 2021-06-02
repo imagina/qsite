@@ -22,12 +22,6 @@
                 <div class="q-ml-xs">{{ quserState.userData.firstName }}</div>
               </q-btn>
             </q-no-ssr>
-            <!--== Button checking ==-->
-            <q-btn icon="fas fa-stopwatch" unelevated round color="white" text-color="primary" class="btn-action"
-                   @click="$eventBus.$emit('toggleMasterDrawer','checkin')"
-                   v-if="$auth.hasAccess('icheckin.shifts.create')">
-              <q-tooltip>{{ $tr('qcheckin.sidebar.checkin') }}</q-tooltip>
-            </q-btn>
             <!--== Button Go to site ==-->
             <q-btn round dense icon="far fa-eye" color="white" unelevated class="btn-action"
                    type="a" :href="$store.state.qsiteApp.baseUrl" target="_blank" text-color="primary">
@@ -38,6 +32,13 @@
                    :class="`btn-action ${badge.chat ? 'active-badge' : ''}`" round dense icon="far fa-comment-alt"
                    @click="$eventBus.$emit('toggleMasterDrawer','chat')" text-color="primary">
               <q-tooltip>Chat</q-tooltip>
+            </q-btn>
+            <!--== Button Notifications ==-->
+            <q-btn round dense icon="fas fa-bell" color="white" text-color="primary"
+                   :class="`btn-action ${badge.notification ? 'active-badge' : ''}`"
+                   @click="$eventBus.$emit('toggleMasterDrawer','notification')"
+                   v-if="$auth.hasAccess('notification.notifications.manage')">
+              <q-tooltip>{{ $trp('ui.label.notification') }}</q-tooltip>
             </q-btn>
             <!--== Button Config ==-->
             <q-btn round dense icon="fas fa-cog" color="white" unelevated class="btn-action" text-color="primary"
@@ -52,9 +53,11 @@
           <div id="logoImage" :style="`background-image: url('${logo}')`" class="img-as-bg cursor-pointer"
                @click="$helper.openExternalURL($store.state.qsiteApp.baseUrl, false)"></div>
           <!--Project name-->
-          <q-toolbar-title class="cursor-pointer"
-                           @click="$helper.openExternalURL($store.state.qsiteApp.baseUrl, false)">
-            {{ projectName }}
+          <q-toolbar-title>
+            <div class="cursor-pointer" style="width: max-content"
+                 @click="$helper.openExternalURL($store.state.qsiteApp.baseUrl, false)">
+              {{ projectName }}
+            </div>
           </q-toolbar-title>
           <!--Actions-->
           <div class="row q-gutter-x-sm items-center">
@@ -95,6 +98,19 @@
                 </q-list>
               </q-btn-dropdown>
             </q-no-ssr>
+            <!--== Button checking ==-->
+            <q-btn icon="fas fa-stopwatch" unelevated round color="white" text-color="primary" class="btn-action"
+                   @click="$eventBus.$emit('toggleMasterDrawer','checkin')"
+                   v-if="$auth.hasAccess('icheckin.shifts.create')">
+              <q-tooltip>{{ $tr('qcheckin.sidebar.checkin') }}</q-tooltip>
+            </q-btn>
+            <!--== Button Notifications ==-->
+            <q-btn round dense icon="fas fa-bell" color="white" text-color="primary"
+                   :class="`btn-action ${badge.notification ? 'active-badge' : ''}`"
+                   @click="$eventBus.$emit('toggleMasterDrawer','notification')"
+                   v-if="$auth.hasAccess('notification.notifications.manage')">
+              <q-tooltip>{{ $trp('ui.label.notification') }}</q-tooltip>
+            </q-btn>
           </div>
         </q-toolbar>
         <!--<div v-else id="headerIpanel">
@@ -185,7 +201,8 @@ export default {
       filter: this.$filter,
       appConfig: config('app'),
       badge: {
-        chat: false
+        chat: false,
+        notification: false
       },
       loadHeaderIpanel: false
     }
@@ -215,14 +232,14 @@ export default {
 
       //Set Home page and current page
       let pages = (this.currentRoute.name.indexOf('app.home') == -1) ?
-        [config(`pages.mainqsite.home`), this.currentRoute.meta] : [config(`pages.mainqsite.home`)]
+          [config(`pages.mainqsite.home`), this.currentRoute.meta] : [config(`pages.mainqsite.home`)]
 
       //Get page from breadcrum
       breadcrumbs.forEach(pageName => pages.splice(1, 0, config(`pages.${pageName}`)))
 
       //Format all routes to breadcrum
       pages.forEach(page => {
-        if (page.activated && this.$auth.hasAccess(page.permission))
+        if (page && page.activated && this.$auth.hasAccess(page.permission))
           response.push({
             label: this.$tr(page.headerTitle || page.title),
             icon: page.icon,
@@ -268,11 +285,11 @@ export default {
 
           //Load weeb component
           window.customElements.define('embedded-header-ipanel', class EmbeddedWebview extends HTMLElement {
-              connectedCallback() {
-                const shadow = this.attachShadow({mode: 'closed'});
-                shadow.appendChild(document.importNode(template.content, true))
+                connectedCallback() {
+                  const shadow = this.attachShadow({mode: 'closed'});
+                  shadow.appendChild(document.importNode(template.content, true))
+                }
               }
-            }
           );
 
           //Allow load header web component

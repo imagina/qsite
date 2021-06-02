@@ -13,16 +13,7 @@ class Alert {
       pos: 'bottom-right',
       action: false,
       timeOut: 4000,
-      actions: [
-        {
-          label: 'Ok',
-          icon: '',
-          color: 'green',
-          handler: () => {
-            false
-          }
-        }
-      ],
+      actions: [],
       color: 'primary',
       textColor: 'white',
       ...config('app.alert')
@@ -37,10 +28,19 @@ class Alert {
     else this.showNotify(params)
   }
 
+  //Return merged global params
+  getGlobalParams(params) {
+    //if not is modal and not has message, set all params as message
+    if ((!params.mode || (params.mode != 'modal')) && !params.message) params = {message: params}
+    //Merge with default params
+    params = {...this.defaultParams, ...params}
+    //Repsonse
+    return params
+  }
+
   //Alert success
   success(params = {}) {
-    if (!params.message) params = {message: params}
-    params = {...this.defaultParams, ...params}
+    params = this.getGlobalParams(params)
     params.icon = params.icon || 'notifications'
     params.color = 'positive'
     //Show
@@ -50,8 +50,7 @@ class Alert {
 
   //Alert Error
   error(params = {}) {
-    if (!params.message) params = {message: params}
-    params = {...this.defaultParams, ...params}
+    params = this.getGlobalParams(params)
     params.icon = params.icon || 'error'
     params.color = 'negative'
     //Show
@@ -61,8 +60,7 @@ class Alert {
 
   //Alert info
   info(params = {}) {
-    if (!params.message) params = {message: params}
-    params = {...this.defaultParams, ...params}
+    params = this.getGlobalParams(params)
     params.icon = params.icon || 'info'
     params.color = 'cyan'
     //Show
@@ -72,8 +70,7 @@ class Alert {
 
   //Alert warning
   warning(params = {}) {
-    if (!params.message) params = {message: params}
-    params = {...this.defaultParams, ...params}
+    params = this.getGlobalParams(params)
     params.icon = params.icon || 'warning'
     params.color = 'warning'
     //Show
@@ -83,8 +80,7 @@ class Alert {
 
   //Alert light
   light(params = {}) {
-    if (!params.message) params = {message: params}
-    params = {...this.defaultParams, ...params}
+    params = this.getGlobalParams(params)
     params.icon = params.icon || 'notifications'
     params.color = 'faded'
     //Show
@@ -94,8 +90,7 @@ class Alert {
 
   //Alert dark
   dark(params = {}) {
-    if (!params.message) params = {message: params}
-    params = {...this.defaultParams, ...params}
+    params = this.getGlobalParams(params)
     params.icon = params.icon || 'notifications'
     params.color = 'black'
     //Show
@@ -114,7 +109,7 @@ class Alert {
       color: params.color,
       textColor: params.textColor,
       position: params.pos,
-      actions: params.actions,
+      actions: params.actions.length ? params.actions : [{label: 'Ok', color: 'white'}],
       html: true
     })
   }

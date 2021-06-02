@@ -34,7 +34,7 @@
 
     <!--checking-->
     <q-drawer bordered id="drawerCheckinMaster" v-model="drawer.checkin" side="right" overlay
-              v-if="(appConfig.mode == 'iadmin') && $auth.hasAccess('icheckin.shifts.create')">
+              v-if="(appConfig.mode == 'ipanel') && $auth.hasAccess('icheckin.shifts.create')">
       <checkin/>
     </q-drawer>
 
@@ -42,6 +42,12 @@
     <q-drawer id="drawerRecommendationMaster" v-model="drawer.recommendation" side="right" :overlay="false"
               v-if="routeSubHeader.recommendations ? true : false">
       <master-recommendation/>
+    </q-drawer>
+
+    <!--Notification-->
+    <q-drawer bordered id="dawerNotificatiosMaster" v-model="drawer.notification" side="right" overlay
+              v-if="$auth.hasAccess('notification.notifications.manage')">
+      <master-notifications/>
     </q-drawer>
   </div>
 </template>
@@ -53,6 +59,7 @@ import menuList from '@imagina/qsite/_components/master/recursiveItem'
 import masterFilter from '@imagina/qsite/_components/master/masterFilter'
 import checkin from '@imagina/qcheckin/_components/checkin'
 import masterRecommendation from '@imagina/qsite/_components/master/masterRecommendations'
+import masterNotifications from  '@imagina/qnotification/_components/notifications'
 
 export default {
   beforeDestroy() {
@@ -60,7 +67,7 @@ export default {
     this.$eventBus.$off('openMasterDrawer')
   },
   props: {},
-  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation},
+  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation, masterNotifications},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -80,7 +87,9 @@ export default {
         chat: false,
         filter: false,
         checkin: false,
-        recommendation: false
+        recommendation: false,
+        notification: false
+
       },
       menu: config('sidebar'),
       appConfig: config('app'),

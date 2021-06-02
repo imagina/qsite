@@ -90,6 +90,14 @@
               </q-item-section>
               <q-item-section class="ellipsis">{{ $trp('ui.label.recommendation') }}</q-item-section>
             </q-item>
+            <!--Notification action-->
+            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','notification')"
+                    v-if="$auth.hasAccess('notification.notifications.manage')">
+              <q-item-section avatar>
+                <q-icon color="primary" name="fas fa-bell"/>
+              </q-item-section>
+              <q-item-section class="ellipsis">{{ $trp('ui.label.notification') }}</q-item-section>
+            </q-item>
             <!---->
           </q-list>
         </q-card-section>
