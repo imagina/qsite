@@ -191,10 +191,10 @@
         </div>
         <!--input color-->
         <q-input v-model="responseValue" :label="fieldLabel" v-if="loadField('inputColor')" v-bind="fieldProps.field"
-                 @click="$refs.qColorProxi.show()">
+                 @click="$refs.qColorProxi.show()" :ref="`inputColor-${fieldKey}`">
           <template v-slot:append>
             <!--Icon-->
-            <q-icon name="fas fa-tint" class="cursor-pointer" :style="`color : ${responseValue || 'grey'}`"/>
+            <q-icon name="fas fa-tint" class="cursor-pointer"/>
             <!--Picker-->
             <q-popup-proxy ref="qColorProxi" transition-show="scale" transition-hide="scale">
               <q-color v-model="responseValue"/>
@@ -223,6 +223,11 @@
         <!--rating-->
         <q-field v-model="responseValue" v-if="loadField('rating')" v-bind="fieldProps.fieldComponent">
           <q-rating v-model="responseValue" v-bind="fieldProps.field" class="q-mt-sm"/>
+        </q-field>
+        <!--help-->
+        <q-field filled v-model="responseValue" v-if="loadField('help')" v-bind="fieldProps.fieldComponent">
+         <q-btn @click="modal(fieldProps.text, fieldProps.title)"  class="q-ma-sm absolute-right" round color="blue" icon="fas fa-info" />
+
         </q-field>
         <!--icon select-->
         <select-icon v-model="responseValue" v-if="loadField('selectIcon')" v-bind="fieldProps" class="q-mb-md"/>
@@ -264,7 +269,6 @@ import schedulable from '@imagina/qsite/_components/master/schedulable'
 import selectMedia from '@imagina/qmedia/_components/selectMedia'
 import googleMapMarker from '@imagina/qsite/_components/master/googleMapMarker'
 import VJsonEditor from 'v-jsoneditor/src/index'
-
 export default {
   name: 'dynamicField',
   beforeDestroy() {
@@ -330,9 +334,11 @@ export default {
     })
   },
   data() {
+
     return {
       success: false,//global component status
       loading: false,
+      fieldKey: this.$uid(),
       responseValue: null,//value to response
       showPassword: false,//to show password
       options: [],//Options
@@ -587,13 +593,28 @@ export default {
           }
           break;
         case'inputColor':
+          //Instance color
+          let bgColor = this.responseValue || '#FFFFFF'
+          let textColorClass = this.$helper.pickTextColor(bgColor) == '#000000' ? 'text-t-dark' : 'text-t-light'
+
+          //Set bg color to input
+          setTimeout(() => {
+            let inputElement = this.$refs[`inputColor-${this.fieldKey}`]
+
+            //Set input bg color
+            if (inputElement) {
+              let fieldControl = inputElement.$el.getElementsByClassName('q-field__control')[0]
+              fieldControl.style.setProperty('background-color', bgColor, 'important')
+            }
+          }, 200)
+
           props = {
             field: {
               bgColor: 'white',
-              color: 'primary',
               outlined: true,
               dense: true,
               readonly: true,
+              class: `dynamic-field__color q-mb-md ${textColorClass}`,
               ...props
             },
             slot: {
@@ -852,7 +873,7 @@ export default {
     }
   },
   methods: {
-    //initi
+    //init
     async init() {
       if (this.field.type) {
         this.setDefaultVModel((this.value != undefined) ? this.value : this.field.value)//Set default values by field type
@@ -1122,6 +1143,22 @@ export default {
           this.options = this.$helper.filterOptions(val, this.rootOptions, this.responseValue)
         })
       }
+    },
+    // modal
+    modal (text, title) {
+      this.$q.dialog({
+        title: title,
+        message: text,
+        persistent: true
+      }).onOk(() => {
+        // console.log('>>>> OK')
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
     }
   }
 }
@@ -1149,6 +1186,18 @@ export default {
       .vue-treeselect__single-value
         line-height 1.9
         padding 0
+
+  .dynamic-field__color
+    .q-field__control
+      border-radius $custom-radius-items
+
+    &.text-t-dark
+      .q-icon, .q-field__label, input
+        color $dark
+
+    &.text-t-light
+      .q-icon, .q-field__label, input
+        color white
 
 #ckEditorComponent
   width 100%
