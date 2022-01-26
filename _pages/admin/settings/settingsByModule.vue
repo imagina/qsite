@@ -3,27 +3,46 @@
     <!--Page Actions-->
     <div class="q-mb-md">
       <div class="box box-auto-height">
-        <page-actions :title="titlePage" @refresh="getData(true)"/>
+        <page-actions :title="$tr(mainConfig.perzonalizationPage.title)"
+                      :description="$tr(mainConfig.perzonalizationPage.description)"
+                      @refresh="getData(true)"/>
       </div>
     </div>
     <!--Empty results-->
     <not-result class="box box-auto-height" v-if="!loading && !formBlocks.length"/>
     <!--Content-->
-    <div v-if="!loading && formBlocks.length">
-      <div class="row q-col-gutter-md">
-        <!--Block targets-->
-        <div v-for="(block, keyBlock) in formBlocks" :key="keyBlock"
-             class="col-12 col-sm-6 col-lg-4 col-xl-3">
-          <div class="block box box-auto-height" @click="block.action ? block.action(block) : null">
-            <!--Icon-->
-            <q-icon :name="block.icon || 'fas fa-paint-brush'" class="block__icon q-mr-sm"/>
-            <!--Title-->
-            <div class="block__title-content row items-center">
-              <div class="block__title ellipsis-2-lines">{{ block.title }}</div>
-            </div>
-            <!--Description-->
-            <div class="block__description ellipsis-3-lines">
-              {{ block.description || `${$tr('ui.label.personalization')} | ${block.title}` }}
+    <div v-if="!loading && formBlocks.length" class="row q-col-gutter-md">
+      <!--Quick settings-->
+      <div id="quickSettingsContent" class="col-12 col-xl-4" v-if="Object.keys(quickSettings).length">
+        <div class="block box box-auto-height">
+          <!--Icon-->
+          <q-icon name="fas fa-bolt" class="block__icon q-mr-sm"/>
+          <!--Title-->
+          <div class="block__title-content row items-center q-mb-md">
+            <div class="block__title ellipsis-2-lines">{{ $tr('qsite.layout.quickSettings') }}</div>
+          </div>
+          <!--Group-->
+          <div class="block__content">
+            <dynamic-form v-model="form" :blocks="quickSettings" form-type="grid"
+                          ref="settingsForm" @submit="saveSettings()" :loading="loading"/>
+          </div>
+        </div>
+      </div>
+      <!--Group settings-->
+      <div class="col-12 col-xl">
+        <div class="row q-col-gutter-md">
+          <!--Block targets-->
+          <div v-for="(block, keyBlock) in formBlocks" :key="keyBlock"
+               class="col-12 col-sm-6 col-lg-4">
+            <div class="block box box-auto-height" @click="block.action ? block.action(block) : null">
+              <!--Icon-->
+              <q-icon :name="block.icon || 'fas fa-paint-brush'" class="block__icon q-mr-sm"/>
+              <!--Title-->
+              <div class="block__title-content row items-center">
+                <div class="block__title ellipsis-2-lines">{{ block.title }}</div>
+              </div>
+              <!--Description-->
+              <div class="block__description ellipsis-3-lines"> {{ block.description || '...' }}</div>
             </div>
           </div>
         </div>
@@ -73,7 +92,8 @@ export default {
         show: false,
         blocks: null
       },
-      cruds: []
+      cruds: [],
+      settingGroupLabels: null
     }
   },
   computed: {
@@ -89,18 +109,12 @@ export default {
     //Return main config from current route
     mainConfig() {
       return {
-        perzonalization: {
+        perzonalizationPage: {
           otherModules: [],
           cruds: []
         },
         ...this.$route.meta.mainConfig
       }
-    },
-    //Return Page Title, according to mainConfig parameter mainConfig
-    titlePage() {
-      let response = this.$tr('ui.label.personalization')
-      if (this.mainConfig.moduleTitle) response += ` | ${this.$tr(this.mainConfig.moduleTitle)}`
-      return response
     },
     //Return setting assigned settings
     assignedSettings() {
@@ -164,12 +178,12 @@ export default {
 
       //Custom settings fields
       if (Object.keys(this.settingsToEdit).length) {
-        blocks.push({title: 'General', fields: this.$clone(this.settingsToEdit)})
+        blocks.push({title: 'General', groupName: 'general', fields: this.$clone(this.settingsToEdit)})
       } else {//Get module settgins
         //Get module name
         let modulesToLoadSettings = [
           this.mainConfig.moduleName,
-          ...(this.mainConfig.perzonalization?.otherModules || [])
+          ...(this.mainConfig.perzonalizationPage?.otherModules || [])
         ]
         //Get settings
         Object.keys(this.settingsGroup).forEach(moduleName => {
@@ -177,7 +191,7 @@ export default {
             Object.keys(this.settingsGroup[moduleName]).forEach(groupName => {
               //Search by group in blocks
               let groupIndex = blocks.findIndex(item => item.groupName == groupName)
-              //Merge gields at same group
+              //Merge fields at same group
               if (groupIndex >= 0) {
                 blocks[groupIndex].fields = {
                   ...blocks[groupIndex].fields,
@@ -199,6 +213,13 @@ export default {
       blocks.forEach((block, keyBlock) => {
         //Set action to block
         blocks[keyBlock].action = this.openBlock
+        //Set title and description
+        let groupLabel = this.groupsLabel[block.groupName.toLowerCase()]
+        if (groupLabel) {
+          blocks[keyBlock].icon = groupLabel.icon
+          blocks[keyBlock].title = groupLabel.title || blocks[keyBlock].title
+          blocks[keyBlock].description = groupLabel.description
+        }
         //Add field id by fiedl
         Object.keys(block.fields).forEach(fieldName => {
           blocks[keyBlock].fields[fieldName] = {
@@ -232,6 +253,43 @@ export default {
 
       //response
       return blocks
+    },
+    //Quick settings
+    quickSettings() {
+      //Instance response
+      let response = []
+      //Get blocks
+      let blocks = this.$clone(this.formBlocks)
+
+      //Set extra data to every field
+      blocks.forEach((block, keyBlock) => {
+        //Add field id by fiedl
+        if (block.fields) {
+          //Keep only quickSettings fields
+          Object.keys(block.fields).forEach(fieldName => {
+            blocks[keyBlock].fields[fieldName].colClass = 'col-12'
+            if (!blocks[keyBlock].fields[fieldName].quickSetting) delete blocks[keyBlock].fields[fieldName]
+          })
+          //Add blocks with quickFields to response
+          if (Object.keys(blocks[keyBlock].fields).length) response.push(blocks[keyBlock])
+        }
+      })
+
+      //Response
+      return response
+    },
+    //return module settings label
+    groupsLabel() {
+      let response = {}
+      if (!this.settingGroupLabels) return response
+      Object.keys(this.settingGroupLabels).forEach(moduleName => {
+        if (moduleName.toLowerCase() == this.mainConfig.moduleName.toLowerCase()) {
+          Object.keys(this.settingGroupLabels[moduleName]).forEach(itemName => {
+            response[itemName.toLowerCase()] = this.$clone(this.settingGroupLabels[moduleName][itemName])
+          })
+        }
+      })
+      return response
     }
   },
   methods: {
@@ -246,6 +304,7 @@ export default {
         this.loading = true
         await Promise.all([
           this.$store.dispatch('qsiteApp/GET_SITE_SETTINGS', {refresh: refresh}),//Get settings
+          this.getSettingGroupConfig(refresh),//Get setting fields
           this.getSettingFields(refresh),//Get setting fields
           this.getDeprecatedSettings(refresh)//Get seprecated settings
         ])
@@ -259,6 +318,22 @@ export default {
         this.setFormData()//Set form data
         this.loading = false
         resolve(true)
+      })
+    },
+    //Get config from modules
+    getSettingGroupConfig(refresh = false) {
+      return new Promise((resolve, reject) => {
+        this.dataSettings = false//Reset data settings
+        //Request Params
+        let requestParams = {
+          refresh: true,
+          params: {filter: {allTranslations: true, configNameByModule: 'config.settingGroups'}}
+        }
+        //Request
+        this.$crud.index('apiRoutes.qsite.configs', requestParams).then(response => {
+          this.settingGroupLabels = this.$clone(response.data)
+          resolve(true)
+        }).catch(error => resolve(error))
       })
     },
     //Get settings Fields
@@ -426,7 +501,7 @@ export default {
         show: true,
         blocks: [block],
         props: {
-          title: `${this.titlePage} - ${block.title}`,
+          title: block.title,
           customPosition: true,
           actions: [
             {
@@ -449,6 +524,13 @@ export default {
 </script>
 <style lang="stylus">
 #settingPage
+  #quickSettingsContent
+    .block__content
+      .box
+        box-shadow none
+        border 1px solid $grey-3
+        border-radius $custom-radius
+
   .block
     position relative
     cursor pointer

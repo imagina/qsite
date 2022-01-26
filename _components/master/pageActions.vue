@@ -23,6 +23,8 @@
         </q-btn>
       </div>
     </div>
+    <!--Description-->
+    <div v-if="description" class="ellipsis-2-lines col-12 description-content">{{ description }}</div>
     <!--Filter data-->
     <div class="col-12" v-if="filter.hasValues">
       <q-separator class="q-mb-sm"/>
@@ -49,6 +51,7 @@ export default {
   },
   props: {
     title: {type: String},
+    description: {type: String},
     icon: {type: String},
     gutter: {type: String, default: 'sm'},
     size: {type: String, default: 'small'},
@@ -179,6 +182,11 @@ export default {
   .actions-content
     @media screen and (max-width: $breakpoint-md)
       width 100%
+
+  .description-content
+    line-height 1
+    color $grey-8
+    font-size 14px
 
   .page-input-search
     @media screen and (max-width: $breakpoint-md)

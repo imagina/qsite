@@ -41,4 +41,16 @@ export default {
     icon: 'fas fa-flask',
     authenticated: true,
   },
+  //Dynamic Fields Page
+  dynamicFieldsPage: {
+    permission: null,
+    activated: true,
+    path: '/dynamic-fields',
+    name: 'app.dynamic.fields.page',
+    layout: () => import('@imagina/qsite/_layouts/master'),
+    page: () => import('@imagina/qsite/_pages/master/dynamicFieldPage'),
+    title: 'sidebar.pageHome',
+    icon: 'fas fa-flask',
+    authenticated: true,
+  },
 }

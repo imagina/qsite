@@ -27,5 +27,8 @@ export default {
   startTime: 'Start time',
   endTime: 'End time',
   shiftTime: 'Shift time',
-  showSite: 'Show Site'
+  showSite: 'Show Site',
+  quickSettings: 'Quick Settings',
+  perzonalizationTitle: 'Welcome to the editor of your website',
+  perzonalizationDescription: 'Easily change the logo, colors and the main information of your website'
 }
