@@ -19,6 +19,18 @@
         <div class="input-title text-capitalize" v-if="loadField('html') || loadField('multiSelect')">
           {{ fieldLabel }}
         </div>
+        <!-- Help btn -->
+        <div :class="helpLoad.class">
+          <q-btn size="xs" v-if="field.help" class="z-top" :style="'margin:'+helpLoad.margin" round color="blue" icon="fas fa-info"  unelevated>
+            <q-menu anchor="bottom right" self="top right">
+              <q-item>
+                <q-item-section>
+                  {{ field.help.description }}
+                </q-item-section>
+              </q-item>
+            </q-menu>
+          </q-btn>
+          </div>
         <!--Crud-->
         <crud v-model="responseValue" @created="getOptions" v-bind="fieldProps" :key="field.name"
               :type="field.props.crudType || 'select'" ref="crudComponent"
@@ -224,11 +236,7 @@
         <q-field v-model="responseValue" v-if="loadField('rating')" v-bind="fieldProps.fieldComponent">
           <q-rating v-model="responseValue" v-bind="fieldProps.field" class="q-mt-sm"/>
         </q-field>
-        <!--help-->
-        <q-field filled v-model="responseValue" v-if="loadField('help')" v-bind="fieldProps.fieldComponent">
-         <q-btn @click="modal(fieldProps.text, fieldProps.title)"  class="q-ma-sm absolute-right" round color="blue" icon="fas fa-info" />
 
-        </q-field>
         <!--icon select-->
         <select-icon v-model="responseValue" v-if="loadField('selectIcon')" v-bind="fieldProps" class="q-mb-md"/>
         <!--rating-->
@@ -865,6 +873,89 @@ export default {
       let field = this.$clone(this.field)
       return (field.props.type && (field.props.type == 'password')) ? true : false
     },
+    //Help custom class and styles
+    helpLoad(){
+      let result = { margin: String, class: String }
+      const objectOptions = {
+        crud:{
+          class:'absolute-right',
+          margin: '1em'
+        },
+        input:{
+          class:'absolute-right',
+          margin: '1em'
+        },
+        search:{
+          class:'absolute-right',
+          margin: '1em'
+        },
+        date:{
+          class:'absolute-right',
+          margin: '1em'
+        },
+        time:{
+          class:'absolute-right',
+          margin: '0'
+        },
+        fullDate:{
+          class:'absolute-right',
+          margin: '1em'
+        },
+        select:{
+          class:'absolute-right',
+          margin: '1em'
+        },
+        treeSelect:{
+          class:'absolute-right',
+          margin: '1em'
+        },
+        html:{
+          class:'absolute-right',
+          margin:'3.5em 1.5em'
+        },
+        checkbox:{
+          class:'absolute-left',
+          margin:'1em 17em'
+        },
+        media:{
+          class:'absolute-left',
+          margin:'2.3em 20em'
+        },
+        inputColor:{
+          class:'absolute-left',
+          margin:'1em 15em'
+        },
+        toggle:{
+          class:'absolute-left',
+          margin:'1em 20em'
+        },
+        signature:{
+          class:'absolute-right',
+          margin:'3.5em 1em'
+        },
+        rating:{
+          class:'absolute-left',
+          margin:'0 10em'
+        },
+        selectIcon:{
+          class:'absolute-right',
+          margin:'1em'
+        },
+        optionGroup:{
+          class:"absolute-left",
+          margin:'1.3em 15em'
+        },
+        schedulable:{
+          class:'absolute-left',
+          margin:'2.6em 14em'
+        },
+        json:{
+          class:'absolute-left',
+          margin:'2.5em 21em'
+        }
+      }
+      return objectOptions[this.field.type]
+    },
     //Settings
     settings() {
       return {
@@ -1143,22 +1234,6 @@ export default {
           this.options = this.$helper.filterOptions(val, this.rootOptions, this.responseValue)
         })
       }
-    },
-    // modal
-    modal (text, title) {
-      this.$q.dialog({
-        title: title,
-        message: text,
-        persistent: true
-      }).onOk(() => {
-        // console.log('>>>> OK')
-      }).onOk(() => {
-        // console.log('>>>> second OK catcher')
-      }).onCancel(() => {
-        // console.log('>>>> Cancel')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
-      })
     }
   }
 }
