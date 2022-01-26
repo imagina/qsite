@@ -7,8 +7,8 @@
         <q-tooltip>{{ btn.label }}</q-tooltip>
       </q-btn>
       <!--Auth section-->
-      <q-btn :to="{name: 'user.profile.me'}" v-if="quserState.authenticated" rounded no-caps padding="2px 8px"
-             color="white" unelevated>
+      <q-btn v-if="quserState.authenticated && (configMode == 'iadmin')" rounded no-caps
+             padding="2px 8px" color="white" unelevated>
         <div id="profileImage" class="img-as-bg"
              :style="`background-image: url('${quserState.userData.mainImage}')`"></div>
         <div class="q-ml-xs q-mr-sm text-blue-grey">{{ quserState.userData.firstName }}</div>
@@ -64,6 +64,7 @@ export default {
   },
   data() {
     return {
+      configMode : config('app.mode'),
       badge: {
         chat: false,
         notification: false

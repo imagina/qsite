@@ -27,5 +27,8 @@ export default {
   startTime: 'Hora de inicio',
   endTime: 'Hora de finalización',
   shiftTime: 'Duración por turno',
-  showSite : 'Ver Sitio'
+  showSite: 'Ver Sitio',
+  quickSettings: 'Ajustes Rapidos',
+  perzonalizationTitle: 'Bienvenid@ al editor de tu sitio web',
+  perzonalizationDescription: 'De manera fácil, cambia el logo, colores y la información principal de tu página web'
 }

@@ -29,7 +29,9 @@
                         :active="groupSelected == groupName && moduleSelected == moduleName" class="q-pl-sm q-pr-md"
                         @click.native="openGroupSettings(moduleName, groupName)"
                         dense v-if="Object.keys(group).length">
-                  <q-item-section>{{ groupsName[moduleName][groupName] }}</q-item-section>
+                  <q-item-section>
+                    {{ groupsName[moduleName][groupName].title || groupsName[moduleName][groupName] }}
+                  </q-item-section>
                   <q-item-section side> {{ Object.keys(group).length }}</q-item-section>
                 </q-item>
               </q-list>
@@ -40,7 +42,7 @@
       <!--Form-->
       <div class="col-12 col-md-9">
         <dynamic-form v-if="!loading" v-model="form" :blocks="[{fields: this.$clone(formFields)}]"
-                      :title="`${getModuleData(moduleSelected).title} - ${groupsName[moduleSelected][groupSelected]}`"
+                      :title="`${getModuleData(moduleSelected).title} - ${groupsName[moduleSelected][groupSelected].title || groupsName[moduleSelected][groupSelected]}`"
                       @submit="saveSettings()"/>
       </div>
     </div>
