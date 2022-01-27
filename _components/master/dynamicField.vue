@@ -20,17 +20,17 @@
           {{ fieldLabel }}
         </div>
         <!-- Help btn -->
-        <div :class="helpLoad.class">
-          <q-btn size="xs" v-if="field.help" class="z-top" :style="'margin:'+helpLoad.margin" round color="blue" icon="fas fa-info"  unelevated>
+        <div v-if="helpLoad.load" :class="helpLoad.class">
+          <q-btn size="xs" class="after-field" :style="'margin:'+helpLoad.margin" round color="blue" icon="fas fa-info"  unelevated>
             <q-menu anchor="bottom right" self="top right">
               <q-item>
-                <q-item-section>
+                <q-item-section style="max-width:20em">
                   {{ field.help.description }}
                 </q-item-section>
               </q-item>
             </q-menu>
           </q-btn>
-          </div>
+        </div>
         <!--Crud-->
         <crud v-model="responseValue" @created="getOptions" v-bind="fieldProps" :key="field.name"
               :type="field.props.crudType || 'select'" ref="crudComponent"
@@ -340,6 +340,7 @@ export default {
     this.$nextTick(function () {
       this.init()
     })
+    console.log(this.field.type)
   },
   data() {
 
@@ -875,86 +876,105 @@ export default {
     },
     //Help custom class and styles
     helpLoad(){
-      let result = { margin: String, class: String }
+      let result = { margin: String, class: String, load: false }
       const objectOptions = {
         crud:{
           class:'absolute-right',
-          margin: '1em'
+          margin: '1em 3em',
+          load: true
         },
         input:{
           class:'absolute-right',
-          margin: '1em'
+          margin: '1em',
+          load: true
         },
         search:{
           class:'absolute-right',
-          margin: '1em'
+          margin: '1em 4em',
+          load: true
         },
         date:{
           class:'absolute-right',
-          margin: '1em'
+          margin: '1em',
+          load: true
         },
-        time:{
+        hour:{
           class:'absolute-right',
-          margin: '0'
+          margin: '1em',
+          load: true
         },
         fullDate:{
           class:'absolute-right',
-          margin: '1em'
+          margin: '1em 4em',
+          load: true
         },
         select:{
           class:'absolute-right',
-          margin: '1em'
+          margin: '1em 3em',
+          load: true
         },
         treeSelect:{
           class:'absolute-right',
-          margin: '1em'
+          margin:'1em 3em',
+          load: true
         },
         html:{
           class:'absolute-right',
-          margin:'3.5em 1.5em'
+          margin:'3.5em 1.5em',
+          load: true
         },
         checkbox:{
           class:'absolute-left',
-          margin:'1em 17em'
+          margin:'1em 17em',
+          load: true
         },
         media:{
-          class:'absolute-left',
-          margin:'2.3em 20em'
+          class:'absolute-right',
+          margin:'2.3em 20em',
+          load: true
         },
         inputColor:{
-          class:'absolute-left',
-          margin:'1em 15em'
+          class:'absolute-right',
+          margin:'1em 4em',
+          load: true
         },
         toggle:{
           class:'absolute-left',
-          margin:'1em 20em'
+          margin:'1.3em 20em',
+          load: true
         },
         signature:{
           class:'absolute-right',
-          margin:'3.5em 1em'
+          margin:'2em 1em',
+          load: true
         },
         rating:{
           class:'absolute-left',
-          margin:'0 10em'
+          margin:'0 10em',
+          load: true
         },
         selectIcon:{
           class:'absolute-right',
-          margin:'1em'
+          margin:'1em',
+          load: true
         },
         optionGroup:{
           class:"absolute-left",
-          margin:'1.3em 15em'
+          margin:'1.3em 15em',
+          load: true
         },
         schedulable:{
           class:'absolute-left',
-          margin:'2.6em 14em'
+          margin:'2.6em 14em',
+          load: true
         },
         json:{
-          class:'absolute-left',
-          margin:'2.5em 21em'
+          class:'absolute-right',
+          margin:'5em 1em',
+          load: true
         }
       }
-      return objectOptions[this.field.type]
+      return objectOptions[this.field.type] || result
     },
     //Settings
     settings() {
@@ -1240,39 +1260,40 @@ export default {
 </script>
 <style lang="stylus">
 #dynamicFieldComponent
-  .checkbox-field
-    .q-field__control-container
-      padding-top 0 !important
+.checkbox-field
+.q-field__control-container
+  padding-top 0 !important
 
-  .field-no-padding
-    .q-field__control
-      padding 0 !important
+.field-no-padding
+.q-field__control
+  padding 0 !important
 
-      .q-field__control-container
-        padding 0 !important
+.q-field__control-container
+  padding 0 !important
 
-  .vue-treeselect
-    .vue-treeselect__control
-      background transparent !important
-      border 0
-      max-height 26px
-      padding 0
+.vue-treeselect
+.vue-treeselect__control
+  background transparent !important
+  border 0
+  max-height 26px
+  padding 0
 
-      .vue-treeselect__single-value
-        line-height 1.9
-        padding 0
+.vue-treeselect__single-value
+  line-height 1.9
+  padding 0
 
-  .dynamic-field__color
-    .q-field__control
-      border-radius $custom-radius-items
-
-    &.text-t-dark
-      .q-icon, .q-field__label, input
-        color $dark
-
+.dynamic-field__color
+.q-field__control
+  border-radius $custom-radius-itemst
+  &.text-t-dark
+  .q-icon, .q-field__label, input
+    color $dark
     &.text-t-light
       .q-icon, .q-field__label, input
         color white
+
+.after-field
+  z-index 4
 
 #ckEditorComponent
   width 100%
