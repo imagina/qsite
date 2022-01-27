@@ -239,11 +239,11 @@
 
         <!--icon select-->
         <select-icon v-model="responseValue" v-if="loadField('selectIcon')" v-bind="fieldProps" class="q-mb-md"/>
-        <!--rating-->
+        <!--optionGroup-->
         <q-field v-model="responseValue" v-if="loadField('optionGroup')" v-bind="fieldProps.fieldComponent">
-          <q-option-group v-model="responseValue" v-bind="fieldProps.field"/>
+          <q-option-group class="q-pt-md" v-model="responseValue" v-bind="fieldProps.field"/>
         </q-field>
-        <!--rating-->
+        <!--captcha-->
         <q-field v-model="responseValue" v-if="loadField('captcha')" v-bind="fieldProps.fieldComponent">
           <captcha v-model="responseValue"/>
         </q-field>
@@ -340,7 +340,6 @@ export default {
     this.$nextTick(function () {
       this.init()
     })
-    console.log(this.field.type)
   },
   data() {
 
@@ -890,7 +889,7 @@ export default {
         },
         search:{
           class:'absolute-right',
-          margin: '1em 4em',
+          margin: '1em 6em',
           load: true
         },
         date:{
@@ -905,17 +904,17 @@ export default {
         },
         fullDate:{
           class:'absolute-right',
-          margin: '1em 4em',
+          margin: '1em 6em',
           load: true
         },
         select:{
           class:'absolute-right',
-          margin: '1em 3em',
+          margin: '1em 6em',
           load: true
         },
         treeSelect:{
           class:'absolute-right',
-          margin:'1em 3em',
+          margin:'1em 6em',
           load: true
         },
         html:{
@@ -930,12 +929,12 @@ export default {
         },
         media:{
           class:'absolute-right',
-          margin:'2.3em 20em',
+          margin:'2em 20em',
           load: true
         },
         inputColor:{
           class:'absolute-right',
-          margin:'1em 4em',
+          margin:'1em 6em',
           load: true
         },
         toggle:{
@@ -945,12 +944,12 @@ export default {
         },
         signature:{
           class:'absolute-right',
-          margin:'2em 1em',
+          margin:'4em 1em',
           load: true
         },
         rating:{
           class:'absolute-left',
-          margin:'0 10em',
+          margin:'0 9em',
           load: true
         },
         selectIcon:{
@@ -960,17 +959,17 @@ export default {
         },
         optionGroup:{
           class:"absolute-left",
-          margin:'1.3em 15em',
+          margin:'1.3em 12em',
           load: true
         },
         schedulable:{
-          class:'absolute-left',
-          margin:'2.6em 14em',
+          class:'absolute-right',
+          margin:'3em 3em',
           load: true
         },
         json:{
           class:'absolute-right',
-          margin:'5em 1em',
+          margin:'8em 1em',
           load: true
         }
       }
@@ -1260,41 +1259,34 @@ export default {
 </script>
 <style lang="stylus">
 #dynamicFieldComponent
-.checkbox-field
-.q-field__control-container
-  padding-top 0 !important
-
-.field-no-padding
-.q-field__control
-  padding 0 !important
-
-.q-field__control-container
-  padding 0 !important
-
-.vue-treeselect
-.vue-treeselect__control
-  background transparent !important
-  border 0
-  max-height 26px
-  padding 0
-
-.vue-treeselect__single-value
-  line-height 1.9
-  padding 0
-
-.dynamic-field__color
-.q-field__control
-  border-radius $custom-radius-itemst
-  &.text-t-dark
-  .q-icon, .q-field__label, input
-    color $dark
+  .checkbox-field
+    .q-field__control-container
+      padding-top 0 !important
+  .field-no-padding
+    .q-field__control
+      padding 0 !important
+      .q-field__control-container
+        padding 0 !important
+  .vue-treeselect
+    .vue-treeselect__control
+      background transparent !important
+      border 0
+      max-height 26px
+      padding 0
+      .vue-treeselect__single-value
+        line-height 1.9
+        padding 0
+  .dynamic-field__color
+    .q-field__control
+      border-radius $custom-radius-items
+    &.text-t-dark
+      .q-icon, .q-field__label, input
+        color $dark
     &.text-t-light
       .q-icon, .q-field__label, input
         color white
-
-.after-field
-  z-index 4
-
+  .after-field
+    z-index 4
 #ckEditorComponent
   width 100%
 </style>
