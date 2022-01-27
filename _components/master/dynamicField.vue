@@ -20,7 +20,7 @@
           {{ fieldLabel }}
         </div>
         <!-- Help btn -->
-        <div v-if="helpLoad.load" :class="helpLoad.class">
+        <div v-if="helpLoad.load && field.type.help" :class="helpLoad.class">
           <q-btn size="xs" class="after-field" :style="'margin:'+helpLoad.margin" round color="blue" icon="fas fa-info"  unelevated>
             <q-menu anchor="bottom right" self="top right">
               <q-item>
