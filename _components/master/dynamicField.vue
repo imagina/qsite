@@ -20,7 +20,7 @@
           {{ fieldLabel }}
         </div>
         <!-- Help btn -->
-        <div v-if="helpLoad.load && field.type.help" :class="helpLoad.class">
+        <div v-if="helpLoad.load && field.help" :class="helpLoad.class">
           <q-btn size="xs" class="after-field" :style="'margin:'+helpLoad.margin" round color="blue" icon="fas fa-info"  unelevated>
             <q-menu anchor="bottom right" self="top right">
               <q-item>
@@ -879,7 +879,7 @@ export default {
       const objectOptions = {
         crud:{
           class:'absolute-right',
-          margin: '1em 3em',
+          margin: '1em 4.5em',
           load: true
         },
         input:{
@@ -889,7 +889,7 @@ export default {
         },
         search:{
           class:'absolute-right',
-          margin: '1em 6em',
+          margin: '1em 5em',
           load: true
         },
         date:{
@@ -904,17 +904,17 @@ export default {
         },
         fullDate:{
           class:'absolute-right',
-          margin: '1em 6em',
+          margin: '1em 5.5em',
           load: true
         },
         select:{
           class:'absolute-right',
-          margin: '1em 6em',
+          margin: '1em 4.5em',
           load: true
         },
         treeSelect:{
           class:'absolute-right',
-          margin:'1em 6em',
+          margin:'1em 4.5em',
           load: true
         },
         html:{
@@ -934,7 +934,7 @@ export default {
         },
         inputColor:{
           class:'absolute-right',
-          margin:'1em 6em',
+          margin:'1em 5em',
           load: true
         },
         toggle:{
@@ -963,8 +963,8 @@ export default {
           load: true
         },
         schedulable:{
-          class:'absolute-right',
-          margin:'3em 3em',
+          class:'absolute-left',
+          margin:'2.8em 12em',
           load: true
         },
         json:{
