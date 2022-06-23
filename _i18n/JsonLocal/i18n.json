@@ -1115,6 +1115,9 @@
           "flightInfo": "Flight Info",
           "workOrders": "Work Orders",
           "rampInfo": "Ramp"
+        },
+        "message": {
+          "servicesMessage": "At least one service is required"
         }
       }
     },
