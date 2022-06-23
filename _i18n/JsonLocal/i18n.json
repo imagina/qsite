@@ -994,6 +994,9 @@
     },
     "ifly": {
       "cms": {
+        "message":{
+          "servicesMessage":"You must add at least one service"
+        },
         "form": {
           "aircraftModel": "Aircraft Model",
           "airlineName": "Airline Name",
