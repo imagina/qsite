@@ -1238,6 +1238,32 @@
     },
     "isite": {
       "cms": {
+        "crudMySite": {
+          "information": {
+            "title": "Site Information",
+            "description": "In this section, you have the ability to customize the details of your website. Here you can update essential elements such as the name of your site, select the category that best represents it, and write an attractive and precise description. This information is fundamental as it helps visitors understand what your page is about and what they can expect from it."
+          },
+          "socialNetworks": {
+            "title": "Social Networks",
+            "description": "Link your Facebook and Instagram profiles, and provide a WhatsApp number. These connections make it easier for your visitors to interact with you on the platforms they already use, allowing you to build a stronger community around your website."
+          },
+          "media": {
+            "title": "Media Files",
+            "description": "Here you can add a logo for your website, and help your customers easily identify your brand."
+          },
+          "colors": {
+            "title": "Colors",
+            "description": "The color section allows you to personalize the appearance of your website to match your brand. Here you can select two colors that will be used as the main theme of your page. These colors will help establish the visual identity of your site, giving it a unique and consistent look."
+          },
+          "schedule": {
+            "title": "Business Hours",
+            "description": "Here you can set the hours during which your business is operational. This information is essential for your customers, as it lets them know when they can expect services or responses to their inquiries."
+          },
+          "location": {
+            "title": "Location",
+            "description": "Here you have the ability to share your exact location with the visitors of your website. You can enter details such as the province and city, as well as the exact address of your office."
+          }
+        },
         "sidebar": {
           "pageHome": "Home",
           "pageConfig": "Configuration",
@@ -1294,6 +1320,7 @@
         "perzonalizationTitle": "Welcome to the editor of your website",
         "perzonalizationDescription": "Easily change the logo, colors and the main information of your website",
         "label": {
+          "informationTitle": "Site Information",
           "top": "Top",
           "bottom": "Bottom",
           "left": "Left",
@@ -1321,6 +1348,8 @@
           "content": "Content",
           "continueWith": "Continue with",
           "facebook": "Facebook",
+          "instagram": "Instagram",
+          "youtube": "Youtube",
           "google": "Google",
           "microsoft": "Microsoft",
           "showing": "Showing",
@@ -1640,6 +1669,7 @@
           "refreshEveryMinutes": "Refresh every {min} minutes"
         },
         "message": {
+          "phoneHint": "Enter a phone number and press enter",
           "appOffline": "You have lost connection to the internet. This app is offline.",
           "activitiesDescription": "Select the activity you want",
           "descriptionHelpCenter": "Choose the option you want to solve your doubts",
@@ -1712,6 +1742,9 @@
           "configureThisSection": "configure This section"
         },
         "form": {
+          "whatsappNumber": "Número de Whatsapp",
+          "codeCountry": "Code country",
+          "defaultMessage": "Default message",
           "id": "ID",
           "title": "Title | Title",
           "caption": "Caption | Captions",
@@ -2990,6 +3023,32 @@
     },
     "isite": {
       "cms": {
+        "crudMySite": {
+          "information": {
+            "title": "Informacion del Sitio",
+            "description": "En esta sección, tienes la posibilidad de personalizar los detalles de tu sitio web. Aquí puedes actualizar elementos esenciales como el nombre de tu sitio, seleccionar la categoría que mejor lo representa, y redactar una descripción atractiva y precisa. Esta información es fundamental ya que ayuda a los visitantes a entender de qué trata tu página y qué pueden esperar de ella."
+          },
+          "socialNetworks": {
+            "title": "Redes Sociales",
+            "description": "Vincula tus perfiles de Facebook e Instagram, y proporcionar un número de WhatsApp. Estas conexiones facilitan que tus visitantes interactúen contigo en las plataformas que ya utilizan, permitiéndote construir una comunidad más fuerte alrededor de tu sitio web."
+          },
+          "media": {
+            "title": "Archivos Multimedia",
+            "description": "Aquí podrás añadir un logo para tu sitio web, y ayudar a tus clientes a indentificar tu marca con falicidad."
+          },
+          "colors": {
+            "title": "Colores",
+            "description": "La sección colores te permite personalizar la apariencia de tu sitio web para que coincida con tu marca. Aquí puedes seleccionar dos colores que se usarán como tema principal de tu página. Estos colores ayudarán a establecer la identidad visual de tu sitio, proporcionándole un aspecto único y consistente."
+          },
+          "schedule": {
+            "title": "Horarios de Atención",
+            "description": "Aquí puedes establecer las horas durante las cuales tu negocio está operativo. Esta información es esencial para tus clientes, ya que les permite saber cuándo pueden esperar servicios o respuestas a sus consultas."
+          },
+          "location": {
+            "title": "Localización",
+            "description": "Aquí tienes la posibilidad de compartir tu ubicación exacta con los visitantes de tu sitio web. Aquí puedes ingresar detalles como la provincia y la ciudad, así como la dirección exacta de tu oficina."
+          }
+        },
         "sidebar": {
           "pageHome": "Inicio",
           "pageConfig": "Configuración",
@@ -3074,6 +3133,8 @@
           "content": "Contenido",
           "continueWith": "Continuar con",
           "facebook": "Facebook",
+          "instagram": "Instagram",
+          "youtube": "Youtube",
           "google": "Google",
           "microsoft": "Microsoft",
           "showing": "Mostrando",
@@ -3391,6 +3452,7 @@
           "refreshEveryMinutes": "Refrescar cada {min} minutos"
         },
         "message": {
+          "phoneHint": "Ingresa un número telefónico y presiona enter",
           "appOffline": "Has perdido la conexión a internet. La aplicación está offline.",
           "activitiesDescription": "Seleeciona la actividad que desees.",
           "descriptionHelpCenter": "Elige la opción que deseas para resolver tus dudas",
@@ -3463,6 +3525,9 @@
           "configureThisSection": "Configura esta sección"
         },
         "form": {
+          "whatsappNumber": "Número de Whatsapp",
+          "codeCountry": "Código del Páis",
+          "defaultMessage": "Mensaje por defecto",
           "id": "ID",
           "title": "Título | Titulos",
           "caption": "Subtítulo | Subtítulos",

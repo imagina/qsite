@@ -18,6 +18,7 @@
       <q-form v-bind="structure.form.props" v-if="structure.form.directives.vIf"
               @validation-error="structure.form.events.validateError()">
         <!--Language-->
+
         <div v-bind="structure.wrapperLocales.props" v-show="structure.wrapperLocales.directives.vShow">
           <locales v-model="locale" ref="localeComponent" :form="$refs.formContent"/>
         </div>
@@ -26,7 +27,8 @@
           <!--Columns-->
           <component v-for="(column, keyColumn) in structure.columns()" :key="keyColumn" v-bind="column.props">
             <!--Blocks-->
-            <component v-for="(block, keyBlock) in column.blocks" :key="keyBlock" v-bind="block.props">
+            <component v-for="(block, keyBlock) in column.blocks" :key="keyBlock" v-bind="block.props" class="position-relative">
+              <help-text v-if="block.help" :title="block.help.title" :description="block.help.description" class="position-right"/>
               <div :class="block.childClass">
                 <!--Top step Info-->
                 <div class="step-top-content" v-if="block.title || block.description">
@@ -112,6 +114,12 @@ export default {
     value: {
       default: () => {
         return {}
+      }
+    },
+    help: {
+      type: Object,
+      default(){
+        return { description: "Some description..." }
       }
     },
     loading: {type: Boolean, default: false},
@@ -783,7 +791,12 @@ export default {
 <style lang="stylus">
 #dynamicFormComponentContent
   //min-height 150px
-
+  .position-relative{
+    position: relative
+  }
+  .position-right
+    position absolute
+    right 16px
   #stepperContent
     padding 0
 

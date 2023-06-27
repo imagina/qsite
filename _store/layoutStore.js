@@ -45,6 +45,7 @@ export default function layoutStore() {
         state.layoutList.fields.layoutId.files.selectedFile = getSelectedLayout();
     }
     function getLayoutsList() {
+        console.log("esto retorna: ", state.layoutList);
         return state.layoutList;
     }
     function setSelectedLayout(layaoutId) {
