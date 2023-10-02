@@ -72,7 +72,8 @@ export default {
           rounded: true,
           color: action.color || 'green',
           toUrl: action.toUrl || false,
-          handler: action.handler || false
+          handler: action.handler || false,
+          noCaps: true
         }
         //Dynamics props
         if (action.label) response.label = action.label
