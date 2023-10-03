@@ -1749,7 +1749,9 @@
           "selectedCategory": "Selected category",
           "noCategories": "There are no categories",
           "selectedTemplate": "Selected template",
-          "noTemplates": "No templates"
+          "noTemplates": "No templates",
+          "recordModalTitle": "Congratulations on completing your account registration!",
+          "recordModalMessage": "<p>You've taken the first important step by signing up, and now we're ready to take you through our simple process to customize and create the perfect website that reflects your vision and goals.</p><p>Welcome and go ahead! 👋</p>"
         },
         "form": {
           "whatsappNumber": "Número de Whatsapp",
@@ -3544,7 +3546,9 @@
           "selectedCategory": "Categoría seleccionada",
           "noCategories": "No existen categorías",
           "selectedTemplate": "Plantilla seleccionada",
-          "noTemplates": "No existen plantillas"
+          "noTemplates": "No existen plantillas",
+          "recordModalTitle": "¡Felicidades por completar el registro de tu cuenta!",
+          "recordModalMessage": "<p>Has dado el primer paso importante al registrarte, y ahora estamos listos para llevarte a  través de nuestro sencillo proceso para personalizar y crear el sitio web perfecto que refleje tu visión y objetivos.</p><p> ¡Bienvenid@ y adelante! 👋</p>"
         },
         "form": {
           "whatsappNumber": "Número de Whatsapp",

@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     async getData() {
-      console.log(this.infoBase);
       if (this.infoBase && this.infoBase.form) {
         this.activeForm = this.infoBase.form.check;
         this.form = this.infoBase.form.info;
@@ -106,7 +105,6 @@ export default {
       }
     },
     verifyNext() {
-      console.log(this.activeForm);
       if(this.activeForm) {
         //  quiere decir que tiene que llenar el formulario
         this.verifyForm();

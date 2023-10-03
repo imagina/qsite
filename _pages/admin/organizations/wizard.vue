@@ -152,10 +152,6 @@ export default {
   },
   methods: {
     async init() {
-      /*  this.$cache.remove('org-wizard-step');
-      this.$cache.remove('org-wizard-categories');
-      this.$cache.remove('org-wizard-plans');
-      this.$cache.remove('org-wizard-data'); */
       this.getInfo();
       this.configProgress();
 
@@ -652,7 +648,14 @@ export default {
     opacity: 0;
   }
 }
-.step-plan, .step-categories, .step-themes, .step-ai {
+#wizardOrganization .step-plan, 
+#wizardOrganization .step-categories, 
+#wizardOrganization .step-themes, 
+#wizardOrganization .step-ai {
   margin-top: 25px;
+}
+#wizardOrganization a:-webkit-any-link:focus-visible {
+    outline-offset: 0 !important;
+    outline: 0 !important;
 }
 </style>
