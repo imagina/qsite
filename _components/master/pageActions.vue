@@ -15,7 +15,7 @@
                v-if="extraActions && extraActions.includes('search') && searchAction"
                @input="$emit('search', $clone(search))">
         <template v-slot:prepend>
-          <q-icon color="tertiary" size="xs" name="fa-duotone fa-magnifying-glass"/>
+          <q-icon color="tertiary" size="xs" name="fa-light fa-magnifying-glass"/>
         </template>
       </q-input>
       <!--Button Actions-->
@@ -81,11 +81,13 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
+    <master-synchronizable v-model="syncParams" ref="syncComponent" />
   </div>
 </template>
 <script>
 //Components
 import masterExport from "@imagina/qsite/_components/master/masterExport"
+import masterSynchronizable from "@imagina/qsite/_components/master/masterSynchronizable"
 
 export default {
   beforeDestroy() {
@@ -107,7 +109,7 @@ export default {
     },
     tourName: {default: null}
   },
-  components: {masterExport},
+  components: {masterExport, masterSynchronizable},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -117,6 +119,7 @@ export default {
   data() {
     return {
       exportParams: false,
+      syncParams: false,
       search: null,
       filterData: {},
       refreshIntervalId: null,
@@ -141,9 +144,9 @@ export default {
         rounded: true,
         dense: true,
         unelevated: true,
-        color: "primary",
+        textColor: "primary",
+        style: "border: 1px solid rgba(0, 13, 71, 0.15)",
         class: `btn-${this.size}`,
-        outline: true,
         noCaps: true,
       }
     },
@@ -153,12 +156,21 @@ export default {
       let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
 
       let response = [
+        //Export Icommerce
+        {
+          label: this.$tr('isite.cms.label.migration'),
+          vIf: (this.syncParams && !excludeActions.includes('sync')),
+          props: {
+            icon: 'fa-light fa-folder-tree'
+          },
+          action: () => this.$refs.syncComponent.show()
+        },
         //Export
         {
           label: this.$tr('isite.cms.label.export'),
           vIf: (this.exportParams && !excludeActions.includes('export')),
           props: {
-            icon: 'fa-duotone fa-file-arrow-down'
+            icon: 'fa-light fa-file-arrow-down'
           },
           action: () => this.$refs.exportComponent.showReport()
         },
@@ -167,7 +179,7 @@ export default {
           label: 'Tour',
           vIf: (this.tourName && !config("app.disableTours")),
           props: {
-            icon: 'fa-duotone fa-shoe-prints',
+            icon: 'fa-light fa-shoe-prints',
             id: 'actionStartTour'
           },
           action: () => this.startTour(true)
@@ -187,7 +199,7 @@ export default {
           label: this.$tr('isite.cms.label.filter'),
           vIf: (this.filter.load && !excludeActions.includes('filter')),
           props: {
-            icon: 'fa-duotone fa-filter',
+            icon: 'fa-light fa-filter',
             id: 'filter-button-crud',
           },
           action: () => this.$eventBus.$emit('toggleMasterDrawer', 'filter')
@@ -198,7 +210,7 @@ export default {
           type: this.multipleRefresh ? 'btn-dropdown' : '',
           vIf: (this.params.refresh && !excludeActions.includes('refresh')),
           props: {
-            icon: 'fa-duotone fa-rotate-right',
+            icon: 'fa-light fa-rotate-right',
             id: 'refresh-button-crud'
           },
           items: [
@@ -237,8 +249,8 @@ export default {
             vIf: this.params.create && this.params.hasPermission.create,
             props: {
               label: this.$tr(`isite.cms.label.new`),
-              icon: 'fa-duotone fa-plus',
-              color: "primary",
+              icon: 'fa-light fa-plus',
+              textColor: "primary",
               round: false,
               rounded: true,
               padding: '3px 15px',
