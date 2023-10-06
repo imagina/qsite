@@ -21,8 +21,8 @@
       <!--Button Actions-->
       <div v-for="(btn, keyAction) in actions" :key="keyAction">
         <!-- if the button is dropdown -->
-        <q-btn-dropdown split v-bind="{...buttonProps}"
-                        v-if="btn.type == 'btn-dropdown'" outline
+        <q-btn-dropdown split v-bind="{...buttonProps}" padding="xs 15px"
+                        v-if="btn.type == 'btn-dropdown'" class="btn-border-dropdown-custom"
         >
           <template v-slot:label>
             <div class="row items-center no-wrap" @click="refreshByTime(timeRefresh)">
@@ -81,7 +81,7 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
-    <master-synchronizable v-model="syncParams" ref="syncComponent" />
+    <master-synchronizable v-model="syncParams" v-if="$auth.hasAccess('isite.synchronizables.index')" ref="syncComponent" />
   </div>
 </template>
 <script>
@@ -259,6 +259,9 @@ export default {
             action: () => this.$emit('new')
           })
       }
+
+      //force styles
+      response = response.map(item => ({...item, props : {...item.props, color : 'white', outline: false}}))
 
       //Response
       return response.filter(item => item.vIf !== undefined ? item.vIf : true)
