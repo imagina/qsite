@@ -1,4 +1,13 @@
 <template>
+  <q-dialog
+      id="drawerFilterMaster"
+      v-model="show"
+      persistent
+      maximized
+      position="right"
+      v-if="filter.load"
+    >
+  <q-card style="width: 350px; height: calc(120vh)">
   <div id="masterFilterComponent" v-if="filter">
     <!-- Header -->
     <div id="masterFilterContent">
@@ -74,6 +83,8 @@
              @click="emitFilter(), $eventBus.$emit('toggleMasterDrawer','filter')"/>
     </div>
   </div>
+  </q-card>
+    </q-dialog>
 </template>
 <script>
 export default {
@@ -91,6 +102,12 @@ export default {
         storeFilter: false,
       }
     }
+  },
+  props : {
+    show: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   components: {},
   watch: {
@@ -136,6 +153,7 @@ export default {
       if(origin.length === 2) {
         this.currentUrlFilter = origin[1] || '';
       }
+      console.count('created: masterFilter ')
       await this.init();
     })
   },
