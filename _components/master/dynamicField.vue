@@ -417,7 +417,8 @@ export default {
     keyField: {
       type: String,
       default: () => '',
-    }
+    },
+    enableCache: {default: false}
   },
   components: {
     managePermissions,
@@ -1391,6 +1392,8 @@ export default {
 
           //enable cache by isite setting
           let enableCache = this.$store.getters['qsiteApp/getSettingValueByName']('isite::enableDynamicFieldsCache')
+          //enable cache by params
+          if(this.enableCache) enableCache = 1
 
           let params = {//Params to request
             refresh: enableCache == '1' ? false : true,
