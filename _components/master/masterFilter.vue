@@ -153,7 +153,6 @@ export default {
       if(origin.length === 2) {
         this.currentUrlFilter = origin[1] || '';
       }
-      console.count('created: masterFilter ')
       await this.init();
     })
   },
