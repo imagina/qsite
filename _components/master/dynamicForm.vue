@@ -1,6 +1,6 @@
 <template>
   <div id="dynamicFormComponent">
-    <div v-bind="structure.wrapper.props" :key="structure.wrapper.directives.key">
+    <div v-bind="structure.wrapper.props" :key="structure.wrapper.directives.key" v-show="showForm">
       <!--Top Content-->
       <div v-bind="structure.wrapperTop.props" v-if="structure.wrapperTop.directives.vIf">
         <!--Title-->
@@ -99,6 +99,35 @@
       <!--Innerloading-->
       <inner-loading :visible="(loading || innerLoading) ? true : false"/>
     </div>
+    <!-- Feedback after submit-->
+    <div v-if="withFeedBack && showFeedBack">
+      <div class="box box-auto-height justify-center">
+        <div class="row">
+          <div class="col-12 text-center q-gutter-y-sm">
+            <div>
+              <q-icon
+                name="fa-light fa-circle-check"
+                color="green"
+                size="xl"
+              />
+            </div>
+            <div class="text-subtitle1">Formulario enviado correctamente</div>
+            <div>
+              <q-btn
+                unelevated
+                rounded
+                no-caps
+                @click="setNewForm"
+                label="Enviar otra respuesta"
+                type="button"
+                color="primary"
+                icon="fa-light fa-plus"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -142,7 +171,8 @@ export default {
       validator: (value) => [1, 2, 3].includes(value)
     },
     noResetWithBlocksUpdate: {type: Boolean, default: false},
-    boxStyle: {type: Boolean, default: true}
+    boxStyle: {type: Boolean, default: true},
+    withFeedBack: {type: Boolean, default: false}
   },
   watch: {
     value: {
@@ -181,7 +211,9 @@ export default {
       locale: {},
       step: 0,
       innerLoading: false,
-      formBlocks: false
+      formBlocks: false,
+      showForm: true,
+      showFeedBack: false
     }
   },
   computed: {
@@ -761,6 +793,14 @@ export default {
               this.innerLoading = false
               this.reset()
               this.$emit('sent', this.$clone(this.locale.form))
+
+              //feedBack
+              if(this.withFeedBack && response?.data){
+                this.showForm = false;
+                this.showFeedBack = true
+                this.$emit('feedBack', this.$clone(response.data))
+              }
+
             }).catch(error => {
               this.innerLoading = false
             })
@@ -779,11 +819,18 @@ export default {
       this.componentId = this.$uid()
       this.$refs.formContent.resetValidation()
       this.step = 0
+      this.showForm = true
+      this.showFeedBack = false
     },
     selectedFile(file) {
       const fileId = file.length === 0 ? null : file[0].id;
       layoutStore().setSelectedLayout(fileId);
     },
+    setNewForm(){
+      this.reset()
+      this.init()
+      this.$emit('newForm')
+    }
   }
 }
 </script>
