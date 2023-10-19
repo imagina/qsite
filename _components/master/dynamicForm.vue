@@ -106,22 +106,26 @@
           <div class="col-12 text-center q-gutter-y-sm">
             <div>
               <q-icon
-                name="fa-light fa-circle-check"
+                name="fa-light fa-envelope-circle-check"
                 color="green"
                 size="xl"
               />
             </div>
-            <div class="text-subtitle1">Formulario enviado correctamente</div>
+            <div>
+              <p class="text-subtitle1">
+                {{ $tr('isite.cms.form.feedBackMsg') }}
+              </p>
+            </div>
             <div>
               <q-btn
                 unelevated
                 rounded
                 no-caps
                 @click="setNewForm"
-                label="Enviar otra respuesta"
+                :label="$tr('isite.cms.form.feedBackNewForm')"
                 type="button"
                 color="primary"
-                icon="fa-light fa-plus"
+                icon="fa-light fa-envelope"
               />
             </div>
           </div>
