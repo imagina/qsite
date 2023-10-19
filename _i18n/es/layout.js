@@ -22,9 +22,7 @@ export default {
     showInMenu: 'Mostrar en menu',
     featured: 'Destacado',
     sortOrder: 'Orden de prioridad',
-    availableDate: 'Disponible desde',
-    feedBackNewForm: 'Enviar otra respuesta',
-    feedBackMsg: '¡Todo listo!  Tu formulario ha sido enviado con éxito.'
+    availableDate: 'Disponible desde'
   },
   startTime: 'Hora de inicio',
   endTime: 'Hora de finalización',

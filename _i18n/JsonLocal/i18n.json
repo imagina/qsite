@@ -370,6 +370,10 @@
         },
         "message": {
           "helpToOptionsField": "Type the option and press enter..."
+        },
+        "feedBack": {
+          "newForm": "Fill another Form",
+          "message": "¡Done!, Your Form has been successfully sent!"
         }
       }
     },
@@ -2299,6 +2303,10 @@
         },
         "message": {
           "helpToOptionsField": "Escribe la opción y preciona enter..."
+        },
+        "feedBack": {
+          "newForm": "Enviar otra respuesta",
+          "message": "¡Todo listo!  Tu formulario ha sido enviado con éxito."
         }
       }
     },

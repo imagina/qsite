@@ -22,9 +22,7 @@ export default {
     showInMenu: 'Show in Menu',
     featured: 'Featured',
     sortOrder: 'Sort Order',
-    availableDate: 'Available Date',
-    feedBackNewForm: 'Fill another Form',
-    feedBackMsg: 'Done!, Your Form has been successfully sent!'
+    availableDate: 'Available Date'
   },
   startTime: 'Start time',
   endTime: 'End time',

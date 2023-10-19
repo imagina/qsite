@@ -113,7 +113,7 @@
             </div>
             <div>
               <p class="text-subtitle1">
-                {{ $tr('isite.cms.form.feedBackMsg') }}
+                {{ $tr('iforms.cms.feedBack.message') }}
               </p>
             </div>
             <div>
@@ -122,7 +122,7 @@
                 rounded
                 no-caps
                 @click="setNewForm"
-                :label="$tr('isite.cms.form.feedBackNewForm')"
+                :label="$tr('iforms.cms.feedBack.newForm')"
                 type="button"
                 color="primary"
                 icon="fa-light fa-envelope"
