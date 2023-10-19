@@ -832,6 +832,7 @@ export default {
     },
     setNewForm(){
       this.reset()
+      this.locale.form = false
       this.init()
       this.$emit('newForm')
     }
