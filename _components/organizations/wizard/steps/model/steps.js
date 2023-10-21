@@ -4,18 +4,31 @@ import plans from '../plans';
 import themes from '../themes';
 import terms from '../terms';
 import register from '../register';
+import welcome from '../welcome';
+import summary from '../summary';
+import ai from '../ai';
 import {
+    STEP_WELCOME,
     STEP_REGISTER,
     STEP_TERMS,
     STEP_COMPANY,
     STEP_CATEGORIES,
     STEP_THEMES,
     STEP_PLANS,
+    STEP_SUMMARY,
+    STEP_AI,
 } from '@imagina/qsite/_components/organizations/wizard/steps/model/constant';
 
 
 
 export default [
+    {
+        id: STEP_WELCOME,
+        title: 'Welcome',
+        prefix: STEP_WELCOME,
+        component: welcome,
+        done: false,
+    },
     {
         id: STEP_REGISTER,
         title: 'Register',
@@ -56,6 +69,20 @@ export default [
         title: 'Themes',
         prefix: STEP_THEMES,
         component: themes,
+        done: false,
+    },
+    {
+        id: STEP_AI,
+        title: 'AI',
+        prefix: STEP_AI,
+        component: ai,
+        done: false,
+    },
+    {
+        id: STEP_SUMMARY,
+        title: 'Summary',
+        prefix: STEP_SUMMARY,
+        component: summary,
         done: false,
     },
 ];

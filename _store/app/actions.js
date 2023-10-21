@@ -50,8 +50,8 @@ export const GET_IP_ADDRESS = ({commit}) => {
 //Get site settings
 export const GET_SITE_SETTINGS = ({commit, dispatch, state, getters}, params = {}) => {
   return new Promise((resolve, reject) => {
-    params = {centralizedBrand: true, setToSite: true, ...params}
-    let requestParams = {refresh: true}
+    params = {centralizedBrand: true, setToSite: true, refresh: true, ...params}
+    let requestParams = {refresh: params.refresh, cacheKey: 'qsite.settings'}
     let configName = 'apiRoutes.qsite.siteSettings'
     let configApp = config('app')
 
@@ -209,7 +209,7 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
 
     //Set default language to i18n
     //import(`@imagina/qsite/_i18n/master/index`).then(({default: messages}) => {
-    dispatch('qtranslationMaster/GET_TRANSLATIONS', null, {root: true}).then(({default: messages}) => {
+    dispatch('qtranslationMaster/GET_TRANSLATIONS', {refresh: false}, {root: true}).then(({default: messages}) => {
       try {
         Vue.i18n.locale = locale
         Vue.i18n.setLocaleMessage(locale, messages[locale])
@@ -269,10 +269,15 @@ export const SET_EXTRA = ({state, commit, dispatch}, params = false) => {
 }
 
 //Get module configs
-export const GET_MODULE_CONFIGS = ({commit, dispatch, state}) => {
+export const GET_MODULE_CONFIGS = ({commit, dispatch, state}, params = {}) => {
   return new Promise((resolve, reject) => {
+    params = {refresh: true, ...params}
     //Request params
-    let requestParams = {refresh: true, params: {filter: {configNameByModule: 'config'}}}
+    let requestParams = {
+      refresh: params.refresh,
+      cacheKey: 'qsite.module.configs',
+      params: {filter: {configNameByModule: 'config'}}
+    }
     //Request
     crud.index('apiRoutes.qsite.configs', requestParams).then(async response => {
       commit('SET_MODULE_CONFIGS', response.data)
@@ -285,13 +290,37 @@ export const GET_MODULE_CONFIGS = ({commit, dispatch, state}) => {
 }
 
 //Get site hooks
-export const GET_SITE_HOOKS = ({commit, dispatch, state}) => {
+export const GET_SITE_HOOKS = ({commit, dispatch, state}, params = {}) => {
   return new Promise((resolve, reject) => {
+    params = {refresh: true, ...params}
     //Request params
-    let requestParams = {refresh: true, params: {filter: {configNameByModule: 'config.frontendHooks'}}}
+    let requestParams = {
+      refresh: params.refresh,
+      cacheKey: 'qsite.site.hooks',
+      params: {filter: {configNameByModule: 'config.frontendHooks'}}
+    }
     //Request
     crud.index('apiRoutes.qsite.configs', requestParams).then(async response => {
       commit('SET_SITE_HOOKS', response.data)
+      resolve(true)
+    }).catch(error => {
+      console.error('[store-qsite]Error:: Store getting site hooks - ', error)
+      reject(error)
+    })
+  })
+}
+
+//Get site hooks
+export const LOAD_CLARITY = ({commit, dispatch, state}) => {
+  return new Promise((resolve, reject) => {
+    //Request params
+    let requestParams = {
+      refresh: true,
+      params: {filter: {configName: 'isite.config.msClarityScript'}}
+    }
+    //Request
+    crud.index('apiRoutes.qsite.configs', requestParams).then(async response => {
+      if (response.data) helper.appendScriptStringHead(response.data)
       resolve(true)
     }).catch(error => {
       console.error('[store-qsite]Error:: Store getting site hooks - ', error)

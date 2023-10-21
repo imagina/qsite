@@ -1,4 +1,6 @@
 import helper from '@imagina/qsite/_plugins/helper'
+import crud from '@imagina/qcrud/_components/crud'
+import {GET_CLARITY} from "@imagina/qsite/_store/app/actions";
 
 export default async ({app, router, store, Vue}) => {
   //====== Reset Service Worker
@@ -13,6 +15,8 @@ export default async ({app, router, store, Vue}) => {
   store.dispatch('qsiteApp/SET_SITE_COLORS')
   //====== Load extra state in store
   store.dispatch('qsiteApp/SET_EXTRA')
+  //====== Load Clarity
+  store.dispatch('qsiteApp/LOAD_CLARITY')
 
   //====== laod cdn google maps
   let apiKey = store.getters['qsiteApp/getSettingValueByName']('isite::api-maps')

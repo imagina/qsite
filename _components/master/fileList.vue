@@ -50,6 +50,19 @@
               <!---Card-->
               <div v-if="gridType == 'card'" class="file-card cursor-pointer">
                 <!--Image Preview-->
+                <div class="tw-absolute tw-right-0">
+                    <q-btn 
+                      round 
+                      color="primary" 
+                      icon="fa-light fa-file-arrow-down"
+                      size="sm"
+                      @click="downloadFile(itemRow)" 
+                    >
+                      <q-tooltip>
+                        {{ $tr('isite.cms.label.download') }}
+                      </q-tooltip>
+                    </q-btn>
+                </div>
                 <div v-if="itemRow.isImage" class="file-card_img img-as-bg" @click="fileAction(itemRow)"
                      :style="`background-image: url('${itemRow.mediumThumb}')`">
                   <!--Tooltip-->
@@ -496,7 +509,20 @@ export default {
 
       //Emit selected files
       this.$emit('selected', this.$clone(this.selectedFiles))
-    }
+    },
+    downloadFile(file) {
+      const fileUrl = file.path;
+      const fileName = file.filename;
+      const downloadLink = document.createElement('a');
+      downloadLink.href = fileUrl;
+      downloadLink.download = fileName;
+      downloadLink.target = '_blank';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      setTimeout(() => {
+        document.body.removeChild(downloadLink);
+      }, 100);
+    },
   }
 }
 </script>

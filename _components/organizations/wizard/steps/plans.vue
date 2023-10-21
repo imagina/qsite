@@ -5,53 +5,57 @@
       <div></div>
       <div></div>
     </div>
+    
     <div v-else>
-      <q-tabs
-        v-model="tabActive"
-        active-color="primary"
-        indicator-color="primary"
-        narrow-indicator
-        class="tw-mb-4"
-      >
-        <q-tab :name="item.optionValue" :label="item.optionValue" v-for="(item, index) in tab" :key="index"/>
-      </q-tabs>
-      <q-tab-panels v-model="tabActive" animated>
-        <q-tab-panel :name="element.optionValue" v-for="(element, i) in tab" :key="i">
-          <q-list
-              bordered
-              separator
-              class="tw-mb-4 cursor-pointer tw-rounded-md item-plan tw-mx-2 md:tw-mx-6"
-              v-for="(item, index) in plans" :key="index"
-              v-if="item.optionValue == element.optionValue"
-              :class="{ activePlan : item.id === selected.id &&  item.planId === selected.planId}"
-              @click="selectPlan(item)">
+      <div v-if="tab.length>0">
+        <q-tabs
+          v-model="tabActive"
+          active-color="primary"
+          indicator-color="primary"
+          narrow-indicator
+          class="tw-mb-4"
+        >
+          <q-tab :name="item.optionValue" :label="item.optionValue" v-for="(item, index) in tab" :key="index"/>
+        </q-tabs>
+        <q-tab-panels v-model="tabActive" animated>
+          <q-tab-panel :name="element.optionValue" v-for="(element, i) in tab" :key="i">
+            <q-list
+                bordered
+                separator
+                class="tw-mb-4 cursor-pointer tw-rounded-md item-plan tw-mx-2 md:tw-mx-6"
+                v-for="(item, index) in plans" :key="index"
+                v-if="item.optionValue == element.optionValue"
+                :class="{ activePlan : item.id === selected.id &&  item.planId === selected.planId}"
+                @click="selectPlan(item)">
 
-            <q-expansion-item
-              expand-icon-toggle
-              group="plans"
-              v-model="item.active"
-            >
-              <template v-slot:header>
-                <q-item-section>
-                  <div class="tw-text-lg tw-font-semibold"> {{ item.planName }}</div>
-                  <div class="tw-text-xs">{{ item.planName }}</div>
-                </q-item-section>
+              <q-expansion-item
+                expand-icon-toggle
+                group="plans"
+                v-model="item.active"
+              >
+                <template v-slot:header>
+                  <q-item-section>
+                    <div class="tw-text-lg tw-font-semibold"> {{ item.planName }}</div>
+                    <div class="tw-text-xs">{{ item.planName }}</div>
+                  </q-item-section>
 
-                <q-item-section side>
-                  <div class="row items-center ">
-                    <span class="tw-font-bold">{{ item.price }}</span> / {{ item.optionValue }}
-                  </div>
-                </q-item-section>
-              </template>
-              <q-card>
-                <q-separator/>
-                <q-card-section v-html="item.planDescription"></q-card-section>
-              </q-card>
-            </q-expansion-item>
-          </q-list>
+                  <q-item-section side>
+                    <div class="row items-center ">
+                      <span class="tw-font-bold">{{ item.price }}</span> / {{ item.optionValue }}
+                    </div>
+                  </q-item-section>
+                </template>
+                <q-card>
+                  <q-separator/>
+                  <q-card-section v-html="item.planDescription"></q-card-section>
+                </q-card>
+              </q-expansion-item>
+            </q-list>
 
-        </q-tab-panel>
-      </q-tab-panels>
+          </q-tab-panel>
+        </q-tab-panels>
+      </div>
+      <div class="text-center tw-mt-6" v-else>No hay planes disponibles</div>
     </div>
 
     <div class="step-sidebar">
@@ -73,7 +77,6 @@
         <div class="tw-text-base tw-mb-8 text-center" v-html="stepContent.description"></div>
         <q-img v-if="stepContent.mediaFiles" contain
                :src="stepContent.mediaFiles.mainimage.extraLargeThumb"
-               :ratio="1/1"
         />
       </div>
     </div>
@@ -134,10 +137,12 @@ export default {
     },
     async getPlanSelected() {
       try {
+        this.loading = true;
         if (this.infoBase && (this.infoBase.plan !== null)) {
           this.selected = this.infoBase.plan;
           this.tabActive = this.selected.optionValue;
           this.navNext();
+          this.loading = false;
         } else {
           // Sino hay nada es porque recargo entonces verifico que tiene cache
           const info = await this.$cache.get.item('org-wizard-data');
@@ -148,6 +153,7 @@ export default {
           } else {
             this.$emit("update", {active: false});
           }
+          this.loading = false;
         }
 
       } catch (error) {
@@ -155,30 +161,34 @@ export default {
       }
     },
     mapInfoPlan(plans) {
-      this.tab = plans[0].optionValues.slice(0, 2).sort((a, b) => a.optionValue.localeCompare(b.optionValue));
-      if (!this.tabActive) {
-        this.tabActive = this.tab[0].optionValue;
-      }
-      let plan = [], planFilter = [];
+      if(plans.length>0) {
+        this.tab = plans[0].optionValues.slice(0, 2).sort((a, b) => a.optionValue.localeCompare(b.optionValue));
+        if (!this.tabActive) {
+          this.tabActive = this.tab[0].optionValue;
+        }
+        let plan = [], planFilter = [];
 
-      plans.map(function callback(currentValue, index) {
-        const p = currentValue.optionValues.filter((item, index) => index < 2);
-        planFilter = p.map((item) => ({
-          ...item,
-          product: currentValue,
-          planId: currentValue.id,
-          planName: currentValue.name,
-          planSummary: currentValue.summary,
-          planDescription: currentValue.description,
-          planRelatedProducts: currentValue.relatedProducts,
-          planUrl: currentValue.url,
-          active: false,
-        }));
+        plans.map(function callback(currentValue, index) {
+          const p = currentValue.optionValues.filter((item, index) => index < 2);
+          planFilter = p.map((item) => ({
+            ...item,
+            product: currentValue,
+            planId: currentValue.id,
+            planName: currentValue.name,
+            planSummary: currentValue.summary,
+            planDescription: currentValue.description,
+            planRelatedProducts: currentValue.relatedProducts,
+            planUrl: currentValue.url,
+            active: false,
+          }));
 
-        plan.unshift(planFilter);
-      })
+          plan.unshift(planFilter);
+        })
 
-      return plan.flatMap(item => item);
+        return plan.flatMap(item => item);
+      } else {
+        return []
+      }  
     },
     async getData() {
 
@@ -191,6 +201,7 @@ export default {
         await this.$cache.set('org-wizard-plans', plansNew);
         this.plans = this.mapInfoPlan(plansNew);
       }
+      //console.log(this.plans);
     },
     async getStepInfo() {
       this.stepContent = await this.info.find((item) => item.systemName === STEP_NAME_PLANS);

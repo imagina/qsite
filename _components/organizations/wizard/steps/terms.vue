@@ -66,14 +66,17 @@ export default {
   },
   watch: {
     buttonTerms(newTerms, oldTerms) {
-      this.$emit("update", {active: newTerms});
+      this.$emit("update",  { active: newTerms, info: this.buttonEmail });
+    },
+    buttonEmail(newTerms, oldTerms) {
+      this.$emit("update",  { active: this.buttonTerms, info: newTerms });
     }
   },
   computed: {
     termsAndConditions() {
       let settings = {
         politics: this.$store.getters['qsiteApp/getSettingValueByName']('iprofile::registerUserWithPoliticsOfPrivacy') ??
-            `${this.urlBase}/politicas-de-privacidad`,
+            `${this.urlBase}/politica-de-privacidad`,
         terms: this.$store.getters['qsiteApp/getSettingValueByName']('iprofile::registerUserWithTermsAndConditions') ??
             `${this.urlBase}/terminos-y-condiciones`,
       }
@@ -94,14 +97,16 @@ export default {
   },
   methods: {
     async getData() {
-      if (this.infoBase && this.infoBase.terms) {
-        this.buttonTerms = this.infoBase.terms;
+      if (this.infoBase && this.infoBase.terms.active) {
+        this.buttonTerms = this.infoBase.terms.active;
+        this.buttonEmail = this.infoBase.terms.info;
       } else {
         // Sino hay nada es porque recargo entonces verifico que tiene cache
         const info = await this.$cache.get.item('org-wizard-data');
-        if (info != null && info.terms) {
-          this.buttonTerms = info.terms;
-          this.$emit("update", {active: info.terms});
+        if (info != null && info.terms.active) {
+          this.buttonTerms = info.terms.active;
+          this.buttonEmail = info.terms.info;
+          this.$emit("update",  { active: info.terms.active, info: info.terms.info });
         } else {
           this.$emit("update", {active: false});
         }

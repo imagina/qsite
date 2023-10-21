@@ -62,7 +62,7 @@ export default {
           type: "input",
           props: {
             icon: "corporate_fare",
-            label: "Nombre",
+            label: this.$tr('isite.cms.form.name'),
             color: "primary",
             rounded: true,
             dense: false

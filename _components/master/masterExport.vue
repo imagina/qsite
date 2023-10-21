@@ -1,7 +1,7 @@
 <template>
   <master-modal v-model="showModal" icon="fas fa-file-download" width="380px" :loading="loading"
                 :title="modalTitle" @hide="reset()" @show="init()" custom-position>
-    <div class="relative-position">
+    <div class="relative-position" v-if="!loading">
       <div class="row q-col-gutter-md">
         <!--Generate new report-->
         <div id="newReportContent" class="col-12" v-if="!customExportData && allowCreation">
@@ -26,7 +26,7 @@
               <!--Submit-->
               <div class="text-right col-12">
                 <q-btn :label="$tr('isite.cms.label.create')" color="green" rounded unelevated size="13px"
-                       padding="xs sm" type="submit"/>
+                       padding="xs sm" type="submit" :disable="reportQueue ? true : false"/>
               </div>
             </q-form>
           </div>
@@ -132,12 +132,30 @@ export default {
         }
       }
 
+      //Add warning reportQueue
+      if (this.reportQueue) {
+        fields.reportQueue = {
+          type: 'banner',
+          props: {
+            message: this.$tr('isite.cms.reportQueue', {
+              date: this.$trd(this.reportQueue, {type: 'long'})
+            }),
+            color: 'warning'
+          }
+        }
+      }
+
       //Response
       return fields
     },
     //Allow Downloads from custom config
     allowCreation() {
       return this.params.allowCreation !== undefined ? this.params.allowCreation : true
+    },
+    //Validate if already there is exporting a report
+    reportQueue() {
+      let lockReport = this.fileExport.find(item => item.reportQueue)
+      return lockReport?.reportQueue || null
     }
   },
   methods: {
@@ -225,7 +243,7 @@ export default {
     //Request new report
     newReport() {
       return new Promise(async (resolve, reject) => {
-        //this.loading = true
+        this.loading = true
         //Instance de apiRoute
         const apiRoute = this.params.apiRoute || 'apiRoutes.qsite.export'
         const filter = await this.storeFilter();

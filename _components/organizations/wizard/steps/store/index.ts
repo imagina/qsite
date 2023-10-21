@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import baseService from '@imagina/qcrud/_services/baseService.js';
+import cache from '@imagina/qsite/_plugins/cache'
 
 export default function storeStepWizard() {
   async function getInfoWizard(systemName: string) {
@@ -8,7 +9,7 @@ export default function storeStepWizard() {
         'apiRoutes.qgamification.categories',
         'admin_organization_wizard',
         {
-          refresh: true, params: {filter: {field: 'system_name'}, include: "activities"}
+          refresh: false, params: {filter: {field: 'system_name'}, include: "activities"}
         });
       return response.data.activities;
     } catch (error) {
@@ -18,8 +19,10 @@ export default function storeStepWizard() {
 
   async function getCategories() {
     try {
-      const response = await baseService.index('apiRoutes.qsite.categories', {refresh: true});
+      const requestParams = {refresh: true}
+      const response = await baseService.index('apiRoutes.qsite.categories', requestParams);
       const categories = response.data.sort((a, b) => a.title.localeCompare(b.title));
+      cache.set('org-wizard-categories', categories)
       return categories;
     } catch (error) {
       console.log('Error al cargar las categorias');
@@ -67,7 +70,8 @@ export default function storeStepWizard() {
           products.data[index].optionValues = [{optionValue: plan.frequency, price: plan.price,}]
         }
       })
-
+      //save in cache
+      cache.set('org-wizard-plans', products.data)
       //Response
       return products.data;
     } catch

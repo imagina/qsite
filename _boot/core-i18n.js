@@ -16,7 +16,7 @@ Vue.use(VueI18n)
 export default async ({router, app, Vue, store, ssrContext}) => {
   //Request messages
   const useLocalTranslations = config('app.useLocalTranslations')
-  const messagesServer = useLocalTranslations ? {} : await store.dispatch('qtranslationMaster/GET_TRANSLATIONS')
+  const messagesServer = useLocalTranslations ? {} : await store.dispatch('qtranslationMaster/GET_TRANSLATIONS', {refresh: false})
   let messages = useLocalTranslations ? messagesLocal : messagesServer
   //===== Get default language
   //From URL

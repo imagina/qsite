@@ -1193,7 +1193,8 @@
           "customers": "Customers",
           "costCenters": "Cost Centers",
           "gates": "Parking Spots",
-          "areas": "Areas"
+          "areas": "Areas",
+          "contracts": "Contracts"
         },
         "message": {}
       }
@@ -1320,6 +1321,7 @@
         "perzonalizationTitle": "Welcome to the editor of your website",
         "perzonalizationDescription": "Easily change the logo, colors and the main information of your website",
         "label": {
+          "clickToAction": "Click to Action",
           "informationTitle": "Site Information",
           "top": "Top",
           "bottom": "Bottom",
@@ -1666,7 +1668,12 @@
           "endPoint": "End Point",
           "token": "Token",
           "refreshAtOnce": "Refresh",
-          "refreshEveryMinutes": "Refresh every {min} minutes"
+          "refreshEveryMinutes": "Refresh every {min} minutes",
+          "start": "Start",
+          "continueUser": "Continue with this User",
+          "createNewAccount": "Create new account",
+          "continue": "Continue",
+          "plan": "Plan"
         },
         "message": {
           "phoneHint": "Enter a phone number and press enter",
@@ -1739,7 +1746,13 @@
           "hintFilterByQuery": "Type 3 or more characters to search for options",
           "invalidFormat": "Invalid format",
           "specialCharactersAreNotAllowed": "Special characters are not allowed",
-          "configureThisSection": "configure This section"
+          "configureThisSection": "configure This section",
+          "selectedCategory": "Selected category",
+          "noCategories": "There are no categories",
+          "selectedTemplate": "Selected template",
+          "noTemplates": "No templates",
+          "recordModalTitle": "Congratulations on completing your account registration!",
+          "recordModalMessage": "<p>You've taken the first important step by signing up, and now we're ready to take you through our simple process to customize and create the perfect website that reflects your vision and goals.</p><p>Welcome and go ahead! 👋</p>"
         },
         "form": {
           "whatsappNumber": "Número de Whatsapp",
@@ -1879,7 +1892,9 @@
         "bottomLeft": "Bottom-Left",
         "bottom": "Bottom",
         "bottomRight": "Bottom-Right",
-        "selectedRows": "{num} selected rows"
+        "selectedRows": "{num} selected rows",
+        "reportQueue": "You already have a report in progress, you requested it on <b>{date}</b>. As soon as it is finished we will enable the 'create' function for you... We do this to make the app work much better!",
+        "sessionFound": "There is an active session"
       }
     },
     "setupagione": {
@@ -2978,7 +2993,8 @@
           "customers": "Clientes",
           "costCenters": "Centros de costo",
           "gates": "Lugares de estacionamiento",
-          "areas": "Areas"
+          "areas": "Areas",
+          "contracts": "Contratos"
         },
         "message": {}
       }
@@ -3105,6 +3121,7 @@
         "perzonalizationTitle": "Bienvenid@ al editor de tu sitio web",
         "perzonalizationDescription": "De manera fácil, cambia el logo, colores y la información principal de tu página web",
         "label": {
+          "clickToAction": "Click para Acción",
           "top": "Arriba",
           "bottom": "Abajo",
           "left": "Izquierda",
@@ -3449,7 +3466,12 @@
           "endPoint": "Punto Final",
           "token": "Token",
           "refreshAtOnce": "Refrescar de una vez",
-          "refreshEveryMinutes": "Refrescar cada {min} minutos"
+          "refreshEveryMinutes": "Refrescar cada {min} minutos",
+          "start": "Empezar",
+          "continueUser": "Continuar con este Usuario",
+          "createNewAccount": "Crear Nueva Cuenta",
+          "continue": "Continuar",
+          "plan": "Plan"
         },
         "message": {
           "phoneHint": "Ingresa un número telefónico y presiona enter",
@@ -3522,7 +3544,13 @@
           "hintFilterByQuery": "Escribe 3 o más caracteres para buscar opciones",
           "invalidFormat": "Formato invalido",
           "specialCharactersAreNotAllowed": "No se permiten caracteres especiales",
-          "configureThisSection": "Configura esta sección"
+          "configureThisSection": "Configura esta sección",
+          "selectedCategory": "Categoría seleccionada",
+          "noCategories": "No existen categorías",
+          "selectedTemplate": "Plantilla seleccionada",
+          "noTemplates": "No existen plantillas",
+          "recordModalTitle": "¡Felicidades por completar el registro de tu cuenta!",
+          "recordModalMessage": "<p>Has dado el primer paso importante al registrarte, y ahora estamos listos para llevarte a  través de nuestro sencillo proceso para personalizar y crear el sitio web perfecto que refleje tu visión y objetivos.</p><p> ¡Bienvenid@ y adelante! 👋</p>"
         },
         "form": {
           "whatsappNumber": "Número de Whatsapp",
@@ -3661,7 +3689,9 @@
         "bottomLeft": "Abajo-Izquierda",
         "bottom": "Abajo",
         "bottomRight": "Abajo-Derecha",
-        "selectedRows": "{num} Filas seleccionadas"
+        "selectedRows": "{num} Filas seleccionadas",
+        "reportQueue": "Ya tienes un reporte en progreso, lo solicitaste en <b>{date}</b>. Tan pronto este termine habilitaremos la función de 'crear' para ti... Esto lo hacemos para que la aplicación funcione mucho mejor!",
+        "sessionFound": "Hay una sesión activa"
       }
     },
     "setupagione": {

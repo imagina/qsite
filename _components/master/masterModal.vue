@@ -19,7 +19,7 @@
           <b>{{ title }}</b>
         </div>
         <!--Close Button-->
-        <q-btn v-close-popup icon="fas fa-times" round color="blue-grey" unelevated class="btn-small" outline
+        <q-btn v-close-popup icon="fa-light fa-xmark" round textColor="blue-grey" unelevated class="btn-medium"
                v-if="!hideCloseAction"/>
       </div>
       <q-separator inset/>
