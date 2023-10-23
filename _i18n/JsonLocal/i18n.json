@@ -367,7 +367,7 @@
             "full": "Full Width"
           },
           "successText": "Success text",
-          "submitText": "Submit text"
+          "submitText": "Submit button text"
         },
         "message": {
           "helpToOptionsField": "Type the option and press enter..."
@@ -2302,7 +2302,7 @@
             "full": "Full Ancho"
           },
           "successText": "Texto de exito",
-          "submitText": "Texto de enviado"
+          "submitText": "Texto del Boton de envio"
         },
         "message": {
           "helpToOptionsField": "Escribe la opción y preciona enter..."
