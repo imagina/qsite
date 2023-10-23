@@ -558,7 +558,7 @@ export default {
         submit: {
           color: "green",
           icon: "fas fa-save",
-          label: this.$tr('isite.cms.label.save'),
+          label: this.formBlocks.submitText ?? this.$tr('isite.cms.label.save'),
           ...(this.actions.submit || {}),
           action: () => this.changeStep('next', true)
         },
