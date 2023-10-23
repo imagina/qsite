@@ -1678,7 +1678,8 @@
           "continueUser": "Continue with this User",
           "createNewAccount": "Create new account",
           "continue": "Continue",
-          "plan": "Plan"
+          "plan": "Plan",
+          "copyEmbedHtml": "Copy HTML"
         },
         "message": {
           "phoneHint": "Enter a phone number and press enter",
@@ -3481,7 +3482,8 @@
           "continueUser": "Continuar con este Usuario",
           "createNewAccount": "Crear Nueva Cuenta",
           "continue": "Continuar",
-          "plan": "Plan"
+          "plan": "Plan",
+          "copyEmbedHtml": "Copiar HTML"
         },
         "message": {
           "phoneHint": "Ingresa un número telefónico y presiona enter",
