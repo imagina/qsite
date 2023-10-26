@@ -351,7 +351,6 @@
         },
         "newForm": "New Form",
         "updateForm": "Update Form",
-        "fillForm": "Fill Form",
         "newField": "New Field",
         "updateField": "Update Field",
         "newBlock": "new Block",
@@ -376,7 +375,7 @@
             "full": "Full Width"
           },
           "successText": "Success text",
-          "submitText": "Submit button text"
+          "submitText": "Submit text"
         },
         "message": {
           "helpToOptionsField": "Type the option and press enter...",
@@ -1340,7 +1339,6 @@
         "perzonalizationTitle": "Welcome to the editor of your website",
         "perzonalizationDescription": "Easily change the logo, colors and the main information of your website",
         "label": {
-          "clickToAction": "Click to Action",
           "informationTitle": "Site Information",
           "top": "Top",
           "bottom": "Bottom",
@@ -2301,7 +2299,6 @@
         },
         "newForm": "Nuevo Formulario",
         "updateForm": "Actualizar Formulario",
-        "fillForm": "Llenar Formulario",
         "newField": "Nuevo Campo",
         "updateField": "Actualizar Campo",
         "newBlock": "Nuevo Bloque",
@@ -2326,7 +2323,7 @@
             "full": "Full Ancho"
           },
           "successText": "Texto de exito",
-          "submitText": "Texto del Boton de envio"
+          "submitText": "Texto de enviado"
         },
         "message": {
           "helpToOptionsField": "Escribe la opción y preciona enter...",
@@ -3161,7 +3158,6 @@
         "perzonalizationTitle": "Bienvenid@ al editor de tu sitio web",
         "perzonalizationDescription": "De manera fácil, cambia el logo, colores y la información principal de tu página web",
         "label": {
-          "clickToAction": "Click para Acción",
           "top": "Arriba",
           "bottom": "Abajo",
           "left": "Izquierda",
