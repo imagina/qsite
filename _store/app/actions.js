@@ -196,6 +196,7 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
 
     //Set in store
     commit('SET_DEFAULT_LOCALE', locale)
+    commit('SET_SELECTED_LOCALES')
 
     //Set in axios how default params
     axios.defaults.params.setting.locale = locale
