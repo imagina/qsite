@@ -1,8 +1,8 @@
 <template>
   <div id="wizardOrganization"
-      class="tw-h-screen tw-overflow-auto"
-      :class="{'page-full' : pace == welcome || pace == summary }"
-      >
+    class="tw-h-screen"
+    :class="{'page-full' : pace == welcome || pace == summary, 'tw-overflow-auto': pace != STEP_THEMES }"
+  >
     <div class="page-header
                 tw-border-b-2 tw-border-white tw-border-opacity-50
                 tw-fixed
@@ -14,7 +14,12 @@
                 tw-h-20
     ">
       <a :href="urlBase"> <img :src="logo" class="tw-h-20 tw-w-auto"/> </a>
-      <q-linear-progress :value="progress" class="linear-progress-header"/>
+      <q-linear-progress
+        :value="progress"
+        size="md"
+        style="background-color: lightgray"
+        class="linear-progress-header"
+      />
     </div>
 
     <div class="step-loading">
@@ -133,7 +138,8 @@ export default {
       },
       dataCheck: null,
       welcome: STEP_WELCOME,
-      summary: STEP_SUMMARY
+      summary: STEP_SUMMARY,
+      themes: STEP_THEMES
     }
   },
   provide() {
