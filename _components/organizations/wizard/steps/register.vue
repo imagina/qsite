@@ -25,7 +25,7 @@
                 no-caps
                 color="primary"
                 size="md"
-                @click="createUser()"> 
+                @click="createUser()">
                 {{ $tr('isite.cms.label.createNewAccount') }}
         </q-btn>
         <q-btn  rounded unelevated
@@ -50,8 +50,8 @@
         <q-separator class="tw-mb-6"/>
         <!--Actions-->
         <div class="row justify-center q-gutter-sm">
-          <google-auth/>
-          <facebook-auth/>
+          <google-auth @logged="checkAfterLogin"/>
+          <facebook-auth @logged="checkAfterLogin"/>
         </div>
       </div>
     </div>

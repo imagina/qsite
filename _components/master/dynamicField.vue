@@ -350,6 +350,11 @@
             :options="formatOptions"
             :class="`${field.help ? 'expression-dinamyc-field' : ''}`"
         />
+        <localizedPhone 
+          v-if="loadField('localizedPhone')"
+          v-model="responseValue"
+          :fieldProps="fieldProps"
+        />
         <!--Code Editor-->
         <q-field v-model="responseValue" v-if="loadField('code')"
                  v-bind="fieldProps.fieldComponent"
@@ -386,6 +391,7 @@ import selectMedia from '@imagina/qmedia/_components/selectMedia'
 import googleMapMarker from '@imagina/qsite/_components/master/googleMapMarker'
 import JsonEditorVue from 'json-editor-vue'
 import expressionField from '@imagina/qsite/_components/master/expressionField/index.vue';
+import localizedPhone from '@imagina/qsite/_components/master/localizedPhone/index.vue';
 //Code mirror
 import {codemirror} from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -432,7 +438,8 @@ export default {
     googleMapMarker,
     JsonEditorVue,
     expressionField,
-    codemirror
+    codemirror,
+    localizedPhone
   },
   watch: {
     value: {

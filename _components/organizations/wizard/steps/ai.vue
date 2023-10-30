@@ -1,5 +1,5 @@
 <template>
-  <div class="step-ai" >
+  <div class="step-ai tw-overflow-y-hidden" >
     <div v-if="stepContent" class="tw-max-w-xl tw-mx-auto" :class="{'form-inactive' : !activeForm }">
 
       <h2 class="step-title">{{ stepContent.title  }}</h2>

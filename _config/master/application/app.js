@@ -39,7 +39,6 @@ export default {
     'qmenu',
     'qmedia',
     'qslider',
-    'qbanner',
     'qchat',
     'qtranslation',
     'qrequestable',

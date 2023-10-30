@@ -54,7 +54,12 @@
       </div>
     </div>
     <!--Description-->
-    <div v-if="description" class="ellipsis-2-lines col-12 description-content">{{ description }}</div>
+    <span 
+      v-if="description" 
+      class="col-12 description-content"
+    >
+      {{ description }}
+    </span>
     <!--Filter data-->
     <div class="col-12 tw-mt-3" v-if="filter.hasValues || Object.keys(quickFilters).length">
       <!--<q-separator class="q-mb-sm"/>-->
@@ -107,7 +112,10 @@ export default {
       type: Boolean,
       default: () => false,
     },
-    tourName: {default: null}
+    tourName: {default: null},
+    documentation: { 
+      default: () => {}
+    },
   },
   components: {masterExport, masterSynchronizable},
   watch: {},
@@ -296,13 +304,15 @@ export default {
         //Search the config
         response = this.$store.getters['qsiteApp/getConfigApp'](configName)
       }
-      //Response
-      return !response ? null : {
+
+      const tooltipInfo = {
         title: this.title,
         description: response,
         icon: this.$route.meta.icon,
         class: 'q-ml-sm'
       }
+      if (response) return tooltipInfo
+      if (!response && this.documentation) return this.documentation
     }
   },
   methods: {
