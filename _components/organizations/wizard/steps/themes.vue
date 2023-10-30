@@ -1,5 +1,9 @@
 <template>
-  <div class="step-themes">
+  <div class="
+    step-themes
+    md:tw-overflow-y-auto
+    md:tw-h-screen
+   ">
     <h2 v-if="stepContent" class="step-title">{{stepContent.title}}</h2>
 
     <div class="step-loading" v-if="loading"><div></div><div></div></div>
