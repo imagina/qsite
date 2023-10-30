@@ -222,6 +222,14 @@ export default {
             }
           }
         },
+        localizedPhone: {
+          ...globalData,
+          type: 'localizedPhone',
+          props: {
+            label: 'type: localizedPhone',
+            mask:"###-###-####"
+          },
+        },
       }
     }
   },

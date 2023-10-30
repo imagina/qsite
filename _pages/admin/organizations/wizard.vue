@@ -41,17 +41,15 @@
 
         <template v-slot:navigation>
           <q-stepper-navigation v-if="pace > 2">
-           
-           
             <div class="tw-pt-3 md:tw-pt-4 tw-pb-1">
               <div class="row justify-between">
                 <div class="col-4">
-
                   <q-btn rounded
                          no-caps
                          :disabled="!isActivePrevious"
+                         unelevated
                          v-if="pace > 3"
-                         color="primary"
+                         color="blue-grey"
                          icon="fas fa-arrow-left tw-mr-0 sm:tw-mr-2"
                          @click="stepperPrevious()">
                     <div class="tw-hidden sm:tw-inline-block">
@@ -66,7 +64,8 @@
                          :disabled="!isActive"
                          icon-right="fas fa-arrow-right tw-ml-0 sm:tw-ml-2"
                          @click="stepperNext(pace)"
-                         color="primary">
+                         unelevated
+                         color="green">
                     <div class="tw-hidden sm:tw-inline-block">
                       {{ pace === steps.length ? $tr('isite.cms.label.finalize') : $tr('isite.cms.label.continue') }}
                     </div>
@@ -76,7 +75,6 @@
             </div>
           </q-stepper-navigation>
         </template>
-
       </q-stepper>
     </div>
   </div>
@@ -211,7 +209,7 @@ export default {
               this.setCacheInfo(this.dataCheck);
               this.setCacheStep(step + 1);
               this.$refs.stepper.next();
-            } 
+            }
 
           } else {
 
@@ -220,8 +218,8 @@ export default {
             this.setCacheStep(step + 1);
             this.$refs.stepper.next();
           }
-          
-          
+
+
         }
 
       } catch (error) {
@@ -479,7 +477,7 @@ export default {
   @apply tw-w-2/4 tw-z-50 tw-left-0  tw-fixed tw-bg-white tw-border-b-2;
   @apply tw-border-gray-300 tw-border-opacity-50 tw-pb-3 md:tw-pb-4;
   transition: transform .4s ease-out, width .4s ease-out;
-  margin-top: -95px; top: 180px; 
+  margin-top: -95px; top: 180px;
 }
 
 #wizardOrganization .page-wizard .q-stepper__nav .q-btn .q-icon {
@@ -648,9 +646,9 @@ export default {
     opacity: 0;
   }
 }
-#wizardOrganization .step-plan, 
-#wizardOrganization .step-categories, 
-#wizardOrganization .step-themes, 
+#wizardOrganization .step-plan,
+#wizardOrganization .step-categories,
+#wizardOrganization .step-themes,
 #wizardOrganization .step-ai {
   margin-top: 25px;
 }

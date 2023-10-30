@@ -10,7 +10,7 @@
       customClass="wizard-modal"
     >
       <div class="content-modal">
-        <div class="tw-text-md md:tw-text-lg text-center tw-font-semibold tw-p-4" 
+        <div class="tw-text-md md:tw-text-md text-center tw-font-semibold tw-p-4 text-blue-grey"
             v-html="$tr('isite.cms.message.recordModalMessage')">
         </div>
         <div class="text-center tw-mt-6">
@@ -21,7 +21,7 @@
                 size="md"
                 outline
                 @click="go()">
-          {{ $tr('isite.cms.label.continue') }} 
+          {{ $tr('isite.cms.label.continue') }}
         </q-btn>
         </div>
       </div>
@@ -66,7 +66,6 @@ export default {
 
 <style>
 .wizard-modal {
-  border-radius: 0 !important;
   background: -webkit-linear-gradient(bottom, #fff, #e4e2f2);
 }
 .wizard-modal .master-dialog__header  {
