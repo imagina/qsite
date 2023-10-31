@@ -1,31 +1,31 @@
 <template>
   <master-modal
-    v-model="show"
-    :persistent="true"
-    customPosition
-    :loading="loading"
-    maximized
-    @hide="hideModal"
-    modalWidthSize="98%"
-    :title="title"
+      v-model="show"
+      :persistent="true"
+      customPosition
+      :loading="loading"
+      maximized
+      @hide="hideModal"
+      modalWidthSize="98%"
+      :title="title"
   >
     <div>
       <div class="relative-position">
         <div class="box box-auto-height q-mb-md">
           <div class="tw-mb-4">
             <dynamic-field
-              v-for="(field, keyField) in formFields"
-              :key="keyField"
-              v-model="dynamicFieldForm[keyField]"
-              :field="field"
+                v-for="(field, keyField) in formFields"
+                :key="keyField"
+                v-model="dynamicFieldForm[keyField]"
+                :field="field"
             />
           </div>
           <div v-if="funnelForm">
             <dynamic-form
-              v-if="formCategory.vIf"
-              v-model="form"
-              :form-id="formCategory.formId"
-              @submit="saveForm()"
+                v-if="formCategory.vIf"
+                v-model="form"
+                :form-id="formCategory.formId"
+                @submit="saveForm()"
             />
           </div>
         </div>
@@ -124,6 +124,29 @@ export default {
               options: {
                 label: 'fullName', value: 'id'
               }
+            },
+            customData: {
+              create : {
+                title: this.$tr('requestable.cms.newRequestedBy')
+              },
+              formLeft: {
+                userName: {value: null},
+                isActivated: {value: 1},
+                changePassword: {value: null},
+                password: {value: null},
+                passwordConfirmation: {value: null}
+              },
+              formRight: false,
+              getDataForm: (data) => {
+                return new Promise(resolve => {
+                  let password = this.$uid()
+                  let role = this.$store.getters['qsiteApp/getSettingValueByName']('requestable::defaultContactRole')
+                  data.password = password
+                  data.passwordConfirmation = password
+                  data.roles = role ? [role] : []
+                  resolve(data)
+                })
+              }
             }
           },
         },
@@ -139,7 +162,7 @@ export default {
       this.statusId = statusId;
       this.title = title;
       const funnel =
-        this.$helper.getDynamicSelectList()[this.filterName] || null;
+          this.$helper.getDynamicSelectList()[this.filterName] || null;
       if (funnel) {
         this.funnelForm = funnel.find((item) => item.id == this.funnelId);
       }

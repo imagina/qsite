@@ -1037,7 +1037,8 @@
           "writeComment": "Write a comment..."
         },
         "newRule": "New Rule",
-        "updateRule": "Update Rule"
+        "updateRule": "Update Rule",
+        "newRequestedBy": "New Contact"
       }
     },
     "page": {
@@ -2988,7 +2989,8 @@
           "writeComment": "Escriba un comentario..."
         },
         "newRule": "Nueva Regla",
-        "updateRule": "Actualizar Regla"
+        "updateRule": "Actualizar Regla",
+        "newRequestedBy": "Nuevo Contacto"
       }
     },
     "page": {
