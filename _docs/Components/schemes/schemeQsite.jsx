@@ -758,3 +758,190 @@ export const componentUploader = {
     }
   ]
 }
+
+export const componentSync = {
+  "tabs": [
+    {
+      "title": "Props",
+      "table": {
+        "columnNames": ['Name', 'Content'],
+        "data": [
+          [
+            'loading',
+            { type: <code>Boolean</code>, description: 'Indicate if information is currently being loaded.' }
+          ],
+          [
+            'enabledEmails',
+            { type: <code>Array</code>, description: 'A variable used to store enabled email addresses.' }
+          ],
+          [
+            'routeParams',
+            {
+              type: <code>Object</code>,
+              description: 'Retrieve permission information based on the current path.',
+            }
+          ],
+          [
+            'showModal',
+            { type: <code>Boolean</code>, description: 'Controls whether the modal is displayed.' }
+          ],
+          [
+            'modalTitle',
+            { type: <code>Computed (String)</code>, description: 'Calculate the title of the modal to be displayed.' }
+          ],
+          [
+            'allowCreation',
+            { type: <code>Computed (Boolean)</code>, description: 'Determine whether the generation of a new file is allowed (based on the params.sheetId property).' }
+          ],
+          [
+            'allowImport',
+            { type: <code>Computed (Boolean)</code>, description: 'Determine who can import and display additional information.' }
+          ],
+          [
+            'canSyncData',
+            { type: <code>Computed (Boolean)</code>, description: 'Check if the synchronization process is in progress.' }
+          ],
+          [
+            'linkToFile',
+            { type: <code>string</code>, description: 'Store the link to the spreadsheet file.', example: <code>{`https://docs.google.com/spreadsheets/d/{sheetId}`}</code> }
+          ],
+          [
+            'params',
+            {
+              type: <code>Object</code>,
+              description: <>Store the data obtained from the request to the <code>apiRoutes.qsite.synchronizables</code> path of parameters (initialized as false).</>,
+              structure: <CodeBlock language="js" showLineNumber>
+                {
+                  `{
+  "data": {
+    "createdAt": "2023-10-02 09:33:36",
+    "createdBy": 1,
+    "deletedAt": null,
+    "deletedBy": null,
+    "enabled": 0,
+    "enabledEmails": null,
+    "exportedById": 1,
+    "id": 1,
+    "isRunning": null,
+    "lastSync": "2023-10-11 09:33:15",
+    "name": "...",
+    "organizationId": null,
+    "sheetId": "...",
+    "updatedAt": "2023-10-19 17:11:49",
+    "updatedBy": 1
+  }
+}`
+                }
+              </CodeBlock>
+            }
+          ],
+          [
+            'emailsConfig',
+            {
+              type: <code>Computed (Array)</code>,
+              description: 'Configuration for email fields in the dynamicField.',
+              structure: <CodeBlock language="js" showLineNumber>
+                {
+                  `{
+  value: [],
+  type: 'select',
+  props: {
+    label: '{this.$trp('isite.cms.form.email')}',
+    useInput: true,
+    useChips: true,
+    multiple: true,
+    hideDropdownIcon: true,
+    inputDebounce: "0",
+    newValueMode: "add-unique"
+  }
+}`
+                }
+              </CodeBlock>
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "title": "Functions",
+      "table": {
+        "columnNames": ['Name Function', 'Content'],
+        "data": [
+          [
+            'init',
+            { description: <>Initialize the component and call <code>getData()</code>.</> }
+          ],
+          [
+            'getData',
+            {
+              description: <>Make a request to obtain the export configuration. Update the <code>params</code> and <code>linkToFile</code>.</>,
+              request: <CodeBlock language="js" showLineNumbers>
+                {
+                  `const nameFile = \`icommerce_syncProducts\`;
+
+const requestParams = {
+  refresh: true,
+  params: {
+    filter: {
+    field: 'name'
+    }
+  }
+}
+
+this.$crud.show('apiRoutes.qsite.synchronizables', nameFile, requestParams)
+                  `
+                }
+              </CodeBlock>
+            }
+          ],
+          [
+            'generateFile',
+            {
+              description: 'Generate a file in Google Sheets for synchronization. Once generated, make the request to getData() again. Verify if the email addresses are valid.',
+              request: <CodeBlock language="js" showLineNumber>
+                {
+                  `const requestParams = {
+  attributes: {
+    module: this.routeParams.module,
+    enabled_emails: this.enabledEmails 
+  }
+};
+
+this.$crud.post('apiRoutes.qsite.generateFile', requestParams);
+                  `
+                }
+              </CodeBlock>
+            }
+          ],
+          [
+            'synchronizableFile',
+            {
+              params: <><code>type: (string)</code> - <code>customEntity: (string)</code></>,
+              description: 'Perform a file synchronization for export or import. It can take a type (\'export\' and \'import\') and a custom entity.',
+              request: <CodeBlock language="js" showLineNumbers>
+                {
+                  `const requestParams = {
+  attributes: {
+    name: nameFile,
+    type: type,
+    requestParams: {
+      "filter": {},
+      "include": {}
+    } 
+  }
+}
+
+this.$crud.post('apiRoutes.qsite.sync', requestParams)`
+                }
+              </CodeBlock>
+            }
+          ],
+          [
+            'show',
+            { description: 'Display the modal on the interface.' }
+          ]
+        ]
+      }
+    }
+  ]
+}
