@@ -146,7 +146,10 @@
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
             <slot name="before-options"/>
             <q-item>
-              <q-item-section class="text-grey">
+              <q-item-section class="text-grey" v-if="field.loadOptions.filterByQuery">
+                {{ fieldProps.hint}}
+              </q-item-section>
+              <q-item-section class="text-grey" v-else>
                 {{ $tr('isite.cms.message.notFound') }}
               </q-item-section>
             </q-item>
@@ -1554,6 +1557,15 @@ export default {
         })
       }
 
+      //Hint message for filterByQuery
+      if ( loadOptions && loadOptions.filterByQuery){
+        if(val.length > 2){
+          if(!this.rootOptions.length){
+            this.fieldProps.hint = `${this.$tr('isite.cms.message.notFound')}`
+          }
+        }
+      }
+
       //Emit filter Value
       this.$emit("filter", val)
     },
@@ -1605,7 +1617,6 @@ export default {
 
   .q-field--outlined .q-field__control {
     padding-letf 12px
-    padding-right 40px
   }
 
   .expression-dinamyc-field {
@@ -1663,4 +1674,19 @@ export default {
 
 #ckEditorComponent
   width 100%
+
+// help padding-right
+.crud-dynamic-field,
+.input-dynamic-field,
+.search-dynamic-field,
+.date-dynamic-field,
+.hour-dynamic-field,
+.full-date-dynamic-field,
+.select-dynamic-field,
+.treeselect-dynamic-field,
+.input-color-dynamic-field,
+.select-icon-dinamyc-field
+  .q-field__control{
+    padding-right 40px
+}
 </style>
