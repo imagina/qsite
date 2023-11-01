@@ -188,6 +188,14 @@ export const componentDynamicField = {
             'itemId',
             { type: <code>Integer</code>, description: 'Integer ID for some fields.'},
           ],
+          [
+            'Value',
+            { type: <code>Any</code>, description: 'Is the same that v-model' },
+          ],
+          [
+            'readOnly',
+            { type: <code>Boolean</code>, description: 'Set the field in read-only mode.' },
+          ],
         ]
       }
     },
@@ -236,7 +244,7 @@ export const dynamicFieldConfiguration = [
   ],
   [
     'props',
-    { type: <code>Object</code>, description: 'Props for each rendered field according to its documentation.'},
+    { type: <code>Object</code>, description: 'Props for each rendered field according to its documentation.', configuration: <Link to="/docs/VueJs/Components/dynamicField#field-props">Go to Props</Link> },
   ],
   [
     'permission',
@@ -250,12 +258,53 @@ export const dynamicFieldConfiguration = [
     'loadOptions',
     { type: <code>Object</code>, description: <>Configuration to load options from a request for select field type.<br /><Link to="/docs/VueJs/Components/dynamicField#loadoptions-params">Go to loadOptions Params</Link></>},
   ],
+  [
+    'withFullDate',
+    {
+      type: <code>string</code>,
+      description: 'The type:hour provides a full date format for this field.'
+    }
+  ],
+  [
+    'validateField',
+    {
+      type: <code>Object</code>,
+      description: <>In the case of the <code>input-text</code> type, if it's necessary to validate that the entered value exists through an API call, the <code>apiRoute</code> and <code>requestParams</code> attributes must be provided.</>,
+      props: <Link to="/docs/VueJs/Components/dynamicField#validate-field">Go to Props</Link>
+    }
+  ]
 ]
 
 export const dynamicFieldTypes = [
   [
     'crud',
-    { description: 'Render a CRUD component as a select.'},
+    {
+      description: 'Render a CRUD component as a select.',
+      example: <CodeBlock language="js">
+        {
+          `{
+  value: null,
+  type: 'crud',
+  props: {
+    crudType: 'select',
+    crudData: import(...),
+    crudProps: {
+      multiple: true,
+      useChips: true,
+      clearable: true,
+      label: '',
+    },
+    config: {
+      options: {
+        label: 'name', 
+        value: 'id',
+      }
+    },
+  },
+}`
+        }
+      </CodeBlock>
+    },
   ],
   [
     'input',
@@ -299,7 +348,27 @@ export const dynamicFieldTypes = [
   ],
   [
     'treeSelect',
-    { description: <>Render a tree select input using <a href="https://vue-treeselect.js.org/">vue-tree-select</a>.</>},
+    {
+      description: <>Render a tree select input using <a href="https://vue-treeselect.js.org/">vue-tree-select</a>.</>,
+      example: <CodeBlock language="js">
+        {
+          ` {
+  value: null,
+  type: 'treeSelect',
+  props: {
+    multiple: true,
+    useChips: true,
+    clearable: true,
+    label: 'Types',
+    sortValueBy: 'ORDER_SELECTED'
+  },
+  loadOptions: {
+    ...
+  }
+}`
+        }
+      </CodeBlock>
+    },
   ],
   [
     'html',
@@ -361,6 +430,44 @@ export const dynamicFieldTypes = [
     'media',
     { description: 'Load a media selector.', props: <Link to="/docs/VueJs/components/dynamicField#media-type-props">Enabled props for this field.</Link>},
   ]
+]
+
+export const dynamicFieldProps = [
+  [
+    'selectByDefault',
+    { description: 'To select the first option in a selection component (select) or tree selection (treeSelect) by default.' }
+  ],
+  [
+    'options',
+    { description: 'For selection types (select/treeSelect), you can define the options you want to select in these fields. If the \'loadOptions\' option is provided, they will be merged with the existing options.' }
+  ],
+  [
+    'label',
+    { description: 'Label displayed in the dynamicField.' }
+  ],
+  [
+    'zone',
+    { description: 'In the case of the type:"media", this is the area that will be used to upload and access files from the Imedia module.' }
+  ],
+  [
+    'crudProps',
+    { description: <>In the case of the type:"crud", these are the attributes that will be applied to the <code>select</code> input field. It includes <code>config.options</code> to define the label and id/value in the options, and <code>multiple</code> to determine if it allows multiple selection.</> }
+  ],
+]
+
+export const dynamicFieldValidateField = [
+  [
+    'apiRoute',
+    { type: <code>String</code>, description: 'API route to request data.'},
+  ],
+  [
+    'requestParams',
+    { type: <code>Object</code>, description: 'Standard API parameters to request data.'},
+  ],
+  [
+    'crudId',
+    { type: <code>String</code>, description: <>This field checks with a <code>crudLocal</code>.</>},
+  ],
 ]
 
 export const dynamicFieldLoadOptionsData = [
