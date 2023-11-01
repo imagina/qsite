@@ -146,7 +146,10 @@
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
             <slot name="before-options"/>
             <q-item>
-              <q-item-section class="text-grey">
+              <q-item-section class="text-grey" v-if="field.loadOptions.filterByQuery">
+                {{ fieldProps.hint}}
+              </q-item-section>
+              <q-item-section class="text-grey" v-else>
                 {{ $tr('isite.cms.message.notFound') }}
               </q-item-section>
             </q-item>
@@ -1552,6 +1555,15 @@ export default {
         update(async () => {
           this.options = this.$helper.filterOptions(val, this.rootOptions, this.responseValue)
         })
+      }
+
+      //Hint message for filterByQuery
+      if ( loadOptions && loadOptions.filterByQuery){
+        if(val.length > 2){
+          if(!this.rootOptions.length){
+            this.fieldProps.hint = `${this.$tr('isite.cms.message.notFound')}`
+          }
+        }
       }
 
       //Emit filter Value
