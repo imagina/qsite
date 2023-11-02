@@ -11,9 +11,9 @@
         dense
       >
         <template v-slot:prepend>
-          <q-btn-dropdown flat size="sm" v-model="isDrop">
+          <q-btn-dropdown flat size="md" v-model="isDrop" id="localized-phone-dropdown">
             <template v-slot:label>
-              <div>
+              <div class="text-blue-grey text-weight-medium">
                 {{ seletdCountry.name }} (+{{ seletdCountry.callingCode }})
               </div>
             </template>
@@ -85,3 +85,11 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="stylus">
+#localized-phone-dropdown
+  border-right: 1px solid;
+  border-color: #E5E7EB;
+
+  .q-btn__wrapper
+    padding: 0px
+</style>
