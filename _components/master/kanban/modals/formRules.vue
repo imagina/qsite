@@ -282,8 +282,6 @@ export default {
         const when = response.data.runType ? { when: response.data.runType } : {};
         this.form.run = {...when, ...response.data.runConfig};
         this.form.to = response.data.to;
-        // setTimeout(() => {
-        // }, 1000);
         return response.data;
       } catch (error) {
         this.$apiResponse.handleError(error, () => {
