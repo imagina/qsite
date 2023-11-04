@@ -27,6 +27,10 @@
           :field="formFields.to"
           v-if="formFields.to.vIf" 
           :key="`recipient-${changeKey}`"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28bd5bcd9e2ac2b6c59f5a74d95a18e0436a10fa
         />
       </div>
       <!--Run fields-->
