@@ -305,16 +305,19 @@ export default {
     //Save settings
     saveSettings() {
       this.loading = true
-      //Fix empty locale field
-      if( !this.form['core::locales'].length){
-        const defaultLocale =  this.$store.getters['qsiteApp/getDefaultLocale']
-        this.form['core::locales'].push(defaultLocale)
-      }
 
-      //Set locale on cache
-      this.$store.dispatch('qsiteApp/SET_LOCALE', {
-        locale: this.form['core::locales'][0]
-      })
+      if (this.moduleSelected == 'Core'){
+        //Fix empty locale field
+        if( !this.form['core::locales'].length){
+          const defaultLocale =  this.$store.getters['qsiteApp/getDefaultLocale']
+          this.form['core::locales'].push(defaultLocale)
+        }
+
+        //Set locale on cache
+        this.$store.dispatch('qsiteApp/SET_LOCALE', {
+          locale: this.form['core::locales'][0]
+        })
+      }
 
       //Request
       this.$crud.post('apiRoutes.qsite.settings', {attributes: this.getDataForm()}).then(async response => {
