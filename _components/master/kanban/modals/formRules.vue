@@ -54,7 +54,6 @@ export default {
       this.changeKey = this.$uid()
       if(!this.loading) this.form.to = null;
       if (this.categorySelected) this.form.name = this.$clone(this.categorySelected.title)
-      console.log('ghoa', this.categorySelected.parentId)
     }
   },
   data() {
@@ -78,10 +77,11 @@ export default {
   },
   computed: {
     isTo() {
-      const parentIds = [1,7]
-      return parentIds.includes(this.categorySelected?.parentId)
+      const idCategoriesWithRecipient = [1,7]
+      return idCategoriesWithRecipient.includes(this.categorySelected?.parentId)
     },
     whatLoadOptions() {
+      const ID_INTERNAL_COMMUNICATION = 7
       const loadOptionsUsers = {
         apiRoute: 'apiRoutes.quser.users',
         select: {
@@ -110,7 +110,9 @@ export default {
           id: 'id'
         }
       }
-      return this.categorySelected?.parentId === 7 ? loadOptionsUsers : loadOptionsCategories
+      return this.categorySelected?.parentId === ID_INTERNAL_COMMUNICATION 
+        ? loadOptionsUsers 
+        : loadOptionsCategories
     },
     modalActions() {
       return [
