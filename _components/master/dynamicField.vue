@@ -1561,7 +1561,7 @@ export default {
       if ( loadOptions && loadOptions.filterByQuery){
         if(val.length > 2){
           if(!this.rootOptions.length){
-            this.fieldProps.hint = `${this.$tr('isite.cms.message.notFound')}`
+            this.fieldProps.hint = `${this.$tr('isite.cms.message.noResultsFoundTryAnotherSearchValue')}`
           }
         }
       }
