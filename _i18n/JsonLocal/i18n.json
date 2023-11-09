@@ -1959,7 +1959,7 @@
           "download": "Download QR code"
         },
         "form": {
-          "id": "id",
+          "id": "ID",
           "title": "Title",
           "content": "Content",
           "entityType": "Entity Type",
@@ -3791,7 +3791,7 @@
           "download": "Descargar codigo QR"
         },
         "form": {
-          "id": "id",
+          "id": "ID",
           "title": "Titulo",
           "content": "Contenido",
           "entityType": "Tipo de entidad",
