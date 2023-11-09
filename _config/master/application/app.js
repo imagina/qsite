@@ -40,6 +40,7 @@ export default {
     'qmedia',
     'qslider',
     'qchat',
+    'qqreable',
     'qtranslation',
     'qrequestable',
     'qauction',
