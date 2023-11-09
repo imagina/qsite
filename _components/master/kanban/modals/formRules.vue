@@ -1,8 +1,20 @@
 <template>
-  <master-modal v-model="show" :persistent="true" customPosition @hide="resetForm"
-                :loading="loading" :title="modalTitle" :actions="modalActions">
-    <q-form autocorrect="off" autocomplete="off" ref="formContent" @submit="submitData"
-            @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
+  <master-modal 
+    v-model="show" 
+    :persistent="true" 
+    customPosition 
+    @hide="resetForm"
+    :loading="loading" 
+    :title="modalTitle" 
+    :actions="modalActions"
+  >
+    <q-form 
+      autocorrect="off" 
+      autocomplete="off" 
+      ref="formContent" 
+      @submit="submitData"
+      @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))"
+    >
       <!--Main-->
       <div class="box box-auto-height q-mb-md">
         <!--Category Id-->
@@ -10,8 +22,12 @@
         <!--Title-->
         <dynamic-field v-model="form.name" :field="formFields.name"/>
         <!--Recipient Type-->
-        <dynamic-field v-model="form.recipient" :field="formFields.recipient"
-                       v-if="formFields.recipient.vIf" :key="`recipient-${changeKey}`"/>
+        <dynamic-field 
+          v-model="form.to" 
+          :field="formFields.to"
+          v-if="formFields.to.vIf" 
+          :key="`recipient-${changeKey}`"
+        />
       </div>
       <!--Run fields-->
       <dynamic-form v-model="form.run" :blocks="formFields.run" no-actions no-reset-with-blocks-update
@@ -36,7 +52,7 @@ export default {
   watch: {
     'form.categoryId'() {
       this.changeKey = this.$uid()
-      if(!this.loading) this.form.recipient = null;
+      if(!this.loading) this.form.to = null;
       if (this.categorySelected) this.form.name = this.$clone(this.categorySelected.title)
     }
   },
@@ -51,7 +67,7 @@ export default {
       form: {
         categoryId: null,
         name: null,
-        recipient: null,
+        to: null,
         run: {},
         categoryFields: {},
       },
@@ -60,6 +76,44 @@ export default {
     };
   },
   computed: {
+    isTo() {
+      const idCategoriesWithRecipient = [1,7]
+      return idCategoriesWithRecipient.includes(this.categorySelected?.parentId)
+    },
+    whatLoadOptions() {
+      const ID_INTERNAL_COMMUNICATION = 7
+      const loadOptionsUsers = {
+        apiRoute: 'apiRoutes.quser.users',
+        select: {
+          label: 'fullName', 
+          id: 'id'
+        },
+      }
+
+      const loadOptionsCategories = {
+        delayed: () => {
+          return new Promise(resolve => {
+            this.$crud.get(
+              'apiRoutes.qrequestable.categoriesFormFields',
+                {
+                  filter: {
+                    type: this.categorySelected?.options?.filterFormFieldType
+                  }
+                },
+                { categoryId: this.funnelId }
+            ).then(response => resolve(response.data)
+            ).catch(error => resolve([]))
+          })
+        },
+        select: {
+          label: 'name', 
+          id: 'id'
+        }
+      }
+      return this.categorySelected?.parentId === ID_INTERNAL_COMMUNICATION 
+        ? loadOptionsUsers 
+        : loadOptionsCategories
+    },
     modalActions() {
       return [
         {
@@ -87,27 +141,21 @@ export default {
           required: true,
           props: {
             label: `${this.$tr('isite.cms.form.title')} *`,
-            vIf: this.categorySelected ? true : false,
+            vIf: this.categorySelected,
           }
         },
-        recipient: {
-          type: "select",
-          required: true,
-          vIf: this.categorySelected?.options?.filterFormFieldType ? true : false,
+        to: {
+          value: [],
+          type: 'select',
+          vIf: this.isTo,
           props: {
-            label: `${this.$tr('isite.cms.label.recipient')} *`
+            multiple: true,
+            useChips: true,
+            clearable: true,
+            label: `${this.$tr('isite.cms.label.recipient')} *`,
           },
           loadOptions: {
-            delayed: () => {
-              return new Promise(resolve => {
-                this.$crud.get(
-                    'apiRoutes.qrequestable.categoriesFormFields',
-                    {filter: {type: this.categorySelected?.options?.filterFormFieldType}},
-                    {categoryId: this.funnelId}
-                ).then(response => resolve(response.data)
-                ).catch(error => resolve([]))
-              })
-            }
+            ...this.whatLoadOptions
           }
         },
         run: [{
@@ -198,20 +246,21 @@ export default {
           }
         }
         //Request
-        this.$crud.index('apiRoutes.qrequestable.categoriesRule', requestParams).then(async response => {
-          const categoriesRule = this.$clone(response.data);
-          if(data) {
-            const category = await categoriesRule.find(item => item.id === data.categoryRuleId);
-            await data.fields.forEach(item => {
-              if(category.formFields[item.name]) {
-                category.formFields[item.name].value = item.value;
-              }
-            })
-          }
-          // telegram is hidden until the functionality remains
-          this.categories = await this.$clone(categoriesRule).filter(item => item.id !== this.TELEGRAM);
-          this.loading = false
-        }).catch(error => {console.log(error); this.loading = true })
+        this.$crud.index('apiRoutes.qrequestable.categoriesRule', requestParams)
+          .then(async response => {
+            const categoriesRule = this.$clone(response.data);
+            if(data) {
+              const category = await categoriesRule.find(item => item.id === data.categoryRuleId);
+              await data.fields.forEach(item => {
+                if(category.formFields[item.name]) {
+                  category.formFields[item.name].value = item.value;
+                }
+              })
+            }
+            // telegram is hidden until the functionality remains
+            this.categories = await this.$clone(categoriesRule).filter(item => item.id !== this.TELEGRAM);
+            this.loading = false
+          }).catch(error => {console.log(error); this.loading = true })
       })
     },
     async showAutomation(id) {
@@ -219,17 +268,22 @@ export default {
         const requestParams = {
           refresh: true,
           params: {
-            filter: { statusId: this.statusId, categoryId: this.$filter.values.categoryId}
+            filter: { 
+              statusId: this.statusId, 
+              categoryId: this.$filter.values.categoryId
+            }
           }
         }
-        const response = await this.$crud.show('apiRoutes.qrequestable.automationRule',id, requestParams);
+        const response = await this.$crud.show(
+          'apiRoutes.qrequestable.automationRule',
+          id, 
+          requestParams
+        );
         this.form.categoryId = response.data.categoryRuleId;
         this.form.name = response.data.name;
-        const when = response.data.runType ? {when: response.data.runType } : {};
+        const when = response.data.runType ? { when: response.data.runType } : {};
         this.form.run = {...when, ...response.data.runConfig};
-        setTimeout(() => {
-          this.form.recipient = response.data.to;
-        }, 1000);
+        this.form.to = response.data.to;
         return response.data;
       } catch (error) {
         this.$apiResponse.handleError(error, () => {
@@ -244,7 +298,7 @@ export default {
       var ruleData = {
         categoryRuleId: this.form.categoryId,
         name: this.form.name,
-        to: this.form.recipient,
+        to: this.form.to,
         runType: this.form.run.when,
         runConfig: null,
         statusId: this.statusId,
@@ -262,7 +316,7 @@ export default {
         }
       }
       const crud = this.automationId
-        ? this.$crud.update(route, this.automationId ,ruleData)
+        ? this.$crud.update(route, this.automationId, ruleData)
         : this.$crud.create(route, ruleData);
       //Request
       crud.then(response => {
