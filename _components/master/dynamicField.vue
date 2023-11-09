@@ -1354,7 +1354,7 @@ export default {
             }
           })
         } else {
-          this.responseValue = propValue ? this.$clone(this.fieldProps.emitValue ? propValue.toString() : propValue) : propValue
+          this.responseValue = propValue || propValue == 0 ? this.$clone(this.fieldProps.emitValue ? propValue.toString() : propValue) : propValue
         }
       }
     },
