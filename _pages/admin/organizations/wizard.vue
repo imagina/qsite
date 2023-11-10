@@ -138,8 +138,7 @@ export default {
       },
       dataCheck: null,
       welcome: STEP_WELCOME,
-      summary: STEP_SUMMARY,
-      themes: STEP_THEMES
+      summary: STEP_SUMMARY
     }
   },
   provide() {
