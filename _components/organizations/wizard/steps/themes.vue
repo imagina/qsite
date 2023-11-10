@@ -180,7 +180,6 @@ export default {
 }
 .step-themes .item-theme:after {
   @apply tw-absolute tw-top-0 tw-right-0 tw-bottom-0 tw-left-0 tw-border tw-border-transparent tw-rounded;
-  transition: border-color .2s,top .2s,right .2s,bottom .2s,left .2s;
   content: "";
 }
 .step-themes .activeClass:after, .step-themes .item-theme:hover:after {  
