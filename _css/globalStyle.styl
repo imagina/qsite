@@ -403,12 +403,16 @@ import('@riophae/vue-treeselect/dist/vue-treeselect.css')
     border-bottom: 2px dotted #2067b0
 
 
+.selectable
+ border: 2px solid transparent;
+
 .selectable--selected
 .selectable:active
 .selectable:hover
     background-color: $primary
     border: 2px solid $primary
     color: #fff
-    cursor pointer
-    transition: all 300ms
+    cursor: pointer
     transform: scale(1.1)
+    transition: all 0.2s ease-in-out;
+    z-index: 10
