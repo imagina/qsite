@@ -12,12 +12,12 @@
           <div class="col-6 col-sm-3  tw-mb-2 tw-p-3 tw-cursor-pointer"
               v-for="(item, index) in themes">
             <div class="item-theme"
-                :class="{ activeClass : item.id === selected.id }"
+                :class="item.id === selected.id ? 'selectable--selected' : 'selectable'"
                 @click="selectData(item)">
               <q-img contain
                     :src="item.mediaFiles.mainimage.smallThumb"
                     :ratio="1/1"
-                    class="tw-rounded tw-border tw-w-full tw-bg-white"/>
+                    class="tw-border tw-w-full tw-bg-white"/>
               <div class="item-theme-name tw-text-xs text-center text-weight-bold">
                 {{ item.name }}
               </div>
@@ -168,30 +168,14 @@ export default {
 }
 .step-themes .item-theme-name {
   @apply tw-p-1 tw-mt-1;
-  border-radius: 6px;
 }
-.step-themes .item-theme:hover .item-theme-name,
-.step-themes  .activeClass .item-theme-name {
-  background-color: var(--q-color-primary);
-  color: #fff;
-}
-.step-themes .activeClass .tw-border {
-  @apply tw-shadow-lg;
-}
-.step-themes .item-theme:after {
-  @apply tw-absolute tw-top-0 tw-right-0 tw-bottom-0 tw-left-0 tw-border tw-border-transparent tw-rounded;
-  content: "";
-}
-.step-themes .activeClass:after, .step-themes .item-theme:hover:after {  
-  border: 6px solid var(--q-color-primary);
-  border-radius: 6px;
-}
+
 .step-themes .step-sidebar-stretch {
   @apply tw-items-stretch !important;
 }
 .step-themes .img-themes {
   object-fit: contain;
-  height: 50vh;
+  height: 60vh;
 }
 .step-themes .select-description {
   display: -webkit-box;
