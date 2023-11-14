@@ -12,14 +12,16 @@
       </div>
       <div class="tw-mt-6" v-if="activeForm">
         <div class="tw-pl-4 tw-text-xs">Completa el siguiente formulario </div>
-          <dynamic-form
-            v-model="form"
-            :form-id="formId"
-            formType="grid"
-            no-actions
-            ref="ai-form"
-            default-col-class="col-6"
-          />
+          <div style="min-height: 100px">
+            <dynamic-form
+              v-model="form"
+              :form-id="formId"
+              formType="grid"
+              no-actions
+              ref="ai-form"
+              default-col-class="col-6"
+            />
+          </div>
       </div>
     </div>
 
@@ -126,8 +128,8 @@ export default {
   animation: fade-in-left 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 .step-ai > .form-inactive {
-  @apply tw-flex tw-min-h-screen tw-flex-col tw-justify-center;
-  margin-top: -95px;
+  @apply tw-flex tw-flex-col tw-justify-center;
+  height: calc(100vh - 320px);
 }
 .step-ai #dynamicFormComponent .box {
   @apply tw-shadow-none !important;
