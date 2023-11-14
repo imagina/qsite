@@ -33,7 +33,6 @@
           v-model="pace"
           ref="stepper"
           v-if="dataText.length>0"
-          class="q-pb-xl"
       >
         <q-step
             v-for="step in steps"
