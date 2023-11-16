@@ -1,7 +1,7 @@
 <template>
   <div id="wizardOrganization"
-      class="tw-h-screen tw-overflow-auto"
-      :class="{'page-full' : pace == welcome || pace == summary }"
+      class="tw-h-screen 'overflow-auto"
+      :class="{'page-full' : pace == welcome || pace == summary,  'overflow-hidden': pace == 7 }"
       >
     <div class="page-header
                 tw-border-b-2 tw-border-white tw-border-opacity-50
@@ -14,7 +14,13 @@
                 tw-h-20
     ">
       <a :href="urlBase"> <img :src="logo" class="tw-h-20 tw-w-auto"/> </a>
-      <q-linear-progress :value="progress" class="linear-progress-header"/>
+      <q-linear-progress
+        style="background-color: #ffff"
+        size="md"
+        track-color="white"
+        :value="progress"
+        class="linear-progress-header"
+      />
     </div>
 
     <div class="step-loading">
@@ -35,6 +41,8 @@
             :prefix="step.prefix"
             :title="step.title"
             :done="step.done"
+            class="q-pb-xl"
+            :style="(step.id == 7) ? 'max-height: calc(100vh - 180px);' : ''"
         >
           <component ref="stepComponent" :is="step.component" @update="navNext" :info.async="dataText"/>
         </q-step>

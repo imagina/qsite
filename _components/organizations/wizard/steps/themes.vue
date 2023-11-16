@@ -1,13 +1,9 @@
 <template>
-  <div class="
-    step-themes
-    md:tw-overflow-y-auto
-    md:tw-h-screen
-   ">
+  <div class="step-themes" >
     <h2 v-if="stepContent" class="step-title">{{stepContent.title}}</h2>
 
     <div class="step-loading" v-if="loading"><div></div><div></div></div>
-    <div class="row tw-justify-center tw-px-2 md:tw-px-4 tw-mb-6" v-else>
+    <div class="row tw-justify-center tw-px-2" v-else>
       <div class="col-12 tw-text-xs tw-mt-2 tw-px-3" v-show="selected">
         {{ $tr('isite.cms.message.selectedTemplate') }} : <span class="tw-font-bold"> {{selected.name}}</span>
       </div>
@@ -16,12 +12,12 @@
           <div class="col-6 col-sm-3  tw-mb-2 tw-p-3 tw-cursor-pointer"
               v-for="(item, index) in themes">
             <div class="item-theme"
-                :class="{ activeClass : item.id === selected.id }"
+                :class="item.id === selected.id ? 'selectable--selected' : 'selectable'"
                 @click="selectData(item)">
               <q-img contain
                     :src="item.mediaFiles.mainimage.smallThumb"
                     :ratio="1/1"
-                    class="tw-rounded tw-border tw-w-full tw-bg-white"/>
+                    class="tw-border tw-w-full tw-bg-white"/>
               <div class="item-theme-name tw-text-xs text-center text-weight-bold">
                 {{ item.name }}
               </div>
@@ -84,6 +80,7 @@ export default {
       this.getThemeSelected();
       this.getThemes();
       this.getStepInfo();
+      this.forceScroll()
     })
   },
   methods: {
@@ -150,6 +147,12 @@ export default {
     },
     getStepInfo() {
       this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_THEMES);
+    },
+    forceScroll(){
+      const scroll = document.getElementsByClassName('scroll')
+      if(scroll){
+        scroll[0].style.overflowY = 'scroll';
+      }
     }
   }
 }
@@ -166,29 +169,13 @@ export default {
 .step-themes .item-theme-name {
   @apply tw-p-1 tw-mt-1;
 }
-.step-themes .item-theme:hover .item-theme-name,
-.step-themes  .activeClass .item-theme-name {
-  background-color: var(--q-color-primary);
-  color: #fff;
-}
-.step-themes .activeClass .tw-border {
-  @apply tw-shadow-lg;
-}
-.step-themes .item-theme:after {
-  @apply tw-absolute tw-top-0 tw-right-0 tw-bottom-0 tw-left-0 tw-border tw-border-transparent tw-rounded;
-  transition: border-color .2s,top .2s,right .2s,bottom .2s,left .2s;
-  content: "";
-}
-.step-themes .activeClass:after, .step-themes .item-theme:hover:after {
-  @apply tw--top-1.5 tw--right-1.5 tw--bottom-1.5 tw--left-1.5;
-  background-color: var(--q-color-primary); z-index:-1;
-}
+
 .step-themes .step-sidebar-stretch {
   @apply tw-items-stretch !important;
 }
 .step-themes .img-themes {
   object-fit: contain;
-  height: 50vh;
+  height: 60vh;
 }
 .step-themes .select-description {
   display: -webkit-box;

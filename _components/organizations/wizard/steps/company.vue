@@ -1,6 +1,6 @@
 <template>
   <div class="step-company">
-    <div v-if="stepContent">
+    <div v-if="stepContent" class="tw-pt-10">
       <h2 class="step-title">{{ stepContent.title }}</h2>
       <div class="tw-text-base tw-px-2 md:tw-px-14 tw-text-center tw-mb-10" v-html="stepContent.description"></div>
     </div>
@@ -107,7 +107,7 @@ export default {
 }
 
 .step-company {
-  @apply tw-flex tw-min-h-screen tw-flex-col tw-justify-center;
-  margin-top: -95px;
+  @apply tw-flex tw-flex-col tw-justify-center;
+  height: calc(100vh - 320px)
 }
 </style>
