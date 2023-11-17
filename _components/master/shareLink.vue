@@ -102,8 +102,8 @@
 <script>
   export default {
     props: {
-      link: {default: false},
-      content: {default: false},
+      link: {default: null},
+      content: {default: null},
     },
     mounted() {
       this.$nextTick(function () {
