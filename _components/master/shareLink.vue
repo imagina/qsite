@@ -170,12 +170,7 @@
 </script>
 <style lang="stylus">
 #shareLinkModal
-  border-radius: $custom-radius !important
-  .q-card
-    min-width: 360px
-    min-height: 260px
   .platform:hover
     transform: scale(1.1)
     transition: all 0.2s ease-in-out;
-
 </style>
