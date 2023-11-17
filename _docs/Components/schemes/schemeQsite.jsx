@@ -1060,3 +1060,23 @@ this.$crud.post('apiRoutes.qsite.sync', requestParams)`
     }
   ]
 }
+
+export const componentShareLink = {
+  "tabs": [
+    {
+      "title": "Props",
+      "table": {
+        "data": [
+          [
+            'link',
+            { type: <code>String</code>, description: <>The link to be shared on social media or copied to the clipboard. Default <code>Null</code>.</>},
+          ],
+          [
+            'content',
+            { type: <code>String</code>, description: <>The HTML content to be copied to the clipboard. Default <code>Null</code>.</>},
+          ],
+        ]
+      }
+    }
+  ]
+}
