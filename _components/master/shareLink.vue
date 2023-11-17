@@ -79,7 +79,6 @@
                 bottom-slots
                 v-model="link"
                 outlined
-                autofocus
               >
                 <template v-slot:append>
                   <q-btn
