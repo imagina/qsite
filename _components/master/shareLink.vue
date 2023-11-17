@@ -38,7 +38,7 @@
           </div>
           <div class="row col justify-center">
               <q-btn
-                :label="$trp('isite.cms.label.copyEmbedHtml')"
+                :label="$trp('isite.cms.label.copy')"
                 color="primary"
                 @click="copyToClipBoard(content)"
                 unelevated
@@ -118,7 +118,7 @@
     computed: {
       availableButtons() {
         return {
-          content: this.content ? { icon: 'fa-light fa-code-simple', color: 'grey', label: this.$trp('isite.cms.label.copyEmbedHtml') } : false,
+          content: this.content ? { icon: 'fa-light fa-code-simple', color: 'grey', label: this.$trp('isite.cms.label.insert') } : false,
           facebook: {
             icon: 'fa-brands fa-facebook',
             color: 'blue',

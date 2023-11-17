@@ -1696,7 +1696,8 @@
           "plan": "Plan",
           "copyEmbedHtml": "Copy HTML",
           "createChildForm": "Create child form",
-          "copy": "Copy"
+          "copy": "Copy",
+          "insert": "Insert"
         },
         "message": {
           "showDemo": "Demo",
@@ -3537,7 +3538,8 @@
           "plan": "Plan",
           "copyEmbedHtml": "Copiar HTML",
           "createChildForm": "Crear formulario hijo",
-          "copy": "Copiar"
+          "copy": "Copiar",
+          "insert": "Insertar"
         },
         "message": {
           "showDemo": "Ver Demo",
