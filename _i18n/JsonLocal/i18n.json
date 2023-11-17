@@ -1956,7 +1956,9 @@
         "label": {
           "new": "New QR code",
           "view": "View QR code",
-          "download": "Download QR code"
+          "download": "Download QR code",
+          "update": "Update QR code",
+          "createQr": "Create a New QR Code"
         },
         "form": {
           "id": "ID",
@@ -1966,6 +1968,9 @@
           "entityId": "Entity Id",
           "zone": "Zone",
           "bannerInfo": "Prefixes make it easier to define the type of content contained in each QR code. Here are common examples you can use when entering your content:<br><br><li>Website URL: enter \"<b>http://</b>\" or \"<b>https://</b>\" followed by the Website URL. Example: \"<b>https://www.imaginacolombia.com\"</b></li><li>Email: enter \"<b>mailto:</b>\" followed by the Email. Example: \"<b>mailto:support@imaginacolombia.com</b>\"</li><li>Phone number: Enter \"<b>tel:</b>\" followed by the Phone number. Example: <b>tel:555-555-5555</b></li><li>Text Message (SMS)  With Pretyped Message and Number: Enter \"<b>sms:</b>\" Combine number \"<b>:</b>\" message. Example: <b>sms:555-555-5555:I am a pretyped message</b></li><li>Geo Address: Enter \"<b>geo:</b>\". Example: <b>geo:-78.400364,-85.916993</b></li><li>MeCard: Enter \"<b>mecard:</b>\". Example: <b>MECARD:Simple, Software;Some Address, Somewhere, 20430;TEL:555-555-5555;EMAIL:support@imaginacolombia.com</b></li>"
+        },
+        "messages": {
+          "sureCreateQr": "Are you sure you want to generate a QR code for this item?"
         }
       }
     }
@@ -3788,7 +3793,9 @@
         "label": {
           "new": "Nuevo Codigo QR",
           "view": "Ver codigo QR",
-          "download": "Descargar codigo QR"
+          "download": "Descargar codigo QR",
+          "update": "Update QR code",
+          "createQr": "Create a New QR Code"
         },
         "form": {
           "id": "ID",
@@ -3798,6 +3805,9 @@
           "entityId": "Id de endiad ",
           "zone": "Zona",
           "bannerInfo": "Los prefijos facilitan la definición del tipo de contenido que contiene cada código QR. Aquí hay ejemplos comunes que puedes usar al ingresar tu contenido:<br><br><li>Dirección web: ingresa \"<b>http://</b>\" o \"<b>https://</b>\" seguido de la direccion web. Ejemplo: \"<b>https://www.imaginacolombia.com\"</b></li><li>Correo electrónico: ingresa \"<b>mailto:</b>\" seguido de la direccion de correo. Ejemplo: \"<b>mailto:support@imaginacolombia.com</b>\"</li><li>Número de teléfono: Ingresa \"<b>tel:</b>\" seguido del numero telefonico. Ejemplo: <b>tel:555-555-5555</b></li><li>Mensaje de texto (SMS) con mensaje y número predefinidos: Ingresa \"<b>sms:</b>\" Combina número \"<b>:</b>\" mensaje. Ejemplo: <b>sms:555-555-5555:yo soy el mensaje</b></li><li>Ubicacion geográfica: Ingresa \"<b>geo:</b>\". Ejemplo: <b>geo:-78.400364,-85.916993</b></li><li>Tarjeta MeCard: Ingresa \"<b>mecard:</b>\". Ejemplo: <b>MECARD:Simple, Software;Some Address, Somewhere, 20430;TEL:555-555-5555;EMAIL:support@imaginacolombia.com</b></li>"
+        },
+        "messages": {
+          "sureCreateQr": "¿Está seguro de generar un código QR para este elemento?"
         }
       }
     }
