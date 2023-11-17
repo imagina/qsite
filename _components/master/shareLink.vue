@@ -1,6 +1,6 @@
 <template>
   <div id="shareLinkcomponent" v-if="link || content">
-     <!--Button to open modal to share-->
+    <!--Button to open modal to share-->
     <q-btn icon="fa-light fa-share-alt"
       @click="openModal()"
       flat
@@ -8,23 +8,21 @@
       rounded
     />
     <!--Modal Buttons-->
-    <q-dialog id="shareLinkModal" v-model="showModal">
-      <q-card>
-        <q-card-section class="row items-center">
-          <!--Title-->
-          <div class="text-h6 text-primary">
-            <q-icon name="fas fa-share-alt" class="q-mr-xs"/>
-            {{$tr('isite.cms.label.share')}}
-          </div>
-          <q-space/>
-          <!--Close button-->
-          <q-btn icon="close" flat round dense v-close-popup/>
-        </q-card-section>
-        <!-- Content preview -->
-        <q-card-section
+    <master-modal id="shareLinkModal" v-model="showModal" :title="$tr('isite.cms.label.share')" icon="fas fa-share-alt">
+      <div>
+        <q-btn
           v-if="contentPreview && content"
-          class="q-gutter-y-md"
-        >
+          icon="fa-light fa-arrow-left"
+          size="sm"
+          color="primary"
+          @click="contentPreview = false"
+          unelevated
+          round
+          no-caps
+          class="q-mb-md"
+        />
+        <!-- Content preview -->
+        <div v-if="contentPreview && content" class="q-gutter-y-md">
           <div class="row">
             <div class="col-12">
               <q-input
@@ -46,12 +44,9 @@
                 no-caps
               />
           </div>
-        </q-card-section>
+        </div>
         <!--Available buttons to share-->
-        <q-card-section
-          v-else
-          class="q-gutter-y-lg"
-        >
+        <div v-else class="q-gutter-y-lg q-pt-xs">
           <div class="row q-gutter-x-md justify-center">
             <div v-for="(button, key) in availableButtons"
               :key="key"
@@ -93,9 +88,9 @@
               </q-input>
             </div>
           </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+        </div>
+      </div>
+    </master-modal>
   </div>
 </template>
 <script>
@@ -178,6 +173,7 @@
   border-radius: $custom-radius !important
   .q-card
     min-width: 360px
+    min-height: 260px
   .platform:hover
     transform: scale(1.1)
     transition: all 0.2s ease-in-out;
