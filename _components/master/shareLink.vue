@@ -1,11 +1,12 @@
 <template>
-  <div id="shareLinkcomponent" v-if="link || content">
+  <div id="shareLinkcomponent">
     <!--Button to open modal to share-->
     <q-btn icon="fa-light fa-share-alt"
       @click="openModal()"
       flat
       unelevated
       rounded
+      v-if="showIcon"
     />
     <!--Modal Buttons-->
     <master-modal id="shareLinkModal" v-model="showModal" :title="$tr('isite.cms.label.share')" icon="fas fa-share-alt">
@@ -96,8 +97,9 @@
 <script>
   export default {
     props: {
-      link: {default: null},
-      content: {default: null},
+      url: {default: null},
+      embed: {default: null},
+      showIcon: {default: false}
     },
     mounted() {
       this.$nextTick(function () {
@@ -107,7 +109,9 @@
     data() {
       return {
         showModal: false,
-        contentPreview: false
+        contentPreview: false,
+        link: null,
+        content: null
       }
     },
     computed: {
@@ -144,6 +148,8 @@
     methods: {
       init() {
         this.stylePupop
+        this.link = this.url
+        this.content = this.embed
       },
       //Share link
       shareLink(platform) {
@@ -153,7 +159,11 @@
           this.openInNewWindow(this.availableButtons[platform].apiUrl)
         }
       },
-      openModal(){
+      openModal(item = {}){
+        if(item){
+          this.link = item.url
+          this.content = item.embed
+        }
         this.contentPreview = (!this.link && this.content)
         this.showModal = true
       },

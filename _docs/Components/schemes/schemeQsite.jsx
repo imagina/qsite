@@ -1068,11 +1068,15 @@ export const componentShareLink = {
       "table": {
         "data": [
           [
-            'link',
-            { type: <code>String</code>, description: <>The link to be shared on social media or copied to the clipboard. Default <code>Null</code>.</>},
+            'showIcon',
+            { type: <code>boolean</code>, description: <>Shows the icon to open the modal. Default <code>false</code>.</>},
           ],
           [
-            'content',
+            'url',
+            { type: <code>String</code>, description: <>The Url to be shared on social media or copied to the clipboard. Default <code>Null</code>.</>},
+          ],
+          [
+            'embed',
             { type: <code>String</code>, description: <>The HTML content to be copied to the clipboard. Default <code>Null</code>.</>},
           ],
         ]
