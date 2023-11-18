@@ -12,7 +12,11 @@
           "noMessages": "There isn't messages..."
         },
         "newProvider": "New Provider",
-        "updateProvider": "Update Provider"
+        "updateProvider": "Update Provider",
+        "label": {
+          "resend": "Resend",
+          "sendMessage": "Send a Message..."
+        }
       }
     },
     "ievent": {
@@ -1988,7 +1992,11 @@
           "noMessages": "No tienes mensajes..."
         },
         "newProvider": "Nuevo Proveedor",
-        "updateProvider": "Actualizar Proveedor"
+        "updateProvider": "Actualizar Proveedor",
+        "label": {
+          "resend": "Reenviar",
+          "sendMessage": "Envia un mensaje..."
+        }
       }
     },
     "ievent": {

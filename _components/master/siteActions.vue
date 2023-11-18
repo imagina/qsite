@@ -166,7 +166,7 @@ export default {
           {
             name: 'chat',
             label: 'Chat',
-            vIf: false && (config('app.mode') == 'iadmin') && this.$auth.hasAccess('ichat.conversations.index'),
+            vIf: (config('app.mode') == 'iadmin') && this.$auth.hasAccess('ichat.conversations.index'),
             props: {
               ...this.defaultButtonProps,
               icon: 'fa-light fa-message-lines',
