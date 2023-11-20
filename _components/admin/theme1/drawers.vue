@@ -25,10 +25,10 @@
     </q-drawer>
 
     <!-- Chat -->
-    <!--    <q-drawer bordered id="chatMaster" overlay v-model="drawer.chat" side="right"-->
-    <!--              v-if="$auth.hasAccess('ichat.conversations.index')">-->
-    <!--      <chat-list/>-->
-    <!--    </q-drawer>-->
+    <q-drawer bordered id="chatMaster" overlay v-model="drawer.chat" side="right"
+              v-if="$auth.hasAccess('ichat.conversations.index')">
+      <chat-list/>
+    </q-drawer>
 
     <!--Master filter-->
     <q-drawer bordered id="drawerFilterMaster" v-model="drawer.filter" side="right" v-if="filter.load" :overlay="false">
