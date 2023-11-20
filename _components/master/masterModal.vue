@@ -119,7 +119,7 @@ export default {
   &__body
     padding 0 6px 0 16px
     margin 16px 0
-    overflow-y scroll
+    overflow-y auto
 
   &__actions
     padding 0 16px 8px 16px
