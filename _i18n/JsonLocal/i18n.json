@@ -1699,7 +1699,9 @@
           "continue": "Continue",
           "plan": "Plan",
           "copyEmbedHtml": "Copy HTML",
-          "createChildForm": "Create child form"
+          "createChildForm": "Create child form",
+          "copy": "Copy",
+          "insert": "Insert"
         },
         "message": {
           "showDemo": "Demo",
@@ -1962,7 +1964,7 @@
           "view": "View QR code",
           "download": "Download QR code",
           "update": "Update QR code",
-          "createQr": "Generate a QR Code"
+          "createQr": "Create a New QR Code"
         },
         "form": {
           "id": "ID",
@@ -3548,7 +3550,9 @@
           "continue": "Continuar",
           "plan": "Plan",
           "copyEmbedHtml": "Copiar HTML",
-          "createChildForm": "Crear formulario hijo"
+          "createChildForm": "Crear formulario hijo",
+          "copy": "Copiar",
+          "insert": "Insertar"
         },
         "message": {
           "showDemo": "Ver Demo",
