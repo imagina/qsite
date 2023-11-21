@@ -159,7 +159,7 @@
           this.openInNewWindow(this.availableButtons[platform].apiUrl)
         }
       },
-      openModal(item = {}){
+      openModal(item = false){
         if(item){
           this.link = item.url
           this.content = item.embed
