@@ -112,7 +112,8 @@ class Middleware {
             const otherWorkSpace = appConfig.mode == 'iadmin' ? 'ipanel' : 'iadmin'
             //Validate if redirect to other workSpace
             if (this.store.getters['quserAuth/hasAccess'](`profile.access.${otherWorkSpace}`)) {
-              helper.openExternalURL(`${this.store.state.qsiteApp.baseUrl}/${otherWorkSpace}`, false)
+              const redirectToWorkSpace = window.location.href.replace(appConfig.mode, otherWorkSpace)
+              helper.openExternalURL(redirectToWorkSpace, false)
             } else {
               this.redirectTo = {name: 'app.not.authorized'}
             }
