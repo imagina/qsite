@@ -21,7 +21,7 @@
             <!--Title-->
             <div class="row items-center">
               <div id="profileImage" class="img-as-bg q-mr-sm items-center"
-                   :style="`background-image: url('${quserState.userData.mainImage}')`"></div>
+                   :style="`background-image: url('${profilePicture.smallThumb}')`"></div>
               <div class="q-ml-xs" v-if="!miniState">{{ quserState.userData.firstName }}</div>
             </div>
             <!--Icon-->
@@ -38,7 +38,7 @@
                   <!--Image profile-->
                   <div class="text-center">
                     <q-avatar size="72px" class="q-mx-auto">
-                      <img :src="quserState.userData.mainImage">
+                      <img :src="profilePicture.mediumThumb">
                     </q-avatar>
                   </div>
                   <!--User Data-->
@@ -164,6 +164,10 @@ export default {
       this.drawer.recommendation = false
       return this.$route.meta.subHeader || {}
     },
+    profilePicture(){
+      const defaultPicture = { smallThumb: this.quserState.userData.mainImage, mediumThumb: this.quserState.userData.mainImage }
+      return this.quserState.userData?.mediaFiles?.profile || defaultPicture
+    }
   },
   methods: {
     //init
