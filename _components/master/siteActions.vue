@@ -35,7 +35,7 @@
       <q-btn v-if="quserState.authenticated && (configMode == 'iadmin')" id="profileButton" rounded no-caps
              padding="2px 8px" color="white" unelevated>
         <div id="profileImage" class="img-as-bg"
-             :style="`background-image: url('${profilePicture.smallThumb}')`"></div>
+             :style="`background-image: url('${profileImage.smallThumb}')`"></div>
         <div class="q-ml-xs q-mr-sm text-blue-grey">{{ quserState.userData.firstName }}</div>
         <q-icon name="fas fa-chevron-down" size="14px" color="blue-grey"/>
         <!--Menu-->
@@ -47,7 +47,7 @@
                 <!--Image profile-->
                 <div class="text-center">
                   <q-avatar size="72px" class="q-mx-auto">
-                    <img :src="profilePicture.mediumThumb">
+                    <img :src="profileImage.mediumThumb">
                   </q-avatar>
                 </div>
                 <!--User Data-->
@@ -253,9 +253,8 @@ export default {
         ]
       }
     },
-    profilePicture(){
-      const defaultPicture = { smallThumb: this.quserState.userData.mainImage, mediumThumb: this.quserState.userData.mainImage }
-      return this.quserState.userData?.mediaFiles?.profile || defaultPicture
+    profileImage(){
+      return this.$store.getters['quserAuth/profileImage']
     }
   },
   methods: {

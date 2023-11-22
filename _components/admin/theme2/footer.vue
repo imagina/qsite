@@ -15,7 +15,7 @@
           <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated"
                  class="item-icon" padding="none">
             <q-avatar size="20px">
-              <img :src="quserState.userData.mainImage">
+              <img :src="profileImage.smallThumb">
             </q-avatar>
           </q-btn>
           <div>{{ $tr('isite.cms.label.profile') }}</div>
@@ -151,6 +151,9 @@ export default {
     params() {
       return this.currentRoute.meta.subHeader || {}
     },
+    profileImage(){
+      return this.$store.getters['quserAuth/profileImage']
+    }
   },
   methods: {
     init() {
