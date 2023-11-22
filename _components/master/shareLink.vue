@@ -11,17 +11,6 @@
     <!--Modal Buttons-->
     <master-modal id="shareLinkModal" v-model="showModal" :title="$tr('isite.cms.label.share')" icon="fas fa-share-alt">
       <div>
-        <q-btn
-          v-if="contentPreview && content"
-          icon="fa-light fa-arrow-left"
-          size="sm"
-          color="primary"
-          @click="contentPreview = false"
-          unelevated
-          round
-          no-caps
-          class="q-mb-md"
-        />
         <!-- Content preview -->
         <div v-if="contentPreview && content" class="q-gutter-y-md">
           <div class="row">
@@ -161,8 +150,8 @@
       },
       openModal(item = false){
         if(item){
-          this.link = item.url
-          this.content = item.embed
+          this.link = item.url ?? false
+          this.content = item.embed ?? false
         }
         this.contentPreview = (!this.link && this.content)
         this.showModal = true
