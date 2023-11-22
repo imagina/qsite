@@ -254,7 +254,8 @@ export default {
       }
     },
     profilePicture(){
-      return this.quserState.userData?.mediaFiles?.profile || this.quserState.userData.mainImage
+      const defaultPicture = { smallThumb: this.quserState.userData.mainImage, mediumThumb: this.quserState.userData.mainImage }
+      return this.quserState.userData?.mediaFiles?.profile || defaultPicture
     }
   },
   methods: {
