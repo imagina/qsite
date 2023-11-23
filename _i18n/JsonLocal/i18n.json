@@ -966,7 +966,10 @@
           "lastLogin": "Last login",
           "defaultAddress": "Default address",
           "documentType": "Document type",
-          "documentnumber": "Document number"
+          "documentnumber": "Document number",
+          "emailLogin": "Continue With Email",
+          "sendEmailToVerify": "We have sent an email to <b>{email}</b> where you will find a secure link to access. Please check your inbox to access securely.",
+          "introMessage": "Enter your email, and we'll send you a link to connect quickly and securely"
         },
         "message": {
           "emailExist": "Email already exist",
@@ -2949,7 +2952,10 @@
           "lastLogin": "Ultima sesión",
           "defaultAddress": "Dirección por defecto",
           "documentType": "Tipo de documento",
-          "documentnumber": "Numero de documento"
+          "documentnumber": "Numero de documento",
+          "emailLogin": "Continuar con Email",
+          "sendEmailToVerify": "Hemos enviado un correo electrónico a <b>{email}</b> en donde encontrarás un enlace seguro para acceder. Por favor, verifica tu bandeja de entrada para acceder de manera segura.",
+          "introMessage": "Ingresa tu email, te enviaremos un link para conectarte de forma rápida y segura"
         },
         "message": {
           "emailExist": "El email ya está registrado",
