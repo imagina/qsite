@@ -616,6 +616,33 @@ class Helper {
 
     return true;
   }
+  
+  //Copy to clipboard Base64
+  async copyBase64ToClipboard(base64 = '', message = 'isite.cms.messages.copyToClipboard') {
+    try {
+      //Get blob of base64Image
+      const blob = await fetch(base64).then(r => r.blob())
+      //Transform in a clipboard
+      const image = new ClipboardItem({ 'image/png': blob })
+
+      navigator.clipboard.write([image]).then(function () {
+        alert.info({
+          icon: 'fas fa-copy',
+          message: Vue.prototype.$tr(message)
+        });
+      }, function (err) {
+        alert.error({
+          icon: 'fas fa-copy',
+          message: Vue.prototype.$tr('isite.cms.messages.failedCopyToClipboard')
+        });
+      });
+    } catch (error) {
+      alert.error({
+        icon: 'fas fa-copy',
+        message: Vue.prototype.$tr('isite.cms.messages.failedCopyToClipboard')
+      });
+    }
+  }
 }
 
 const helper = new Helper();
