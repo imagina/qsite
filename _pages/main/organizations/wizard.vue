@@ -245,15 +245,17 @@ export default {
           this.progress = this.progress + this.progressPercent;
           this.$refs.stepper.next();
           this.setCacheStep(current.id + 1);
-        }
-
-        if (current.id == STEP_REGISTER) {
-          this.dataCheck.user = value.info;
           this.stepperNext(current.id);
         }
 
+        /*if (current.id == STEP_REGISTER) {
+          this.dataCheck.user = value.info;
+          this.stepperNext(current.id);
+        }*/
+
         // if it is terms and conditions the value of the check updates the data
         if (current.id == STEP_TERMS) {
+          this.dataCheck.user = this.$store.getters["quserAuth/user"];
           this.dataCheck.terms.active = value.active;
           this.dataCheck.terms.info = value.info;
         }
