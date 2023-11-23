@@ -29,13 +29,13 @@ export default [
         component: welcome,
         done: false,
     },
-    {
+    /*{
         id: STEP_REGISTER,
         title: 'Register',
         prefix: STEP_REGISTER,
         component: register,
         done: false,
-    },
+    },*/
     {
         id: STEP_TERMS,
         title: 'Terms',
