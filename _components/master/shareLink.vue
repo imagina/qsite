@@ -58,25 +58,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-12">
-              <q-input
-                rounded
-                bottom-slots
-                v-model="link"
-                outlined
-              >
-                <template v-slot:append>
-                  <q-btn
-                    :label="$trp('isite.cms.label.copy')"
-                    @click="copyToClipBoard(link)"
-                    unelevated
-                    rounded
-                    no-caps
-                    color="primary"
-                  />
-                </template>
-              </q-input>
-            </div>
+            <dynamic-field class="col-12" :field="dinamycConfig"/>
           </div>
         </div>
       </div>
@@ -132,7 +114,16 @@
         let windowW = window.innerWidth
 
         return `resizable,height=${windowH - 100},width=600,top=${50},left=${((windowW - 600) / 2)}`
-      }
+      },
+      dinamycConfig() {
+        return {
+          value: this.link,
+          type: 'copy',
+          props: {
+            label: this.$trp('isite.cms.label.copy')
+          }
+        }
+      },
     },
     methods: {
       init() {
