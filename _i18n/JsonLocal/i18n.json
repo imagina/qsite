@@ -1968,7 +1968,10 @@
           "view": "View QR code",
           "download": "Download QR code",
           "update": "Update QR code",
-          "createQr": "Create a New QR Code"
+          "createQr": "Create a New QR Code",
+          "openMobile": "Open on mobile device",
+          "scanQrCodeWithCamera": "Scan the QR code using your mobile camera to access the link",
+          "openNewTab": "Open in new Tab"
         },
         "form": {
           "id": "ID",
@@ -3815,7 +3818,10 @@
           "view": "Ver codigo QR",
           "download": "Descargar codigo QR",
           "update": "Actualizar Codigo QR",
-          "createQr": "Genera un Codigo QR"
+          "createQr": "Genera un Codigo QR",
+          "openMobile": "Accede desde tu dispositivo móvil",
+          "scanQrCodeWithCamera": "Escanea el código QR con la cámara de tu móvil para abrir el enlace",
+          "openNewTab": "Abrir en una nueva pestaña"
         },
         "form": {
           "id": "ID",
