@@ -429,7 +429,11 @@ export const dynamicFieldTypes = [
   [
     'media',
     { description: 'Load a media selector.', props: <Link to="/docs/VueJs/components/dynamicField#media-type-props">Enabled props for this field.</Link>},
-  ]
+  ],
+  [
+    'copy',
+    { description: 'Copy the value. Only text is supported.'},
+  ],
 ]
 
 export const dynamicFieldProps = [
