@@ -78,9 +78,15 @@ export default {
   computed: {
     isTo() {
       const idCategoriesWithRecipient = [1,7]
-      return idCategoriesWithRecipient.includes(this.categorySelected?.parentId)
+      const parentId = this.categorySelected.parentId || 0;
+      return idCategoriesWithRecipient.includes(parentId)
     },
     whatLoadOptions() {
+      const filterFormFieldType = this.categorySelected.options ? {
+        filter: {
+          type: this.categorySelected?.options?.filterFormFieldType || null
+        }
+      } : {};
       const ID_INTERNAL_COMMUNICATION = 7
       const loadOptionsUsers = {
         apiRoute: 'apiRoutes.quser.users',
@@ -89,16 +95,13 @@ export default {
           id: 'id'
         },
       }
-
       const loadOptionsCategories = {
         delayed: () => {
           return new Promise(resolve => {
             this.$crud.get(
               'apiRoutes.qrequestable.categoriesFormFields',
                 {
-                  filter: {
-                    type: this.categorySelected?.options?.filterFormFieldType
-                  }
+                  ...filterFormFieldType
                 },
                 { categoryId: this.funnelId }
             ).then(response => resolve(response.data)
@@ -220,21 +223,25 @@ export default {
       }
     },
     categorySelected() {
-      return this.categories.find(category => category.id == this.form.categoryId)
+      return this.categories.find(category => category.id == this.form.categoryId) || {}
     }
   },
   methods: {
     async openModal(statusId, title, id = null) {
-      this.automationId = id;
-      this.loading = true
-      let response = false;
-      this.statusId = statusId;
-      this.modalTitle = `${this.$tr('requestable.cms.newRule')} - ${title}`
-      this.show = true;
-      if(id) {
-        response = await this.showAutomation(id);
+      try {
+        this.automationId = id;
+        this.loading = true
+        let response = false;
+        this.statusId = statusId;
+        this.modalTitle = `${this.$tr('requestable.cms.newRule')} - ${title}`
+        this.show = true;
+        if(id) {
+          response = await this.showAutomation(id);
+        }
+        await this.getCategories(response);
+      } catch (error) {
+        this.loading = false
       }
-      await this.getCategories(response);
     },
     getCategories(data = false) {
       return new Promise(resolve => {
@@ -260,7 +267,7 @@ export default {
             // telegram is hidden until the functionality remains
             this.categories = await this.$clone(categoriesRule).filter(item => item.id !== this.TELEGRAM);
             this.loading = false
-          }).catch(error => {console.log(error); this.loading = true })
+          }).catch(error => {console.log(error); this.loading = false })
       })
     },
     async showAutomation(id) {
@@ -287,7 +294,7 @@ export default {
         return response.data;
       } catch (error) {
         this.$apiResponse.handleError(error, () => {
-          this.loading = true
+          this.loading = false
         })
       }
     },

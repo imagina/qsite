@@ -488,7 +488,7 @@ export default {
       if (this.useCaptcha && blocks.length){
         const lastBlock = blocks[blocks.length - 1]
 
-        if(lastBlock.fields?.captcha){
+        if(!Array.isArray(lastBlock.fields)){
           lastBlock.fields.captcha = {type: 'captcha'}
         }else {
           lastBlock.fields.push({type: 'captcha' , name: 'captcha', value: ''})
