@@ -375,6 +375,23 @@
             <codemirror v-model="responseValue" :options="fieldProps.field.options"/>
           </div>
         </q-field>
+
+        <!--copy-->
+        <q-input v-model="responseValue" v-if="loadField('copy')" v-bind="fieldProps"
+                 :ref="`copy-${fieldKey}`" :label="fieldLabel"
+                 :class="`${field.help ? 'copy-dynamic-field' : ''}`"
+        >
+          <template v-slot:append>
+            <!--Copy button-->
+            <q-btn
+                :label="$trp('isite.cms.label.copy')"
+                flat
+                no-caps
+                @click="$helper.copyToClipboard(responseValue)"
+                color="primary"
+            />
+          </template>
+        </q-input>
       </div>
     </div>
   </div>
@@ -1003,6 +1020,16 @@ export default {
               dense: true,
               ...props
             }
+          }
+          break;
+        case'copy':
+          props = {
+            bgColor: 'white',
+            readonly: true,
+            outlined: true,
+            dense: true,
+            inputClass: 'ellipsis',
+            ...props
           }
           break;
       }
@@ -1693,6 +1720,7 @@ export default {
 .select-dynamic-field,
 .treeselect-dynamic-field,
 .input-color-dynamic-field,
+.copy-dynamic-field,
 .select-icon-dinamyc-field
   .q-field__control{
     padding-right 40px
