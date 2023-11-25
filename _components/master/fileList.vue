@@ -60,7 +60,7 @@
                     <q-checkbox v-if="allowSelect"
                       v-model="table.selected"
                       :val="itemRow.filename"
-                      :class="`${table.selected.includes(itemRow.filename) ? '' : 'showOnHover'}`"
+                      :class="`${table.selected.includes(itemRow.filename) ? '' : (isDesktop ? 'showOnHover' : '') }`"
                       color="primary"
                       keep-color
                       checked-icon="fa-sharp fa-solid fa-circle-check"
@@ -68,20 +68,22 @@
                       size="lg"
                     />
                 </div>
-                <div class="tw-absolute tw-left-0 tw-bottom-20 showOnHover text-blue-grey">
+                <div class="tw-absolute tw-left-0 tw-bottom-20 text-blue-grey">
                   <q-btn
-                    class="q-ml-sm"
+                    class="q-ml-sm "
+                    :class="{'showOnHover' : isDesktop}"
                     @click="fileAction(itemRow)"
-                    icon="fa-light fa-eye"
+                    icon="fa-solid fa-eye"
                     label="Vistazo rápido"
                     size="sm"
                     dense
+                    rounded
                     no-caps
                     unelevated
-                    style="border: 1px solid teal;background: white; font-size: 12px;"
+                    style="border: 1px solid teal;background: white; font-size: 12px;z-index: 10"
                   />
                 </div>
-                <div class="tw-absolute tw-right-0 showOnHover" >
+                <div class="tw-absolute tw-right-0" :class="{'showOnHover' : isDesktop}">
                     <q-btn 
                       round 
                       color="primary" 
@@ -441,6 +443,9 @@ export default {
     },
     isSelected(){
       return name => this.table.selected.includes(name) ? 'selectable--selected scale-down' : (this.allowSelect ? 'selectable' : '')
+    },
+    isDesktop(){
+      return this.$q.screen.gt.sm
     }
   },
   methods: {
