@@ -74,7 +74,7 @@
                     :class="{'showOnHover' : isDesktop}"
                     @click="fileAction(itemRow)"
                     icon="fa-solid fa-eye"
-                    label="Vistazo rápido"
+                    :label="$tr('isite.cms.label.quickLook')"
                     size="sm"
                     dense
                     rounded
