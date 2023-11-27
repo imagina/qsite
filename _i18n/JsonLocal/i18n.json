@@ -1705,7 +1705,8 @@
           "copyEmbedHtml": "Copy HTML",
           "createChildForm": "Create child form",
           "copy": "Copy",
-          "insert": "Insert"
+          "insert": "Insert",
+          "quickLook": "Quick look"
         },
         "message": {
           "showDemo": "Demo",
@@ -3563,7 +3564,9 @@
           "copyEmbedHtml": "Copiar HTML",
           "createChildForm": "Crear formulario hijo",
           "copy": "Copiar",
-          "insert": "Insertar"
+          "insert": "Insertar",
+          "quickLook": "Vistazo rápido"
+
         },
         "message": {
           "showDemo": "Ver Demo",
