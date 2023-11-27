@@ -120,7 +120,7 @@
           value: this.link,
           type: 'copy',
           props: {
-            label: this.$trp('isite.cms.label.copy')
+            label: this.$tr('iqreable.cms.form.content')
           }
         }
       },
