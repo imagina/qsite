@@ -1,7 +1,7 @@
 <template>
   <div id="wizardOrganization"
       class="tw-h-screen 'overflow-auto"
-      :class="{'page-full' : pace == welcome || pace == summary,  'overflow-hidden': pace == 7 }"
+      :class="{'page-full' : pace == welcome || pace == summary,  'overflow-hidden': pace == 6 }"
       >
     <div class="page-header
                 tw-border-b-2 tw-border-white tw-border-opacity-50
@@ -42,13 +42,13 @@
             :title="step.title"
             :done="step.done"
             class="q-pb-xl"
-            :style="(step.id == 7) ? 'max-height: calc(100vh - 180px);' : ''"
+            :style="(step.id == 6) ? 'max-height: calc(100vh - 180px);' : ''"
         >
           <component ref="stepComponent" :is="step.component" @update="navNext" :info.async="dataText"/>
         </q-step>
 
         <template v-slot:navigation>
-          <q-stepper-navigation v-if="pace > 2">
+          <q-stepper-navigation v-if="pace > 1">
             <div class="tw-pt-3 md:tw-pt-4 tw-pb-1">
               <div class="row justify-between">
                 <div class="col-4">
@@ -56,7 +56,7 @@
                          no-caps
                          :disabled="!isActivePrevious"
                          unelevated
-                         v-if="pace > 3"
+                         v-if="pace > 2"
                          color="blue-grey"
                          icon="fas fa-arrow-left tw-mr-0 sm:tw-mr-2"
                          @click="stepperPrevious()">
@@ -92,7 +92,6 @@ import modelSteps from '@imagina/qsite/_components/organizations/wizard/steps/mo
 import storeStepWizard from '@imagina/qsite/_components/organizations/wizard/steps/store/index.ts';
 import {
   STEP_WELCOME,
-  STEP_REGISTER,
   STEP_TERMS,
   STEP_COMPANY,
   STEP_CATEGORIES,
@@ -248,14 +247,8 @@ export default {
           this.stepperNext(current.id);
         }
 
-        /*if (current.id == STEP_REGISTER) {
-          this.dataCheck.user = value.info;
-          this.stepperNext(current.id);
-        }*/
-
         // if it is terms and conditions the value of the check updates the data
         if (current.id == STEP_TERMS) {
-          this.dataCheck.user = this.$store.getters["quserAuth/user"];
           this.dataCheck.terms.active = value.active;
           this.dataCheck.terms.info = value.info;
         }
@@ -343,6 +336,16 @@ export default {
       this.dataText = await storeStepWizard().getInfoWizard();
       storeStepWizard().getCategories();
       storeStepWizard().getPlans(PLAN_BASE_ID);
+
+      this.dataCheck = {
+        user: null,
+        terms: {active: false, info: false },
+        category: null,
+        layout: null,
+        plan: null,
+        organization: ''
+      };
+
       // verifico en que step se quedo antes de recargar
       const step = await this.$cache.get.item('org-wizard-step');
       // verifico que info tenia guardada antes de recargar
@@ -359,7 +362,8 @@ export default {
       } else {
         this.getUrl();
       }
-
+      //Set the user info due register step was removed
+      this.dataCheck['user'] = this.$store.getters["quserAuth/user"];
     },
     async setCacheStep(step) {
       await this.$cache.set('org-wizard-step', step);

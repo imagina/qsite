@@ -9,7 +9,6 @@ import summary from '../summary';
 import ai from '../ai';
 import {
     STEP_WELCOME,
-    STEP_REGISTER,
     STEP_TERMS,
     STEP_COMPANY,
     STEP_CATEGORIES,
@@ -29,13 +28,6 @@ export default [
         component: welcome,
         done: false,
     },
-    /*{
-        id: STEP_REGISTER,
-        title: 'Register',
-        prefix: STEP_REGISTER,
-        component: register,
-        done: false,
-    },*/
     {
         id: STEP_TERMS,
         title: 'Terms',
