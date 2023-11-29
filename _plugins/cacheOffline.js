@@ -56,7 +56,7 @@ class cacheOffline {
     return true;
   }
 
-  async getAllWorkOrderList(apiRoute=null){
+  async getAllList(apiRoute=null){
     if (!apiRoute) return []
     const route = `${apiRoute}::offline`;
     return await cache.get.item(route) || { data: [] };
