@@ -343,7 +343,8 @@ export default {
         category: null,
         layout: null,
         plan: null,
-        organization: ''
+        organization: '',
+        form: {active: false, check: false, info: {} },
       };
 
       // verifico en que step se quedo antes de recargar
