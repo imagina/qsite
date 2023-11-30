@@ -13,14 +13,14 @@ class cacheOffline {
     return true;
   }
 
-  async updateRecord(apiRoute=null, data = {}){
+  async updateRecord(apiRoute=null, data = {}, id){
     if (!apiRoute) return []
     const route = `${apiRoute}::offline`;
     const cacheResponse = await cache.get.item(route) || { data: [] };
 
     const dataInCache = structuredClone(cacheResponse)
     const records = await dataInCache.data.map(item => 
-      String(item.id) === String(data.id) ? {...item, ...data} : item
+      String(item.id) === String(id) ? {...item, ...data} : item
     );
     const newData = {
       ...dataInCache,
