@@ -501,7 +501,8 @@ export default {
           ['quote', 'unordered', 'ordered'],
           ['fullscreen']
         ]
-      }
+      },
+      sortOptions: true
     }
   },
   computed: {
@@ -1026,11 +1027,13 @@ export default {
         })
 
         //sort by label
-        items.sort((a, b) => {
-            if (a.label > b.label) return 1
-            if (a.label < b.label) return -1
-            return 0;
-        })
+        if (this.sortOptions) {
+          items.sort((a, b) => {
+              if (a.label > b.label) return 1
+              if (a.label < b.label) return -1
+              return 0;
+          })
+        }
 
         //response
         return items
@@ -1456,10 +1459,12 @@ export default {
     },
     //Set options
     async setOptions() {
-      if (['treeSelect', 'select', 'multiSelect', 'expression'].indexOf(this.field.type) != -1) {
-        if (this.field.loadOptions) {
-          await this.getOptions()
-        }//Get options
+      if (['treeSelect', 'select', 'multiSelect', 'expression'].includes(this.field.type)) {
+        //Instance sortOrder from field props
+        if (this.field.props?.sortOptions != undefined) this.sortOptions = this.$clone(this.field.props.sortOptions)
+        //Load options
+        if (this.field.loadOptions) await this.getOptions()
+        //Set options
         else if (this.field.props && this.field.props.options) this.rootOptions = this.field.props.options
       }
     },
