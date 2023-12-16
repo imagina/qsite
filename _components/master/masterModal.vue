@@ -1,9 +1,9 @@
 <template>
-  <q-dialog 
-    v-model="show" 
+  <q-dialog
+    v-model="show"
     :content-class="`master-dialog${customPosition ? '-custom' : ''}`"
-    v-on="$listeners" 
-    :maximized="maximized" 
+    v-on="$listeners"
+    :maximized="maximized"
     :persistent="persistent"
     :position="customPosition ? 'right' : 'standard'"
     :content-style="masterModalWidthSize"
@@ -19,7 +19,7 @@
           <b>{{ title }}</b>
         </div>
         <!--Close Button-->
-        <q-btn v-close-popup icon="fas fa-times" round color="blue-grey" unelevated class="btn-small" outline
+        <q-btn v-close-popup icon="fa-light fa-xmark" round textColor="blue-grey" unelevated class="btn-medium"
                v-if="!hideCloseAction"/>
       </div>
       <q-separator inset/>
@@ -30,10 +30,10 @@
       <!--Actions Content-->
       <div class="master-dialog__actions" v-if="actions && actions.length">
         <div class="row justify-end q-gutter-sm">
-          <q-btn 
+          <q-btn
             v-for="(btn, keyBtn) in actions"
             v-if="btn.props.vIf != undefined ? btn.props.vIf : true"
-            :key="keyBtn" 
+            :key="keyBtn"
             v-bind="{...actionBtnProps, ...(btn.props || {})}"
             @click="btn.action ? btn.action() : null"
             :loading="btn.props.loading != undefined ? btn.props.loading : false"
@@ -109,6 +109,7 @@ export default {
 .master-dialog
   &__content
     background white
+    padding 0 10px
 
   &__header
     padding 16px
@@ -118,7 +119,7 @@ export default {
   &__body
     padding 0 6px 0 16px
     margin 16px 0
-    overflow-y scroll
+    overflow-y auto
 
   &__actions
     padding 0 16px 8px 16px
@@ -152,5 +153,5 @@ export default {
       border-radius $custom-radius 0 0 0 !important
 
     &__body
-      height calc(100vh - 157px)     
+      height calc(100vh - 173px)
 </style>

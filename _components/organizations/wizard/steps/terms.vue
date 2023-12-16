@@ -126,7 +126,7 @@ export default {
 }
 
 .step-terms {
-  @apply tw-flex tw-min-h-screen tw-flex-col tw-justify-center;
-  margin-top: -95px;
+  @apply tw-flex tw-flex-col tw-justify-center;
+  height: calc(100vh - 290px)
 }
 </style>

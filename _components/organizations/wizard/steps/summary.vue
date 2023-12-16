@@ -98,7 +98,7 @@ export default {
     async getDataSelected() {
       try {
         this.loading = true;
-        if(this.infoBase) {
+        if(false) { //forced due unkown issue
             this.selected=this.infoBase;
             this.$emit("update", {active: true});
             this.loading = false;
@@ -108,10 +108,10 @@ export default {
           if(info != null) {
               this.selected=info;
               this.$emit("update", {active: true});
+              this.selected.user =  info?.user ?? this.$store.getters["quserAuth/user"];
           } 
           this.loading = false;
         }
-        console.log(this.selected);
       } catch (error) {
         console.log(error);
       }

@@ -146,7 +146,10 @@
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
             <slot name="before-options"/>
             <q-item>
-              <q-item-section class="text-grey">
+              <q-item-section class="text-grey" v-if="field.loadOptions.filterByQuery">
+                {{ fieldProps.hint }}
+              </q-item-section>
+              <q-item-section class="text-grey" v-else>
                 {{ $tr('isite.cms.message.notFound') }}
               </q-item-section>
             </q-item>
@@ -350,6 +353,17 @@
             :options="formatOptions"
             :class="`${field.help ? 'expression-dinamyc-field' : ''}`"
         />
+        <localizedPhone
+            v-if="loadField('localizedPhone')"
+            v-model="responseValue"
+            :fieldProps="fieldProps"
+        />
+
+        <multipleDynamicFields
+            v-if="loadField('multiplier')"
+            v-model="responseValue"
+            :fieldProps="fieldProps"
+        />
         <!--Code Editor-->
         <q-field v-model="responseValue" v-if="loadField('code')"
                  v-bind="fieldProps.fieldComponent"
@@ -361,6 +375,23 @@
             <codemirror v-model="responseValue" :options="fieldProps.field.options"/>
           </div>
         </q-field>
+
+        <!--copy-->
+        <q-input v-model="responseValue" v-if="loadField('copy')" v-bind="fieldProps"
+                 :ref="`copy-${fieldKey}`" :label="fieldLabel"
+                 :class="`${field.help ? 'copy-dynamic-field' : ''}`"
+        >
+          <template v-slot:append>
+            <!--Copy button-->
+            <q-btn
+                :label="$trp('isite.cms.label.copy')"
+                flat
+                no-caps
+                @click="$helper.copyToClipboard(responseValue)"
+                color="primary"
+            />
+          </template>
+        </q-input>
       </div>
     </div>
   </div>
@@ -386,6 +417,8 @@ import selectMedia from '@imagina/qmedia/_components/selectMedia'
 import googleMapMarker from '@imagina/qsite/_components/master/googleMapMarker'
 import JsonEditorVue from 'json-editor-vue'
 import expressionField from '@imagina/qsite/_components/master/expressionField/index.vue';
+import localizedPhone from '@imagina/qsite/_components/master/localizedPhone/index.vue';
+import multipleDynamicFields from '@imagina/qsite/_components/master/multipleDynamicFields/views'
 //Code mirror
 import {codemirror} from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -432,7 +465,9 @@ export default {
     googleMapMarker,
     JsonEditorVue,
     expressionField,
-    codemirror
+    codemirror,
+    localizedPhone,
+    multipleDynamicFields,
   },
   watch: {
     value: {
@@ -501,7 +536,8 @@ export default {
           ['quote', 'unordered', 'ordered'],
           ['fullscreen']
         ]
-      }
+      },
+      sortOptions: true
     }
   },
   computed: {
@@ -987,6 +1023,16 @@ export default {
             }
           }
           break;
+        case'copy':
+          props = {
+            bgColor: 'white',
+            readonly: true,
+            outlined: true,
+            dense: true,
+            inputClass: 'ellipsis',
+            ...props
+          }
+          break;
       }
 
       //Add ruler to required field
@@ -1026,11 +1072,13 @@ export default {
         })
 
         //sort by label
-        items.sort((a, b) => {
+        if (this.sortOptions) {
+          items.sort((a, b) => {
             if (a.label > b.label) return 1
             if (a.label < b.label) return -1
             return 0;
-        })
+          })
+        }
 
         //response
         return items
@@ -1344,7 +1392,7 @@ export default {
             }
           })
         } else {
-          this.responseValue = propValue ? this.$clone(this.fieldProps.emitValue ? propValue.toString() : propValue) : propValue
+          this.responseValue = propValue || propValue == 0 ? this.$clone(this.fieldProps.emitValue ? propValue.toString() : propValue) : propValue
         }
       }
     },
@@ -1420,7 +1468,7 @@ export default {
             this.rootOptionsData = this.$clone(response.data)
             let formatedOptions = []
             //Format response
-            response.data = response.data.map((item, index) => ({...item, id: item.id || (index + 1)}))
+            response.data = response.data.map((item, index) => ({...item, id: item.id >= 0 ? item.id : (index + 1)}))
             formatedOptions = ['select', 'expression'].includes(this.field.type) ?
                 this.$array.select(response.data, loadOptions.select || fieldSelect) :
                 this.$array.tree(response.data, loadOptions.select || fieldSelect)
@@ -1456,10 +1504,12 @@ export default {
     },
     //Set options
     async setOptions() {
-      if (['treeSelect', 'select', 'multiSelect', 'expression'].indexOf(this.field.type) != -1) {
-        if (this.field.loadOptions) {
-          await this.getOptions()
-        }//Get options
+      if (['treeSelect', 'select', 'multiSelect', 'expression'].includes(this.field.type)) {
+        //Instance sortOrder from field props
+        if (this.field.props?.sortOptions != undefined) this.sortOptions = this.$clone(this.field.props.sortOptions)
+        //Load options
+        if (this.field.loadOptions) await this.getOptions()
+        //Set options
         else if (this.field.props && this.field.props.options) this.rootOptions = this.field.props.options
       }
     },
@@ -1554,6 +1604,15 @@ export default {
         })
       }
 
+      //Hint message for filterByQuery
+      if (loadOptions && loadOptions.filterByQuery) {
+        if (val.length > 2) {
+          if (!this.rootOptions.length) {
+            this.fieldProps.hint = `${this.$tr('isite.cms.message.noResultsFoundTryAnotherSearchValue')}`
+          }
+        }
+      }
+
       //Emit filter Value
       this.$emit("filter", val)
     },
@@ -1605,7 +1664,6 @@ export default {
 
   .q-field--outlined .q-field__control {
     padding-letf 12px
-    padding-right 40px
   }
 
   .expression-dinamyc-field {
@@ -1663,4 +1721,20 @@ export default {
 
 #ckEditorComponent
   width 100%
+
+// help padding-right
+.crud-dynamic-field,
+.input-dynamic-field,
+.search-dynamic-field,
+.date-dynamic-field,
+.hour-dynamic-field,
+.full-date-dynamic-field,
+.select-dynamic-field,
+.treeselect-dynamic-field,
+.input-color-dynamic-field,
+.copy-dynamic-field,
+.select-icon-dinamyc-field
+  .q-field__control {
+    padding-right 40px
+  }
 </style>

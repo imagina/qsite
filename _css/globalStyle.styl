@@ -209,6 +209,21 @@ import('@riophae/vue-treeselect/dist/vue-treeselect.css')
         right -2px
         top -2px
 
+  .btn-outlined-custom
+    border 1px solid rgba(0, 13, 71, 0.15)
+
+    .q-btn__content
+      color $primary
+
+  .btn-border-dropdown-custom
+    border-radius 10px
+
+    button:nth-child(2)
+      border-left 1px solid rgba(0, 13, 71, 0.15) !important
+
+
+
+
   //===================== VUE TREE SELECT
 
   .vue-treeselect__portal-target
@@ -378,3 +393,28 @@ import('@riophae/vue-treeselect/dist/vue-treeselect.css')
     right: -8px
     bottom: -8px
     border 2px solid $primary
+
+.cursor-actionable
+.cursor-actionable
+  color #2067b0
+  cursor pointer
+  max-width max-content
+  &:hover
+    border-bottom: 2px dotted #2067b0
+
+.selectable
+  border: 2px solid transparent important
+  border-radius: 4px !important
+  z-index: 0 !important
+
+.selectable--selected
+.selectable:active
+.selectable:hover
+    background-color: $primary !important
+    border: 2px solid $primary !important
+    border-radius: 4px !important
+    color: #fff
+    cursor: pointer
+    transform: scale(1.1)
+    transition: all 0.2s ease-in-out;
+    z-index: 10 !important
