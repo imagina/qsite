@@ -1074,9 +1074,9 @@ export default {
         //sort by label
         if (this.sortOptions) {
           items.sort((a, b) => {
-            if (a.label > b.label) return 1
-            if (a.label < b.label) return -1
-            return 0;
+              if (a.label > b.label) return 1
+              if (a.label < b.label) return -1
+              return 0;
           })
         }
 
