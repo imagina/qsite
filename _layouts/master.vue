@@ -9,7 +9,6 @@
     <!-- ROUTER VIEW -->
     <q-page-container>
       <!--Page route-->
-      <offlineAlert v-if="isAppOffline"/>
       <div id="routeInformationContent" v-if="appConfig.mode == 'iadmin'"
            :class="`q-hide q-md-show ${iadminTheme == 1 ? 'bg-primary' : 'bg-white'}`">
         <div id="subContent" class="row justify-between items-center">
@@ -67,9 +66,7 @@ import footerPanel from '@imagina/qsite/_components/panel/footer'
 //Components
 import cropperComponent from '@imagina/qsite/_components/master/cropper'
 import activitiesActions from '@imagina/qgamification/_components/activitiesActions/index.vue'
-import Alert from '@imagina/qoffline/_components/alert.vue';
-import Progressrequest from '@imagina/qoffline/_components/Progressrequest.vue';
-import offlineAlert from '@imagina/qsite/_components/master/offlineAlert.vue';
+import Alert from '@imagina/qoffline/_components/Alert.vue'
 
 export default {
   name: "MasterLayout",
@@ -79,6 +76,7 @@ export default {
     let siteName = this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name')
     let siteDescription = this.$store.getters['qsiteApp/getSettingValueByName']('core::site-description')
     let iconHref = this.$store.getters['qsiteApp/getSettingMediaByName']('isite::favicon').path
+
     return {
       title: `${this.useLegacyStructure ? this.$tr(routeTitle) : routeTitle} | ${siteName}`,
       meta: {
@@ -103,9 +101,7 @@ export default {
     drawersPanel,
     footerPanel,
     //Offline
-    Alert,
-    Progressrequest,
-    offlineAlert
+    Alert
   },
   watch: {
     shouldChangePassword(data) {
@@ -119,7 +115,7 @@ export default {
   },
   mounted() {
     this.$nextTick(async function () {
-      this.init();
+      this.init()
     })
   },
   data() {
@@ -128,13 +124,10 @@ export default {
       homePage: 'isite_cms_main_home',
       modalForce: {
         shouldChangePassword: false
-      },
+      }
     }
   },
   computed: {
-    isAppOffline() {
-      return this.$store.state.qofflineMaster.isAppOffline;
-    },
     appState() {
       return this.$store.state.qsiteApp
     },

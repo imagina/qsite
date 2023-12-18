@@ -76,15 +76,7 @@ export default {
       handler: function (newValue) {
         this.init()
       }
-    },
-    'offline': {
-      deep: true,
-      handler: function (newValue) {
-        if(!newValue) {
-          this.init()
-        }
-      }
-    },
+    }
   },
   mounted() {
     this.$nextTick(function () {
@@ -103,9 +95,6 @@ export default {
     }
   },
   computed: {
-    offline() {
-      return this.$store.state.qofflineMaster.isAppOffline;
-    },
     //Page title
     pageTitle() {
       const useLegacyStructure = parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::legacyStructureCMS') || 0)

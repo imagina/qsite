@@ -1418,12 +1418,7 @@ export default {
         //Instance default options keeping the options for the selected values
         let defaultOptions = this.$clone([
           ...(this.field.props?.options || []),
-          ...this.rootOptions.filter(opt => {
-            if( this.responseValue && typeof this.responseValue !== 'object') {
-              return this.responseValue && this.responseValue.includes((opt.value || opt.id).toString())
-            }
-            return this.responseValue && this.responseValue[opt.value || opt.id];
-          })
+          ...this.rootOptions.filter(opt => this.responseValue && this.responseValue.includes((opt.value || opt.id).toString()))
         ])
 
         //==== Request options
@@ -1460,7 +1455,7 @@ export default {
             ? this.$crud.get(loadOptions.apiRoute, params, parametersUrl) 
             : this.$crud.index(loadOptions.apiRoute, params, true);
           //Request
-          crud.then(response => {
+          crud(loadOptions.apiRoute, params, parametersUrl).then(response => {
             if (this.keyField !== '') {
               const keyData = {[this.keyField]: response.data}
               this.$helper.setDynamicSelectList(keyData);

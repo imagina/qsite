@@ -102,10 +102,10 @@ export default {
     readOnlyData: {
       deep: true,
       handler: async function () {
-        if (this.$filter.storeFilter && this.currentUrlFilter.length > 0) {
+        if(this.$filter.storeFilter && this.currentUrlFilter.length > 0 ) {
           const obj = await this.$helper.convertStringToObject();
           Object.keys(this.readOnlyData).forEach((key) => {
-            if (obj.hasOwnProperty(key)) {
+            if(obj.hasOwnProperty(key)) {
               this.readOnlyData[key].value = obj[key];
             }
           })
@@ -119,7 +119,7 @@ export default {
   created() {
     this.$nextTick(async function () {
       const origin = window.location.href.split('?');
-      if (origin.length === 2) {
+      if(origin.length === 2) {
         this.currentUrlFilter = origin[1] || '';
       }
       await this.init();
@@ -136,7 +136,7 @@ export default {
   },
   computed: {
     filter() {
-      if (this.$filter.storeFilter && this.currentUrlFilter.length > 0) {
+      if(this.$filter.storeFilter && this.currentUrlFilter.length > 0) {
         this.filterValues = this.$helper.convertStringToObject();
       }
       if (!this.$filter.storeFilter && this.$filter.values) this.filterValues = this.$clone(this.$filter.values)
@@ -176,8 +176,6 @@ export default {
               {label: this.$tr('isite.cms.label.lastYear'), value: 'lastYear'},
               {label: this.$tr('isite.cms.label.numYearsAgo', {numYears: 2}), value: 'twoYearsAgo'},
               {label: this.$tr('isite.cms.label.lastNumYears', {numYears: 2}), value: 'lastTwoYears'},
-              {label: this.$tr('isite.cms.label.daysAroundToday', {numDays: 15}), value: '15daysAroundToday'},
-              {label: this.$tr('isite.cms.label.daysAroundToday', {numDays: 5}), value: '5daysAroundToday'}
             ]
           }
         },
@@ -249,31 +247,30 @@ export default {
   },
   methods: {
     async init() {
-      const filterValues = this.$filter.storeFilter && this.currentUrlFilter.length > 0
-          ? await this.$helper.convertStringToObject()
-          : this.filterValues;
+      const filterValues = this.$filter.storeFilter && this.currentUrlFilter.length > 0 
+        ? await this.$helper.convertStringToObject() 
+        : this.filterValues;
       this.filterValues = filterValues || {};
       await this.emitFilter(true);
     },
     //Emit filter
     async emitFilter(filterBtn = false) {
-      if (!filterBtn) {
-        if (this.$filter.storeFilter) {
+      if(!filterBtn) {
+        if(this.$filter.storeFilter) {
           const objUrl = await this.$helper.convertStringToObject();
           const type = objUrl.type ? {type: objUrl.type} : {};
-          const date = objUrl.dateStart && objUrl.dateEnd
-              ? {dateEnd: objUrl.dateEnd, dateStart: objUrl.dateStart}
-              : {};
+          const date = objUrl.dateStart && objUrl.dateEnd 
+          ? { dateEnd: objUrl.dateEnd, dateStart: objUrl.dateStart} 
+          : {};
           this.filterValues = {...this.filterValues, ...type, ...date};
         }
         this.currentUrlFilter = '';
       }
       this.changeDate();
       this.$filter.addValues(this.filterValues);
-      if (this.$filter.storeFilter) {
+      if(this.$filter.storeFilter) {
         this.mutateCurrentURL();
-      }
-      ;
+      };
       //Emit Filter
       if (this.filter && this.filter.callBack) {
         this.filter.callBack(this.filter)//Call back
@@ -285,8 +282,8 @@ export default {
       try {
         let paramsUrl = '';
         Object.keys(this.filterValues).forEach((item, index) => {
-          if (this.$filter.fields.hasOwnProperty(item)) {
-            if (index === 0) {
+          if(this.$filter.fields.hasOwnProperty(item)) {
+            if(index === 0) {
               paramsUrl += this.validateObjectFilter('?', item);
             } else {
               paramsUrl += this.validateObjectFilter('&', item);
@@ -302,10 +299,10 @@ export default {
     },
     // validate Object Filter
     validateObjectFilter(operator = '?', item) {
-      if (this.filterValues[item]) {
-        if (typeof this.filterValues[item] === 'object'
-            || Array.isArray(this.filterValues[item])) {
-          return `${operator}${item}=${JSON.stringify(this.filterValues[item])}`;
+      if(this.filterValues[item]) {
+        if(typeof this.filterValues[item] === 'object' 
+          || Array.isArray(this.filterValues[item])) {
+          return  `${operator}${item}=${JSON.stringify(this.filterValues[item])}`;
         }
         return `${operator}${item}=${this.filterValues[item]}`;
       }
@@ -389,14 +386,6 @@ export default {
               fromDate = this.$moment().startOf('year').format('YYYY-MM-DD 00:00:00')
               toDate = this.$moment().endOf('year').format('YYYY-MM-DD 23:59:59')
               break;
-            case '15daysAroundToday':
-              fromDate = this.$moment().subtract(7, 'days').format('YYYY-MM-DD 00:00:00');
-              toDate = this.$moment().add(7, 'days').format('YYYY-MM-DD 23:59:59');
-              break;
-            case '5daysAroundToday':
-              fromDate = this.$moment().subtract(2, 'days').format('YYYY-MM-DD 00:00:00');
-              toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD 23:59:59');
-              break;
             case 'customRange':
               if (fromDate)
                 fromDate = this.$moment(fromDate).format('YYYY-MM-DD 00:00:00')
@@ -422,14 +411,11 @@ export default {
   #tabsContent
     .q-tab__content
       min-width auto
-
-  .q-field.q-field--float .q-field__label
-    color: $primary
-
-  .q-field__control
+  .q-field.q-field--float .q-field__label 
+    color: $primary  
+  .q-field__control  
     .q-field__append .q-icon
-      color: $tertiary
-
+      color: $tertiary 
     .q-field__append:last-child .q-icon
-      color: $primary
+      color: $primary   
 </style>

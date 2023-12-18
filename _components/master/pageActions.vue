@@ -61,7 +61,7 @@
       {{ description }}
     </span>
     <!--Filter data-->
-    <div class="col-12 tw-mt-3" v-if="(filter.hasValues || Object.keys(quickFilters).length) && !isAppOffline">
+    <div class="col-12 tw-mt-3" v-if="filter.hasValues || Object.keys(quickFilters).length">
       <!--<q-separator class="q-mb-sm"/>-->
       <div class="text-blue-grey ellipsis text-caption items-center row">
         <q-icon name="fa-light fa-filter" class="q-mr-xs" color="amber" size="18px"/>
@@ -136,9 +136,6 @@ export default {
     }
   },
   computed: {
-    isAppOffline() {
-      return this.$store.state.qofflineMaster.isAppOffline;
-    },
     //Return filter data
     filter() {
       this.filterData = this.$clone(this.$filter.values)
@@ -179,7 +176,7 @@ export default {
         //Export
         {
           label: this.$tr('isite.cms.label.export'),
-          vIf: (this.exportParams && !excludeActions.includes('export') && !this.isAppOffline),
+          vIf: (this.exportParams && !excludeActions.includes('export')),
           props: {
             icon: 'fa-light fa-file-arrow-down'
           },
@@ -208,7 +205,7 @@ export default {
         //Filter
         {
           label: this.$tr('isite.cms.label.filter'),
-          vIf: (this.filter.load && !excludeActions.includes('filter') && !this.isAppOffline),
+          vIf: (this.filter.load && !excludeActions.includes('filter')),
           props: {
             icon: 'fa-light fa-filter',
             id: 'filter-button-crud',
@@ -219,7 +216,7 @@ export default {
         {
           label: this.$trp('isite.cms.label.refresh'),
           type: this.multipleRefresh ? 'btn-dropdown' : '',
-          vIf: (this.params.refresh && !excludeActions.includes('refresh') && !this.isAppOffline),
+          vIf: (this.params.refresh && !excludeActions.includes('refresh')),
           props: {
             icon: 'fa-light fa-rotate-right',
             id: 'refresh-button-crud'
@@ -230,7 +227,7 @@ export default {
               action: () => this.refreshByTime(0)
             },
             {
-              label: this.$tr('isite.cms.label.refreshEveryMinute', {min: 1}),
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 1}),
               action: () => this.refreshByTime(1)
             },
             {

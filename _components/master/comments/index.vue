@@ -167,7 +167,6 @@ export default defineComponent({
     commentableId: {
       type: Number,
       required: true,
-      default: () => 0
     },
     commentableType: {
       type: String,
