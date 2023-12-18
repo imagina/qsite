@@ -119,7 +119,11 @@ class localCache {
       if (!keysToRemove.length) return resolve(true)
 
       //Remove keys
-      keysToRemove.forEach(key => LocalForage.removeItem(key))
+      keysToRemove.forEach(key => {
+        if (key !== 'requests') {
+          LocalForage.removeItem(key)
+        }
+      })
       resolve(true)
     })
   }
