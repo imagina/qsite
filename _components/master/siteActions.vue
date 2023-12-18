@@ -1,5 +1,5 @@
 <template>
-  <div id="siteActionscomponent">
+  <div id="siteActionscomponent" class="tw-flex">
     <div :class="`row q-gutter-${gutter}`">
       <!--Actions-->
       <q-btn v-for="(btn, keyAction) in actions.buttons" :key="keyAction" v-bind="btn.props"
@@ -30,12 +30,14 @@
         </q-menu>
         <!-- Tooltip -->
         <q-tooltip>{{ btn.label }}</q-tooltip>
+        <!-- Badge -->
+        <q-badge v-if="btn.badgeLabel" :color="btn.badgeColor || 'orange'" rounded floating>{{ btn.badgeLabel }}</q-badge>
       </q-btn>
       <!--Auth section-->
       <q-btn v-if="quserState.authenticated && (configMode == 'iadmin')" id="profileButton" rounded no-caps
              padding="2px 8px" color="white" unelevated>
         <div id="profileImage" class="img-as-bg"
-             :style="`background-image: url('${profileImage.smallThumb}')`"></div>
+             :style="`background-image: url('${ profileImage && profileImage.smallThumb}')`"></div>
         <div class="q-ml-xs q-mr-sm text-blue-grey">{{ quserState.userData.firstName }}</div>
         <q-icon name="fas fa-chevron-down" size="14px" color="blue-grey"/>
         <!--Menu-->
@@ -47,7 +49,7 @@
                 <!--Image profile-->
                 <div class="text-center">
                   <q-avatar size="72px" class="q-mx-auto">
-                    <img :src="profileImage.mediumThumb">
+                    <img :src="profileImage && profileImage.mediumThumb">
                   </q-avatar>
                 </div>
                 <!--User Data-->
@@ -106,6 +108,9 @@ export default {
     }
   },
   computed: {
+    isAppOffline() {
+      return this.$store.state.qofflineMaster.isAppOffline;
+    },
     //Quser state
     quserState() {
       return this.$store.state.quserAuth
@@ -133,6 +138,20 @@ export default {
 
       return {
         buttons: [
+          //Offline
+          {
+            vIf: this.$store.getters['qsiteApp/getSettingValueByName']('isite::offline'),
+            name: 'offline',
+            label: this.$tr('isite.cms.label.offline'),
+            badgeColor: 'orange',
+            badgeLabel: this.$store.state.qofflineMaster.totalRequests,
+            props: {
+              ...this.defaultButtonProps,
+              icon: 'fa-light fa-cloud-slash',
+              class: `btn-small`
+            },
+            action: () => this.$eventBus.$emit('toggleMasterDrawer', 'offline')
+          },
           //Go To Site
           {
             vIf: this.showGoToSiteButton,
@@ -239,7 +258,7 @@ export default {
           //logout
           {
             name: 'settings',
-            vIf: (config('app.mode') == 'iadmin'),
+            vIf: (config('app.mode') == 'iadmin') && !this.isAppOffline,
             props: {
               ...this.defaultButtonProps,
               label: this.$tr('isite.cms.configList.signOut'),

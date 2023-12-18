@@ -1,7 +1,7 @@
 import LocalForage from 'localforage'
 
 class localCache {
-  constructor() {
+  constructor(cacheName, storage) {
     if (process.env.CLIENT) {
       //Order config to localForage
       let configDrivers = () => {
@@ -16,9 +16,9 @@ class localCache {
       //Config for LocalForage
       LocalForage.config({
         driver: configDrivers(),
-        name: this.nameDB(),
+        name: cacheName || this.nameDB(),
         version: 1,
-        storeName: 'storage',
+        storeName: storage || 'storage',
       })
     }
 
@@ -104,7 +104,7 @@ class localCache {
   //Remove an item from storage
   remove(index = {}) {
     return new Promise(async (resolve, reject) => {
-      if (!index || !process.env.CLIENT) return resolve(undefined) //Validate if is side Server
+      if (!index || !process.env.CLIENT || !window.navigator.onLine) return resolve(undefined) //Validate if is side Server
       //Default keys to delete
       let keysToRemove = (index && index.allKey) ? [] : [index]
 
@@ -119,7 +119,13 @@ class localCache {
       if (!keysToRemove.length) return resolve(true)
 
       //Remove keys
-      keysToRemove.forEach(key => LocalForage.removeItem(key))
+      keysToRemove.forEach(key => {
+        const containsOffline = key.includes('::offline');
+
+        if (key !== 'requests' && !containsOffline) {
+          LocalForage.removeItem(key)
+        }
+      })
       resolve(true)
     })
   }
@@ -141,16 +147,15 @@ class localCache {
   clear() {
     return new Promise((resolve, reject) => {
       if (!process.env.CLIENT) return resolve(undefined) //Validate if is side Server
-
-      LocalForage.clear().then(value => {
-        resolve(true)
-      }).catch(error => {
-      })
+      this.keys().then(keys => {
+        keys.forEach(async key => !key.includes("requests") && await this.remove(key));
+      }).then(() => resolve(true))
     })
   }
 
   //Restore cache, save any data
   restore(keys = []) {
+    console.warn("Restore cache");
     return new Promise((resolve, reject) => {
       if (!process.env.CLIENT) return resolve(undefined) //Validate if is side Server
 

@@ -30,6 +30,10 @@
       <chat-list/>
     </q-drawer>
 
+    <!--Master filter-->
+    <q-drawer bordered id="drawerFilterMaster" v-model="drawer.filter" side="right" v-if="filter.load" :overlay="false">
+      <master-filter/>
+    </q-drawer>
 
     <!--Recommendation-->
     <q-drawer id="drawerRecommendationMaster" v-model="drawer.recommendation" side="right" behavior="mobile"
@@ -43,6 +47,12 @@
               v-if="$auth.hasAccess('notification.notifications.manage')">
       <master-notifications/>
     </q-drawer>
+
+    <!--Offline-->
+    <q-drawer bordered id="drawerOfflineMaster" v-model="drawer.offline" side="right" overlay
+              v-if="$store.getters['qsiteApp/getSettingValueByName']('isite::offline')">
+      <offline/>
+    </q-drawer>
   </div>
 </template>
 <script>
@@ -52,9 +62,11 @@ import sidebarMixins from '@imagina/qsite/_mixins/sidebarMixins'
 import configList from '@imagina/qsite/_components/master/configList'
 import chatList from '@imagina/qchat/_components/drawerChatList'
 import menuList from '@imagina/qsite/_components/master/recursiveItem'
+import masterFilter from '@imagina/qsite/_components/master/masterFilter'
 import checkin from '@imagina/qcheckin/_components/checkin'
 import masterRecommendation from '@imagina/qsite/_components/master/masterRecommendations'
 import masterNotifications from '@imagina/qnotification/_components/drawerNotifications'
+import offline from '@imagina/qoffline/_components/drawerOffline'
 
 export default {
   beforeDestroy() {
@@ -63,7 +75,7 @@ export default {
   },
   mixins: [sidebarMixins],
   props: {},
-  components: {menuList, configList, chatList, checkin, masterRecommendation, masterNotifications},
+  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation, masterNotifications,offline},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -80,11 +92,14 @@ export default {
         menu: this.$q.platform.is.mobile ? false : true,
         config: false,
         chat: false,
+        filter: false,
         checkin: false,
         recommendation: false,
-        notification: false
+        notification: false,
+        offline: false
       },
-      appConfig: config('app')
+      appConfig: config('app'),
+      filter: this.$filter
     }
   },
   computed: {
@@ -141,6 +156,7 @@ export default {
           this.miniState = !this.miniState
         }
       } else {
+
         this.drawer[drawerName] = !this.drawer[drawerName]
       }
     }

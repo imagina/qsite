@@ -41,7 +41,7 @@
           hover:tw-ease-in 
           hover:tw--translate-y-1 icon-plus
         "
-        v-if="!disableCrud && hover && columnData.type !== 2"
+        v-if="!disableCrud && hover"
         @click="addColumnKanban"
       >
         <i 
@@ -189,7 +189,6 @@
             hover:tw-text-white 
             hover:tw-bg-gray-200"
           @click="openFormComponentModal(columnData.id, columnData.title)"
-          :disabled="typeof columnData.id == 'string'"
           >
           <i class="fa-solid fa-plus"></i> 
         </q-btn>
@@ -357,7 +356,7 @@ export default {
   },
   methods: {
     addColumnKanban() {
-      this.addColumn(this.columnIndex, this.columnData);
+      this.addColumn(this.columnIndex);
     },
     async columnDeleteMessages() {
       this.$q.dialog({

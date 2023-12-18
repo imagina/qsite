@@ -61,7 +61,7 @@
       {{ description }}
     </span>
     <!--Filter data-->
-    <div class="col-12 tw-mt-3" v-if="filter.hasValues || Object.keys(quickFilters).length">
+    <div class="col-12 tw-mt-3" v-if="(filter.hasValues || Object.keys(quickFilters).length) && !isAppOffline">
       <!--<q-separator class="q-mb-sm"/>-->
       <div class="text-blue-grey ellipsis text-caption items-center row">
         <q-icon name="fa-light fa-filter" class="q-mr-xs" color="amber" size="18px"/>
@@ -86,8 +86,6 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
-    <!-- Master Filter Component -->
-    <master-filter :show="drawer.filter" v-if="filter.load"/>
     <master-synchronizable v-model="syncParams" v-if="$auth.hasAccess('isite.synchronizables.index')" ref="syncComponent" />
   </div>
 </template>
@@ -95,7 +93,6 @@
 //Components
 import masterExport from "@imagina/qsite/_components/master/masterExport"
 import masterSynchronizable from "@imagina/qsite/_components/master/masterSynchronizable"
-import masterFilter from "@imagina/qsite/_components/master/masterFilter"
 
 export default {
   beforeDestroy() {
@@ -120,22 +117,7 @@ export default {
       default: () => {}
     },
   },
-  inject: {
-    filterPlugin: {
-      from: 'filterPlugin',
-      default: {
-        name: false,
-        fields: {},
-        values: {},
-        callBack: false,
-        pagination: {},
-        load: false,
-        hasValues: false,
-        storeFilter: false,
-      }
-    }
-  },
-  components: {masterExport, masterSynchronizable, masterFilter},
+  components: {masterExport, masterSynchronizable},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -150,19 +132,17 @@ export default {
       filterData: {},
       refreshIntervalId: null,
       titleRefresh: this.$tr('isite.cms.label.refreshAtOnce'),
-      timeRefresh: 0,
-      drawer: {
-        filter: false
-      },
+      timeRefresh: 0
     }
   },
   computed: {
+    isAppOffline() {
+      return this.$store.state.qofflineMaster.isAppOffline;
+    },
     //Return filter data
     filter() {
-      this.filterData = this.$clone(this.filterPlugin.values)
-      return this.filterPlugin
-      //this.filterData = this.$clone(this.$filter.values)
-      //return this.$filter
+      this.filterData = this.$clone(this.$filter.values)
+      return this.$filter
     },
     //Return params of subHeader
     params() {
@@ -199,7 +179,7 @@ export default {
         //Export
         {
           label: this.$tr('isite.cms.label.export'),
-          vIf: (this.exportParams && !excludeActions.includes('export')),
+          vIf: (this.exportParams && !excludeActions.includes('export') && !this.isAppOffline),
           props: {
             icon: 'fa-light fa-file-arrow-down'
           },
@@ -228,18 +208,18 @@ export default {
         //Filter
         {
           label: this.$tr('isite.cms.label.filter'),
-          vIf: (this.filter.load && !excludeActions.includes('filter')),
+          vIf: (this.filter.load && !excludeActions.includes('filter') && !this.isAppOffline),
           props: {
             icon: 'fa-light fa-filter',
             id: 'filter-button-crud',
           },
-          action: () => this.toggleMasterFilter(true)
+          action: () => this.$eventBus.$emit('toggleMasterDrawer', 'filter')
         },
         //Refresh
         {
           label: this.$trp('isite.cms.label.refresh'),
           type: this.multipleRefresh ? 'btn-dropdown' : '',
-          vIf: (this.params.refresh && !excludeActions.includes('refresh')),
+          vIf: (this.params.refresh && !excludeActions.includes('refresh') && !this.isAppOffline),
           props: {
             icon: 'fa-light fa-rotate-right',
             id: 'refresh-button-crud'
@@ -250,7 +230,7 @@ export default {
               action: () => this.refreshByTime(0)
             },
             {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 1}),
+              label: this.$tr('isite.cms.label.refreshEveryMinute', {min: 1}),
               action: () => this.refreshByTime(1)
             },
             {
@@ -263,7 +243,7 @@ export default {
             },
             {
               label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 15}),
-              action: () => this.refreshByTime(15)
+              action: () => this.refreshByTime(5)
             }
           ],
           action: this.emitRefresh,
@@ -302,18 +282,16 @@ export default {
       var response = {}
       //Get quick filters
       if (this.$q.platform.is.desktop) {
-        if(this.filter.fields) {
-          Object.keys(this.filter.fields).forEach(fieldName => {
-            var fieldfilter = this.filter.fields[fieldName]
-            if (fieldfilter.quickFilter) {
-              response[fieldName] = {
-                ...fieldfilter,
-                colClass: "col-12 col-md-4 col-xl-3"
-              }
-              if (!this.filterData[fieldName]) this.$set(this.filterData, fieldName, fieldfilter.value || null)
+        Object.keys(this.filter.fields).forEach(fieldName => {
+          var fieldfilter = this.filter.fields[fieldName]
+          if (fieldfilter.quickFilter) {
+            response[fieldName] = {
+              ...fieldfilter,
+              colClass: "col-12 col-md-4 col-xl-3"
             }
-          })
-        }
+            if (!this.filterData[fieldName]) this.$set(this.filterData, fieldName, fieldfilter.value || null)
+          }
+        })
       }
       //Response
       return response
@@ -342,10 +320,9 @@ export default {
   },
   methods: {
     init() {
-      this.handlerEvent()
-    },
-    handlerEvent() {
-      this.$eventBus.$on('toggleMasterDrawer', () => this.toggleMasterFilter(false))
+      this.$root.$on('page.data.filter.read', (readValues) => {
+        this.$set(this.filter, 'readValues', readValues)
+      })
     },
     refreshByTime(time) {
       this.timeRefresh = time;
@@ -370,8 +347,10 @@ export default {
     },
     //Emit filter
     emitFilter() {
-      this.filterPlugin.addValues(this.filterData)
-      if (this.filterPlugin && this.filterPlugin.callBack) this.filterPlugin.callBack();
+      //Add Values
+      this.$filter.addValues(this.filterData)
+      //Call back
+      if (this.filter && this.filter.callBack) this.filter.callBack(this.filter)
     },
     clearInterval() {
       if (this.refreshIntervalId) {
@@ -393,9 +372,6 @@ export default {
           }
         ]
       })
-    },
-    toggleMasterFilter(value){
-      this.drawer.filter = value;
     }
   }
 }

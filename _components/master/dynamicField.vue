@@ -200,11 +200,6 @@
           <template slot="after-options">
             <slot name="after-options"></slot>
           </template>
-          <template v-slot:before v-if="selectImg">
-            <q-avatar>
-              <img :src="selectImg">
-            </q-avatar>
-          </template>
         </q-select>
         <!--tree select-->
         <q-field v-model="responseValue" v-if="loadField('treeSelect')" :label="fieldLabel"
@@ -364,10 +359,10 @@
             :fieldProps="fieldProps"
         />
 
-        <multipleDynamicFields 
-          v-if="loadField('multiplier')"
-          v-model="responseValue"
-          :fieldProps="fieldProps"
+        <multipleDynamicFields
+            v-if="loadField('multiplier')"
+            v-model="responseValue"
+            :fieldProps="fieldProps"
         />
         <!--Code Editor-->
         <q-field v-model="responseValue" v-if="loadField('code')"
@@ -450,8 +445,7 @@ export default {
     keyField: {
       type: String,
       default: () => '',
-    },
-    enableCache: {default: false}
+    }
   },
   components: {
     managePermissions,
@@ -547,11 +541,6 @@ export default {
     }
   },
   computed: {
-    selectImg() {
-      const data = this.rootOptions.find(item => item.id == this.responseValue) || {};
-      
-      return data.img || null;
-    },
     //Return label to field
     fieldLabel() {
       let response = ''
@@ -1085,9 +1074,9 @@ export default {
         //sort by label
         if (this.sortOptions) {
           items.sort((a, b) => {
-            if (a.label > b.label) return 1
-            if (a.label < b.label) return -1
-            return 0;
+              if (a.label > b.label) return 1
+              if (a.label < b.label) return -1
+              return 0;
           })
         }
 
@@ -1384,9 +1373,6 @@ export default {
         case 'code':
           this.responseValue = typeof propValue != "string" ? JSON.stringify(propValue) : propValue
           break
-        case 'multiplier':
-          this.responseValue = (Array.isArray(propValue)) ? propValue : []
-          break
         default :
           this.responseValue = propValue || null
           break
@@ -1432,7 +1418,12 @@ export default {
         //Instance default options keeping the options for the selected values
         let defaultOptions = this.$clone([
           ...(this.field.props?.options || []),
-          ...this.rootOptions.filter(opt => this.responseValue && this.responseValue.includes((opt.value || opt.id).toString()))
+          ...this.rootOptions.filter(opt => {
+            if( this.responseValue && typeof this.responseValue !== 'object') {
+              return this.responseValue && this.responseValue.includes((opt.value || opt.id).toString())
+            }
+            return this.responseValue && this.responseValue[opt.value || opt.id];
+          })
         ])
 
         //==== Request options
@@ -1443,8 +1434,6 @@ export default {
 
           //enable cache by isite setting
           let enableCache = this.$store.getters['qsiteApp/getSettingValueByName']('isite::enableDynamicFieldsCache')
-          //enable cache by params
-          if(this.enableCache) enableCache = 1
 
           let params = {//Params to request
             refresh: enableCache == '1' ? false : true,
@@ -1467,9 +1456,11 @@ export default {
             }
           }
           const parametersUrl = loadOptions.parametersUrl || {};
-          const crud = Object.keys(parametersUrl).length > 0 ? this.$crud.get : this.$crud.index;
+          const crud = Object.keys(parametersUrl).length > 0 
+            ? this.$crud.get(loadOptions.apiRoute, params, parametersUrl) 
+            : this.$crud.index(loadOptions.apiRoute, params, true);
           //Request
-          crud(loadOptions.apiRoute, params, parametersUrl).then(response => {
+          crud.then(response => {
             if (this.keyField !== '') {
               const keyData = {[this.keyField]: response.data}
               this.$helper.setDynamicSelectList(keyData);
@@ -1539,9 +1530,9 @@ export default {
     watchValue() {
       let value = this.$clone(this.value)
       let response = this.$clone(this.responseValue)
-      
+
       if (JSON.stringify(value) !== JSON.stringify(response)) {
-                //decode when is json
+        //decode when is json
         if (this.field.type == "json" && (typeof response == "string"))
           response = JSON.parse(response)
         //Emit input data
@@ -1638,7 +1629,7 @@ export default {
           )
           //Validate if there is the option for the value
           if (loadOptions.filterByQuery && !includeAll) {
-            let fieldSelect = loadOptions.select || {label: 'title', id: 'id', img: 'mainImage'}
+            let fieldSelect = loadOptions.select || {label: 'title', id: 'id'}
             //Instance request params
             let requestParams = {
               refresh: true,
@@ -1655,7 +1646,7 @@ export default {
             this.$crud.index(loadOptions.apiRoute, requestParams).then(response => {
               this.rootOptions = [
                 ...this.rootOptions,
-                ...this.$array.select(response.data, fieldSelect),
+                ...this.$array.select(response.data, fieldSelect)
               ]
             }).catch(error => {
               this.$apiResponse.handleError(error, () => {

@@ -1240,13 +1240,17 @@
         "identifyYourReport": "Identify your report",
         "selectColumnsFilters": "Select columns and filters",
         "selectSortColumns": "Select and sort columns",
+        "selectColumns": "Select the Columns",
+        "dragColumns": "Drag and reorder the columns",
         "moveColumn": "Move column",
-        "selectFirst": "Select the first {total} filters",
+        "selectFirst": "Select the filters",
+        "selectFirstSummary": "Choose the firts ({total})* filters you need for this report to use quickly.",
         "detailFilterOptions": "Detail the filter options",
         "selectInfoYouWantToShowForEachFilter": "Select the info you want to show for each filter",
         "chooseColumnSorting": "Choose column sorting",
         "adjustFollowingParameters": "Do you want to schedule it? Adjust the following parameters",
         "sort": "Sort",
+        "addAnotherEmail": "Add another email",
         "message": {
           "selectColumn": "Please select at least one column to continue and a filter",
           "waitMoment": "Wait a moment we are loading your report"
@@ -1349,7 +1353,6 @@
         "perzonalizationTitle": "Welcome to the editor of your website",
         "perzonalizationDescription": "Easily change the logo, colors and the main information of your website",
         "label": {
-          "resposible": "Responsible",
           "clickToAction": "Click to Action",
           "informationTitle": "Site Information",
           "top": "Top",
@@ -1703,13 +1706,10 @@
           "createNewAccount": "Create new account",
           "continue": "Continue",
           "plan": "Plan",
-          "analytics": "Analytics",
-          "automationRules": "Automation rules",
           "copyEmbedHtml": "Copy HTML",
           "createChildForm": "Create child form",
           "copy": "Copy",
           "insert": "Insert",
-          "phoneNumber": "Phone number",
           "quickLook": "Quick look"
         },
         "message": {
@@ -1791,8 +1791,7 @@
           "selectedTemplate": "Selected template",
           "noTemplates": "No templates",
           "recordModalTitle": "Congratulations on completing your account registration!",
-          "recordModalMessage": "<p>You've taken the first important step by signing up, and now we're ready to take you through our simple process to customize and create the perfect website that reflects your vision and goals.</p><p>Welcome and go ahead! 👋</p>",
-          "emailInvalid": "Email invalid"
+          "recordModalMessage": "<p>You've taken the first important step by signing up, and now we're ready to take you through our simple process to customize and create the perfect website that reflects your vision and goals.</p><p>Welcome and go ahead! 👋</p>"
         },
         "form": {
           "whatsappNumber": "Número de Whatsapp",
@@ -3107,13 +3106,17 @@
         "identifyYourReport": "Identifique su informe",
         "selectColumnsFilters": "Seleccionar columnas y filtros",
         "selectSortColumns": "Seleccionar y ordenar las columnas",
+        "selectColumns": "Seleccione las columnas",
+        "dragColumns": "Arrastra y reordena las columnas",
         "moveColumn": "Mover columna",
-        "selectFirst": "Selecciona el primer {total} filtros",
+        "selectFirst": "Selecciona los filtros",
+        "selectFirstSummary": "Elija los primeros ({total})* filtros que necesita para que este informe los utilice rápidamente.",
         "detailFilterOptions": "Detalla las opciones de filtro",
         "selectInfoYouWantToShowForEachFilter": "Seleccione la información que desea mostrar para cada filtro",
         "chooseColumnSorting": "Elija la clasificación de columnas",
         "adjustFollowingParameters": "¿Quieres programarlo? Ajuste los siguientes parámetros",
         "sort": "Ordenar",
+        "addAnotherEmail": "Agregar otro correo electrónico",
         "message": {
           "selectColumn": "Seleccione al menos una columna y un filtro para continuar",
           "waitMoment": "Espere un momento estamos cargando su reporte"
@@ -3216,7 +3219,6 @@
         "perzonalizationTitle": "Bienvenid@ al editor de tu sitio web",
         "perzonalizationDescription": "De manera fácil, cambia el logo, colores y la información principal de tu página web",
         "label": {
-          "resposible": "Responsable",
           "clickToAction": "Click para Acción",
           "top": "Arriba",
           "bottom": "Abajo",
@@ -3568,13 +3570,10 @@
           "createNewAccount": "Crear Nueva Cuenta",
           "continue": "Continuar",
           "plan": "Plan",
-          "analytics": "Analytics",
-          "automationRules": "Reglas de automatizacións",
           "copyEmbedHtml": "Copiar HTML",
           "createChildForm": "Crear formulario hijo",
           "copy": "Copiar",
           "insert": "Insertar",
-          "phoneNumber": "Número de teléfono",
           "quickLook": "Vistazo rápido"
 
         },
@@ -3657,8 +3656,7 @@
           "selectedTemplate": "Plantilla seleccionada",
           "noTemplates": "No existen plantillas",
           "recordModalTitle": "¡Felicidades por completar el registro de tu cuenta!",
-          "recordModalMessage": "<p>Has dado el primer paso importante al registrarte, y ahora estamos listos para llevarte a  través de nuestro sencillo proceso para personalizar y crear el sitio web perfecto que refleje tu visión y objetivos.</p><p> ¡Bienvenid@ y adelante! 👋</p>",
-          "emailInvalid": "Correo invalido"
+          "recordModalMessage": "<p>Has dado el primer paso importante al registrarte, y ahora estamos listos para llevarte a  través de nuestro sencillo proceso para personalizar y crear el sitio web perfecto que refleje tu visión y objetivos.</p><p> ¡Bienvenid@ y adelante! 👋</p>"
         },
         "form": {
           "whatsappNumber": "Número de Whatsapp",

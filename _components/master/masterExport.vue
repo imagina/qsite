@@ -69,21 +69,6 @@ export default {
   props: {
     exportItem: {type: Boolean, default: false}
   },
-  inject: {
-    filterPlugin: {
-      from: 'filterPlugin',
-      default: {
-        name: false,
-        fields: {},
-        values: {},
-        callBack: false,
-        pagination: {},
-        load: false,
-        hasValues: false,
-        storeFilter: false,
-      }
-    }
-  },
   components: {},
   watch: {
     '$route.name': {
@@ -91,7 +76,15 @@ export default {
       handler: function (newValue) {
         this.init()
       }
-    }
+    },
+    'offline': {
+      deep: true,
+      handler: function (newValue) {
+        if(!newValue) {
+          this.init()
+        }
+      }
+    },
   },
   mounted() {
     this.$nextTick(function () {
@@ -110,6 +103,9 @@ export default {
     }
   },
   computed: {
+    offline() {
+      return this.$store.state.qofflineMaster.isAppOffline;
+    },
     //Page title
     pageTitle() {
       const useLegacyStructure = parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::legacyStructureCMS') || 0)
@@ -321,11 +317,11 @@ export default {
       }
     },
     async storeFilter() {
-      const filterClone = this.filterPlugin.storeFilter
+      const filterClone = this.$filter.storeFilter
           ? {values: await this.$helper.convertStringToObject()}
-          : this.$clone(this.filterPlugin);
+          : this.$clone(this.$filter);
       let filter = {...filterClone};
-      if (this.filterPlugin.storeFilter) {
+      if (this.$filter.storeFilter) {
         if (filter.values.dateStart && filter.values.dateEnd) {
           const dateFilter = await this.getCurrentFilterDate(filter.values.dateStart, filter.values.dateEnd);
           delete filter.values.type;

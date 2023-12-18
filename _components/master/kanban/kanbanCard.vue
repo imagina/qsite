@@ -13,103 +13,79 @@
     "
     :style="{ borderLeftColor: colorColumn }"
   >
-    <section class="tw-flex tw-justify-between">
-      <div class="tw-w-full">
-        <div class="tw-flex">
-          <span
-            class="
-              tw-text-gray-700
-              tw-font-semibold
-              tw-font-sans
-              tw-tracking-wide
-              tw-text-sm
-              tw-w-full
-            "
-          >
-            ID: {{ cardData.id }} {{ cardData.title }}
-          </span>
-          <q-btn-dropdown
-            round
-            color="gray-4"
-            flat
-            size="10px"
-            padding="5px 5px"
-            class="
-              kd-without-arrow
-              tw-float-right 
-              tw-cursor-pointer 
-              tw-text-xs 
-              tw-bg-gray-100
-              tw-h-7
-            "
-            icon="fa-solid fa-ellipsis"
-          >
-            <q-list
-              dense
-              class="
-                tw-p-2 
-                kd-list-without-arrow 
-                tw-bg-gray-100 
-                tw-text-xs"
-            >
-              <q-item
-                clickable
-                v-close-popup
-                v-for="(action, keyAction) in actionsAutomations"
-                :key="keyAction"
-                v-bind="action.props"
-                v-if="action.vIf != undefined ? action.vIf : true"
-                @click.native="runAction(action)"
-              >
-                <q-item-section avatar>
-                  <q-icon :name="action.icon" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>
-                    {{ action.label || action.tooltip }}
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
-        </div>
-      </div>
-    </section>
-    <div
-      v-if="cardData.type"
-      class="
-        tw-flex 
-        tw-mt-1 
-        tw-justify-between 
-        tw-items-center
-      "
-    >
-      <span 
+    <div class="tw-flex tw-justify-between">
+      <p
         class="
-          tw-mt-4
-          tw-text-xs 
-          tw-text-gray-600
+          tw-text-gray-700
+          tw-font-semibold
+          tw-font-sans
+          tw-tracking-wide
+          tw-text-sm
+          tw-w-full
         "
       >
-        <b>Tipo * </b> {{ cardData.type }}
+        <q-btn-dropdown
+          round
+          color="gray-4"
+          flat
+          size="10px"
+          padding="5px 5px"
+          class="
+            kd-without-arrow
+            tw-float-right 
+            tw-cursor-pointer 
+            tw-text-xs 
+            tw-bg-gray-100
+          "
+          icon="fa-solid fa-ellipsis"
+        >
+          <q-list
+            dense
+            class="
+              tw-p-2 
+              kd-list-without-arrow 
+              tw-bg-gray-100 
+              tw-text-xs"
+          >
+            <q-item
+              clickable
+              v-close-popup
+              v-for="(action, keyAction) in actionsAutomations"
+              :key="keyAction"
+              v-bind="action.props"
+              v-if="action.vIf != undefined ? action.vIf : true"
+              @click.native="runAction(action)"
+            >
+              <q-item-section avatar>
+                <q-icon :name="action.icon" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>
+                  {{ action.label || action.tooltip }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+
+       ID:{{ cardData.id }} {{ cardData.title }}
+      </p>
+    </div>
+    <div
+      v-if="cardData.type"
+      class="tw-flex tw-mt-1 tw-justify-between tw-items-center"
+    >
+      <span class="tw-text-xs tw-text-gray-600">
+        <b>Tipo *</b> {{ cardData.type }}
       </span>
     </div>
     <div
-      class="
-        tw-flex 
-        tw-mt-1 
-        tw-justify-between 
-        tw-items-center
-      "
+      class="tw-flex tw-mt-1 tw-justify-between tw-items-center"
       v-for="field in cardData.fields"
       :key="field.id"
     >
       <span
-        class="
-          tw-text-xs 
-          tw-text-gray-600 
-          tw-truncate
-        "
+        class="tw-text-xs tw-text-gray-600 tw-truncate"
         v-if="field.name && typeof field.value !== 'object'"
       >
         <b>{{ field.label || field.name }} *</b>
@@ -117,50 +93,15 @@
       </span>
     </div>
 
-    <div 
-      class="
-        tw-flex 
-        tw-mt-4 
-        tw-justify-between 
-        tw-items-center
-      ">
-      <span 
-        class="
-          tw-text-xs 
-          tw-text-gray-600
-        ">
-          <b>{{ $tr('isite.cms.label.date') }} *</b> {{ cardData.createdAt }}
+    <div class="tw-flex tw-mt-4 tw-justify-between tw-items-center">
+      <span class="tw-text-xs tw-text-gray-600">
+        <b>{{ $tr('isite.cms.label.date') }} *</b> {{ cardData.createdAt }}
       </span>
     </div>
-    <figure 
-      class="
-        tw-flex
-        tw-mt-4
-      "
-      v-if="lastName"
-    >
-      <img 
-        class="
-          tw-w-5
-          tw-h-5
-          tw-rounded-md
-        "
-        :src="urlAvatar"
-      />
-      <q-tooltip
-        anchor="top left"
-        self="bottom left"
-        :offset="[10, 10]"
-        :delay="100" 
-      >
-        <p>{{ lastName }}</p>
-      </q-tooltip>
-    </figure>
   </div>
 </template>
 
 <script>
-
 export default {
   inject: {
     showRequestData: {
@@ -191,40 +132,16 @@ export default {
   props: {
     cardData: {
       type: Object,
-      default: () => this.cardDataDefault,
+      default: () => {},
     },
     colorColumn: {
       type: String,
       default: () => "#00000",
     },
   },
-  data() {
-    return {
-      cardDataDefault: {
-        id: 0,
-        title: '',
-        type: '',
-        createdAt: '',
-        fields: [],
-        creator: {
-          lastName: '',
-        },
-      },
-    };
-  },
   computed: {
-    quserState() {
-      return this.$store.state.quserAuth
-    },
     actions() {
       return this.crudfieldActions(this.cardData);
-    },
-    lastName() {
-      return this.cardData?.creator?.lastName || ''
-    },
-    urlAvatar() {
-      return  this.cardData?.creator?.mediaFiles?.profile?.largeThumb || 
-              this.quserState.userData.mainImage
     },
     actionsAutomations() {
       let response = [
@@ -288,12 +205,11 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .kd-without-arrow .q-btn-dropdown__arrow {
   @apply tw-hidden !important;
 }
 .kd-list-without-arrow .q-item__section--avatar {
   @apply tw-mx-1 tw-pr-1 !important tw-min-w-0 !important;
 }
-
 </style>

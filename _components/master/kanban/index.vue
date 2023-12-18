@@ -15,14 +15,11 @@
         ghost-class="ghostCard"
         drag-class="dragCard"
         filter=".ignoreItem"
-        draggable=".notMoveBetweenColumns"
         :disabled="loading || !dragColumn || kanbanColumns.length === 0"
         class="tw-p-3 tw-h-auto tw-flex tw-space-x-4 tw-overflow-x-auto"
         @change="reorderColumns"
       >
-        <div v-if="!loading" v-for="(column, index) in kanbanColumns" 
-         :class="{'notMoveBetweenColumns': column.type !== 1}"
-        >
+        <div v-if="!loading" v-for="(column, index) in kanbanColumns">
           <kanbanColumn
             :key="index"
             :column-data="column"
@@ -35,7 +32,6 @@
               tw-bg-gray-100 tw-rounded-lg tw-shadow
             "
           />
-          
         </div>
         <q-skeleton
           animation="blink"
@@ -107,8 +103,6 @@
         :funnelId="funnelSelectedComputed"
         :filterName="routes.column ? routes.column.filter.name : null"
     />
-    <modalStatus />
-    <modalAnalytics />
   </div>
 </template>
 
@@ -119,10 +113,6 @@ import automationRules from "./automationRules/index.vue";
 import draggable from "vuedraggable";
 import formComponent from './modals/form.vue';
 import formRules from './modals/formRules';
-import modalStatus from './modals//statusModal/index.vue'
-import modalAnalytics from './modals/analytics/index.vue'
-import showaAnalytics from './modals/analytics/actions/show.ts';
-import storeAnalytics from './modals/analytics/store/index.ts';
 
 const modelPayload = {
   id: null,
@@ -196,18 +186,15 @@ export default {
       crudfieldActions: this.crudfieldActions,
       deleteKanbanCard: this.deleteKanbanCard,
       updateCardColumn: this.updateCard,
-      getStatus: this.getStatus,
     };
   },
-  inject:['funnelPageAction', 'fieldActions', 'filterPlugin'],
+  inject:['funnelPageAction', 'fieldActions'],
   components: {
     kanbanColumn,
     draggable,
     automationRules,
     formComponent,
-    formRules,
-    modalStatus,
-    modalAnalytics,
+    formRules
   },
   data() {
     return {
@@ -240,36 +227,14 @@ export default {
   },
   computed: {
     extraPageActions() {
-      return [
-        {
-          vIf: this.$auth.hasAccess('requestable.automationrules.manage'),
-          label: this.$tr('requestable.cms.label.analytics'),
+      return {
+          label: "Reglas de automatización",
           props: {
-            padding: "3px 15px",
-            icon: 'fa-duotone fa-chart-mixed'
-          },
-          action: this.openAnalytics,
-        },
-        {
-          vIf: this.$auth.hasAccess('requestable.automationrules.manage'),
-          label: this.$tr('requestable.cms.label.automationRules'),
-          props: {
-            icon: 'fa-duotone fa-ruler',
+            label: "Reglas de automatización",
             padding: "3px 15px",
           },
           action: this.openAutomationRulesModal,
-        },
-        {
-          vIf: this.$auth.hasAccess('requestable.statuses.manage'),
-          label: this.$tr('isite.cms.form.status'),
-          props: {
-            icon: 'fa-duotone fa-swap-arrows',
-            padding: "3px 15px",
-          },
-          action: () => { 
-            kanbanStore().setModalStatus(true) 
-          },
-        }];
+        };
     },
     funnel() {
       return {
@@ -300,10 +265,10 @@ export default {
     },
   },
   methods: {
-    async init(refresh = false, isModal = false) {
+    async init(refresh = false) {
       this.kanbanColumns = [];
       await this.getFunnel();
-      await this.getColumns(refresh, isModal);
+      await this.getColumns(refresh);
     },
     async getFunnel() {
       try {
@@ -341,24 +306,18 @@ export default {
         item.position = index;
       });
     },
-    async getStatus(refresh = false) {
-      if(!this.routes.column) return;
-        const route = this.routes.column;
-        const parameters = { params: {}, refresh };
-        parameters.params.include = route.include;
-        const id =  { id: this.filterPlugin.values.statusId } || {};
-        parameters.params.filter = {
-          [route.filter.name]: this.funnelSelectedComputed, ...id,
-          order: {field:"type", way:"asc"}
-        };
-        const response = await this.$crud.index(route.apiRoute, parameters);
-        return response;
-    },
-    async getColumns(refresh = false, isModal = false) {
+    async getColumns(refresh = false) {
       try {
         if(!this.routes.column) return;
         this.loading = true;
-        const response = await this.getStatus(isModal ? !refresh : refresh);
+        const route = this.routes.column;
+        const parameters = { params: {}, refresh };
+        parameters.params.include = route.include;
+        const id =  { id: this.$filter.values.statusId } || {};
+        parameters.params.filter = {
+          [route.filter.name]: this.funnelSelectedComputed, ...id
+        };
+        const response = await this.$crud.index(route.apiRoute, parameters);
         const kanbanColumn = this.getKanbanColumns(response.data, refresh);
         this.kanbanColumns = kanbanColumn;
         setTimeout(() => {
@@ -383,7 +342,6 @@ export default {
           loading: false,
           new: false,
           position: index,
-          type: item.type
         };
       });
       kanbanColumn.forEach(async (column) => {
@@ -424,7 +382,7 @@ export default {
         parameters.params.include = route.include;
         parameters.params.filter = { 
           [route.filter.name]: column.id, 
-          ...this.filterPlugin.values, 
+          ...this.$filter.values, 
           ...search,
           order: {way: 'desc'}
         };
@@ -515,15 +473,13 @@ export default {
         console.log(error);
       }
     },
-    addColumn(index, data = null) {
+    addColumn(index) {
       try {
-            const counter = `kanban-${Math.random() + 1}`;
-            console.log(counter);
+            const counter = `kanban-${this.totalColumns + 1}`;
             const randomColor = Math.floor(Math.random() * 16777215).toString(16);
             const column = { ...modelColumn };
             column.id = counter;
             column.color = `#${randomColor}`;
-            column.type = data?.type || 0;
             this.kanbanColumns.splice(index + 1, 0, column);
         } catch (error) {
             console.log(error);
@@ -552,7 +508,6 @@ export default {
         payloadStatus.title = data.title;
         payloadStatus.color = data.color;
         payloadStatus[route.filter.name] = this.funnelSelected;
-        payloadStatus.type = data.type;
         return await this.$crud.create(route.apiRoute, payloadStatus);
       } catch (error) {
         console.log(error);
@@ -585,11 +540,6 @@ export default {
     },
     openAutomationRulesModal() {
       if(this.$refs.automationRules) this.$refs.automationRules.openModal();
-    },
-    async openAnalytics() {
-      storeAnalytics.showModal = true;
-      storeAnalytics.categoryId = this.funnelSelected;
-      await showaAnalytics();
     },
     openFormComponentModal(statusId, title, id = null) {
       if (this.automation) {

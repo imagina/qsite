@@ -5,19 +5,18 @@
       tw-border 
       tw-border-gray-200
       tw-rounded-md
-    "
+      tw-shadow-md"
     >
     <div 
       class="
-        tw-w-full 
-        tw-px-3
-        tw-py-2 
-        tw-text-xs
-        tw-font-light
-        tw-border-b
-        tw-border-gray-200
-        tw-text-gray-500
-      "
+       tw-w-full 
+       tw-px-4
+       tw-py-2 
+       tw-text-lg 
+       tw-font-semibold 
+       tw-border-b
+       tw-border-gray-200
+       tw-text-gray-500"
     >
       {{ fieldProps.label }}
     </div>
@@ -28,42 +27,38 @@
         handle=".dot-vertical"
         class="tw-h-500"
         :class="{'tw-overflow-y-scroll': fields.length > 0}"
-        ref="refDraggable"
       >
         <div
           v-for="(field, keyField) in fields"
           :key="keyField"
           class="
-            row 
-            q-col-gutter-xs 
-            tw-mb-1 
-            tw-border 
-            tw-border-gray-200 
-            tw-mx-3
-            tw-px-2
-            tw-rounded-md 
-            tw-mt-1
-          "
+           row 
+           q-col-gutter-md 
+           tw-mb-5 
+           tw-border 
+           tw-border-gray-200 
+           tw-mx-5
+           tw-px-2
+           tw-rounded-md 
+           tw-mt-3"
         >
          <div 
           class="tw-w-full"
           v-if="fieldProps.isDraggable"
         >
-            <i 
-              class="
-                tw-cursor-move
-                fa-solid 
-                fa-grip-dots
-                dot-vertical 
-                tw-text-sm 
-                tw-text-gray-500
-              " 
+            <i class="
+              tw-cursor-move
+              fa-solid 
+              fa-grip-dots
+              dot-vertical 
+              tw-text-lg 
+              tw-text-gray-500" 
             />
          </div>
           <div
             v-for="key in Object.keys(field)"
             :key="key"
-            :class="defaultField[key] && defaultField[key].colClass"
+            :class="defaultField[key].colClass"
           >
             <dynamic-field
               v-model="fields[keyField][key]"
@@ -74,10 +69,9 @@
             <q-btn
               color="red"
               icon="fa-light fa-trash-can"
-              size="xs"
+              size="sm"
               flat
               round
-              :disabled="isMinQuantity"
               @click="deleteItem(keyField)"
             >
               <q-tooltip>
@@ -91,11 +85,11 @@
           class="
            tw-w-full 
            tw-text-center
-           tw-text-sx 
+           tw-text-7xl 
            tw-text-gray-500
-           tw-py-2"
+           tw-py-16"
         >
-          <div class="tw-mb-1 tw-text-lg">
+          <div class="tw-mb-4">
             <i class="fa-light fa-face-thinking" />
           </div>
           No data
@@ -103,8 +97,8 @@
       </draggable>
       <div 
         class="
-         tw-my-2
-         tw-px-2 
+         tw-my-4
+         tw-px-4 
          tw-w-full 
          tw-text-right"
       >
@@ -112,9 +106,9 @@
           color="primary"
           icon="fa-light fa-plus"
           @click="add"
-          size="xs"
+          size="sm"
           round
-          class="tw-ml-2"
+          class="tw-ml-4"
           :disabled="maxQuantity"
         >
           <q-tooltip>

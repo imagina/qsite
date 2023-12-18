@@ -2,7 +2,7 @@
   <div id="testPageId">
     <div class="row">
       <div v-for="(field, keyField) in fieldsConfig" :key="keyField" class="col-12">
-          <dynamic-field v-model="form[keyField]" class="q-mb-md" :field="field"/>
+        <dynamic-field v-model="form[keyField]" class="q-mb-md" :field="field"/>
       </div>
     </div>
   </div>
@@ -239,7 +239,7 @@ export default {
                 isDraggable: true, // Default true
                 maxQuantity: 7, // Default 5
                 fields : {
-                    localizedPhone: {
+                  localizedPhone: {
                       ...globalData,
                       type: 'localizedPhone',
                       colClass: "col-12",

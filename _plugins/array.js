@@ -76,16 +76,16 @@ class Array {
    * }]
    *
    */
-  select(dataArray, fields = {label: 'title', id: 'id', img: 'mainImage'}) {
+  select(dataArray, fields = {label: 'title', id: 'id'}) {
     let response = []
     dataArray.forEach((item) => {
       response.push({
         label: item[fields.label],
         id: item[fields.id],
-        value: item[fields.id],
-        img: item[fields.img] || null
+        value: item[fields.id]
       })
     })
+
     return response
   }
 

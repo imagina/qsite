@@ -77,21 +77,8 @@
                     </div>
                   </div>
                 </div>
-                <div 
-                   class="
-                    tw-text-left
-                    tw-text-xs 
-                    tw-text-gray-600
-                    tw-ml-1
-                    tw-mb-4
-                    tw-z-10"
-                    @click="showModalForm"
-                  >
-                    <span class="tw-border-dashed 
-                    tw-border-b tw-cursor-pointer">Editar este formulario</span> 
-                  </div>
                 <!--Actions-->
-                <div :class="`tw-space-x-1 actions__content row justify-${step == 0 ? 'end' : 'between'}`"
+                <div :class="`actions__content row justify-${step == 0 ? 'end' : 'between'}`"
                      v-if="(formType == 'stepper') && !noActions">
                   <q-btn v-for="(action, keyAction) in formActions" :key="keyAction" v-bind="action"
                          unelevated rounded no-caps @click="action.action(keyBlock)" type="button"
@@ -112,7 +99,6 @@
       <!--Innerloading-->
       <inner-loading :visible="(loading || innerLoading) ? true : false"/>
     </div>
-    <newFormModal />
     <!-- Feedback after submit-->
     <div v-if="withFeedBack && showFeedBack">
       <div class="box box-auto-height justify-center">
@@ -152,13 +138,10 @@
 <script>
 import fileListComponent from '@imagina/qsite/_components/master/fileList';
 import layoutStore from '@imagina/qsite/_store/layoutStore.js'
-import newFormModal from '@imagina/qrequestable/_components/modals/information/components/newFormModal.vue'
-import newFormModalStore from '@imagina/qrequestable/_components/modals/information/stores/newFormModal.ts'
 
 export default {
   components: {
-    fileListComponent,
-    newFormModal,
+    fileListComponent
   },
   props: {
     value: {
@@ -193,7 +176,6 @@ export default {
     },
     noResetWithBlocksUpdate: {type: Boolean, default: false},
     boxStyle: {type: Boolean, default: true},
-    noSave: {type: Boolean, default: false},
     withFeedBack: {type: Boolean, default: false}
   },
   watch: {
@@ -584,12 +566,12 @@ export default {
         submit: {
           color: "green",
           icon: "fas fa-save",
-          vIf: !this.noSave,
           label: this.formBlocks.submitText ?? this.$tr('isite.cms.label.save'),
           ...(this.actions.submit || {}),
           action: () => this.changeStep('next', true)
         },
       }
+
       //Instance Response
       let response = {previous: actions.previous, next: (isLastStep ? actions.submit : actions.next)}
 
@@ -859,9 +841,6 @@ export default {
     selectedFile(file) {
       const fileId = file.length === 0 ? null : file[0].id;
       layoutStore().setSelectedLayout(fileId);
-    },
-    showModalForm() {
-      newFormModalStore.showModal = true;
     },
     setNewForm(){
       this.reset()
