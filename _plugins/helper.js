@@ -229,6 +229,23 @@ class Helper {
     return convertObject(object)//Return response
   }
 
+  snakeToCamelCaseKeys(obj) {
+    const newObj = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (key) {
+        const newKey = this.snakeToCamelCase(key);
+        if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+            newObj[newKey] = this.snakeToCamelCaseKeys(value);
+        } else if((Array.isArray(value) && typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean')){
+            newObj[newKey] = Object.values(this.snakeToCamelCaseKeys(value));
+        }else{
+            newObj[newKey] = value;
+        }
+      }
+    }
+    return newObj;
+  }
+
   //Convert object keys to snake_case
   objToArrayDeep(object) {
     //function recursive to loop all items from object
@@ -284,7 +301,7 @@ class Helper {
       else if (permitValues) {
         let optValue = opt.value.toString()//Parse value
         if (typeof (permitValues) == 'object') {
-          permitValues.forEach(item => {
+          Object.keys(permitValues).forEach(item => {
             if (item.toString() == optValue) responseOptions.push(opt)
           })
         } else if (permitValues.toString() == optValue) responseOptions.push(opt)

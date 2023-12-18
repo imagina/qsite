@@ -1,12 +1,17 @@
 
 import cache from "@imagina/qsite/_plugins/cache";
 
-export default async function paginateCacheOffline(apiRoute, search = null, page = 1, perPage = 10) {
-    const cacheResponse = await cache.get.item(`${apiRoute}::offline`) || { data: [] };
-    if (!cacheResponse.data.length === 0) {
-        return cacheResponse;
-    };
-    const filteredData = cacheResponse.data.filter(item => {
+export default async function paginateCacheOffline(fountain, search=null, page=1, perPage=10) {
+    let data = null
+    
+    if (typeof fountain === 'string') 
+        data = await cache.get.item(`${fountain}::offline`) || { data: [] }
+
+    if (typeof fountain === 'object') data = fountain
+
+    if (!data.data.length === 0) return data
+
+    const filteredData = data.data.filter(item => {
         return Object.values(item).some(value => {
             if (value) {
                 search = search ? search.toLowerCase() : null;

@@ -47,6 +47,12 @@
               v-if="$auth.hasAccess('notification.notifications.manage')">
       <master-notifications/>
     </q-drawer>
+
+    <!--Offline-->
+    <q-drawer bordered id="drawerOfflineMaster" v-model="drawer.offline" side="right" overlay
+              v-if="$store.getters['qsiteApp/getSettingValueByName']('isite::offline')">
+      <offline/>
+    </q-drawer>
   </div>
 </template>
 <script>
@@ -60,6 +66,7 @@ import masterFilter from '@imagina/qsite/_components/master/masterFilter'
 import checkin from '@imagina/qcheckin/_components/checkin'
 import masterRecommendation from '@imagina/qsite/_components/master/masterRecommendations'
 import masterNotifications from '@imagina/qnotification/_components/drawerNotifications'
+import offline from '@imagina/qoffline/_components/drawerOffline'
 
 export default {
   beforeDestroy() {
@@ -68,7 +75,7 @@ export default {
   },
   mixins: [sidebarMixins],
   props: {},
-  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation, masterNotifications},
+  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation, masterNotifications,offline},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -88,7 +95,8 @@ export default {
         filter: false,
         checkin: false,
         recommendation: false,
-        notification: false
+        notification: false,
+        offline: false
       },
       appConfig: config('app'),
       filter: this.$filter
@@ -148,6 +156,7 @@ export default {
           this.miniState = !this.miniState
         }
       } else {
+
         this.drawer[drawerName] = !this.drawer[drawerName]
       }
     }
