@@ -1413,7 +1413,7 @@ export default {
           const parametersUrl = loadOptions.parametersUrl || {};
           const crud = Object.keys(parametersUrl).length > 0 
             ? this.$crud.get(loadOptions.apiRoute, params, parametersUrl) 
-            : this.$crud.index(loadOptions.apiRoute, params, true);
+            : this.$crud.index(loadOptions.apiRoute, params);
           //Request
           crud.then(response => {
             if (this.keyField !== '') {
