@@ -19,8 +19,5 @@ export default {
   categories: `${urlBase}/categories`,
   modulesInfo: `${urlBase}/configs/modules-info`,
   layouts: `${urlBase}/layouts`,
-  logs: `${urlBase}/logs`,
-  synchronizables: `${urlBase}/synchronizables`,
-  generateFile: `${urlBase}/synchronizables/generate-spread-sheet`,
-  sync: `${urlBase}/synchronizables/sync`
+  logs: `${urlBase}/logs`
 }

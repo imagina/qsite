@@ -100,8 +100,7 @@ export default {
           },
           loadOptions: {
             apiRoute: 'apiRoutes.quser.users',
-            select: {label: 'fullName', id: 'id'},
-            filterByQuery: true
+            select: {label: 'fullName', id: 'id'}
           }
         },
         treeSelect: {
@@ -222,42 +221,6 @@ export default {
               mode : 'text/css'
             }
           }
-        },
-        localizedPhone: {
-          ...globalData,
-          type: 'localizedPhone',
-          props: {
-            label: 'type: localizedPhone',
-            mask:"###-###-####"
-          },
-        },
-        multiDynamifield : {
-            value : [],
-            type : 'multiplier',
-            props : {
-                label : 'Multiple Dynamic Fields',
-                isDraggable: true, // Default true
-                maxQuantity: 7, // Default 5
-                fields : {
-                  localizedPhone: {
-                      ...globalData,
-                      type: 'localizedPhone',
-                      colClass: "col-12",
-                      props: {
-                        label: 'type: localizedPhone',
-                        mask:"###-###-####"
-                      },
-                    },
-                    numberPhone : {
-                        value : null,
-                        type : 'input',
-                        colClass: "col-12",
-                        props : { 
-                          label: 'Email'
-                        } 
-                    }
-                }
-            }
         },
       }
     }

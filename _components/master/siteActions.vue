@@ -185,7 +185,7 @@ export default {
           {
             name: 'chat',
             label: 'Chat',
-            vIf: (config('app.mode') == 'iadmin') && this.$auth.hasAccess('ichat.conversations.index'),
+            vIf: false && (config('app.mode') == 'iadmin') && this.$auth.hasAccess('ichat.conversations.index'),
             props: {
               ...this.defaultButtonProps,
               icon: 'fa-light fa-message-lines',
@@ -272,9 +272,6 @@ export default {
         ]
       }
     },
-    profileImage(){
-      return this.$store.getters['quserAuth/profileImage']
-    }
   },
   methods: {
     init() {

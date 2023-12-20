@@ -1,77 +1,55 @@
 <template>
-  <div id="shareLinkcomponent">
-    <!--Button to open modal to share-->
-    <q-btn icon="fa-light fa-share-alt"
-      @click="openModal()"
-      flat
-      unelevated
-      rounded
-      v-if="showIcon"
-    />
-    <!--Modal Buttons-->
-    <master-modal id="shareLinkModal" v-model="showModal" :title="$tr('isite.cms.label.share')" icon="fas fa-share-alt">
-      <div>
-        <!-- Content preview -->
-        <div v-if="contentPreview && content" class="q-gutter-y-md">
-          <div class="row">
-            <div class="col-12">
-              <q-input
-                v-model="content"
-                type="textarea"
-                standout
-                readonly
-                autogrow
-              />
-            </div>
-          </div>
-          <div class="row col justify-center">
-              <q-btn
-                :label="$trp('isite.cms.label.copy')"
-                color="primary"
-                @click="copyToClipBoard(content)"
-                unelevated
-                rounded
-                no-caps
-              />
-          </div>
-        </div>
-        <!--Available buttons to share-->
-        <div v-else class="q-gutter-y-lg q-pt-xs">
-          <div class="row q-gutter-x-md justify-center">
-            <div v-for="(button, key) in availableButtons"
-              :key="key"
-              v-if="button.icon"
-              class="text-center platform"
-              style="max-width: 70px;"
-            >
-              <q-btn
-                :icon="button.icon"
-                unelevated
-                :color="button.color"
-                align="center"
-                @click="shareLink(key)"
-                round
-              />
-              <div>
-                {{ button.label }}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <dynamic-field class="col-12" :field="dinamycConfig"/>
-          </div>
-        </div>
+  <q-no-ssr id="shareLinkcomponent" class="inline-block" v-if="link">
+    <!--Buttons-->
+    <div id="contentButtons">
+      <!--Available buttons to share-->
+      <div v-for="(button, key) in availableButtons" :key="key" class="inline-block">
+        <q-btn :icon="button.icon" unelevated :label="showLabel ? key : ''" v-if="buttons.indexOf(key) != -1"
+               :color="button.color" flat @click="shareLink(key)"/>
       </div>
-    </master-modal>
-  </div>
+      <!--Button to open modal to share-->
+      <q-btn icon="fas fa-share-alt" color="grey-9" flat unelevated @click="showModal = true" v-if="!noModal"/>
+    </div>
+    <!--Modal Buttons-->
+    <q-dialog id="shareLinkModalButtons" v-model="showModal" v-if="!noModal">
+      <q-card>
+        <q-card-section class="row items-center">
+          <!--Title-->
+          <div class="text-h6 text-primary">
+            <q-icon name="fas fa-share-alt" class="q-mr-xs"/>
+            {{$tr('isite.cms.label.share')}}
+          </div>
+          <q-space/>
+          <!--Close button-->
+          <q-btn icon="close" flat round dense v-close-popup/>
+        </q-card-section>
+
+        <!--Available buttons to share-->
+        <q-card-section class="q-pt-none row q-gutter-y-sm">
+          <div v-for="(button, key) in availableButtons" :key="key" class="buttonContent col-12">
+            <q-btn :icon="button.icon" unelevated :label="key" :color="button.color" align="left"
+                   @click="shareLink(key)"/>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+  </q-no-ssr>
 </template>
 <script>
   export default {
     props: {
-      url: {default: null},
-      embed: {default: null},
-      showIcon: {default: false}
+      buttons: {
+        type: Array,
+        default: () => {
+          return []
+        }
+      },
+      showLabel: {type: Boolean, default: false},
+      noModal: {type: Boolean, default: false},
+      link: {default: true}
     },
+    components: {},
+    watch: {},
     mounted() {
       this.$nextTick(function () {
         this.init()
@@ -79,34 +57,16 @@
     },
     data() {
       return {
-        showModal: false,
-        contentPreview: false,
-        link: null,
-        content: null
+        showModal: false
       }
     },
     computed: {
       availableButtons() {
         return {
-          content: this.content ? { icon: 'fa-light fa-code-simple', color: 'grey', label: this.$trp('isite.cms.label.insert') } : false,
-          facebook: {
-            icon: 'fa-brands fa-facebook',
-            color: 'blue',
-            label: 'Facebook',
-            apiUrl: `https://www.facebook.com/sharer/sharer.php?u=${this.link}`
-          },
-          whatsapp: {
-            icon: 'fab fa-whatsapp',
-            color: 'green',
-            label: 'Whatsapp',
-            apiUrl: `https://api.whatsapp.com/send?text=${this.link}`
-          },
-          twitter: {
-            icon: 'fab fa-twitter',
-            color: 'cyan',
-            label: 'Twitter',
-            apiUrl: `http://www.twitter.com/share?url=${this.link}`
-          },
+          facebook: {icon: 'fab fa-facebook', color: 'blue'},
+          whatsapp: {icon: 'fab fa-whatsapp', color: 'green'},
+          twitter: {icon: 'fab fa-twitter', color: 'cyan'},
+          copy: {icon: 'fas fa-copy', color: 'grey'},
         }
       },
       stylePupop() {
@@ -114,53 +74,72 @@
         let windowW = window.innerWidth
 
         return `resizable,height=${windowH - 100},width=600,top=${50},left=${((windowW - 600) / 2)}`
-      },
-      dinamycConfig() {
-        return {
-          value: this.link,
-          type: 'copy',
-          props: {
-            label: this.$tr('iqreable.cms.form.content')
-          }
-        }
-      },
+      }
     },
     methods: {
       init() {
         this.stylePupop
-        this.link = this.url
-        this.content = this.embed
       },
       //Share link
       shareLink(platform) {
-        if(platform == 'content'){
-          this.contentPreview = true
-        }else {
-          this.openInNewWindow(this.availableButtons[platform].apiUrl)
+        if (this.link) {
+          let linkOrigin = window.location.origin
+          let link = this.$clone(this.link)
+
+          //Order vue router to share
+          if (link && link.routeName) {
+            //Genarate vue route
+            link = this.$router.resolve({
+              name: link.routeName,
+              params: link.params ?? {},
+              query: link.query ?? {},
+            })
+            //Get fullpath
+            //link = `${linkOrigin}${link.route.fullPath}`
+            link = `https://www.soloparches.com${link.route.fullPath}`
+          }
+
+          switch (platform) {
+            case 'facebook':
+              window.open(`https://www.facebook.com/sharer/sharer.php?u=${link}`, '_blank', this.stylePupop)
+              break;
+            case 'whatsapp':
+              window.open(`whatsapp://send?text=${link}`, '_blank', this.stylePupop)
+              break;
+            case 'twitter':
+              window.open(`http://www.twitter.com/share?url=${link}`, '_blank', this.stylePupop)
+              break;
+            case 'copy':
+              navigator.clipboard.writeText(link).then(() => {
+                this.$alert.info(this.$tr('isite.cms.message.copiedToClipboard'))
+              })
+              break;
+          }
         }
-      },
-      openModal(item = false){
-        if(item){
-          this.link = item.url ?? false
-          this.content = item.embed ?? false
-        }
-        this.contentPreview = (!this.link && this.content)
-        this.showModal = true
-      },
-      openInNewWindow(url){
-        window.open(url, '_blank', this.stylePupop)
-      },
-      copyToClipBoard(text){
-        navigator.clipboard.writeText(text).then(() => {
-          this.$alert.info(this.$tr('isite.cms.message.copiedToClipboard'))
-        })
       }
     }
   }
 </script>
 <style lang="stylus">
-#shareLinkModal
-  .platform:hover
-    transform: scale(1.1)
-    transition: all 0.2s ease-in-out;
+  #shareLinkcomponent
+    #contentButtons
+      .q-btn__wrapper
+        padding 4px
+        min-height 24px
+
+        .q-icon
+          font-size 20px
+
+  //Modal
+  #shareLinkModalButtons
+    .q-card
+      max-width 230px
+
+      .buttonContent
+        display block
+
+        .q-btn
+          width 100%
+          display block
+          text-transform capitalize
 </style>

@@ -149,9 +149,7 @@ export default {
               extension: file.name.split('.').pop()
             }
             //Crop image
-            const extensions = this.settings.allowedImageTypes
-                .map(item => item.toLowerCase())
-                .filter(item => !['gif'].includes(item))
+            const extensions = this.settings.allowedImageTypes.map(item => item.toLowerCase())
             if (file.__img && extensions.includes(fileData.extension.toLowerCase())) {
               await new Promise((resolve, reject) => {
                 this.$eventBus.$emit('master.cropper.image', {

@@ -12,21 +12,17 @@
       <offlineAlert v-if="isAppOffline"/>
       <div id="routeInformationContent" v-if="appConfig.mode == 'iadmin'"
            :class="`q-hide q-md-show ${iadminTheme == 1 ? 'bg-primary' : 'bg-white'}`">
-        <div id="subContent" class="row justify-between items-center">
-          <div class="row items-center">
-            <!-- Back Button -->
-            <q-btn icon="fas fa-arrow-left" unelevated round color="primary" class="btn-small q-mr-md"
-                   @click="$helper.backHistory()">
-              <q-tooltip>{{ $tr('isite.cms.label.back') }}</q-tooltip>
-            </q-btn>
-            <!--Breadcrumb-->
-            <q-breadcrumbs class="text-blue-grey">
-              <q-breadcrumbs-el v-for="(item, key) in breadcrumbs" :key="key" :label="item.label" :icon="item.icon"
-                                :to="item.to ? {name : item.to} : false"/>
-            </q-breadcrumbs>
-          </div>
-          <!-- Help Center -->
-          <activities v-bind="globalActivities.helpCenter"/>
+        <div id="subContent" class="row items-center">
+          <!-- Back Button -->
+          <q-btn icon="fas fa-arrow-left" unelevated round color="primary" class="btn-small q-mr-md"
+                 @click="$helper.backHistory()">
+            <q-tooltip>{{ $tr('isite.cms.label.back') }}</q-tooltip>
+          </q-btn>
+          <!--Breadcrumb-->
+          <q-breadcrumbs class="text-blue-grey">
+            <q-breadcrumbs-el v-for="(item, key) in breadcrumbs" :key="key" :label="item.label" :icon="item.icon"
+                              :to="item.to ? {name : item.to} : false"/>
+          </q-breadcrumbs>
         </div>
       </div>
       <div id="fakeRouteInformationContent" class="q-hide q-md-show" v-if="appConfig.mode == 'iadmin'"></div>
@@ -40,8 +36,8 @@
     <!---Cropper-->
     <cropper-component ref="cropperComponent"/>
 
-    <!-- Admin popUp -->
-    <activities v-bind="globalActivities.adminPopup"/>
+    <!-- Activities -->
+    <activities v-for="(activity, keyACt) in globalActivities" :key="keyACt" v-bind="activity"/>
 
     <!-- Activities Actions -->
     <activities-actions/>
@@ -219,21 +215,27 @@ export default {
     },
     //Activities
     globalActivities() {
-      return {
-        helpCenter: {
+      const activities = [
+        {
           systemName: 'help_center',
           view: 'button',
           vIf: this.$q.platform.is.desktop,
+          style: {
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px'
+          },
           btnProps: {
-            color: 'info',
-            flat: true
+            color: 'info'
           }
         },
-        adminPopup: {
+        {
           systemName: 'admin_popup',
           view: 'popup'
         }
-      }
+      ].filter(act => act.vIf)
+
+      return activities
     }
   },
   methods: {
@@ -290,13 +292,12 @@ export default {
   }
 
   #routeInformationContent {
-    width: -webkit-fill-available;
+    width: 100%;
     position: fixed;
     z-index: 2;
     background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%)
 
     #subContent {
-
       padding: 8px 10px 8px 16px;
       border-radius: $custom-radius 0 0 0;
       background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%)
