@@ -15,14 +15,14 @@
                v-if="extraActions && extraActions.includes('search') && searchAction"
                @input="$emit('search', $clone(search))">
         <template v-slot:prepend>
-          <q-icon color="tertiary" size="xs" name="fa-light fa-magnifying-glass"/>
+          <q-icon color="tertiary" size="xs" name="fa-duotone fa-magnifying-glass"/>
         </template>
       </q-input>
       <!--Button Actions-->
       <div v-for="(btn, keyAction) in actions" :key="keyAction">
         <!-- if the button is dropdown -->
-        <q-btn-dropdown split v-bind="{...buttonProps}" padding="xs 15px"
-                        v-if="btn.type == 'btn-dropdown'" class="btn-border-dropdown-custom"
+        <q-btn-dropdown split v-bind="{...buttonProps}"
+                        v-if="btn.type == 'btn-dropdown'" outline
         >
           <template v-slot:label>
             <div class="row items-center no-wrap" @click="refreshByTime(timeRefresh)">
@@ -54,12 +54,7 @@
       </div>
     </div>
     <!--Description-->
-    <span 
-      v-if="description" 
-      class="col-12 description-content"
-    >
-      {{ description }}
-    </span>
+    <div v-if="description" class="ellipsis-2-lines col-12 description-content">{{ description }}</div>
     <!--Filter data-->
     <div class="col-12 tw-mt-3" v-if="(filter.hasValues || Object.keys(quickFilters).length) && !isAppOffline">
       <!--<q-separator class="q-mb-sm"/>-->
@@ -86,13 +81,11 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
-    <master-synchronizable v-model="syncParams" v-if="$auth.hasAccess('isite.synchronizables.index')" ref="syncComponent" />
   </div>
 </template>
 <script>
 //Components
 import masterExport from "@imagina/qsite/_components/master/masterExport"
-import masterSynchronizable from "@imagina/qsite/_components/master/masterSynchronizable"
 
 export default {
   beforeDestroy() {
@@ -112,12 +105,9 @@ export default {
       type: Boolean,
       default: () => false,
     },
-    tourName: {default: null},
-    documentation: { 
-      default: () => {}
-    },
+    tourName: {default: null}
   },
-  components: {masterExport, masterSynchronizable},
+  components: {masterExport},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -127,7 +117,6 @@ export default {
   data() {
     return {
       exportParams: false,
-      syncParams: false,
       search: null,
       filterData: {},
       refreshIntervalId: null,
@@ -155,9 +144,9 @@ export default {
         rounded: true,
         dense: true,
         unelevated: true,
-        textColor: "primary",
-        style: "border: 1px solid rgba(0, 13, 71, 0.15)",
+        color: "primary",
         class: `btn-${this.size}`,
+        outline: true,
         noCaps: true,
       }
     },
@@ -167,21 +156,12 @@ export default {
       let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
 
       let response = [
-        //Export Icommerce
-        {
-          label: this.$tr('isite.cms.label.migration'),
-          vIf: (this.syncParams && !excludeActions.includes('sync')),
-          props: {
-            icon: 'fa-light fa-folder-tree'
-          },
-          action: () => this.$refs.syncComponent.show()
-        },
         //Export
         {
           label: this.$tr('isite.cms.label.export'),
           vIf: (this.exportParams && !excludeActions.includes('export') && !this.isAppOffline),
           props: {
-            icon: 'fa-light fa-file-arrow-down'
+            icon: 'fa-duotone fa-file-arrow-down'
           },
           action: () => this.$refs.exportComponent.showReport()
         },
@@ -190,7 +170,7 @@ export default {
           label: 'Tour',
           vIf: (this.tourName && !config("app.disableTours")),
           props: {
-            icon: 'fa-light fa-shoe-prints',
+            icon: 'fa-duotone fa-shoe-prints',
             id: 'actionStartTour'
           },
           action: () => this.startTour(true)
@@ -210,7 +190,7 @@ export default {
           label: this.$tr('isite.cms.label.filter'),
           vIf: (this.filter.load && !excludeActions.includes('filter') && !this.isAppOffline),
           props: {
-            icon: 'fa-light fa-filter',
+            icon: 'fa-duotone fa-filter',
             id: 'filter-button-crud',
           },
           action: () => this.$eventBus.$emit('toggleMasterDrawer', 'filter')
@@ -221,7 +201,7 @@ export default {
           type: this.multipleRefresh ? 'btn-dropdown' : '',
           vIf: (this.params.refresh && !excludeActions.includes('refresh') && !this.isAppOffline),
           props: {
-            icon: 'fa-light fa-rotate-right',
+            icon: 'fa-duotone fa-rotate-right',
             id: 'refresh-button-crud'
           },
           items: [
@@ -260,8 +240,8 @@ export default {
             vIf: this.params.create && this.params.hasPermission.create,
             props: {
               label: this.$tr(`isite.cms.label.new`),
-              icon: 'fa-light fa-plus',
-              textColor: "primary",
+              icon: 'fa-duotone fa-plus',
+              color: "primary",
               round: false,
               rounded: true,
               padding: '3px 15px',
@@ -270,9 +250,6 @@ export default {
             action: () => this.$emit('new')
           })
       }
-
-      //force styles
-      response = response.map(item => ({...item, props : {...item.props, color : 'white', outline: false}}))
 
       //Response
       return response.filter(item => item.vIf !== undefined ? item.vIf : true)
@@ -307,15 +284,13 @@ export default {
         //Search the config
         response = this.$store.getters['qsiteApp/getConfigApp'](configName)
       }
-
-      const tooltipInfo = {
+      //Response
+      return !response ? null : {
         title: this.title,
         description: response,
         icon: this.$route.meta.icon,
         class: 'q-ml-sm'
       }
-      if (response) return tooltipInfo
-      if (!response && this.documentation) return this.documentation
     }
   },
   methods: {

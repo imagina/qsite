@@ -1,6 +1,6 @@
 <template>
   <div id="dynamicFormComponent">
-    <div v-bind="structure.wrapper.props" :key="structure.wrapper.directives.key" v-show="showForm">
+    <div v-bind="structure.wrapper.props" :key="structure.wrapper.directives.key">
       <!--Top Content-->
       <div v-bind="structure.wrapperTop.props" v-if="structure.wrapperTop.directives.vIf">
         <!--Title-->
@@ -99,39 +99,6 @@
       <!--Innerloading-->
       <inner-loading :visible="(loading || innerLoading) ? true : false"/>
     </div>
-    <!-- Feedback after submit-->
-    <div v-if="withFeedBack && showFeedBack">
-      <div class="box box-auto-height justify-center">
-        <div class="row">
-          <div class="col-12 text-center q-gutter-y-sm">
-            <div>
-              <q-icon
-                name="fa-light fa-envelope-circle-check"
-                color="green"
-                size="xl"
-              />
-            </div>
-            <div>
-              <p class="text-subtitle1">
-                {{ successText }}
-              </p>
-            </div>
-            <div>
-              <q-btn
-                unelevated
-                rounded
-                no-caps
-                @click="setNewForm"
-                :label="$tr('iforms.cms.feedBack.newForm')"
-                type="button"
-                color="primary"
-                icon="fa-light fa-envelope"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -175,8 +142,7 @@ export default {
       validator: (value) => [1, 2, 3].includes(value)
     },
     noResetWithBlocksUpdate: {type: Boolean, default: false},
-    boxStyle: {type: Boolean, default: true},
-    withFeedBack: {type: Boolean, default: false}
+    boxStyle: {type: Boolean, default: true}
   },
   watch: {
     value: {
@@ -215,9 +181,7 @@ export default {
       locale: {},
       step: 0,
       innerLoading: false,
-      formBlocks: false,
-      showForm: true,
-      showFeedBack: false
+      formBlocks: false
     }
   },
   computed: {
@@ -485,15 +449,7 @@ export default {
       }
 
       //Add captcha field
-      if (this.useCaptcha && blocks.length){
-        const lastBlock = blocks[blocks.length - 1]
-
-        if(!Array.isArray(lastBlock.fields)){
-          lastBlock.fields.captcha = {type: 'captcha'}
-        }else {
-          lastBlock.fields.push({type: 'captcha' , name: 'captcha', value: ''})
-        }
-      }
+      if (this.useCaptcha && blocks.length) blocks[blocks.length - 1].fields.captcha = {type: 'captcha'}
 
       //Validate if field should be translatable
       blocks.forEach((block, blockKey) => {
@@ -566,7 +522,7 @@ export default {
         submit: {
           color: "green",
           icon: "fas fa-save",
-          label: this.formBlocks.submitText ?? this.$tr('isite.cms.label.save'),
+          label: this.$tr('isite.cms.label.save'),
           ...(this.actions.submit || {}),
           action: () => this.changeStep('next', true)
         },
@@ -594,10 +550,6 @@ export default {
       })
       //Response
       return fields
-    },
-    //Returns success text after submit
-    successText(){
-      return this.formBlocks.successText ?? this.$tr('iforms.cms.feedBack.message')
     }
   },
   methods: {
@@ -809,14 +761,6 @@ export default {
               this.innerLoading = false
               this.reset()
               this.$emit('sent', this.$clone(this.locale.form))
-
-              //feedBack
-              if(this.withFeedBack && response?.data){
-                this.showForm = false;
-                this.showFeedBack = true
-                this.$emit('feedBack', this.$clone(response.data))
-              }
-
             }).catch(error => {
               this.innerLoading = false
             })
@@ -835,19 +779,11 @@ export default {
       this.componentId = this.$uid()
       this.$refs.formContent.resetValidation()
       this.step = 0
-      this.showForm = true
-      this.showFeedBack = false
     },
     selectedFile(file) {
       const fileId = file.length === 0 ? null : file[0].id;
       layoutStore().setSelectedLayout(fileId);
     },
-    setNewForm(){
-      this.reset()
-      this.locale.form = false
-      this.init()
-      this.$emit('newForm')
-    }
   }
 }
 </script>

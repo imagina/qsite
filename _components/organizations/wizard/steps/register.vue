@@ -1,18 +1,12 @@
 <template>
   <div class="step-register">
-    <message
-      ref="modalWizard"
-      @message="goOff"
-    />
     <div class="auth-user tw-mx-auto" v-if="isActive">
       <div class="step-title">
         {{ $tr('isite.cms.sessionFound')}}!
       </div>
-      <div v-show="userAuth.userData.fullName">
-        <div class="selected-label">{{ $tr('isite.cms.label.user') }}</div>
-        <div class="selected-box">
-          {{userAuth.userData.fullName}}
-        </div>
+      <div class="selected-label">{{ $tr('isite.cms.label.user') }}</div>
+      <div class="selected-box">
+        {{userAuth.userData.fullName}}
       </div>
       <div class="selected-label">{{ $tr('isite.cms.label.email') }}</div>
       <div class="selected-box">
@@ -33,7 +27,7 @@
                 no-caps
                 color="primary"
                 size="md"
-                @click="showModal(2)">
+                @click="continueUser()">
           {{ $tr('isite.cms.label.continueUser') }}
         </q-btn>
       </div>
@@ -50,8 +44,8 @@
         <q-separator class="tw-mb-6"/>
         <!--Actions-->
         <div class="row justify-center q-gutter-sm">
-          <google-auth @logged="checkAfterLogin"/>
-          <facebook-auth @logged="checkAfterLogin"/>
+          <google-auth/>
+          <facebook-auth/>
         </div>
       </div>
     </div>
@@ -78,7 +72,6 @@ import microsoftAuth from '@imagina/quser/_components/socialAuth/microsoft'
 import axios from "axios"
 import moment from "moment";
 import momenttz from 'moment-timezone';
-import message from '@imagina/qsite/_components/organizations/wizard/modals/message'
 
 export default {
   components: {
@@ -86,7 +79,6 @@ export default {
     facebookAuth,
     googleAuth,
     microsoftAuth,
-    message
   },
   props: {
     info: {
@@ -99,8 +91,7 @@ export default {
       stepContent: '',
       userAuth: this.$store.state.quserAuth,
       isActive: false,
-      activeRegister: false,
-      choice: '',
+      activeRegister: false
     }
   },
   mounted() {
@@ -124,8 +115,7 @@ export default {
       //preguntar por setting para validar timeZone
       this.checkTimeZone()
       //else
-      //this.redirectAfterLogin()
-      this.showModal(1);
+      this.redirectAfterLogin()
     },
     checkTimeZone() {
       //Modal persistent...
@@ -148,7 +138,7 @@ export default {
     getStepInfo() {
       this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_REGISTER);
     },
-    async continueUser() {
+    continueUser() {
       try {
         if (this.userAuth.userData.email) {
           this.$emit("update", {active: true, info: {email: this.userAuth.userData.email}});
@@ -169,19 +159,7 @@ export default {
           this.isActive = true
         }
       }
-    },
-    async showModal(type) {
-      this.choice = type;
-      await this.$refs.modalWizard.showModalWizard();
-    },
-    goOff() {
-      if(this.choice == 1 ){
-        this.redirectAfterLogin();
-      }
-      if(this.choice == 2 ){
-        this.continueUser();
-      }
-    },
+    }
   }
 }
 </script>

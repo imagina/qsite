@@ -1,5 +1,5 @@
 <template>
-  <div class="step-ai tw-overflow-y-hidden" >
+  <div class="step-ai" >
     <div v-if="stepContent" class="tw-max-w-xl tw-mx-auto" :class="{'form-inactive' : !activeForm }">
 
       <h2 class="step-title">{{ stepContent.title  }}</h2>
@@ -12,16 +12,14 @@
       </div>
       <div class="tw-mt-6" v-if="activeForm">
         <div class="tw-pl-4 tw-text-xs">Completa el siguiente formulario </div>
-          <div style="min-height: 100px">
-            <dynamic-form
-              v-model="form"
-              :form-id="formId"
-              formType="grid"
-              no-actions
-              ref="ai-form"
-              default-col-class="col-6"
-            />
-          </div>
+          <dynamic-form
+            v-model="form"
+            :form-id="formId"
+            formType="grid"
+            no-actions
+            ref="ai-form"
+            default-col-class="col-6"
+          />
       </div>
     </div>
 
@@ -74,6 +72,7 @@ export default {
   },
   methods: {
     async getData() {
+      console.log(this.infoBase);
       if (this.infoBase && this.infoBase.form) {
         this.activeForm = this.infoBase.form.check;
         this.form = this.infoBase.form.info;
@@ -107,6 +106,7 @@ export default {
       }
     },
     verifyNext() {
+      console.log(this.activeForm);
       if(this.activeForm) {
         //  quiere decir que tiene que llenar el formulario
         this.verifyForm();
@@ -128,8 +128,8 @@ export default {
   animation: fade-in-left 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 .step-ai > .form-inactive {
-  @apply tw-flex tw-flex-col tw-justify-center;
-  height: calc(100vh - 320px);
+  @apply tw-flex tw-min-h-screen tw-flex-col tw-justify-center;
+  margin-top: -95px;
 }
 .step-ai #dynamicFormComponent .box {
   @apply tw-shadow-none !important;

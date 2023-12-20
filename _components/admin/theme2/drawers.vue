@@ -13,8 +13,7 @@
       <!--List iadmin-->
       <q-scroll-area id="adminMenu" class="bg-primary" :style="`height: calc(100vh - 146px`">
         <!--Menu-->
-        <menu-list ref="menuList" group :translatable="menuTranslatable" :menu="menuSelect"
-                   :with-tooltip="miniState" :tooltip-props="{anchor:'center right'}"/>
+        <menu-list ref="menuList" group :translatable="menuTranslatable" :menu="menuSelect"/>
       </q-scroll-area>
     </q-drawer>
 
@@ -24,10 +23,10 @@
     </q-drawer>
 
     <!-- Chat -->
-    <q-drawer bordered id="chatMaster" overlay v-model="drawer.chat" side="right"
-              v-if="$auth.hasAccess('ichat.conversations.index')">
-      <chat-list/>
-    </q-drawer>
+    <!--    <q-drawer bordered id="chatMaster" overlay v-model="drawer.chat" side="right"-->
+    <!--              v-if="$auth.hasAccess('ichat.conversations.index')">-->
+    <!--      <chat-list/>-->
+    <!--    </q-drawer>-->
 
     <!--Master filter-->
     <q-drawer bordered id="drawerFilterMaster" v-model="drawer.filter" side="right" v-if="filter.load" :overlay="false">
@@ -45,6 +44,12 @@
               v-if="$auth.hasAccess('notification.notifications.manage')">
       <master-notifications/>
     </q-drawer>
+
+    <!--Offline-->
+    <q-drawer bordered id="drawerOfflineMaster" v-model="drawer.offline" side="right" overlay
+              v-if="offlineDrawer">
+      <offline/>
+    </q-drawer>
   </div>
 </template>
 <script>
@@ -58,6 +63,7 @@ import masterFilter from '@imagina/qsite/_components/master/masterFilter'
 import checkin from '@imagina/qcheckin/_components/checkin'
 import masterRecommendation from '@imagina/qsite/_components/master/masterRecommendations'
 import masterNotifications from '@imagina/qnotification/_components/drawerNotifications'
+import offline from '@imagina/qoffline/_components/drawerOffline'
 
 export default {
   beforeDestroy() {
@@ -66,7 +72,7 @@ export default {
   },
   mixins: [sidebarMixins],
   props: {},
-  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation, masterNotifications},
+  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation, masterNotifications, offline},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -87,13 +93,17 @@ export default {
         filter: false,
         checkin: false,
         recommendation: false,
-        notification: false
+        notification: false,
+        offline: false
       },
       appConfig: config('app'),
       filter: this.$filter
     }
   },
   computed: {
+    offlineDrawer() {
+      return this.$store.getters['qsiteApp/getSettingValueByName']('isite::offline')
+    },
     windowSize() {
       return this.windowWith >= '992' ? 'desktop' : 'mobile'
     },
