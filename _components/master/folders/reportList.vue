@@ -37,7 +37,10 @@
             class="tw-font-bold" 
             lines="1"
           >
-            {{ report.title || report.id }}
+           <span 
+            class="tw-cursor-pointer"
+            @click="show(report)"
+           > {{ report.title || report.id }} </span>
           </q-item-label>
           <q-item-label caption lines="1">
             {{ report.name || report.description }} 
@@ -154,6 +157,12 @@ export default {
     uniqBy(data){
       return _.uniqBy(data, 'id');
     },
+    show(report) {
+      const action = this.fieldRelationActions.find(item => item.name =='Show');
+      if(action) {
+        action.action(report)
+      }
+    }
   },
 };
 </script>
