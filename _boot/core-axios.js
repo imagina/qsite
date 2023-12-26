@@ -89,7 +89,7 @@ export default function ({app, router, store, Vue, ssrContext}) {
         params: config.params,
         titleOffline,
       };
-      //addRequestDB(request, user.userData.id);
+      addRequestDB(request, user.userData.id);
     }
     store.dispatch('quserAuth/REFRESH_TOKEN');
     //Set abortController for the GET methods
