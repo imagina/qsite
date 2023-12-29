@@ -507,6 +507,9 @@ export default {
   },
   computed: {
     //Return label to field
+    isAppOffline() {
+      return this.$store.state.qofflineMaster.isAppOffline;
+    },
     fieldLabel() {
       let response = ''
       if (this.field.props && this.field.props.label) {
@@ -1359,14 +1362,14 @@ export default {
           if (componentCrud) {
             //Activate listen to chanel
             this.$root.$on(`crudForm${componentCrud.params.apiRoute}Created`, async () => {
-              this.getOptions()//Get options
+              await this.getOptions()//Get options
             })
           }
         }
       }, 500)
     },
     //Get options if is load options
-    getOptions(query = false) {
+    async getOptions(query = false) {
       return new Promise((resolve, reject) => {
         this.loading = true//Open loading
         let loadOptions = this.$clone(this.field.loadOptions || {})
@@ -1413,7 +1416,7 @@ export default {
           const parametersUrl = loadOptions.parametersUrl || {};
           const crud = Object.keys(parametersUrl).length > 0 
             ? this.$crud.get(loadOptions.apiRoute, params, parametersUrl) 
-            : this.$crud.index(loadOptions.apiRoute, params, true);
+            : this.$crud.index(loadOptions.apiRoute, params);
           //Request
           crud.then(response => {
             if (this.keyField !== '') {
@@ -1434,7 +1437,12 @@ export default {
             resolve(true)
           }).catch(error => {
             this.$apiResponse.handleError(error, () => {
-              this.$alert.error({message: this.$tr('isite.cms.message.errorRequest'), pos: 'bottom'})
+              if (!this.isAppOffline) {
+                this.$alert.error({
+                  message: this.$tr('isite.cms.message.errorRequest'), 
+                  pos: 'bottom'
+                })
+              }
               this.loading = false
               reject(true)
             })
