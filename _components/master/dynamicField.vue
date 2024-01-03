@@ -165,6 +165,13 @@
               <q-item-section v-else-if="scope.opt.icon" avatar>
                 <q-icon size="20px" :name="scope.opt.icon" class="q-mr-sm"/>
               </q-item-section>
+              <!--Image-->
+              <q-item-section avatar v-if="field.imageField">
+                <q-img
+                  :src="getImageFieldUrl(scope.opt.id, field.imageField)"
+                  :style="`${ field.imageFieldStyle ? field.imageFieldStyle : 'height: 24px; width: 24px' }`"
+                />
+              </q-item-section>
               <!--Labels-->
               <q-item-section>
                 <div :class="{'tw-flex': field.props.selectColor }">
@@ -1648,6 +1655,10 @@ export default {
           }
         }
       }
+    },
+    getImageFieldUrl(id, field){
+      const item = this.rootOptionsData.find((e) => e.id == id )
+      return item[field] ? item[field] : ''
     }
   }
 }

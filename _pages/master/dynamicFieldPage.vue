@@ -94,6 +94,8 @@ export default {
         select: {
           ...globalData,
           type: 'select',
+          imageField: 'mainImage',
+          //imageFieldStyle: 'height: 32px; width: 32px',
           props: {
             label: 'type: select',
             options: []
