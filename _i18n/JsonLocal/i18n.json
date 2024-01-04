@@ -1170,7 +1170,8 @@
           "schedule": "Schedule",
           "scheduler": "Scheduler",
           "scheduleStatus": "Schedule status",
-          "workOrderStatuses": "Work Order statuses"
+          "workOrderStatuses": "Work Order statuses",
+          "searchFlight": "Search flight"
         },
         "map": {
           "workOrderId": "Work Order Id",
