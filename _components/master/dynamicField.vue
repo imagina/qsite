@@ -213,6 +213,18 @@
                  v-bind="fieldProps.fieldComponent" :class="`${field.help ? 'treeselect-dynamic-field' : ''}`">
           <tree-select v-model="responseValue" :options="formatOptions" placeholder="" v-bind="fieldProps.field"
                        @select="(node, instanceId) => $emit('select', {node, instanceId})">
+
+              <template slot="option-label" slot-scope="{node}">
+                <label>
+                  <q-img
+                    class="q-mr-xs"
+                    :src="getImageFieldUrl(node.id, field.imageField)"
+                    :style="`${ field.imageFieldStyle ? field.imageFieldStyle : 'height: 24px; width: 24px' }`"
+                  />
+                  {{ node.label }}
+                </label>
+              </template>
+
             <!--Before options slot-->
             <template slot="before-list">
               <slot name="before-options"></slot>

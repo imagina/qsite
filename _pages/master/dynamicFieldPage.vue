@@ -103,13 +103,19 @@ export default {
           loadOptions: {
             apiRoute: 'apiRoutes.quser.users',
             select: {label: 'fullName', id: 'id'},
-            filterByQuery: true
+            filterByQuery: false
           }
         },
         treeSelect: {
           ...globalData,
           type: 'treeSelect',
-          props: {label: 'type: treeSelect'}
+          imageField: 'smallThumb',
+          //imageFieldStyle: 'height: 32px; width: 32px',
+          props: {label: 'type: treeSelect'},
+          loadOptions: {
+            apiRoute: 'apiRoutes.qcommerce.categories',
+            select: {label: 'title', id: 'id'},
+          }
         },
         html: {
           ...globalData,
