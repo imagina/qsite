@@ -109,7 +109,7 @@ export default {
         treeSelect: {
           ...globalData,
           type: 'treeSelect',
-          imageField: 'smallThumb',
+          imageField: 'mediaFiles.mainimage.url',
           //imageFieldStyle: 'height: 32px; width: 32px',
           props: {label: 'type: treeSelect'},
           loadOptions: {

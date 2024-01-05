@@ -218,6 +218,7 @@
                 <label>
                   <q-img
                     class="q-mr-xs"
+                    v-if="field.imageField"
                     :src="getImageFieldUrl(node.id, field.imageField)"
                     :style="`${ field.imageFieldStyle ? field.imageFieldStyle : 'height: 24px; width: 24px' }`"
                   />
@@ -1670,7 +1671,7 @@ export default {
     },
     getImageFieldUrl(id, field){
       const item = this.rootOptionsData.find((e) => e.id == id )
-      return item[field] ? item[field] : ''
+      return _.get(item, field, '')
     }
   }
 }
