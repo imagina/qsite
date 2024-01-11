@@ -1162,7 +1162,7 @@
           "flightScheduleLeg": "Flight Schedule Leg | Flight Schedule Legs",
           "flightStatuses": "Flight Statuses",
           "flight": "Flight | Flights",
-          "flightInfo": "Flight Info",
+          "flightInfo": "Flights",
           "workOrders": "Work Orders",
           "rampInfo": "Ramp",
           "passengerInfo": "Passenger",
@@ -1171,7 +1171,8 @@
           "scheduler": "Scheduler",
           "scheduleStatus": "Schedule status",
           "workOrderStatuses": "Work Order statuses",
-          "searchFlight": "Search flight"
+          "searchFlight": "Search flight",
+          "flightsTracker": "flights Tracker"
         },
         "map": {
           "workOrderId": "Work Order Id",
