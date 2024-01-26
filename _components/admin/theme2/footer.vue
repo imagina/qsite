@@ -27,10 +27,12 @@
           </div>
         </div>
         <!-- go to site -->
-        <div id="footerMobileGoToSite" class="item-footer col cursor-pointer bg"
-             @click="$helper.openExternalURL($store.state.qsiteApp.baseUrl)">
-          <q-icon class="item-icon" name="fa-light fa-eye"/>
-          <div>{{ $tr('isite.cms.configList.goToSite') }}</div>
+        <div 
+          class="item-footer col cursor-pointer" 
+          @click="$eventBus.$emit('toggleMasterDrawer','config')"
+        >
+          <q-icon class="item-icon" name="fas fa-cog"/>
+          <div>{{ $tr('isite.cms.label.setting') }}</div>
         </div>
         <!-- Others -->
         <div id="footerMobileOthers" class="item-footer col cursor-pointer" @click="modal.show = true">
