@@ -1172,7 +1172,7 @@
           "scheduleStatus": "Schedule status",
           "workOrderStatuses": "Work Order statuses",
           "searchFlight": "Search flight",
-          "flightsTracker": "flights Tracker"
+          "flightsTracker": "Flight Tracker"
         },
         "map": {
           "workOrderId": "Work Order Id",
@@ -1251,7 +1251,7 @@
         "sidebar": {
           "cargoInfo": "Cargo",
           "awbTracking": "Awb Tracking",
-          "scale": "Scale"
+          "scale": "Scale Tracking"
         },
         "message": {}
       }
@@ -3072,7 +3072,7 @@
         "sidebar": {
           "cargoInfo": "Cargo",
           "awbTracking": "Awb Tracking",
-          "scale": "Balanza"
+          "scale": "Seguimiento de la balanza"
         },
         "message": {}
       }
