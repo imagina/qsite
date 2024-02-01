@@ -1251,7 +1251,7 @@
         "sidebar": {
           "cargoInfo": "Cargo",
           "awbTracking": "Awb Tracking",
-          "scale": "Scale Tracking"
+          "scaleTracking": "Scale Tracking"
         },
         "message": {}
       }
@@ -3072,7 +3072,7 @@
         "sidebar": {
           "cargoInfo": "Cargo",
           "awbTracking": "Awb Tracking",
-          "scale": "Seguimiento de la balanza"
+          "scaleTracking": "Seguimiento de la balanza"
         },
         "message": {}
       }
