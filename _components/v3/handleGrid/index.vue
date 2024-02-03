@@ -4,7 +4,8 @@
       <draggable :list="elements" class="row q-col-gutter-lg q-pb-md" :group="{ name: 'items' }">
         <div :class="element[gridPosField]" v-for="(element, keyItems) in elements" :key="element.id">
           <div :class="`panel-editor-component__component ${verifyKeys(element,childsFieldName) ? 'hasChild' : ''}`">
-            <div class="absolute-right q-ma-sm">
+            <div class="row wrap justify-between full-width q-px-sm">
+              <p class="ellipsis">{{ element[titleField] }}</p>
               <div class="row q-gutter-xs">
                 <!--Actions-->
                 <q-btn v-for="(action, actIndex) in actions" :key="actIndex" v-bind="getActionsButtonProps(action)"
@@ -29,9 +30,8 @@
                 </q-btn>
               </div>
             </div>
-            <p>{{ element[titleField] }}</p>
 
-            <div v-if="verifyKeys(element,childsFieldName)" class="full-width q-px-md">
+            <div v-if="verifyKeys(element,childsFieldName)" class="full-width q-px-xs">
               <handle-grid :elements="element[childsFieldName]" v-bind="$props" :parent="element"
                            @create="emitCreateElement"/>
             </div>
@@ -42,12 +42,9 @@
       <div v-if="canAddNewItem" class="full-width text-center">
         <q-separator class="q-my-md"/>
         <q-btn unelevated no-caps rounded color="cyan" @click="emitCreateElement()" outline class="full-width">
-          <div class="row items-center no-wrap">
-            <q-icon left name="fa-regular fa-grid-2-plus" size="xs"/>
-            <div class="text-center">
-              Añadir
-            </div>
-          </div>
+          <q-icon left name="fa-regular fa-grid-2-plus" size="xs"/>
+          <p class="ellipsis text-center">{{ $tr('isite.cms.label.add') }}</p>
+          <q-tooltip>{{ $tr('isite.cms.label.add') }}</q-tooltip>
         </q-btn>
       </div>
     </section>
@@ -91,31 +88,35 @@ export default defineComponent({
 })
 </script>
 <style lang="stylus">
-#panel-editor-component
+#panel-editor-component {
   margin: 0 auto;
-  padding 10px
+  padding: 10px 5px
   background-color: white;
   border-radius: 10px;
-  //border: 1px solid #ccc;
 
-  .hasChild
-    padding 20px
-    min-height: 120px;
+  .hasChild {
+    padding: 20px 5px
+  }
 
-  .panel-editor-component__component
-    position relative;
+  .panel-editor-component__component {
+    position: relative;
     user-select: none;
     cursor: pointer;
     min-height: 100px;
     display: flex;
-    flex-direction column
+    flex-direction column;
     align-items: center;
     justify-content: center;
     border: dashed 3px $blue-grey;
 
-  .add-new-item
-    //display grid;
-    //place-content center;
-    height 100%;
-    cursor pointer;
+    .actions-props {
+      min-width: 150px;
+    }
+  }
+
+  .add-new-item {
+    height: 100%;
+    cursor: pointer;
+  }
+}
 </style>
