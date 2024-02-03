@@ -212,12 +212,31 @@ class Array {
     //Destroy tree
     data.forEach(item => {
       if (item.children) {
-        let children = this.destroyTree(item.children || [])
+        let children = item.children || []
         delete item.children
         response = [...response, item, ...children]
       } else {
         response = [...response, item]
       }
+    })
+    //Response
+    return response
+  }
+
+  //Destroy tree
+  destroyNestedItems(data, parentId = 0) {
+    let response = []
+
+    //Destroy tree
+    data.forEach((item, index) => {
+      //Handle children items
+      let children = this.destroyNestedItems((item.children || []), item.id)
+      delete item.children
+      //Set parentId and index to sortOrder
+      item.parentId = parentId
+      item.sortOrder = index
+      //Update response
+      response = [...response, item, ...children]
     })
     //Response
     return response

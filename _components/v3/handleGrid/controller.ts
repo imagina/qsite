@@ -16,52 +16,23 @@ export default function controller(props: any, emit: any) {
   const state = reactive({})
 
   // Computed
-  const computeds = {
-    actionButtonProps: computed(() => ({
+  const computeds = {}
+
+  // Methods
+  const methods = {
+    //Return the default actions props by action
+    getActionsButtonProps: (action = {}) => ({
       icon: 'fa-regular fa-objects-column',
       outline: true,
       round: true,
       color: 'cyan',
-      size: '10px'
-    }))
-  }
-
-  // Methods
-  const methods = {
-    handleChangeDraggable() {
-      console.warn(">>>> Pendiente", props.elements)
-      props.elements.forEach((item, index) => {
-        //Apply order
-        item[props.orderBy] = index
-        //Apply parent
-        item[props.parentField] = props.parentValue
-      })
-    },
-    addItem(currentItem) {
-      const index = props.elements.findIndex(i => i.id === currentItem.id);
-      emit('create', {index, parentId: 0, onCreate: (val) => methods.onCreate(index, val)})
-    },
-    onCreate(index, newItem) {
-      if (index >= 0) {
-        const newArray = proxy.$clone<any[]>(props.elements)
-        newArray.splice(index + 1, 0, newItem)
-        // Insert the new object at the specified position
-        props.elements = newArray;
-      } else {
-        props.elements.push(newItem)
-      }
-
-      methods.updateSortOrder();
-    },
-    //Updated Item
-    updateItem(newValue, keySearch = 'id') {
-      //Search if exist the item
-      const itemIndex = props.elements.findIndex(i => i[keySearch] === newValue.id);
-
-      //If exist replace the item with the new item value
-      if (itemIndex >= 0) {
-        props.elements.splice(itemIndex, 1, newValue)
-      }
+      size: '10px',
+      ...action,
+      label: ''
+    }),
+    //Add element
+    emitCreateElement(parent = null) {
+      emit('create', parent || props.parent)
     },
     //Check if exist key in the element
     verifyKeys(element, key) {

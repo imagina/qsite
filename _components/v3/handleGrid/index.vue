@@ -1,20 +1,18 @@
 <template>
   <div class="row">
     <section id="panel-editor-component" class="full-width">
-      <draggable :list="elements" class="row q-col-gutter-lg q-pb-md" :group="{ name: 'items' }"
-                 @change="handleChangeDraggable">
+      <draggable :list="elements" class="row q-col-gutter-lg q-pb-md" :group="{ name: 'items' }">
         <div :class="element[gridPosField]" v-for="(element, keyItems) in elements" :key="element.id">
           <div :class="`panel-editor-component__component ${verifyKeys(element,childsFieldName) ? 'hasChild' : ''}`">
             <div class="absolute-right q-ma-sm">
               <div class="row q-gutter-xs">
                 <!--Actions-->
-                <q-btn v-for="(action, actIndex) in actions" :key="actIndex" v-bind="actionButtonProps"
-                       :icon="action.icon" :color="action.color || actionButtonProps.color"
+                <q-btn v-for="(action, actIndex) in actions" :key="actIndex" v-bind="getActionsButtonProps(action)"
                        @click="action.action(element)">
                   <q-tooltip>{{ action.label }}</q-tooltip>
                 </q-btn>
                 <!--Grid position action-->
-                <q-btn v-if="verifyKeys(element,gridPosField)" v-bind="actionButtonProps">
+                <q-btn v-if="verifyKeys(element,gridPosField)" v-bind="getActionsButtonProps()">
                   <q-popup-edit
                       v-model="element[gridPosField]"
                       :title="element[titleField]"
@@ -32,29 +30,25 @@
               </div>
             </div>
             <p>{{ element[titleField] }}</p>
-            <q-btn v-if="canAddNewItem" class="add-btn" unelevated no-caps rounded color="cyan"
-                   @click="addItem(element)">
-              <div class="row items-center no-wrap">
-                <q-icon left name="fa-regular fa-grid-2-plus" size="xs"/>
-                <div class="text-center">
-                  Añadir
-                </div>
-              </div>
-            </q-btn>
 
             <div v-if="verifyKeys(element,childsFieldName)" class="full-width q-px-md">
-              <handle-grid :elements="element[childsFieldName]" v-bind="$props"
-                           :parent-value="element[parentValueField] || 0"
-                           @create="(val) => addedChildItem(val.index, element.id, val)"/>
+              <handle-grid :elements="element[childsFieldName]" v-bind="$props" :parent="element"
+                           @create="emitCreateElement"/>
             </div>
           </div>
         </div>
       </draggable>
-      <div v-if="canAddNewItem && elements.length == 0" class="add-new-item" @click="addItem()">
-        <div class="text-center q-pa-lg">
-          <q-icon name="fa-regular fa-grid-2-plus" size="60px" color="warning"/>
-          <div class="q-mt-md text-h5 text-blue-grey">Añade un nuevo item</div>
-        </div>
+      <!--Actions-->
+      <div v-if="canAddNewItem" class="full-width text-center">
+        <q-separator class="q-my-md"/>
+        <q-btn unelevated no-caps rounded color="cyan" @click="emitCreateElement()" outline class="full-width">
+          <div class="row items-center no-wrap">
+            <q-icon left name="fa-regular fa-grid-2-plus" size="xs"/>
+            <div class="text-center">
+              Añadir
+            </div>
+          </div>
+        </q-btn>
       </div>
     </section>
   </div>
@@ -80,26 +74,13 @@ export default defineComponent({
       type: String,
       default: 'gridPosition'
     },
-    orderByField: {
-      type: String,
-      default: 'sortOrder'
-    },
-    parentField: {
-      type: String,
-      default: 'parentId'
-    },
-    parentValueField: {
-      type: String,
-      default: 'id'
-    },
-    parentValue: {default: 0},
-
     canAddNewItem: {
       type: Boolean,
       default: false
     },
     actions: {type: Object, default: () => ({})},
-    childsFieldName: {type: String, default: 'children'}
+    childsFieldName: {type: String, default: 'children'},
+    parent: {default: null}
   },
   components: {
     draggable
@@ -132,15 +113,9 @@ export default defineComponent({
     justify-content: center;
     border: dashed 3px $blue-grey;
 
-    .add-btn
-      position absolute;
-      bottom: 0%;
-      left: 50%;
-      transform: translate(-50%, 50%);
-
   .add-new-item
-    display grid;
-    place-content center;
+    //display grid;
+    //place-content center;
     height 100%;
     cursor pointer;
 </style>
