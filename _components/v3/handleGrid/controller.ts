@@ -8,10 +8,6 @@ export default function controller(props: any, emit: any) {
   // Refs
   const refs = {}
 
-  interface StateProps {
-
-  }
-
   // States
   const state = reactive({})
 
@@ -38,21 +34,11 @@ export default function controller(props: any, emit: any) {
     verifyKeys(element, key) {
       const arrayKeys = Object.keys(element);
       return arrayKeys.includes(key)
-    },
-    //Add child in Grid
-    addedChildItem(index, parentId, childObj) {
-      let response = childObj
-      if (response.parentId == 0) {
-        response.parentId = parentId
-      }
-
-      emit('create', response)
-    },
+    }
   }
 
   // Mounted
   onMounted(() => {
-
   })
 
   // Watch
