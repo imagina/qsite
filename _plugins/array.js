@@ -49,12 +49,12 @@ class Array {
 
   builTree(elements, parentId = 0, fields = {}) {
     var branch = []
-    fields = {parentId: 'parentId', nameFieldParent: 'id', ...fields}
+    fields = {parentFieldName: 'parentId', parentFieldValue: 'id', ...fields}
 
     elements.forEach(element => {
-      element[fields.parentId] ? false : element[fields.parentId] = 0
-      if (element[fields.parentId] == parentId) {
-        var children = this.builTree(elements, element[fields.nameFieldParent], fields)
+      element[fields.parentFieldName] ? false : element[fields.parentFieldName] = 0
+      if (element[fields.parentFieldName] == parentId) {
+        var children = this.builTree(elements, element[fields.parentFieldValue], fields)
         let record = element
         if (children.length) {
           record['children'] = children
@@ -229,12 +229,12 @@ class Array {
 
     //Destroy tree
     data.forEach((item, index) => {
-      const field = {parentId: 'parentId', ...fields}
+      const field = {parentFieldName: 'parentId', parentFieldValue: 'id', ...fields}
       //Handle children items
-      let children = this.destroyNestedItems((item.children || []), item[field.parentId])
+      let children = this.destroyNestedItems((item.children || []), item[field.parentFieldValue])
       delete item.children
       //Set parentId and index to sortOrder
-      item[field.parentId] = parentId
+      item[field.parentFieldName] = parentId
       item.sortOrder = index
       //Update response
       response = [...response, item, ...children]
