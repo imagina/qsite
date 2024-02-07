@@ -231,7 +231,7 @@ class Array {
     data.forEach((item, index) => {
       const field = {parentFieldName: 'parentId', parentFieldValue: 'id', ...fields}
       //Handle children items
-      let children = this.destroyNestedItems((item.children || []), item[field.parentFieldValue])
+      let children = this.destroyNestedItems((item.children || []), item[field.parentFieldValue], fields)
       delete item.children
       //Set parentId and index to sortOrder
       item[field.parentFieldName] = parentId
