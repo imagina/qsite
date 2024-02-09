@@ -1,6 +1,6 @@
 import {Loading} from "quasar";
 import treeSelect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+//[ptc]import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import crud from '@imagina/qcrud/_components/crud'
 import innerLoading from '@imagina/qsite/_components/master/innerLoading'
 import notFound from '@imagina/qsite/_components/master/404'
@@ -25,7 +25,7 @@ import activities from '@imagina/qgamification/_components/categoryView/index.vu
 import helpText from '@imagina/qsite/_components/master/helpText.vue';
 
 
-export default ({app, router, store, Vue}) => {
+export default ({ app, router, store }) => {
   //Components
   let components = [
     {name: 'crud', component: crud},
@@ -55,8 +55,8 @@ export default ({app, router, store, Vue}) => {
 
   //Register components
   components.forEach(item => {
-    Vue.use(item.component)
-    Vue.component(item.name, item.component)
+    app.use(item.component)
+    app.component(item.name, item.component)
   })
 
   //Hidde loading

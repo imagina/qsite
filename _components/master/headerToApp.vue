@@ -34,24 +34,28 @@
     methods: {}
   }
 </script>
-<style lang="stylus">
-  #backPageComponent
-    height 50px
-    width 100%
-    border-bottom 1px solid $blue-grey-9
+<style lang="scss">
+  #backPageComponent {
+    height: 50px;
+    width: 100%;
+    border-bottom: 1px solid $blue-grey-9;
+  }
 
-    .fixed-top
-      z-index 99
-      min-height 50px
+  .fixed-top {
+    z-index: 99;
+    min-height: 50px;
+  }
 
-    .text-label
-      display inline
-      text-transform capitalize
-      font-size 19px
-      font-weight normal
+  .text-label {
+    display: inline;
+    text-transform: capitalize;
+    font-size: 19px;
+    font-weight: normal;
+  }
 
-    img
-      width 66px
-      padding 0 16px 0 8px
-      height 34px
+  img {
+    width: 66px;
+    padding: 0 16px 0 8px;
+    height: 34px;
+  }
 </style>

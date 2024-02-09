@@ -147,10 +147,11 @@
 </template>
 <script>
 import QCharts from '@imagina/qsite/_components/master/charts.vue';
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
-    this.$root.$off('page.data.refresh')
+    eventBus.off('page.data.refresh')
   },
   props: {
     params: {type: Object, default: false}
@@ -204,7 +205,7 @@ export default {
       if (this.params.filters) this.setFilters()//Set filters
       else this.getData()//Get data
       //Listen refresh page event
-      this.$root.$on('page.data.refresh', () => this.getData())
+      eventBus.on('page.data.refresh', () => this.getData())
     },
     //Get data
     getData() {
@@ -259,49 +260,60 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#quickCardComponent
-  position relative
+<style lang="scss">
+#quickCardComponent {
+  position: relative;
 
-  #iconQuickCard
-    position: absolute
-    top 28px
-    right 5px
-    background white
-    border 2px solid $primary
-    color $primary
-    padding 10px
-    border-radius 50%
-    font-size 20px
+  #iconQuickCard {
+    position: absolute;
+    top: 28px;
+    right: 5px;
+    background: white;
+    border: 2px solid $primary;
+    color: $primary;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 20px;
+  }
 
-  #contentQuickCard
-    min-height 150px
+  #contentQuickCard {
+    min-height: 150px;
+  }
 
-  #itemsListV
-    .itemImage, .itemIcon
-      background-color $grey-4
-      height 70px
-      width 70px
-      border-radius 10px
+  #itemsListV {
+    .itemImage, .itemIcon {
+      background-color: $grey-4;
+      height: 70px;
+      width: 70px;
+      border-radius: 10px;
+    }
+  }
 
-  #itemsListH
-    .itemImage, .itemIcon
-      background-color $grey-4
-      height 180px
-      width 100%
-      border-radius 10px
-      font-size 30px
-      color $grey-7
+  #itemsListH {
+    .itemImage, .itemIcon {
+      background-color: $grey-4;
+      height: 180px;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 30px;
+      color: $grey-7;
+    }
+  }
 
-  #itemsListRankin
-    .q-item
-      position relative
+  #itemsListRankin {
+    .q-item {
+      position: relative;
 
-      .q-linear-progress
-        position absolute
-        bottom 0
-        left 0
+      .q-linear-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+    }
+  }
 
-  .colorPercentage
-    color: $primary
+  .colorPercentage {
+    color: $primary;
+  }
+}
 </style>

@@ -2,9 +2,11 @@
   <div id="helpCenterComponent"></div>
 </template>
 <script>
+import eventBus from '@imagina/qsite/_plugins/eventBus'
+
 export default {
   beforeDestroy() {
-    this.$eventBus.$off('toggleHelpSection')
+    eventBus.off('toggleHelpSection')
   },
   props: {
     btnProps: {type: Object}
@@ -25,7 +27,7 @@ export default {
   computed: {},
   methods: {
     init() {
-      this.$eventBus.$on('toggleHelpSection', (params) => {
+      eventBus.on('toggleHelpSection', (params) => {
         this.handleHelpCenter(params)
       })
     },
@@ -41,5 +43,5 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="scss">
 </style>

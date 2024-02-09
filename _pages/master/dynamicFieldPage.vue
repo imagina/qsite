@@ -55,7 +55,9 @@ export default {
           type: 'crud',
           props: {
             crudType: 'select',
-            crudData: import('@imagina/qblog/_crud/categories'),
+            imageField: 'mediaFiles.mainimage.url',
+            //[ptc]
+            //crudData: import('@imagina/qblog/_crud/categories'),
             customData: {
               read: {
                 requestParams: {include: 'parent', filter: {status: 1}}
@@ -96,7 +98,8 @@ export default {
           type: 'select',
           props: {
             label: 'type: select',
-            options: []
+            options: [],
+            imageField: 'mainImage',
           },
           loadOptions: {
             apiRoute: 'apiRoutes.quser.users',
@@ -106,7 +109,14 @@ export default {
         treeSelect: {
           ...globalData,
           type: 'treeSelect',
-          props: {label: 'type: treeSelect'}
+          props: {
+            label: 'type: treeSelect',
+            imageField: 'mediaFiles.mainimage.url',
+          },
+          loadOptions: {
+            apiRoute: 'apiRoutes.qcommerce.categories',
+            select: {label: 'title', id: 'id'},
+          }
         },
         html: {
           ...globalData,
@@ -222,6 +232,42 @@ export default {
             }
           }
         },
+        localizedPhone: {
+          ...globalData,
+          type: 'localizedPhone',
+          props: {
+            label: 'type: localizedPhone',
+            mask:"###-###-####"
+          },
+        },
+        multiDynamifield : {
+            value : [],
+            type : 'multiplier',
+            props : {
+                label : 'Multiple Dynamic Fields',
+                isDraggable: true, // Default true
+                maxQuantity: 7, // Default 5
+                fields : {
+                    localizedPhone: {
+                      ...globalData,
+                      type: 'localizedPhone',
+                      colClass: "col-12",
+                      props: {
+                        label: 'type: localizedPhone',
+                        mask:"###-###-####"
+                      },
+                    },
+                    numberPhone : {
+                        value : null,
+                        type : 'input',
+                        colClass: "col-12",
+                        props : {
+                          label: 'Email'
+                        }
+                    }
+                }
+            }
+        },
       }
     }
   },
@@ -231,5 +277,5 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="scss">
 </style>

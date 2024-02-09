@@ -1,115 +1,102 @@
-import Route from 'vue-routisan'
-import appConfig from 'src/config/app'
 import pagesConfig from 'src/config/pages'
 
 class LocalRoutes {
   constructor() {
-    this.availablesLanguages = appConfig.languages.availables
-    this.defaultLanguage = appConfig.languages.default
     this.pages = pagesConfig
+    this.routes = [];
   }
 
-  //Return object of routes
   getRoutes() {
     this.loadRoutes()
     this.addExtraRoutes()
-    return Route.all()
+    return this.routes;
   }
 
-  //Load main routes
   loadRoutes() {
-    for (var nameGroupPage in this.pages) {
-      let groupPages = this.pages[nameGroupPage]//Get group pages
-      //Loop group pages
-      if (Object.keys(groupPages).length) {
-        for (var namePage in groupPages) {
-          let page = groupPages[namePage]//Get page
+    for (const [nameGroupPage, groupPages] of Object.entries(this.pages)) {
+      if (Object.keys(groupPages).length === 0) {
+        continue;
+      }
 
-          //Create Route if is active
-          if (page.activated) {
-            //Get localization paths
-            let pagePath = this.getPathPage(page)
-            //Create main route
-            Route.view(pagePath.default, page.layout).children(() => {
-              Route.view('/', page.page).options(this.getOptionsPage(page));
-            })
-            //Create localization routes
-            this.availablesLanguages.forEach(locale => {
-              Route.view(pagePath[locale], page.layout).children(() => {
-                Route.view('/', page.page).options(this.getOptionsPage(page, locale));
-              })
-            })
-          }
+      for (const [namePage, page] of Object.entries(groupPages)) {
+        if (page.activated) {
+          this.createAndAddRoute(page);
         }
       }
     }
   }
 
-  //Get localization page path
-  getPathPage(page) {
-    //Default language
-    let response = {default: page.path[this.defaultLanguage] || page.path}
-    //Add localizations path
-    this.availablesLanguages.forEach(locale => {
-      response[locale] = `/${locale}${(page.path[locale] || page.path)}`
-    })
-    //Response
-    return response
+  createAndAddRoute(page) {
+    const pagePath = { default: page.path[this.defaultLanguage] || page.path };
+    const route = {
+      path: pagePath.default,
+      component: page.layout,
+      children: [
+        {
+          path: '',
+          component: page.page,
+          ...this.getOptionsPage(page),
+        },
+      ],
+    };
+
+    this.routes.push(route);
   }
 
-  //Return meta data to route
   getOptionsPage(page, locale = false) {
-    let middlewares = (page.middleware || [])
-    let routeName = locale ? `${locale}.${page.name}` : page.name
+    let middlewares = page.middleware || [];
 
     return {
-      name: routeName,
+      name: page.name,
       meta: {
         ...page,
-        permission: (page.permission ? page.permission : null),
+        permission: page.permission || null,
         activated: page.activated,
-        path: locale ? `${locale}.${page.path}` : page.path,
-        name: routeName,
+        path: page.path,
         title: page.title,
         headerTitle: page.headerTitle || false,
         icon: page.icon,
         authenticated: page.authenticated,
-        subHeader: page.subHeader || {}
+        subHeader: page.subHeader || {},
       },
       props: page.props || true,
       beforeEnter: middlewares,
-    }
+    };
   }
 
-  //Add extra routes
   addExtraRoutes() {
-    //Add not found page
+    const notFound = '/:catchAll(.*)';
     if (process.env.MODE !== 'ssr') {
-      Route.view('*', () => import('@imagina/qsite/_layouts/blank.vue')).children(() => {
-        Route.view('/', () => import('@imagina/qsite/_pages/master/404')).options({
-          name: 'app.not.found',
-          meta: {
-            permission: null,
-            activated: true,
-            path: '*',
+      const notFoundRoute = {
+        path: notFound,
+        component: () => import('@imagina/qsite/_layouts/blank.vue'),
+        children: [
+          {
+            path: '',
+            component: () => import('@imagina/qsite/_pages/master/404'),
             name: 'app.not.found',
-            title: 'sidebar.pageNotFound',
-            headerTitle: false,
-            icon: 'fas fa-chart-bar',
-            authenticated: false,
-            subHeader: {}
+            meta: {
+              permission: null,
+              activated: true,
+              path: notFound,
+              name: 'app.not.found',
+              title: 'sidebar.pageNotFound',
+              headerTitle: false,
+              icon: 'fas fa-chart-bar',
+              authenticated: false,
+              subHeader: {},
+            },
+            props: true,
+            beforeEnter: [],
           },
-          props: true,
-          beforeEnter: [],
-        });
-      })
+        ],
+      };
+
+      this.routes.push(notFoundRoute);
     }
   }
 }
 
+const localRoutes = new LocalRoutes();
 
-//Create new clase
-const localRoutes = new LocalRoutes()
-
-//Response
-export default localRoutes
+export default localRoutes;

@@ -73,11 +73,13 @@
     }
   }
 </script>
-<style lang="stylus">
-  #treeListSelect
-    .header-list
-      border-bottom 1px solid $grey-4
-      margin-bottom 10px
+<style lang="scss">
+  #treeListSelect {
+    .header-list {
+      border-bottom: 1px solid $grey-4;
+      margin-bottom: 10px;
+    }
+  }
 </style>
 
 

@@ -36,10 +36,11 @@ import zoneConfigMixing from "@imagina/qmedia/_mixins/zoneConfigMixins"
 // Local
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
-    this.$eventBus.$off('master.cropper.image')
+    eventBus.off('master.cropper.image')
   },
   mixins: [zoneConfigMixing],
   props: {
@@ -62,7 +63,7 @@ export default {
       imgSrc: false,
       imgType: false,
       callBack: false,
-      aspectRatio: NaN
+      aspectRatio: NaN,
     }
   },
   computed: {
@@ -175,7 +176,7 @@ export default {
   methods: {
     init() {
       //Listen global event
-      this.$eventBus.$on('master.cropper.image', params => {
+      eventBus.on('master.cropper.image', params => {
         if (params.src) this.loadFile(params.src)
         if (params.type) this.imgType = this.$clone(params.type)
         if (params.callBack) this.callBack = params.callBack
@@ -238,36 +239,42 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#modalCropperComponent
-  #cropperContent
-    position relative
-    background #000
+<style lang="scss">
+#modalCropperComponent {
+  #cropperContent {
+    position: relative;
+    background: #000;
 
-    #bottomActions
-      position absolute
-      right 10px
-      bottom 10px
+    #bottomActions {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
 
-      .btnActionCropper
-        cursor pointer
-        border-radius 20px
-        background #00000099
-        color white
-        padding 3px 10px
-        border 2px solid white
+      .btnActionCropper {
+        cursor: pointer;
+        border-radius: 20px;
+        background: #00000099;
+        color: white;
+        padding: 3px 10px;
+        border: 2px solid white;
 
-        .q-icon
-          font-size 16px
-          color white
+        .q-icon {
+          font-size: 16px;
+          color: white;
+        }
+      }
+    }
 
-    #topActions
-      padding 3px 5px
-      border-radius 20px
-      background #00000099
-      border 2px solid white
-      margin auto
-      position absolute
-      top 10px
-      left 10px
+    #topActions {
+      padding: 3px 5px;
+      border-radius: 20px;
+      background: #00000099;
+      border: 2px solid white;
+      margin: auto;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+  }
+}
 </style>

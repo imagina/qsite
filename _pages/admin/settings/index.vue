@@ -362,15 +362,19 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#settingPage
-  .q-item
-    font-size 14px
-    color $grey-9
+<style lang="scss">
+#settingPage {
+  .q-item {
+    font-size: 14px;
+    color: $grey-9;
 
-    &.q-item--active
-      color $primary
+    &.q-item--active {
+      color: $primary;
 
-      .q-icon
-        color $primary
+      .q-icon {
+        color: $primary;
+      }
+    }
+  }
+}
 </style>

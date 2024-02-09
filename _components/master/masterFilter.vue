@@ -1,85 +1,123 @@
 <template>
-  <div id="masterFilterComponent" v-if="filter">
-    <!-- Header -->
-    <div id="masterFilterContent">
-      <!--Title-->
-      <div class="row justify-between items-center q-pa-md">
-        <div class="text-subtitle1 row items-center">
-          <q-icon name="fa-regular fa-filter" color="primary" size="20px" class="q-mr-sm"/>
-          <label class="text-primary text-weight-bold">{{ $trp('isite.cms.label.filter', {capitalize: true}) }}</label>
-        </div>
-        <!-- Close icon -->
-        <q-icon name="fas fa-times" color="blue-grey" size="20px" class="cursor-pointer"
-                @click="$eventBus.$emit('toggleMasterDrawer', 'filter')"/>
-      </div>
-
-      <!--Tabs-->
-      <q-separator class="q-mb-md" inset/>
-      <div id="tabsContent" class="full-width" v-if="false">
-        <q-tabs v-model="tabName" dense class="text-grey" active-color="primary" indicator-color="primary"
-                align="justify" v-if="filter.hasValues" :breakpoint="0">
-          <q-tab name="tabForm" :label="$tr('isite.cms.label.filter')"/>
-        </q-tabs>
-      </div>
-    </div>
-
-    <!--Content-->
-    <q-scroll-area id="contentMasterField" class="q-pm-md" style="height: calc(100vh - 253px)">
-      <!--Tab panels-->
-      <q-tab-panels v-model="tabName" animated keep-alive>
-        <!--Tab form-->
-        <q-tab-panel name="tabForm" class="q-pa-none q-px-xs">
-          <div id="filtersContent" class="q-px-sm">
-            <!--Search-->
-            <div v-if="filter.fields && filter.fields.search" class="q-mb-sm">
-              <!--Label-->
-              <div class="full-width text-primary q-mb-xs">
-                <q-icon name="fas fa-search" class="q-mr-xs"/>
-                {{ $tr('isite.cms.label.search', {capitalize: true}) }}
-              </div>
-              <!--Input search-->
-              <dynamic-field v-model="filterValues.search"
-                             :field="{...filter.fields.search, props : {debounce : '0'}}"/>
-            </div>
-            <!--Date-->
-            <div v-if="filter.fields && filter.fields.date" class="q-mb-sm">
-              <!--Fields date-->
-              <dynamic-field v-for="(fieldDate, key) in dateFields" :key="key" :field="fieldDate" class="q-mb-sm"
-                             v-model="filterValues.date[fieldDate.name || key]"/>
-            </div>
-            <!--Pagination-->
-            <div v-if="filter.fields && filter.fields.pagination" class="q-mb-sm">
-              <!--Label-->
-              <div class="full-width text-primary q-mb-xs">
-                <q-icon name="fab fa-buffer" class="q-mr-xs"/>
-                {{ $tr('isite.cms.label.pagination', {capitalize: true}) }}
-              </div>
-              <!--Fields pagination-->
-              <dynamic-field v-for="(fieldPagination, key) in paginationFields" :field="fieldPagination" class="q-mb-sm"
-                             v-model="pagination[fieldPagination.name || key]" :key="key"/>
-            </div>
-            <!--others Fields-->
-            <dynamic-field v-for="(field, key) in filter.fields" :key="key" v-model="filterValues[field.name || key]"
-                           v-if="['search','pagination'].indexOf(key) == -1" class="q-mb-sm" :field="field"
-                           @inputReadOnly="data => $set(readOnlyData, (field.name || key), data)"/>
+  <q-dialog
+      id="drawerFilterMaster"
+      v-model="showDialog"
+      persistent
+      maximized
+      position="right"
+      v-if="filter.load"
+    >
+  <q-card style="width: 350px;">
+    <div id="masterFilterComponent" v-if="filter">
+      <!-- Header -->
+      <div id="masterFilterContent">
+        <!--Title-->
+        <div class="row justify-between items-center q-pa-md">
+          <div class="text-subtitle1 row items-center">
+            <q-icon name="fa-regular fa-filter" color="primary" size="20px" class="q-mr-sm"/>
+            <label class="text-primary text-weight-bold">{{ $trp('isite.cms.label.filter', {capitalize: true}) }}</label>
           </div>
-        </q-tab-panel>
-      </q-tab-panels>
-    </q-scroll-area>
+          <!-- Close icon -->
+          <q-icon name="fas fa-times" color="blue-grey" size="20px" class="cursor-pointer"
+                  @click="eventBus.emit('toggleMasterDrawer', 'filter')"/>
+        </div>
 
-    <!--footer -->
-    <div class="absolute-bottom text-center bg-white tw-p-3" ref="footerContent">
-      <q-separator class="tw-mb-3"/>
-      <q-btn :label="$tr('isite.cms.label.search')" unelevated color="primary" no-caps class="tw-w-full" rounded
-             @click="emitFilter(), $eventBus.$emit('toggleMasterDrawer','filter')"/>
+        <!--Tabs-->
+        <q-separator class="q-mb-md" inset/>
+        <div id="tabsContent" class="full-width" v-if="false">
+          <q-tabs v-model="tabName" dense class="text-grey" active-color="primary" indicator-color="primary"
+                  align="justify" v-if="filter.hasValues" :breakpoint="0">
+            <q-tab name="tabForm" :label="$tr('isite.cms.label.filter')"/>
+          </q-tabs>
+        </div>
+      </div>
+
+      <!--Content-->
+      <q-scroll-area id="contentMasterField" class="q-pm-md" style="height: calc(100vh - 253px)">
+        <!--Tab panels-->
+        <q-tab-panels v-model="tabName" animated keep-alive>
+          <!--Tab form-->
+          <q-tab-panel name="tabForm" class="q-pa-none q-px-xs">
+            <div id="filtersContent" class="q-px-sm">
+              <!--Search-->
+              <div v-if="filter.fields && filter.fields.search" class="q-mb-sm">
+                <!--Label-->
+                <div class="full-width text-primary q-mb-xs">
+                  <q-icon name="fas fa-search" class="q-mr-xs"/>
+                  {{ $tr('isite.cms.label.search', {capitalize: true}) }}
+                </div>
+                <!--Input search-->
+                <dynamic-field v-model="filterValues.search"
+                              :field="{...filter.fields.search, props : {debounce : '0'}}"/>
+              </div>
+              <!--Date-->
+              <div v-if="filter.fields && filter.fields.date" class="q-mb-sm">
+                <!--Fields date-->
+                <dynamic-field v-for="(fieldDate, key) in dateFields" :key="key" :field="fieldDate" class="q-mb-sm"
+                              v-model="filterValues.date[fieldDate.name || key]"/>
+              </div>
+              <!--Pagination-->
+              <div v-if="filter.fields && filter.fields.pagination" class="q-mb-sm">
+                <!--Label-->
+                <div class="full-width text-primary q-mb-xs">
+                  <q-icon name="fab fa-buffer" class="q-mr-xs"/>
+                  {{ $tr('isite.cms.label.pagination', {capitalize: true}) }}
+                </div>
+                <!--Fields pagination-->
+                <dynamic-field v-for="(fieldPagination, key) in paginationFields" :field="fieldPagination" class="q-mb-sm"
+                              v-model="pagination[fieldPagination.name || key]" :key="key"/>
+              </div>
+              <!--others Fields-->
+              <dynamic-field v-for="(field, key) in filter.fields" :key="key" v-model="filterValues[field.name || key]"
+                            v-if="['search','pagination'].indexOf(key) == -1" class="q-mb-sm" :field="field" :enableCache="dynamicFieldCache"
+                            @inputReadOnly="data => readOnlyData[field.name || key] = data"/>
+            </div>
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-scroll-area>
+
+      <!--footer -->
+      <div class="absolute-bottom text-center bg-white tw-p-3" ref="footerContent">
+        <q-separator class="tw-mb-3"/>
+        <q-btn :label="$tr('isite.cms.label.search')" unelevated color="primary" no-caps class="tw-w-full" rounded
+              @click="emitFilter(), eventBus.emit('toggleMasterDrawer','filter')"/>
+      </div>
     </div>
-  </div>
+    </q-card>
+  </q-dialog>
 </template>
 <script>
+import eventBus from '@imagina/qsite/_plugins/eventBus'
+
 export default {
-  props: {},
-  components: {},
+  inject: {
+    filterPlugin: {
+      from: 'filterPlugin',
+      default: {
+        name: false,
+        fields: {},
+        values: {},
+        callBack: false,
+        pagination: {},
+        load: false,
+        hasValues: false,
+        storeFilter: false,
+      }
+    }
+  },
+  props : {
+    show: {
+      type: Boolean,
+      default: () => false,
+    },
+  },
+  components: {
+
+  },
   watch: {
+    show(newValue){
+      this.showDialog = this.$clone(newValue)
+    },
     '$filter': {
       deep: true,
       handler: function (newValue, oldValue) {
@@ -109,10 +147,10 @@ export default {
               this.readOnlyData[key].value = obj[key];
             }
           })
-          this.$root.$emit('page.data.filter.read', this.$clone(this.readOnlyData))
+          this.filterPlugin.readValues = this.$clone(this.readOnlyData)
           return;
         }
-        this.$root.$emit('page.data.filter.read', this.$clone(this.readOnlyData));
+        this.filterPlugin.readValues = this.$clone(this.readOnlyData)
       }
     }
   },
@@ -127,11 +165,14 @@ export default {
   },
   data() {
     return {
+      showDialog: false,
       tabName: 'tabForm',
       filterValues: {},
       pagination: {},
       readOnlyData: {},
       currentUrlFilter: '',
+      dynamicFieldCache: true,
+      eventBus,
     }
   },
   computed: {
@@ -249,9 +290,9 @@ export default {
   },
   methods: {
     async init() {
-      const filterValues = this.$filter.storeFilter && this.currentUrlFilter.length > 0
-          ? await this.$helper.convertStringToObject()
-          : this.filterValues;
+      const filterValues = this.filterPlugin.storeFilter && this.currentUrlFilter.length > 0
+        ? await this.$helper.convertStringToObject()
+        : this.filterValues;
       this.filterValues = filterValues || {};
       await this.emitFilter(true);
     },
@@ -262,8 +303,8 @@ export default {
           const objUrl = await this.$helper.convertStringToObject();
           const type = objUrl.type ? {type: objUrl.type} : {};
           const date = objUrl.dateStart && objUrl.dateEnd
-              ? {dateEnd: objUrl.dateEnd, dateStart: objUrl.dateStart}
-              : {};
+          ? { dateEnd: objUrl.dateEnd, dateStart: objUrl.dateStart}
+          : {};
           this.filterValues = {...this.filterValues, ...type, ...date};
         }
         this.currentUrlFilter = '';
@@ -302,10 +343,10 @@ export default {
     },
     // validate Object Filter
     validateObjectFilter(operator = '?', item) {
-      if (this.filterValues[item]) {
-        if (typeof this.filterValues[item] === 'object'
-            || Array.isArray(this.filterValues[item])) {
-          return `${operator}${item}=${JSON.stringify(this.filterValues[item])}`;
+      if(this.filterValues[item]) {
+        if(typeof this.filterValues[item] === 'object'
+          || Array.isArray(this.filterValues[item])) {
+          return  `${operator}${item}=${JSON.stringify(this.filterValues[item])}`;
         }
         return `${operator}${item}=${this.filterValues[item]}`;
       }
@@ -417,19 +458,23 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#masterFilterComponent
-  #tabsContent
-    .q-tab__content
-      min-width auto
-
-  .q-field.q-field--float .q-field__label
-    color: $primary
-
-  .q-field__control
-    .q-field__append .q-icon
-      color: $tertiary
-
-    .q-field__append:last-child .q-icon
-      color: $primary
+<style lang="scss">
+#masterFilterComponent {
+  #tabsContent {
+    .q-tab__content {
+      min-width: auto;
+    }
+  }
+  .q-field.q-field--float .q-field__label {
+    color: $primary;
+  }
+  .q-field__control {
+    .q-field__append .q-icon {
+      color: $tertiary;
+    }
+    .q-field__append:last-child .q-icon {
+      color: $primary;
+    }
+  }
+}
 </style>

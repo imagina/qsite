@@ -9,7 +9,7 @@
         </q-tooltip>
         <!--Single Item-->
         <q-item :id="`menuItem-${parseIdItem(item.name)}` || `menuItem-${key}`" v-bind="item.itemProps"
-                v-if="item.itemProps.vIf != undefined ? item.itemProps.vIf : true">
+                v-if="item.itemProps?.vIf != undefined ? item.itemProps?.vIf : true">
           <q-item-section v-if="item.icon && showIcons" avatar>
             <q-icon :name="item.icon"/>
           </q-item-section>
@@ -169,22 +169,28 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#listMenu
-  .q-expansion-item__container
-    .q-expansion-item__content
-      padding 0 0 0 15px
+<style lang="scss">
+#listMenu {
+  .q-expansion-item__container {
+    .q-expansion-item__content {
+      padding: 0 0 0 15px;
+    }
+  }
 
-  .q-item
-    cursor pointer
-    color $grey-9
+  .q-item {
+    cursor: pointer;
+    color: $grey-9;
 
-    .q-item__section--avatar
-      min-width 20px
-      padding-right 10px
+    .q-item__section--avatar {
+      min-width: 20px;
+      padding-right: 10px;
+    }
 
-    .q-icon
-      font-size 16px
+    .q-icon {
+      font-size: 16px;
+    }
+  }
+}
 </style>
 
 

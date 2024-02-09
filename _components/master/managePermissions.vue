@@ -347,30 +347,38 @@
     }
   }
 </script>
-<style lang="stylus">
-  #barTitle
-    border 1px solid $grey-4
+<style lang="scss">
+  #barTitle {
+    border: 1px solid $grey-4;
+  }
 
-  #modalFormPermissions
-    .q-card
-      max-width max-content !important
-      min-width 345px
+  #modalFormPermissions {
+    .q-card {
+      max-width: max-content !important;
+      min-width: 345px;
 
-      .content-permissions
-        max-height 60vh !important
-        overflow-y scroll
+      .content-permissions {
+        max-height: 60vh !important;
+        overflow-y: scroll;
 
-        .q-expansion-item--expanded
-          .q-expansion-item__container
-            border 2px solid $primary
+        .q-expansion-item--expanded {
+          .q-expansion-item__container {
+            border: 2px solid $primary;
+          }
+        }
 
-        .q-btn-group
-          border 2px solid $green
+        .q-btn-group {
+          border: 2px solid $green;
 
-          .q-btn
-            padding 4px 10px
+          .q-btn {
+            padding: 4px 10px;
 
-            .q-btn__content
-              font-size 12px
-
+            .q-btn__content {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
 </style>

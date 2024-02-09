@@ -18,7 +18,7 @@
                     color="primary"
                     size="md"
                     outline
-                    @click="redirectLogin()">
+                    @click="nextStep()">
               {{ $tr('isite.cms.label.start') }}
             </q-btn>
           </div>
@@ -28,19 +28,14 @@
   </div>
 </template>
 <script>
-import { STEP_NAME_WELCOME } from './model/constant.js';
+import storeWizard from '@imagina/qsite/_components/organizations/wizard/steps/store/index.ts';
+
 export default {
   components: {},
   data() {
     return {
       stepContent: ''
     }
-  },
-  props: {
-    info: {
-      type: Array,
-      default: () => [],
-    },
   },
   mounted() {
     this.$nextTick(async function () {
@@ -49,11 +44,11 @@ export default {
   },
   methods: {
     async getStepInfo() {
-      this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_WELCOME);
+      this.stepContent = storeWizard.infoWelcome
     },
-    redirectLogin() {
+    nextStep() {
       try {
-        this.$emit("update", {active: true});
+        this.$emit("nextStep");
       } catch (error) {
         console.log('error en welcome');
       }

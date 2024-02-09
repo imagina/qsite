@@ -1,3 +1,5 @@
-import Vue from 'vue'
-const bus = new Vue()
+import { EventBus } from 'quasar'
+
+const bus = new EventBus()
+
 export default bus

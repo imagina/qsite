@@ -138,6 +138,7 @@
 <script>
 //Components
 import QCalendar from '@quasar/quasar-ui-qcalendar'
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   props: {
@@ -201,7 +202,7 @@ export default {
   methods: {
     init() {
       //Listen refresh event
-      this.$root.$on('page.data.refresh', () => this.componentId = this.$uid())
+      eventBus.on('page.data.refresh', () => this.componentId = this.$uid())
     },
     //Return events
     getEventsList(timestamp = false) {
@@ -234,59 +235,73 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#calendarComponent
-  #componentContent
-    #btnCalendarType
-      //border 1px solid $primary
+<style lang="scss">
+#calendarComponent {
+  #componentContent {
+    #btnCalendarType {
+      //border: 1px solid $primary;
 
-      .q-btn
-        border-right 1px solid $grey-4
-        border-bottom 1px solid $grey-4
-        min-width 55px
+      .q-btn {
+        border-right: 1px solid $grey-4;
+        border-bottom: 1px solid $grey-4;
+        min-width: 55px;
 
-        &:last-child
-          border-right none
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
 
-    #calendarContent
-      overflow-x scroll
+    #calendarContent {
+      overflow-x: scroll;
 
-      #calendarComponent
-        .q-calendar-daily__pane
-          min-height 515px
-          max-height 515px
-          height 515px
-          overflow-y scroll
+      #calendarComponent {
+        .q-calendar-daily__pane {
+          min-height: 515px;
+          max-height: 515px;
+          height: 515px;
+          overflow-y: scroll;
+        }
 
-        .q-calendar-weekly__container
-          min-height 555px
-          max-height 555px
-          height 555px
-          overflow-y scroll
+        .q-calendar-weekly__container {
+          min-height: 555px;
+          max-height: 555px;
+          height: 555px;
+          overflow-y: scroll;
 
-          .q-calendar-weekly__day
-            min-height 110px
+          .q-calendar-weekly__day {
+            min-height: 110px;
+          }
+        }
+      }
+    }
 
-      .event-content
-        margin 5px
-        background-color $custom-accent-color
-        cursor pointer
-        color $grey-9
-        border-radius $custom-radius-items
+    .event-content {
+      margin: 5px;
+      background-color: $custom-accent-color;
+      cursor: pointer;
+      color: $grey-9;
+      border-radius: $custom-radius-items;
 
-        .event-icon
-          width 100%
-          margin-top 30px
+      .event-icon {
+        width: 100%;
+        margin-top: 30px;
 
-          .q-avatar
-            margin-top -25px
-            margin-bottom 10px
-            font-size 60px
-            max-height 60px
-            color white
+        .q-avatar {
+          margin-top: -25px;
+          margin-bottom: 10px;
+          font-size: 60px;
+          max-height: 60px;
+          color: white;
+        }
+      }
+    }
 
-      #eventListcontent
-        height 645px
-        max-height 645px
-        overflow-y scroll
+    #eventListcontent {
+      height: 645px;
+      max-height: 645px;
+      overflow-y: scroll;
+    }
+  }
+}
 </style>

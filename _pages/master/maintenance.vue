@@ -36,7 +36,8 @@
     methods: {}
   }
 </script>
-<style lang="stylus">
-  #pageMaintenanceMaster
-    min-height 100vh
+<style lang="scss">
+  #pageMaintenanceMaster {
+    min-height: 100vh;
+  }
 </style>

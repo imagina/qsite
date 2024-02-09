@@ -32,16 +32,9 @@
   </div>
 </template>
 <script>
-import storeStepWizard from './store/index.ts';
-import {STEP_NAME_TERMS} from './model/constant.js';
+import storeWizard from './store/index.ts';
 
-export default {
-  props: {
-    info: {
-      type: Array,
-      default: () => [],
-    },
-  },
+export default {  
   data() {
     return {
       loading: false,
@@ -51,25 +44,21 @@ export default {
       urlBase: this.$store.state.qsiteApp.baseUrl,
     }
   },
-  inject: {
-    infoBase: {
-      type: Object,
-      default: () => {
-      },
-    },
-  },
   mounted() {
-    this.$nextTick(async function () {
+    this.$nextTick(async function () {      
       this.getStepInfo();
       this.getData();
     })
   },
   watch: {
-    buttonTerms(newTerms, oldTerms) {
-      this.$emit("update",  { active: newTerms, info: this.buttonEmail });
+    buttonTerms(newValue, oldValue) {
+      storeWizard.nextStepButton = newValue      
+      storeWizard.data.terms.check = newValue
+      this.$emit("updateData",  {});
     },
-    buttonEmail(newTerms, oldTerms) {
-      this.$emit("update",  { active: this.buttonTerms, info: newTerms });
+    buttonEmail(newValue, oldValue) {            
+      storeWizard.data.terms.email = newValue
+      this.$emit("updateData",  {});
     }
   },
   computed: {
@@ -95,26 +84,15 @@ export default {
       })
     },
   },
-  methods: {
+  methods: {    
     async getData() {
-      if (this.infoBase && this.infoBase.terms.active) {
-        this.buttonTerms = this.infoBase.terms.active;
-        this.buttonEmail = this.infoBase.terms.info;
-      } else {
-        // Sino hay nada es porque recargo entonces verifico que tiene cache
-        const info = await this.$cache.get.item('org-wizard-data');
-        if (info != null && info.terms.active) {
-          this.buttonTerms = info.terms.active;
-          this.buttonEmail = info.terms.info;
-          this.$emit("update",  { active: info.terms.active, info: info.terms.info });
-        } else {
-          this.$emit("update", {active: false});
-        }
-      }
-
+      this.buttonTerms = storeWizard.data.terms.check ?? false
+      this.buttonEmail = storeWizard.data.terms.email ?? false
+      storeWizard.previousStepButton = true 
+      storeWizard.nextStepButton = this.buttonTerms
     },
     async getStepInfo() {
-      this.stepContent = await this.info.find((item) => item.systemName === STEP_NAME_TERMS);
+      this.stepContent = storeWizard.infoTerms
     },
   }
 }

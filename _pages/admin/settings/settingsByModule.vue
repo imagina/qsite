@@ -530,44 +530,53 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#settingPage
-  #quickSettingsContent
-    .block__content
-      .box
-        box-shadow none
-        border 1px solid $grey-3
-        border-radius $custom-radius
+<style lang="scss">
+#settingPage {
+  #quickSettingsContent {
+    .block__content {
+      .box {
+        box-shadow: none;
+        border: 1px solid $grey-3;
+        border-radius: $custom-radius;
+      }
+    }
+  }
 
-  .block
-    position relative
-    cursor pointer
+  .block {
+    position: relative;
+    cursor: pointer;
 
-    &__icon
-      position absolute
-      left 15px
-      top 15px
-      background-color $primary
-      border-radius 50%
-      padding 6px
-      color white
-      font-size 16px
+    &__icon {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      background-color: $primary;
+      border-radius: 50%;
+      padding: 6px;
+      color: white;
+      font-size: 16px;
+    }
 
-    &__title-content
-      height 28px
-      max-height 28px
+    &__title-content {
+      height: 28px;
+      max-height: 28px;
+    }
 
-    &__title
-      padding-left 35px
-      line-height 1
-      color $blue-grey
-      font-weight bold
+    &__title {
+      padding-left: 35px;
+      line-height: 1;
+      color: $blue-grey;
+      font-weight: bold;
+    }
 
-    &__description
-      line-height 1
-      color $grey-8
-      font-size 14px
-      padding-top 8px
-      height 50px
-      max-height 50px
+    &__description {
+      line-height: 1;
+      color: $grey-8;
+      font-size: 14px;
+      padding-top: 8px;
+      height: 50px;
+      max-height: 50px;
+    }
+  }
+}
 </style>

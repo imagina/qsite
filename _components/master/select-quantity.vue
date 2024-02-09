@@ -57,7 +57,7 @@
     methods: {}
   }
 </script>
-<style lang="stylus">
+<style lang="scss">
   .quantityInput
     .q-field__control
       padding 0 6px

@@ -8,7 +8,7 @@
       </div>
       <!-- Close icon -->
       <q-icon name="fas fa-times" color="blue-grey" size="20px" class="cursor-pointer"
-        @click="$eventBus.$emit('toggleMasterDrawer', 'config')" />
+              @click="eventBus.emit('toggleMasterDrawer', 'config')"/>
     </div>
 
     <!--Separator-->
@@ -218,6 +218,7 @@
   </div>
 </template>
 <script>
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 export default {
   props: {},
   components: {},
@@ -244,11 +245,12 @@ export default {
         departments: false,
         locales: false
       },
-      fullScreen: this.$q.fullscreen.isActive,
+      fullScreen: this.$q?.fullscreen?.isActive,
       userToImpersonate: null,
       loadingImpersonate: false,
       userList: [],
       loadingCacheClear: false,
+      eventBus
     }
   },
   computed: {
@@ -305,7 +307,7 @@ export default {
   methods: {
     //Toggle fullscreen
     toggleFullscreen() {
-      this.$q.fullscreen.toggle()
+      this.$q?.fullscreen?.toggle()
     },
 
     //Set departments and roles to options
@@ -411,16 +413,19 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#configList
-  color $grey-9
+<style lang="scss">
+#configList {
+  color: $grey-9;
 
-  .q-icon
-    min-width max-content !important
+  .q-icon {
+    min-width: max-content !important;
+  }
 
-  .title-block
-    border-radius 5px
-    background-color $primary
-    color white
-    padding 4px 15px
+  .title-block {
+    border-radius: 5px;
+    background-color: $primary;
+    color: white;
+    padding: 4px 15px;
+  }
+}
 </style>

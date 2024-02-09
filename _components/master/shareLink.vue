@@ -120,26 +120,11 @@
     }
   }
 </script>
-<style lang="stylus">
-  #shareLinkcomponent
-    #contentButtons
-      .q-btn__wrapper
-        padding 4px
-        min-height 24px
-
-        .q-icon
-          font-size 20px
-
-  //Modal
-  #shareLinkModalButtons
-    .q-card
-      max-width 230px
-
-      .buttonContent
-        display block
-
-        .q-btn
-          width 100%
-          display block
-          text-transform capitalize
+<style lang="scss">
+#shareLinkModal {
+  .platform:hover {
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+  }
+}
 </style>

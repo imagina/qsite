@@ -8,7 +8,6 @@ import hook from '@imagina/qsite/_plugins/hook'
 import crud from '@imagina/qcrud/_services/baseService'
 import lodash from 'lodash'
 import moment from 'vue-moment'
-import Vuelidate from 'vuelidate'
 import {uid} from 'quasar'
 import {openURL} from 'quasar'
 import eventBus from '@imagina/qsite/_plugins/eventBus'
@@ -19,17 +18,17 @@ import {tour} from '@imagina/qgamification/_plugins/tour'
 import apiResponse from '@imagina/qcrud/_plugins/apiResponse'
 
 export default function ({app, router, store, Vue, ssrContext}) {
-  Vue.prototype.$alert = alert
-  Vue.prototype.$array = array
-  Vue.prototype.$date = date
-  Vue.prototype.$helper = helper
-  Vue.prototype.$cache = cache
-  Vue.prototype.$lodash = lodash
-  Vue.prototype.$remember = remember
-  Vue.prototype.$tour = tour
-  Vue.prototype.$hook = new hook(store)
-  Vue.prototype.$notification = new notificationPlugin(store)
-  Vue.prototype.$clone = (dataToClone) => {
+  app.config.globalProperties.$alert = alert
+  app.config.globalProperties.$array = array
+  app.config.globalProperties.$date = date
+  app.config.globalProperties.$helper = helper
+  app.config.globalProperties.$cache = cache
+  app.config.globalProperties.$lodash = lodash
+  app.config.globalProperties.$remember = remember
+  app.config.globalProperties.$tour = tour
+  app.config.globalProperties.$hook = new hook(store)
+  app.config.globalProperties.$notification = new notificationPlugin(store)
+  app.config.globalProperties.$clone = (dataToClone) => {
     return lodash.cloneDeepWith(dataToClone, value => {
       //Not clone File or Blob  type
       if (value instanceof File || value instanceof Blob) {
@@ -37,11 +36,11 @@ export default function ({app, router, store, Vue, ssrContext}) {
       }
     })
   }
-  Vue.prototype.$crud = crud
-  Vue.prototype.$openUrl = openURL
-  Vue.prototype.$eventBus = eventBus
-  Vue.prototype.$filter = filter
-  Vue.prototype.$auth = {
+  app.config.globalProperties.$crud = crud
+  app.config.globalProperties.$openUrl = openURL
+  app.config.globalProperties.$eventBus = eventBus
+  app.config.globalProperties.$filter = filter
+  app.config.globalProperties.$auth = {
     hasAccess: (can, params) => {
       return store.getters['quserAuth/hasAccess'](can, params)
     },
@@ -49,9 +48,9 @@ export default function ({app, router, store, Vue, ssrContext}) {
       return store.getters['quserAuth/hasSetting'](name)
     },
   }
-  Vue.prototype.$uid = uid
-  Vue.prototype.$apiResponse = apiResponse
-  Vue.use(moment)
-  Vue.use(Vuelidate)
-  Vue.use(VueSignaturePad)
+  app.config.globalProperties.$uid = uid
+  app.config.globalProperties.$apiResponse = apiResponse
+  //[ptc] app.use(moment)
+  // app.use(moment)
+  app.use(VueSignaturePad)
 }
