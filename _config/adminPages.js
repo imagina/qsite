@@ -14,18 +14,6 @@ export default {
       refresh: true,
     }
   },
-  //organization Wizard
-  organizationWizard: {
-    //permission: null,
-    //authenticated: true,
-    activated: true,
-    path: '/site/organizations-wizard',
-    name: 'qsite.admin.organizations.wizard',
-    page: () => import('@imagina/qsite/_pages/admin/organizations/wizard'),
-    layout: () => import('@imagina/qsite/_layouts/blank.vue'),
-    title: 'isite.cms.sidebar.adminOrganizationWizard',
-    icon: 'fal fa-crown'
-  },
   //Organization Page
   organizationsAll: {
     permission: 'isite.organizations.index-all',

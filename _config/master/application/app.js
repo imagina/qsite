@@ -39,8 +39,8 @@ export default {
     'qmenu',
     'qmedia',
     'qslider',
-    'qbanner',
     'qchat',
+    'qqreable',
     'qtranslation',
     'qrequestable',
     'qauction',
@@ -58,11 +58,22 @@ export default {
       'impersonatorData',
       'app.state.extra',
       'auth.organization.id',
-      'requests'
+      'org-wizard-data',
+      'org-wizard-categories',
+      'org-wizard-plans',
+      'org-wizard-step'
     ],
     logout: [
+      'offlineRequests',
       'site.default.locale',
-      'requests'
+      'qsite.settings',
+      'qsite.module.configs',
+      'qsite.site.hooks',
+      'qtranslation.translations',
+      'org-wizard-data',
+      'org-wizard-categories',
+      'org-wizard-plans',
+      'org-wizard-step'
     ]
   },
   //Reset Store
