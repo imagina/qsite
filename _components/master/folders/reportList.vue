@@ -40,10 +40,7 @@
             class="tw-font-bold folder-title" 
             lines="1"
           >
-           <span 
-            class="tw-cursor-pointer"
-            @click="show(report)"
-           > {{ report.title || report.id }} </span>
+            {{ report.title || report.id }}
           </q-item-label>
           <q-item-label caption lines="1">
             {{ report.name || report.description }} 
@@ -160,12 +157,6 @@ export default {
     uniqBy(data){
       return _.uniqBy(data, 'id');
     },
-    show(report) {
-      const action = this.fieldRelationActions.find(item => item.name =='Show');
-      if(action) {
-        action.action(report)
-      }
-    }
   },
 };
 </script>

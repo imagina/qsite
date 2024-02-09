@@ -27,7 +27,7 @@ export default function useExpressionField(props = {}, emit = null) {
   }
   function selectKeyFromOptions(item) {
     try {
-      let origString = inputDataComputed.value;
+      let origString = inputDataComputed.value || '';
       origString = origString.split("");
       origString.splice(selectionStart.value, 0, `{{${item}}}`);
       const newString = origString.join("");

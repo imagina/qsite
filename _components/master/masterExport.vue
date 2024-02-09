@@ -71,6 +71,21 @@ export default {
   props: {
     exportItem: {type: Boolean, default: false}
   },
+  inject: {
+    filterPlugin: {
+      from: 'filterPlugin',
+      default: {
+        name: false,
+        fields: {},
+        values: {},
+        callBack: false,
+        pagination: {},
+        load: false,
+        hasValues: false,
+        storeFilter: false,
+      }
+    }
+  },
   components: {},
   watch: {
     '$route.name': {
@@ -319,11 +334,11 @@ export default {
       }
     },
     async storeFilter() {
-      const filterClone = this.$filter.storeFilter
+      const filterClone = this.filterPlugin.storeFilter
           ? {values: await this.$helper.convertStringToObject()}
-          : this.$clone(this.$filter);
+          : this.$clone(this.filterPlugin);
       let filter = {...filterClone};
-      if (this.$filter.storeFilter) {
+      if (this.filterPlugin.storeFilter) {
         if (filter.values.dateStart && filter.values.dateEnd) {
           const dateFilter = await this.getCurrentFilterDate(filter.values.dateStart, filter.values.dateEnd);
           delete filter.values.type;
