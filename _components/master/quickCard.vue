@@ -124,6 +124,15 @@
               </div>
           </div>
         </div>
+         <!-- custom card -->
+         <div v-if="cardParams.type === 'custom'">
+          <component
+            :is="cardParams.component"
+            :cardParams="{...cardParams}"
+            :items="{...items}"
+            :loading="loading"
+          />
+        </div>
         <!--Action to-->
         <div class="text-center">
           <q-btn v-if="items.length && cardParams.actionTo" unelevated :label="$tr('isite.cms.label.showMore')" color="primary"
@@ -163,6 +172,7 @@ export default {
   },
   computed: {
     showNotResult() {
+      if(this.cardParams.type === 'custom') return false
       if(this.cardParams.type === 'percentage' || this.cardParams.type === 'chart') {
         if(typeof this.items === 'object') {
           return Object.keys(this.items).length === 0 && !this.loading;

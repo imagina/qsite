@@ -1,7 +1,7 @@
 <template>
   <q-dialog id="alertModalComponent" ref="alertModalComponent" persistent
             transition-show="slide-up" transition-hide="slide-down" :content-style="modalWidth">
-    <div id="cardContent" class="box relative-position">
+    <div id="cardContent" class="box">
       <!--Header-->
       <q-toolbar :class="`bgg-${paramsModal.color} q-px-none`" style="min-height: auto">
         <q-toolbar-title v-if="paramsModal.title" class="box-title row items-center">
@@ -25,11 +25,10 @@
         <div
           id="actions"
           class="row justify-end q-gutter-sm">
-          <q-btn v-for="(actionProps, keyAction) in actionsModal" :key="keyAction" v-bind="actionProps"
+          <q-btn v-for="(actionProps, keyAction) in actionsModal" :key="keyAction" v-bind="actionProps" v-close-popup
                  @click="callBack(actionProps)"/>
         </div>
       </q-card-section>
-      <inner-loading :visible="loading"/>
     </div>
   </q-dialog>
 </template>
@@ -73,9 +72,7 @@ export default {
           rounded: true,
           color: action.color || 'green',
           toUrl: action.toUrl || false,
-          handler: action.handler || false,
-          promise: action.promise || false,
-          noCaps: true
+          handler: action.handler || false
         }
         //Dynamics props
         if (action.label) response.label = action.label
@@ -98,21 +95,10 @@ export default {
       this.$refs.alertModalComponent.hide()
     },
     //Callback
-    async callBack(action) {
-      if (action.promise) {
-        this.loading = true
-        await action.promise()
-          .catch(() => {
-            this.loading = false
-          })
-        this.loading = false
-        this.hide()
-      } else {
-        if (action.toUrl) this.$helper.openExternalURL(action.toUrl, false)
-        else if (action.toVueRoute) this.$router.push(action.toVueRoute)
-        else if (action.handler) action.handler()
-        this.hide()
-      }
+    callBack(action) {
+      if (action.toUrl) this.$helper.openExternalURL(action.toUrl, false)
+      else if (action.toVueRoute) this.$router.push(action.toVueRoute)
+      else if (action.handler) action.handler()
     }
   }
 }

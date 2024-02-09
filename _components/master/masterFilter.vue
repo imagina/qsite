@@ -217,6 +217,8 @@ export default {
               {label: this.$tr('isite.cms.label.lastYear'), value: 'lastYear'},
               {label: this.$tr('isite.cms.label.numYearsAgo', {numYears: 2}), value: 'twoYearsAgo'},
               {label: this.$tr('isite.cms.label.lastNumYears', {numYears: 2}), value: 'lastTwoYears'},
+              {label: this.$tr('isite.cms.label.daysAroundToday', {numDays: 15}), value: '15daysAroundToday'},
+              {label: this.$tr('isite.cms.label.daysAroundToday', {numDays: 5}), value: '5daysAroundToday'}
             ]
           }
         },
@@ -426,6 +428,14 @@ export default {
             case 'currentYear':
               fromDate = this.$moment().startOf('year').format('YYYY-MM-DD 00:00:00')
               toDate = this.$moment().endOf('year').format('YYYY-MM-DD 23:59:59')
+              break;
+            case '15daysAroundToday':
+              fromDate = this.$moment().subtract(7, 'days').format('YYYY-MM-DD 00:00:00');
+              toDate = this.$moment().add(7, 'days').format('YYYY-MM-DD 23:59:59');
+              break;
+            case '5daysAroundToday':
+              fromDate = this.$moment().subtract(2, 'days').format('YYYY-MM-DD 00:00:00');
+              toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD 23:59:59');
               break;
             case 'customRange':
               if (fromDate)

@@ -15,7 +15,7 @@
           <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated"
                  class="item-icon" padding="none">
             <q-avatar size="20px">
-              <img :src="profileImage.smallThumb">
+              <img :src="quserState.userData.mainImage">
             </q-avatar>
           </q-btn>
           <div>{{ $tr('isite.cms.label.profile') }}</div>
@@ -27,10 +27,12 @@
           </div>
         </div>
         <!-- go to site -->
-        <div id="footerMobileGoToSite" class="item-footer col cursor-pointer bg"
-             @click="$helper.openExternalURL($store.state.qsiteApp.baseUrl)">
-          <q-icon class="item-icon" name="fa-light fa-eye"/>
-          <div>{{ $tr('isite.cms.configList.goToSite') }}</div>
+        <div 
+          class="item-footer col cursor-pointer" 
+          @click="$eventBus.$emit('toggleMasterDrawer','config')"
+        >
+          <q-icon class="item-icon" name="fas fa-cog"/>
+          <div>{{ $tr('isite.cms.label.setting') }}</div>
         </div>
         <!-- Others -->
         <div id="footerMobileOthers" class="item-footer col cursor-pointer" @click="modal.show = true">
@@ -61,6 +63,13 @@
                 <q-icon color="primary" name="fa-light fa-folder-gear"/>
               </q-item-section>
               <q-item-section class="ellipsis">{{ $tr('isite.cms.label.setting') }}</q-item-section>
+            </q-item>
+            <!--Offline-->
+            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','offline')">
+              <q-item-section avatar>
+                <q-icon color="primary" name="fa-regular fa-wifi-slash"/>
+              </q-item-section>
+              <q-item-section class="ellipsis">{{ $tr('isite.cms.label.offlineRequests') }}</q-item-section>
             </q-item>
             <!--Chat action-->
             <q-item clickable v-ripple v-if="$auth.hasAccess('ichat.conversations.index')"
@@ -93,6 +102,13 @@
                 <q-icon color="primary" name="fa-light fa-bell"/>
               </q-item-section>
               <q-item-section class="ellipsis">{{ $trp('isite.cms.label.notification') }}</q-item-section>
+            </q-item>
+            <!-- Logout -->
+            <q-item clickable v-ripple @click.native="$router.push({name: 'auth.logout'})">
+              <q-item-section avatar>
+                <q-icon color="primary" name="fa-light fa-right-from-bracket"/>
+              </q-item-section>
+              <q-item-section class="ellipsis">{{ $tr('isite.cms.configList.signOut') }}</q-item-section>
             </q-item>
             <!---->
           </q-list>
@@ -148,9 +164,6 @@ export default {
     params() {
       return this.currentRoute.meta.subHeader || {}
     },
-    profileImage(){
-      return this.$store.getters['quserAuth/profileImage']
-    }
   },
   methods: {
     init() {

@@ -38,6 +38,16 @@ class Alert {
     return params
   }
 
+  //alert standar
+  standar(params = {}){
+    params = this.getGlobalParams(params)
+    params.icon = params.icon || 'notifications'
+    params.color = 'bg-grey-14'
+    //Show
+    if (params.mode && (params.mode == 'modal')) this.showModal(params)
+    else this.showNotify(params)
+  }
+
   //Alert success
   success(params = {}) {
     params = this.getGlobalParams(params)

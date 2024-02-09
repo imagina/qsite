@@ -12,11 +12,7 @@
           "noMessages": "There isn't messages..."
         },
         "newProvider": "New Provider",
-        "updateProvider": "Update Provider",
-        "label": {
-          "resend": "Resend",
-          "sendMessage": "Send a Message..."
-        }
+        "updateProvider": "Update Provider"
       }
     },
     "ievent": {
@@ -380,7 +376,7 @@
             "full": "Full Width"
           },
           "successText": "Success text",
-          "submitText": "Submit button text"
+          "submitText": "Submit text"
         },
         "message": {
           "helpToOptionsField": "Type the option and press enter...",
@@ -850,7 +846,7 @@
           "selectProduct": "Select a product option",
           "warnAddDiscount": "To add discounts, you must first create the product",
           "viewProduct": "View product",
-          "advanceEdit": "Go to advanced Form",
+          "advanceEdit": "Advanced Edit",
           "quickEdit": "Quick Edit",
           "btnAddProduct": "Add Product",
           "chooseProduct": "Choose Product",
@@ -876,6 +872,13 @@
           "productsToSoldOut": "Tienda - Products to sold out"
         },
         "advancedSummary": "Advanced Summary"
+      }
+    },
+    "ioffline": {
+      "cms": {
+        "sidebar": {
+          "adminGroup": "Offline"
+        }
       }
     },
     "icredit": {
@@ -1156,6 +1159,7 @@
           "cargoTotalKilosLoaded": "Kilos Loaded"
         },
         "label": {
+          "workOrders": "Work Oders",
           "scheduled": "scheduled",
           "scheduledDelayed": "scheduled Delayed",
           "active": "active",
@@ -1195,14 +1199,17 @@
           "flightScheduleLeg": "Flight Schedule Leg | Flight Schedule Legs",
           "flightStatuses": "Flight Statuses",
           "flight": "Flight | Flights",
-          "flightInfo": "Flight Info",
+          "flightInfo": "Flights",
           "workOrders": "Work Orders",
           "rampInfo": "Ramp",
           "passengerInfo": "Passenger",
           "map": "Map",
           "schedule": "Schedule",
+          "scheduler": "Scheduler",
           "scheduleStatus": "Schedule status",
-          "workOrderStatuses": "Work Order statuses"
+          "workOrderStatuses": "Work Order statuses",
+          "searchFlight": "Search flight",
+          "flightsTracker": "Flight Tracker"
         },
         "map": {
           "workOrderId": "Work Order Id",
@@ -1235,6 +1242,7 @@
           "costCenters": "Cost Centers",
           "gates": "Parking Spots",
           "areas": "Areas",
+          "passengerCarrierStations": "Passenger Carrier Stations",
           "contracts": "Contracts"
         },
         "message": {}
@@ -1243,7 +1251,9 @@
     "ireports": {
       "cms": {
         "form": {},
-        "label": {},
+        "label": {
+          "selectAll": "Select all"
+        },
         "sidebar": {
           "reportsInfo": "Reports",
           "reportInfo": "Report",
@@ -1277,7 +1287,8 @@
         "label": {},
         "sidebar": {
           "cargoInfo": "Cargo",
-          "awbTracking": "Awb Tracking"
+          "awbTracking": "Awb Tracking",
+          "scaleTracking": "Scale Tracking"
         },
         "message": {}
       }
@@ -1369,6 +1380,7 @@
         "label": {
           "resposible": "Responsible",
           "clickToAction": "Click to Action",
+          "offlineSync": "Offline sync",
           "informationTitle": "Site Information",
           "top": "Top",
           "bottom": "Bottom",
@@ -1525,6 +1537,7 @@
           "lastYear": "Last year",
           "numYearsAgo": "{numYears} years ago",
           "lastNumYears": "Last {numYears} years",
+          "daysAroundToday": "{numDays} days Around Today",
           "customRange": "Custom range",
           "back": "Back",
           "time": "Time | Times",
@@ -1716,6 +1729,9 @@
           "token": "Token",
           "refreshAtOnce": "Refresh",
           "refreshEveryMinutes": "Refresh every {min} minutes",
+          "refreshEveryMinute": "Refresh every {min} minute",
+          "offline": "Offline",
+          "offlineRequests": "Offline Requests",
           "start": "Start",
           "continueUser": "Continue with this User",
           "createNewAccount": "Create new account",
@@ -1731,13 +1747,14 @@
           "quickLook": "Quick look"
         },
         "message": {
-          "showDemo": "Demo",
+          "requestAdded": "Request added to the offline queue successfully",
+          "appOffline": "It seems you have no connection. Some actions may not work.",
           "phoneHint": "Enter a phone number and press enter",
           "appOffline": "You have lost connection to the internet. This app is offline.",
           "activitiesDescription": "Select the activity you want",
           "descriptionHelpCenter": "Choose the option you want to solve your doubts",
           "editFormProduct": "In this form you can edit your product in a simple way, if you want to edit your product with more advanced options, click on the following button to go to the advanced form.",
-          "createFormProduct": "Want to see the advanced options?",
+          "createFormProduct": "In this form you can create a new product in a simple way, if you want to create your product with more advanced options, click on the following button to go to the advanced form.",
           "notFound": "Sorry, nothing here",
           "noResultsFoundTryAnotherSearchValue": "No results found, try another search value...",
           "goToHome": "Go to home",
@@ -1932,6 +1949,7 @@
           "requestedBy": "Requested By",
           "feature": "Feature | Features",
           "fieldsDetails": "Fields Details",
+          "filtersDetails": "Filters Details",
           "warehouse": "Warehouse"
         },
         "configList": {
@@ -2425,7 +2443,7 @@
             "full": "Full Ancho"
           },
           "successText": "Texto de exito",
-          "submitText": "Texto del Boton de envio"
+          "submitText": "Texto de enviado"
         },
         "message": {
           "helpToOptionsField": "Escribe la opción y preciona enter...",
@@ -2895,7 +2913,7 @@
           "selectProduct": "Seleccione una opción de producto",
           "warnAddDiscount": "Para agregar descuentos, primero debe crear el producto",
           "viewProduct": "Ver producto",
-          "advanceEdit": "Ir al formulario avanzado",
+          "advanceEdit": "Edición Avanzada",
           "quickEdit": "Edición Rapida",
           "btnAddProduct": "Agregar Producto",
           "chooseProduct": "Elegir Producto",
@@ -2921,6 +2939,13 @@
           "productsToSoldOut": "Tienda - Productos por agotar"
         },
         "advancedSummary": "Resumen Avanzado"
+      }
+    },
+    "ioffline": {
+      "cms": {
+        "sidebar": {
+          "adminGroup": "Offline"
+        }
       }
     },
     "icredit": {
@@ -3135,6 +3160,9 @@
           "map": "Map",
           "schedule": "Calendario",
           "scheduleStatus": "Estado del calendario"
+        },
+        "label": {
+          "workOrders": "Work Oders"
         }
       }
     },
@@ -3159,7 +3187,9 @@
     "ireports": {
       "cms": {
         "form": {},
-        "label": {},
+        "label": {
+          "selectAll": "Seleccionar todo"
+        },
         "sidebar": {
           "reportsInfo": "Reportes",
           "reportInfo": "Reporte",
@@ -3193,7 +3223,8 @@
         "label": {},
         "sidebar": {
           "cargoInfo": "Cargo",
-          "awbTracking": "Awb Tracking"
+          "awbTracking": "Awb Tracking",
+          "scaleTracking": "Seguimiento de la balanza"
         },
         "message": {}
       }
@@ -3439,6 +3470,7 @@
           "lastYear": "Ultimo año",
           "numYearsAgo": "Hace {numYears} años",
           "lastNumYears": "Ultimos {numYears} años",
+          "daysAroundToday": "{numDays} días alrededor de hoy",
           "customRange": "Rango personalizado",
           "back": "Volver",
           "time": "Tiempo | Tiempos",
@@ -3630,6 +3662,9 @@
           "token": "Token",
           "refreshAtOnce": "Refrescar de una vez",
           "refreshEveryMinutes": "Refrescar cada {min} minutos",
+          "refreshEveryMinute": "Refrescar cada {min} minuto",
+          "offline": "Sin conexión",
+          "offlineRequests": "Peticiones sin conexión",
           "start": "Empezar",
           "continueUser": "Continuar con este Usuario",
           "createNewAccount": "Crear Nueva Cuenta",
@@ -3646,13 +3681,13 @@
 
         },
         "message": {
-          "showDemo": "Ver Demo",
+          "requestAdded": "Petición agregada a la cola sin conexión",
           "phoneHint": "Ingresa un número telefónico y presiona enter",
           "appOffline": "Has perdido la conexión a internet. La aplicación está offline.",
           "activitiesDescription": "Seleeciona la actividad que desees.",
           "descriptionHelpCenter": "Elige la opción que deseas para resolver tus dudas",
           "editFormProduct": "En este formulario podrás editar tu producto de manera sencilla, si quieres editar tu producto con opciones más avanzadas, da click en el siguiente botón para ir a el formulario avanzado.",
-          "createFormProduct": "¿Quieres ver las opciones avanzadas?",
+          "createFormProduct": "En este formulario podrás crear un nuevo producto de manera sencilla, si quieres crear tu producto con opciones más avanzadas, da click en el siguiente botón para ir a el formulario avanzado.",
           "notFound": "Lo sentimos, no hay nada aquí",
           "noResultsFoundTryAnotherSearchValue": "No se han encontrado resultados, intenta con otro valor de busqueda...",
           "goToHome": "Volver al inicio",
@@ -3846,6 +3881,7 @@
           "requestedBy": "Solicitado Por",
           "feature": "Característica | Características",
           "fieldsDetails": "Detalles de la Característica",
+          "filtersDetails": "Detalles de los filtros",
           "warehouse": "Bodega"
         },
         "configList": {

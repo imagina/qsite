@@ -160,6 +160,9 @@ export default {
     }
   },
   computed: {
+    isAppOffline() {
+      return this.$store.state.qofflineMaster.isAppOffline;
+    },
     //Return filter data
     filter() {
       this.filterData = this.$clone(this.filterPlugin.values)
@@ -231,7 +234,7 @@ export default {
         //Filter
         {
           label: this.$tr('isite.cms.label.filter'),
-          vIf: (this.filter.load && !excludeActions.includes('filter')),
+          vIf: (this.filter.load && !excludeActions.includes('filter') && !this.isAppOffline),
           props: {
             icon: 'fa-light fa-filter',
             id: 'filter-button-crud',
@@ -242,7 +245,7 @@ export default {
         {
           label: this.$trp('isite.cms.label.refresh'),
           type: this.multipleRefresh ? 'btn-dropdown' : '',
-          vIf: (this.params.refresh && !excludeActions.includes('refresh')),
+          vIf: (this.params.refresh && !excludeActions.includes('refresh') && !this.isAppOffline),
           props: {
             icon: 'fa-light fa-rotate-right',
             id: 'refresh-button-crud'
@@ -266,7 +269,7 @@ export default {
             },
             {
               label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 15}),
-              action: () => this.refreshByTime(15)
+              action: () => this.refreshByTime(5)
             }
           ],
           action: this.emitRefresh,

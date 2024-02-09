@@ -119,6 +119,9 @@ export default {
     }
   },
   computed: {
+    isAppOffline() {
+      return this.$store.state.qofflineMaster.isAppOffline;
+    },
     //Quser state
     quserState() {
       return this.$store.state.quserAuth
@@ -146,6 +149,20 @@ export default {
 
       return {
         buttons: [
+          //Offline
+          {
+            vIf: this.$store.getters['qsiteApp/getSettingValueByName']('isite::offline'),
+            name: 'offline',
+            label: this.$tr('isite.cms.label.offline'),
+            badgeColor: 'orange',
+            badgeLabel: this.$store.state.qofflineMaster.totalRequests,
+            props: {
+              ...this.defaultButtonProps,
+              icon: 'fa-light fa-cloud-slash',
+              class: `btn-small`
+            },
+            action: () => this.$eventBus.$emit('toggleMasterDrawer', 'offline')
+          },
           //Go To Site
           {
             vIf: this.showGoToSiteButton,
@@ -252,7 +269,7 @@ export default {
           //logout
           {
             name: 'settings',
-            vIf: (config('app.mode') == 'iadmin'),
+            vIf: (config('app.mode') == 'iadmin') && !this.isAppOffline,
             props: {
               ...this.defaultButtonProps,
               label: this.$tr('isite.cms.configList.signOut'),

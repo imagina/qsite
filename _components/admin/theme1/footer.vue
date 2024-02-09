@@ -15,7 +15,7 @@
           <q-btn :to="{name: 'user.profile.me'}" flat no-caps v-if="quserState.authenticated"
                  class="item-icon" padding="none">
             <q-avatar size="20px">
-              <img :src="profileImage.smallThumb">
+              <img :src="quserState.userData.mainImage">
             </q-avatar>
           </q-btn>
           <div>{{ $tr('isite.cms.label.profile') }}</div>
@@ -62,6 +62,13 @@
                 <q-icon color="primary" name="fa-light fa-folder-gear"/>
               </q-item-section>
               <q-item-section class="ellipsis">{{ $tr('isite.cms.label.setting') }}</q-item-section>
+            </q-item>
+            <!--Offline-->
+            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','offline')">
+              <q-item-section avatar>
+                <q-icon color="primary" name="fa-regular fa-wifi-slash"/>
+              </q-item-section>
+              <q-item-section class="ellipsis">{{ $tr('isite.cms.label.offlineRequests') }}</q-item-section>
             </q-item>
             <!--Chat action-->
             <q-item clickable v-ripple v-if="$auth.hasAccess('ichat.conversations.index')"
@@ -148,9 +155,6 @@ export default {
     params() {
       return this.currentRoute.meta.subHeader || {}
     },
-    profileImage(){
-      return this.$store.getters['quserAuth/profileImage']
-    }
   },
   methods: {
     init() {

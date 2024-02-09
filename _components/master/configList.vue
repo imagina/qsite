@@ -168,6 +168,20 @@
     </div>
 
     <!--Separator-->
+    <q-separator class="q-my-md" />
+
+    <!-- ===== Custom Configs ===== -->
+    <div v-for="customConfig in customConfigs">
+      <div class="title-block">
+        {{ $trp(customConfig.moduleTitle, { capitalize: true }) }}
+      </div>
+      <div v-for="config in customConfig.configList" class="q-px-sm cursor-pointer q-pt-md" @click="config.action()">
+        <q-icon color="primary" size="18px" :name="config.icon" class="q-mr-sm" />
+        {{ $t(config.title, { capitalize: true }) }}
+      </div>
+    </div>
+
+    <!--Separator-->
     <q-separator class="q-my-md"/>
 
     <!-- ===== Settings ===== -->
@@ -243,6 +257,25 @@ export default {
     }
   },
   computed: {
+    isAppOffline() {
+      return this.$store.state.qofflineMaster.isAppOffline;
+    },
+    customConfigs() {
+      const getCustomConfigs = Object.values(config('main')).map(item => {
+        if (item.configList) {
+          return {
+            moduleTitle: item.moduleTitle,
+            configList: item.configList
+          }
+        }
+        return {
+          moduleTitle: item.moduleTitle,
+          configList: []
+        }
+      });
+
+      return getCustomConfigs.filter(config => config.configList.length > 0)
+    },
     versionText() {
       return 'v' + config('app.version')
     },

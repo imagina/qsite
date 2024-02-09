@@ -9,6 +9,7 @@
     <!-- ROUTER VIEW -->
     <q-page-container>
       <!--Page route-->
+      <offlineAlert v-if="isAppOffline"/>
       <div id="routeInformationContent" v-if="appConfig.mode == 'iadmin'"
            :class="`q-hide q-md-show ${iadminTheme == 1 ? 'bg-primary' : 'bg-white'}`">
         <div id="subContent" class="row justify-between items-center">
@@ -68,6 +69,8 @@ import cropperComponent from 'modules/qsite/_components/master/cropper'
 import activitiesActions from 'modules/qgamification/_components/activitiesActions/index.vue'
 //[ptc]
 //import Alert from 'modules/qoffline/_components/alert.vue'
+import Progressrequest from 'modules/qoffline/_components/Progressrequest.vue';
+import offlineAlert from 'modules/qsite/_components/master/offlineAlert.vue';
 
 export default {
   name: "MasterLayout",
@@ -101,6 +104,8 @@ export default {
     drawersPanel,
     footerPanel,
     //Offline
+    Progressrequest,
+    offlineAlert
     //[ptc] Alert
     //Alert
   },
@@ -129,6 +134,9 @@ export default {
     }
   },
   computed: {
+    isAppOffline() {
+      return this.$store.state.qofflineMaster.isAppOffline;
+    },
     appState() {
       return this.$store.state.qsiteApp
     },
@@ -284,7 +292,7 @@ export default {
   }
 
   #routeInformationContent {
-    width: -webkit-fill-available;
+    width: 100%;
     position: fixed;
     z-index: 2;
     background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%);

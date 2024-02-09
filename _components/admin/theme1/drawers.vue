@@ -43,6 +43,12 @@
               v-if="$auth.hasAccess('notification.notifications.manage')">
       <master-notifications/>
     </q-drawer>
+
+    <!--Offline-->
+    <q-drawer bordered id="drawerOfflineMaster" v-model="drawer.offline" side="right" overlay
+              v-if="$store.getters['qsiteApp/getSettingValueByName']('isite::offline')">
+      <offline/>
+    </q-drawer>
   </div>
 </template>
 <script>
@@ -56,6 +62,7 @@ import checkin from 'modules/qcheckin/_components/checkin'
 import masterRecommendation from 'modules/qsite/_components/master/masterRecommendations'
 import masterNotifications from 'modules/qnotification/_components/drawerNotifications'
 import eventBus from 'modules/qsite/_plugins/eventBus'
+import offline from 'modules/qoffline/_components/drawerOffline'
 
 export default {
   beforeDestroy() {
@@ -83,7 +90,8 @@ export default {
         chat: false,
         checkin: false,
         recommendation: false,
-        notification: false
+        notification: false,
+        offline: false
       },
       appConfig: config('app'),
       eventBus
