@@ -102,21 +102,26 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-#masterCaptchaComponent
-  #g-recaptcha
-    width max-content
-    margin auto
+<style lang="scss">
+#masterCaptchaComponent {
+  #g-recaptcha {
+    width: max-content;
+    margin: auto;
+  }
 
-  .text-info-v3
-    color $grey-5
-    font-size 14px
-    text-align justify
+  .text-info-v3 {
+    color: $grey-5;
+    font-size: 14px;
+    text-align: justify;
 
-    a
-      color $light-blue-13
+    a {
+      color: $light-blue-13;
+    }
+  }
+}
 
 //Hidden badage
-.grecaptcha-badge
-  visibility hidden
+.grecaptcha-badge {
+  visibility: hidden;
+}
 </style>

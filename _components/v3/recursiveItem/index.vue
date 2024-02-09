@@ -9,7 +9,7 @@
         </q-tooltip>
         <!--Single Item-->
         <q-item :id="`menuItem-${parseIdItem(item.name || key)}`" v-bind="item.itemProps"
-                v-if="item.itemProps.vIf != undefined ? item.itemProps.vIf : true" @click.native="selectItem(item)">
+                v-if="item?.itemProps?.vIf != undefined ? item?.itemProps?.vIf : true" @click.native="selectItem(item)">
           <q-item-section v-if="item.icon && showIcons" avatar>
             <q-icon :name="item.icon"/>
           </q-item-section>
@@ -55,7 +55,7 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="scss">
 #listMenu
   .q-expansion-item__container
     .q-expansion-item__content

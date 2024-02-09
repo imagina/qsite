@@ -4,15 +4,16 @@ class Array {
 
   //Order array as tree
   tree(elements, fields = {}) {
+    const elementsClone = lodash.cloneDeep(elements)
     var trees = []
     var response = []
     fields = {label: 'title', id: 'id', parentId: 'parentId', ...fields}
 
     //Get parents ID
-    elements.forEach(item => {
+    elementsClone.forEach(item => {
       if (!item[fields.parentId]) item[fields.parentId] = 0//Default parent ID
       let findId = false
-      elements.forEach(j => {
+      elementsClone.forEach(j => {
         if (parseInt(j.id) == parseInt(item[fields.parentId])) findId = j
       })
       if (!findId) trees[item[fields.parentId]] = item[fields.parentId]
@@ -31,7 +32,7 @@ class Array {
 
     //Build tree items
     trees.forEach((tree, index) => {
-      this.builTree(elements, tree, fields).forEach(element => {
+      this.builTree(elementsClone, tree, fields).forEach(element => {
         let itemOrder = {
           label: element[fields.label],
           id: element[fields.id],

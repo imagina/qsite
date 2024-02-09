@@ -2,7 +2,7 @@
   <div id="masterDrawers">
     <!-- MENU -->
     <q-drawer id="menuMaster" class="no-shadow" v-model="drawer.menu" ref="menuMaster"
-              :mini="miniState" @click.capture="miniState ? $eventBus.$emit('toggleMasterDrawer','menu') : null">
+              :mini="miniState" @click.capture="miniState ? eventBus.emit('toggleMasterDrawer','menu') : null">
       <!--Logo-->
       <div class="q-pa-md logo-bg-primary text-center" v-if="!miniState && drawer.menu">
         <q-img contain :src="logo" style="height: 120px; min-height: 120px; max-width: 80%"/>
@@ -117,11 +117,12 @@ import masterFilter from '@imagina/qsite/_components/master/masterFilter'
 import checkin from '@imagina/qcheckin/_components/checkin'
 import masterRecommendation from '@imagina/qsite/_components/master/masterRecommendations'
 import masterNotifications from '@imagina/qnotification/_components/drawerNotifications'
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
-    this.$eventBus.$off('toggleMasterDrawer')
-    this.$eventBus.$off('openMasterDrawer')
+    eventBus.off('toggleMasterDrawer')
+    eventBus.off('openMasterDrawer')
   },
   mixins: [sidebarMixins],
   props: {},
@@ -149,7 +150,8 @@ export default {
         notification: false
       },
       appConfig: config('app'),
-      filter: this.$filter
+      filter: this.$filter,
+      eventBus
     }
   },
   computed: {
@@ -177,9 +179,9 @@ export default {
     },
     handlerEvent() {
       //handler toggleMasterDrawer
-      this.$eventBus.$on('toggleMasterDrawer', (drawerName) => this.toggleDrawer(drawerName))
+      eventBus.on('toggleMasterDrawer', (drawerName) => this.toggleDrawer(drawerName))
       //handler openMasterDrawer
-      this.$eventBus.$on('openMasterDrawer', (drawerName) => this.drawer[drawerName] = true)
+      eventBus.on('openMasterDrawer', (drawerName) => this.drawer[drawerName] = true)
     },
     //Show drawer specific
     toggleDrawer(drawerName) {
@@ -207,90 +209,107 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-.q-layout-drawer-delimiter
-  box-shadow $shadow-1
+<style lang="scss">
+.q-layout-drawer-delimiter {
+  box-shadow: $shadow-1;
+}
 
-.q-drawer--mini
-  width 57px !important
+.q-drawer--mini {
+  width: 57px !important;
+}
 
-  .q-item__section
-    padding 0px 20px !important
+.q-drawer--mini .q-item__section {
+  padding: 0px 20px !important;
+}
 
-#menuMaster
-  .q-drawer
-    background $custom-accent-color
+#menuMaster .q-drawer {
+  background: $custom-accent-color;
+}
 
-  .q-scrollarea
-    padding-top 5px
+#menuMaster .q-scrollarea {
+  padding-top: 5px;
+}
 
-  hr
-    background-color $grey-3
+#menuMaster hr {
+  background-color: $grey-3;
+}
 
-  .q-expansion-item
-    background-color $custom-accent-color
+#menuMaster .q-expansion-item {
+  background-color: $custom-accent-color;
+}
 
-    .content-item
-      background-color $custom-accent-color
+#menuMaster .q-expansion-item .content-item {
+  background-color: $custom-accent-color;
+}
 
-  .q-expansion-item__container
-    .q-expansion-item__content
-      padding 0 0 0 1px
-      border-left 15px solid $custom-accent-color
+#menuMaster .q-expansion-item__container .q-expansion-item__content {
+  padding: 0 0 0 1px;
+  border-left: 15px solid $custom-accent-color;
+}
 
-  .q-item
-    padding-left 0
-    min-height 40px
-    color $blue-grey
+#menuMaster .q-item {
+  padding-left: 0;
+  min-height: 40px;
+  color: $blue-grey;
+}
 
-    .q-item__section--avatar
-      padding 0 18px !important
+#menuMaster .q-item .q-item__section--avatar {
+  padding: 0 18px !important;
+}
 
-      .q-icon
-        font-size 20px
-        color $blue-grey
+#menuMaster .q-item .q-item__section--avatar .q-icon {
+  font-size: 20px;
+  color: $blue-grey;
+}
 
-    &:hover
-      background-color $grey-4
-      color $primary
+#menuMaster .q-item:hover {
+  background-color: $grey-4;
+  color: $primary;
+}
 
-      .q-icon
-        color $primary
-        font-size 22px
+#menuMaster .q-item:hover .q-icon {
+  color: $primary;
+  font-size: 22px;
+}
 
-    &.item-is-active
-      background-color $custom-accent-color
+#menuMaster .q-item.item-is-active {
+  background-color: $custom-accent-color;
+}
 
-      .q-item__section, .q-icon
-        color $primary
+#menuMaster .q-item.item-is-active .q-item__section,
+#menuMaster .q-item.item-is-active .q-icon {
+  color: $primary;
+}
 
-  .expansion-selected
-    background-color $primary
+#menuMaster .expansion-selected {
+  background-color: $primary;
+}
 
-  #btnProfile
-    cursor pointer
-    position absolute
-    bottom 0
-    left 0
-    background-color $primary
-    border-radius 0
-    color white
-    height 50px
-    width 100%
-    padding 7px 8.5px
+#menuMaster #btnProfile {
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: $primary;
+  border-radius: 0;
+  color: white;
+  height: 50px;
+  width: 100%;
+  padding: 7px 8.5px;
+}
 
-    #profileImage
-      height 36px
-      width 36px
-      border-radius 50%
+#menuMaster #btnProfile #profileImage {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+}
 
-#masterDrawers
-  #drawerRecomendationMaster
-    .q-drawer
-      max-height max-content
-      background $bg-custom-accent-color
+#masterDrawers #drawerRecomendationMaster .q-drawer {
+  max-height: max-content;
+  background: $bg-custom-accent-color;
+}
 
-    .q-drawer__content
-      background #ebf1fa
-
+#masterDrawers #drawerRecomendationMaster .q-drawer__content {
+  background: #ebf1fa;
+}
 </style>

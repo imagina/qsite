@@ -59,36 +59,43 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#avatarImageComponent
-  padding 0
-  height max-content
-  width max-content
+<style lang="scss">
+#avatarImageComponent {
+  padding: 0;
+  height: max-content;
+  width: max-content;
 
-  .avatar-img-content
-    border-radius 50%
-    background-position center
-    background-repeat no-repeat
-    background-size cover
+  .avatar-img-content {
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 
-#modalOpenImage
-  .contentImage
-    overflow initial
-    position relative
-    max-height calc(100vh - 48px)
-    box-shadow none
+  #modalOpenImage {
+    .contentImage {
+      overflow: initial;
+      position: relative;
+      max-height: calc(100vh - 48px);
+      box-shadow: none;
+    }
 
-  .q-card
-    max-height calc(100vh - 98px)
-    max-width calc(100vw - 48px)
-    position relative
+    .q-card {
+      max-height: calc(100vh - 98px);
+      max-width: calc(100vw - 48px);
+      position: relative;
 
-    img
-      max-height calc(100vh - 116px)
-      max-width calc(90vw - 16px)
+      img {
+        max-height: calc(100vh - 116px);
+        max-width: calc(90vw - 16px);
+      }
+    }
 
-  .q-btn
-    position absolute
-    top -18px
-    right -18px
+    .q-btn {
+      position: absolute;
+      top: -18px;
+      right: -18px;
+    }
+  }
+}
 </style>

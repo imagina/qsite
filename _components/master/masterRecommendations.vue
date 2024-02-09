@@ -185,29 +185,36 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#recommendationsComponent
-  padding 16px
-  background $custom-accent-color
-  height 100%
+<style lang="scss">
+#recommendationsComponent {
+  padding: 16px;
+  background: $custom-accent-color;
+  height: 100%;
 
-  .item
-    margin 0 0 8px 0
+  .item {
+    margin: 0 0 8px 0;
 
-    .text-subtitle2
-      height 31px
-      display flex
-      align-items center
+    .text-subtitle2 {
+      height: 31px;
+      display: flex;
+      align-items: center;
+    }
+  }
 
-  .content-avatar
-    max-width 45px
+  .content-avatar {
+    max-width: 45px;
     min-width: 45px;
-    padding 0
+    padding: 0;
+  }
 
-  .box
-    min-height auto
+  .box {
+    min-height: auto;
+  }
+}
 
-@media (max-width: $breakpoint-lg-max)
-  #recommendationsComponent
-    padding 30px 8px 30px 8px
+@media (max-width: $breakpoint-lg-max) {
+  #recommendationsComponent {
+    padding: 30px 8px 30px 8px;
+  }
+}
 </style>

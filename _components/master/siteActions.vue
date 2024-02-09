@@ -2,37 +2,41 @@
   <div id="siteActionscomponent" class="tw-flex">
     <div :class="`row q-gutter-${gutter}`">
       <!--Actions-->
-      <q-btn v-for="(btn, keyAction) in actions.buttons" :key="keyAction" v-bind="btn.props"
-             v-if="btn.vIf != undefined ? btn.vIf : true" @click="btn.action != undefined ? btn.action() : null">
-        <q-menu v-if="btn.menu" fit>
-          <div class="q-py-sm q-px-md">
-            <div class="text-subtitle1 text-primary">{{ btn.label }}</div>
-            <!--Separator-->
-            <q-separator class="q-my-sm"/>
-            <!-- Description -->
-            <div class="text-caption text-blue-grey">{{ $tr('isite.cms.message.descriptionHelpCenter') }}.</div>
-            <!--Actions-->
-            <q-list separator class="no-shadow" style="min-width: 260px">
-              <q-item v-for="(act, keyAction) in btn.menu.actions" :key="keyAction" clickable v-ripple
-                      v-close-popup @click.native="act.action != undefined ? act.action() : null">
-                <q-item-section class="text-blue-grey">
-                  <div>
-                    <q-icon :name="act.icon" class="q-mr-sm" color="primary" size="xs"/>
-                    {{ act.label }}
-                  </div>
-                </q-item-section>
-                <q-item-section side>
-                  <q-icon name="fa-light fa-chevron-right" size="12px"/>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </div>
-        </q-menu>
-        <!-- Tooltip -->
-        <q-tooltip>{{ btn.label }}</q-tooltip>
-        <!-- Badge -->
-        <q-badge v-if="btn.badgeLabel" :color="btn.badgeColor || 'orange'" rounded floating>{{ btn.badgeLabel }}</q-badge>
-      </q-btn>
+      <template v-for="(btn, keyAction) in actions.buttons">
+        <q-btn  
+          v-if="btn?.vIf != undefined ? btn.vIf : true" 
+          :key="keyAction" 
+          v-bind="btn.props"
+          @click="btn.action != undefined ? btn.action() : null"
+        >
+          <q-menu v-if="btn.menu" fit>
+            <div class="q-py-sm q-px-md">
+              <div class="text-subtitle1 text-primary">{{ btn.label }}</div>
+              <!--Separator-->
+              <q-separator class="q-my-sm"/>
+              <!-- Description -->
+              <div class="text-caption text-blue-grey">{{ $tr('isite.cms.message.descriptionHelpCenter') }}.</div>
+              <!--Actions-->
+              <q-list separator class="no-shadow" style="min-width: 260px">
+                <q-item v-for="(act, keyAction) in btn.menu.actions" :key="keyAction" clickable v-ripple
+                        v-close-popup @click.native="act.action != undefined ? act.action() : null">
+                  <q-item-section class="text-blue-grey">
+                    <div>
+                      <q-icon :name="act.icon" class="q-mr-sm" color="primary" size="xs"/>
+                      {{ act.label }}
+                    </div>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-icon name="fa-light fa-chevron-right" size="12px"/>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </q-menu>
+          <!-- Tooltip -->
+          <q-tooltip>{{ btn.label }}</q-tooltip>
+        </q-btn>
+      </template>
       <!--Auth section-->
       <q-btn v-if="quserState.authenticated && (configMode == 'iadmin')" id="profileButton" rounded no-caps
              padding="2px 8px" color="white" unelevated>
@@ -63,9 +67,14 @@
             <q-separator vertical inset class="q-ml-lg q-mr-sm"/>
             <!--Right content-->
             <div class="column text-left">
-              <q-btn v-for="(btn, keyAction) in actions.menu" :key="keyAction" v-bind="btn.props"
-                     v-if="btn.vIf != undefined ? btn.vIf : true" v-close-popup padding="xs md"
-                     @click="btn.action != undefined ? btn.action() : null"/>
+              <template v-for="(btn, keyAction) in actions.menu">
+                <q-btn 
+                  :key="keyAction" 
+                  v-bind="btn.props"
+                  v-if="btn?.vIf != undefined ? btn.vIf : true" v-close-popup padding="xs md"
+                  @click="btn.action != undefined ? btn.action() : null"
+                />
+              </template>
             </div>
           </div>
         </q-menu>
@@ -74,9 +83,11 @@
   </div>
 </template>
 <script>
+import eventBus from '@imagina/qsite/_plugins/eventBus'
+
 export default {
   beforeDestroy() {
-    this.$eventBus.$off('header.badge.manage')
+    eventBus.off('header.badge.manage')
   },
   props: {
     gutter: {type: String, default: 'sm'},
@@ -179,7 +190,7 @@ export default {
               icon: 'fas fa-stopwatch',
               round: true
             },
-            action: () => this.$eventBus.$emit('toggleMasterDrawer', 'checkin')
+            action: () => eventBus.emit('toggleMasterDrawer', 'checkin')
           },
           //Chat
           {
@@ -191,7 +202,7 @@ export default {
               icon: 'fa-light fa-message-lines',
               class: `btn-small ${this.badge.chat ? 'active-badge' : ''}`
             },
-            action: () => this.$eventBus.$emit('toggleMasterDrawer', 'chat')
+            action: () => eventBus.emit('toggleMasterDrawer', 'chat')
           },
           //Notifications
           {
@@ -203,7 +214,7 @@ export default {
               icon: 'fa-light fa-bell',
               class: `btn-small ${this.badge.notification ? 'active-badge' : ''}`
             },
-            action: () => this.$eventBus.$emit('toggleMasterDrawer', 'notification')
+            action: () => eventBus.emit('toggleMasterDrawer', 'notification')
           },
           //Help Center
           {
@@ -220,7 +231,7 @@ export default {
                 {
                   icon: 'fa-light fa-question-circle',
                   label: 'FAQ',
-                  action: () => this.$eventBus.$emit('toggleHelpSection', {sectionName: 'faq'})
+                  action: () => eventBus.emit('toggleHelpSection', {sectionName: 'faq'})
                 }
               ]
             }
@@ -253,7 +264,7 @@ export default {
               rounded: true,
               align: "left"
             },
-            action: () => this.$eventBus.$emit('toggleMasterDrawer', 'config')
+            action: () => eventBus.emit('toggleMasterDrawer', 'config')
           },
           //logout
           {
@@ -276,7 +287,7 @@ export default {
   methods: {
     init() {
       //Manage badges to button actions
-      this.$eventBus.$on('header.badge.manage', (response) => {
+      eventBus.on('header.badge.manage', (response) => {
         Object.keys(response).forEach(name => this.badge[name] = response[name])
       })
     },
@@ -286,10 +297,11 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="scss">
 #siteActionscomponent
-  #profileImage
-    height 25px
-    width 25px
-    border-radius 50%
+  #profileImage {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+  }
 </style>

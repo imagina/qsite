@@ -2,7 +2,7 @@
   <div id="masterDrawers1">
     <!-- MENU -->
     <q-drawer id="menuMaster" class="no-shadow" v-model="drawer.menu" ref="menuMaster"
-              @click.capture="miniState ? $eventBus.$emit('toggleMasterDrawer','menu') : null">
+              @click.capture="miniState ? eventBus.emit('toggleMasterDrawer','menu') : null">
       <!--Logo-->
       <div id="logoSite" class="relative-position">
         <q-img contain :src="logo" style="height: 80px; min-height: 80px"/>
@@ -67,11 +67,12 @@ import checkin from '@imagina/qcheckin/_components/checkin'
 import masterRecommendation from '@imagina/qsite/_components/master/masterRecommendations'
 import masterNotifications from '@imagina/qnotification/_components/drawerNotifications'
 import offline from '@imagina/qoffline/_components/drawerOffline'
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
-    this.$eventBus.$off('toggleMasterDrawer')
-    this.$eventBus.$off('openMasterDrawer')
+    eventBus.off('toggleMasterDrawer')
+    eventBus.off('openMasterDrawer')
   },
   mixins: [sidebarMixins],
   props: {},
@@ -99,7 +100,8 @@ export default {
         offline: false
       },
       appConfig: config('app'),
-      filter: this.$filter
+      filter: this.$filter,
+      eventBus
     }
   },
   computed: {
@@ -130,9 +132,9 @@ export default {
     },
     handlerEvent() {
       //handler toggleMasterDrawer
-      this.$eventBus.$on('toggleMasterDrawer', (drawerName) => this.toggleDrawer(drawerName))
+      eventBus.on('toggleMasterDrawer', (drawerName) => this.toggleDrawer(drawerName))
       //handler openMasterDrawer
-      this.$eventBus.$on('openMasterDrawer', (drawerName) => this.drawer[drawerName] = true)
+      eventBus.on('openMasterDrawer', (drawerName) => this.drawer[drawerName] = true)
     },
     //Show drawer specific
     toggleDrawer(drawerName) {
@@ -163,67 +165,84 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="scss">
+#masterDrawers1 {
+  background-color: $custom-accent-color !important;
 
-#masterDrawers1
-  background-color $custom-accent-color !important
+  #drawerRecomendationMaster {
+    .q-drawer {
+      max-height: max-content;
+    }
 
-  #drawerRecomendationMaster
-    .q-drawer
-      max-height max-content
+    .q-drawer__content {
+      background: $custom-accent-color;
+    }
+  }
 
-    .q-drawer__content
-      background $custom-accent-color
+  #menuMaster {
+    aside {
+      background: $primary;
+      background-color: $custom-accent-color !important;
 
-  #menuMaster
-    aside
-      background $primary
-      background-color $custom-accent-color !important
+      #logoSite {
+        padding: 20px 25px 26px 25px;
+        height: 120px;
+        background-color: $primary;
+      }
 
-    #logoSite
-      padding 20px 25px 26px 25px
-      height 120px
-      background-color $primary
+      #versionContent {
+        padding: 3px 15px;
+        font-size: 13px;
+      }
 
-    #versionContent
-      padding 3px 15px
-      font-size 13px
+      .q-expansion-item {
+        background-color: $custom-accent-color !important;
 
-    .q-expansion-item
-      background-color $custom-accent-color !important
+        .q-expansion-item__container {
+          .q-expansion-item__content {
+            padding: 0 0 0 2px;
+            border-left: 15px solid $custom-accent-color;
+          }
+        }
+      }
 
-    .q-expansion-item__container
-      .q-expansion-item__content
-        padding 0 0 0 2px
-        border-left 15px solid $custom-accent-color
+      .q-item {
+        padding-left: 0;
+        min-height: 40px;
+        color: $blue-grey;
 
-    .q-item
-      padding-left 0
-      min-height 40px
-      color $blue-grey
+        .q-item__section--avatar {
+          padding: 0 18px !important;
 
-      .q-item__section--avatar
-        padding 0 18px !important
+          .q-icon {
+            font-size: 20px;
+            color: $blue-grey;
+          }
+        }
 
-        .q-icon
-          font-size 20px
-          color $blue-grey
+        &:hover {
+          background-color: $grey-4;
+          color: $primary;
 
-      &:hover
-        background-color $grey-4
-        color $primary
+          .q-icon {
+            color: $primary;
+            font-size: 22px;
+          }
+        }
 
-        .q-icon
-          color $primary
-          font-size 22px
+        &.item-is-active {
+          background-color: $custom-accent-color;
 
-      &.item-is-active
-        background-color $custom-accent-color
+          .q-item__section, .q-icon {
+            color: $primary;
+          }
+        }
+      }
 
-        .q-item__section, .q-icon
-          color $primary
-
-    .expansion-selected
-      background-color $primary
-
+      .expansion-selected {
+        background-color: $primary;
+      }
+    }
+  }
+}
 </style>

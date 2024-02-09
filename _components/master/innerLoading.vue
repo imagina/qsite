@@ -39,16 +39,17 @@
 
   }
 </script>
-<style lang="stylus">
-  #innerLoadingMaster
-    z-index 10
-    border-radius $custom-radius
+<style lang="scss">
+  #innerLoadingMaster {
+    z-index: 10;
+    border-radius: $custom-radius;
+  }
 
-    &.q-inner-loading
-      .q-box-inner-loading
-        text-align center
-        background-color $grey-1
-        margin 20px 10px 10px 10px
-        padding 5px 15px
-        border-radius 10px
+  #innerLoadingMaster.q-inner-loading .q-box-inner-loading {
+    text-align: center;
+    background-color: $grey-1;
+    margin: 20px 10px 10px 10px;
+    padding: 5px 15px;
+    border-radius: 10px;
+  }
 </style>

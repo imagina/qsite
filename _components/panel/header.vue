@@ -6,7 +6,7 @@
       <q-toolbar id="toolbarTop">
         <!--== Menu Button ==-->
         <q-btn id="buttonToogleMenu" icon="fas fa-bars" unelevated color="primary"
-               @click="$eventBus.$emit('toggleMasterDrawer','menu')"/>
+               @click="eventBus.emit('toggleMasterDrawer','menu')"/>
         <!--Breadcrumb-->
         <q-toolbar-title>
           <div id="breadCrumbContent" class="q-hide q-md-show">
@@ -25,10 +25,11 @@
 <script>
 //Components
 import siteActions from '@imagina/qsite/_components/master/siteActions'
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
-    this.$eventBus.$off('header.badge.manage')
+    eventBus.off('header.badge.manage')
   },
   props: {},
   components: {siteActions},
@@ -47,7 +48,8 @@ export default {
         chat: false,
         notification: false
       },
-      loadHeaderIpanel: false
+      loadHeaderIpanel: false,
+      eventBus
     }
   },
   computed: {
@@ -90,40 +92,49 @@ export default {
   methods: {
     init() {
       //Manage badges to button actions
-      this.$eventBus.$on('header.badge.manage', (response) => {
+      eventBus.on('header.badge.manage', (response) => {
         Object.keys(response).forEach(name => this.badge[name] = response[name])
       })
     },
   }
 }
 </script>
-<style lang="stylus">
-#masterPanelHeader
+<style lang="scss">
+#masterPanelHeader {
   .q-header {
-    background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%)
+    background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%);
   }
 
-  #toolbarTop
-    padding-left 0
-    padding-right 10px
+  #toolbarTop {
+    padding-left: 0;
+    padding-right: 10px;
 
-    #buttonToogleMenu
-      height 36px
-      width 36px
-      border-radius 0 10px 10px 0
+    #buttonToogleMenu {
+      height: 36px;
+      width: 36px;
+      border-radius: 0 10px 10px 0;
 
-      .q-icon
-        font-size 16px
+      .q-icon {
+        font-size: 16px;
+      }
+    }
 
-    .q-breadcrumbs
-      .q-breadcrumbs__el
-        font-size 14px
+    .q-breadcrumbs {
+      .q-breadcrumbs__el {
+        font-size: 14px;
+      }
 
-      .q-breadcrumbs__separator
-        font-size 14px
-        padding 0 3px
+      .q-breadcrumbs__separator {
+        font-size: 14px;
+        padding: 0 3px;
+      }
+    }
+  }
 
-  #siteActionscomponent
-    .q-btn
-      box-shadow $custom-box-shadow
+  #siteActionscomponent {
+    .q-btn {
+      box-shadow: $custom-box-shadow;
+    }
+  }
+}
 </style>

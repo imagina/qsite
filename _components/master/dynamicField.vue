@@ -371,6 +371,17 @@
             :options="formatOptions"
             :class="`${field.help ? 'expression-dinamyc-field' : ''}`"
         />
+        <localizedPhone
+            v-if="loadField('localizedPhone')"
+            v-model="responseValue"
+            :fieldProps="fieldProps"
+        />
+
+        <multipleDynamicFields
+          v-if="loadField('multiplier')"
+          v-model="responseValue"
+          :fieldProps="fieldProps"
+        />
         <!--Code Editor-->
         <q-field v-model="responseValue" v-if="loadField('code')"
                  v-bind="fieldProps.fieldComponent"
@@ -379,7 +390,7 @@
             <div class="text-grey-8 q-mb-xs" v-if="fieldProps.field.label">
               {{ fieldProps.field.label }} [{{ fieldProps.field.options.mode }}]
             </div>
-            <codemirror v-model="responseValue" :options="fieldProps.field.options"/>
+<!--            <codemirror v-model="responseValue" :options="fieldProps.field.options"/>-->
           </div>
         </q-field>
       </div>
@@ -407,16 +418,20 @@ import selectMedia from '@imagina/qmedia/_components/selectMedia'
 import googleMapMarker from '@imagina/qsite/_components/master/googleMapMarker'
 import JsonEditorVue from 'json-editor-vue'
 import expressionField from '@imagina/qsite/_components/master/expressionField/index.vue';
+import localizedPhone from '@imagina/qsite/_components/master/localizedPhone/index.vue';
+import multipleDynamicFields from '@imagina/qsite/_components/master/multipleDynamicFields/views'
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 //Code mirror
-import {codemirror} from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/mode/css/css.js'
-import 'codemirror/mode/sass/sass.js'
-import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/mode/htmlembedded/htmlembedded.js'
-import 'codemirror/mode/php/php.js'
-import 'codemirror/theme/base16-dark.css'
-import 'codemirror/addon/selection/active-line.js'
+//[ptc]import {codemirror} from 'vue-codemirror'
+//[ptc]
+// import 'codemirror/lib/codemirror.css'
+// import 'codemirror/mode/css/css.js'
+// import 'codemirror/mode/sass/sass.js'
+// import 'codemirror/mode/javascript/javascript.js'
+// import 'codemirror/mode/htmlembedded/htmlembedded.js'
+// import 'codemirror/mode/php/php.js'
+// import 'codemirror/theme/base16-dark.css'
+// import 'codemirror/addon/selection/active-line.js'
 
 export default {
   name: 'dynamicField',
@@ -453,7 +468,9 @@ export default {
     googleMapMarker,
     JsonEditorVue,
     expressionField,
-    codemirror
+    //codemirror,
+    localizedPhone,
+    multipleDynamicFields,
   },
   watch: {
     value: {
@@ -528,6 +545,11 @@ export default {
     }
   },
   computed: {
+    selectImg() {
+      const data = this.rootOptions.find(item => item.id == this.responseValue) || {};
+
+      return data.img || null;
+    },
     //Return label to field
     isAppOffline() {
       return this.$store.state.qofflineMaster.isAppOffline;
@@ -1389,8 +1411,8 @@ export default {
           let componentCrud = this.$refs.crudComponent
           if (componentCrud) {
             //Activate listen to chanel
-            this.$root.$on(`crudForm${componentCrud.params.apiRoute}Created`, async () => {
-              await this.getOptions()//Get options
+            eventBus.on(`crudForm${componentCrud.params.apiRoute}Created`, async () => {
+              this.getOptions()//Get options
             })
           }
         }
@@ -1553,7 +1575,7 @@ export default {
       //Validate permission
       if (field.permission && !this.$auth.hasAccess(field.permission)) response = false
       //Validate vIf prop
-      if (response && field.props && (field.props.vIf != undefined)) response = field.props.vIf
+      if (response && field.props && (field.props?.vIf != undefined)) response = field.props?.vIf
       //Response
       return response
     },
@@ -1661,67 +1683,102 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#dynamicFieldComponent
-
+<style lang="scss">
+#dynamicFieldComponent {
   .q-field--outlined .q-field__control {
-    padding-letf 12px
-    padding-right 40px
+    padding-left: 12px;
   }
 
   .expression-dinamyc-field {
-    width: calc(100% - 40px)
+    width: calc(100% - 40px);
   }
 
-  .jsoneditor-vue
+  .jsoneditor-vue {
     width: 100%;
     height: 400px;
+  }
 
-  .checkbox-field
-    .q-field__control-container
-      padding-top 0 !important
+  .checkbox-field {
+    .q-field__control-container {
+      padding-top: 0 !important;
+    }
+  }
 
-  .field-no-padding
-    .q-field__control
-      padding 0 !important
-      overflow hidden
-      border-radius $custom-radius-items
+  .field-no-padding {
+    .q-field__control {
+      padding: 0 !important;
+      overflow: hidden;
+      border-radius: $custom-radius-items;
 
-      .q-field__control-container
-        padding 0 !important
+      .q-field__control-container {
+        padding: 0 !important;
+      }
+    }
+  }
 
-  .vue-treeselect
-    .vue-treeselect__control
-      background transparent !important
-      border 0
-      max-height 26px
-      padding-right 0px
+  .vue-treeselect {
+    .vue-treeselect__control {
+      background: transparent !important;
+      border: 0;
+      max-height: 26px;
+      padding-right: 0px;
 
-      .vue-treeselect__single-value
-        line-height 1.9
-        padding 0
+      .vue-treeselect__single-value {
+        line-height: 1.9;
+        padding: 0;
+      }
+    }
+  }
 
-  .dynamic-field__color
-    .q-field__control
-      border-radius $custom-radius-items
+  .dynamic-field__color {
+    .q-field__control {
+      border-radius: $custom-radius-items;
+    }
 
-    &.text-t-dark
-      .q-icon, .q-field__label, input
-        color $dark
+    &.text-t-dark {
+      .q-icon, .q-field__label, input {
+        color: $dark;
+      }
+    }
 
-    &.text-t-light
-      .q-icon, .q-field__label, input
-        color white
+    &.text-t-light {
+      .q-icon, .q-field__label, input {
+        color: white;
+      }
+    }
+  }
 
-  #bannerField
-    .content
-      border-radius $custom-radius-items
-      border 2px solid
-      overflow hidden
+  #bannerField {
+    .content {
+      border-radius: $custom-radius-items;
+      border: 2px solid;
+      overflow: hidden;
 
-      &__message
-        line-height 1
+      &__message {
+        line-height: 1;
+      }
+    }
+  }
 
-#ckEditorComponent
-  width 100%
+  #ckEditorComponent {
+    width: 100%;
+  }
+
+  // help padding-right
+  .crud-dynamic-field,
+  .input-dynamic-field,
+  .search-dynamic-field,
+  .date-dynamic-field,
+  .hour-dynamic-field,
+  .full-date-dynamic-field,
+  .select-dynamic-field,
+  .treeselect-dynamic-field,
+  .input-color-dynamic-field,
+  .copy-dynamic-field,
+  .select-icon-dinamyc-field {
+    .q-field__control {
+      padding-right: 40px;
+    }
+  }
+}
 </style>

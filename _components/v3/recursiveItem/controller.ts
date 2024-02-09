@@ -2,7 +2,7 @@ import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, o
 import store from '@imagina/qsite/_components/v3/recursiveItem/store'
 
 export default function controller(props: any, emit: any) {
-  const proxy = getCurrentInstance()!.proxy
+  const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
   // Refs
   const refs = {

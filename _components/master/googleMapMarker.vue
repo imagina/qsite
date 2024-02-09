@@ -138,10 +138,12 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#googleMapComponent
-  width 100%
+<style lang="scss">
+#googleMapComponent {
+  width: 100%;
 
-  #map
-    height 300px
+  #map {
+    height: 300px;
+  }
+}
 </style>

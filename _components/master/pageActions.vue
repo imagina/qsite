@@ -91,6 +91,9 @@
 <script>
 //Components
 import masterExport from "@imagina/qsite/_components/master/masterExport"
+import masterSynchronizable from "@imagina/qsite/_components/master/masterSynchronizable"
+import masterFilter from "@imagina/qsite/_components/master/masterFilter"
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
@@ -193,7 +196,7 @@ export default {
           props: {
             icon: 'fas fa-hat-wizard'
           },
-          action: () => this.$eventBus.$emit('toggleMasterDrawer', 'recommendation')
+          action: () => eventBus.emit('toggleMasterDrawer', 'recommendation')
         },
         //Filter
         {
@@ -269,12 +272,15 @@ export default {
       var response = {}
       //Get quick filters
       if (this.$q.platform.is.desktop) {
-        Object.keys(this.filter.fields).forEach(fieldName => {
-          var fieldfilter = this.filter.fields[fieldName]
-          if (fieldfilter.quickFilter) {
-            response[fieldName] = {
-              ...fieldfilter,
-              colClass: "col-12 col-md-4 col-xl-3"
+        if(this.filter.fields) {
+          Object.keys(this.filter.fields).forEach(fieldName => {
+            var fieldfilter = this.filter.fields[fieldName]
+            if (fieldfilter.quickFilter) {
+              response[fieldName] = {
+                ...fieldfilter,
+                colClass: "col-12 col-md-4 col-xl-3"
+              }
+              if (!this.filterData[fieldName]) this.filterData[fieldName] = (fieldfilter.value || null)
             }
             if (!this.filterData[fieldName]) this.$set(this.filterData, fieldName, fieldfilter.value || null)
           }
@@ -318,9 +324,10 @@ export default {
   },
   methods: {
     init() {
-      this.$root.$on('page.data.filter.read', (readValues) => {
-        this.$set(this.filter, 'readValues', readValues)
-      })
+      this.handlerEvent()
+    },
+    handlerEvent() {
+      eventBus.on('toggleMasterDrawer', () => this.toggleMasterFilter(false))
     },
     refreshByTime(time) {
       this.timeRefresh = time;
@@ -374,140 +381,162 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#pageActionscomponent
-  #titleCrudTable
-    font-size 20px
+<style lang="scss">
+#pageActionscomponent {
+  #titleCrudTable {
+    font-size: 20px;
+  }
 
   .animated {
     animation: ring 10s .7s ease-in-out infinite;
   }
 
-  .title-content
-    @media screen and (max-width: $breakpoint-md)
-      text-align center
-      width 100%
-
-  .actions-content
-    .q-field
-      padding-bottom 0 !important
-    .q-field__append .q-icon
-      color: $tertiary
-    @media screen and (max-width: $breakpoint-md)
-      width 100%
-
-  .description-content
-    line-height 1
-    color $grey-8
-    font-size 14px
-
-  .page-input-search
-    @media screen and (max-width: $breakpoint-md)
-      width 100%
-
-    .q-field__control, .q-field__control:after, .q-field__control-container, .q-field__append
-      //min-height 34px
-      //max-height 34px
-    .q-field__control, .q-field__prepend, .q-field__append
-      height: 34px
-
-  #dynamicFieldComponent
-    .q-field.q-field--float .q-field__label
-      color: $primary
-
-    .q-field__control
-      .q-field__append .q-icon
-        color: $tertiary
-
-      .q-field__append:last-child .q-icon
-        color: $primary
-
-.q-menu
-  .q-list
-    .q-item
-      padding: 3px 10px 3px 3px;
-
-      .q-item__section--avatar
-        min-width: 50px;
-        padding-right 10px
-        color $primary
-
-        i
-          font-size 16px
-
-@keyframes ring {
-  0% {
-    transform: rotate(0);
-  }
-  1% {
-    transform: rotate(30deg);
-  }
-  3% {
-    transform: rotate(-28deg);
-  }
-  5% {
-    transform: rotate(34deg);
-  }
-  7% {
-    transform: rotate(-32deg);
-  }
-  9% {
-    transform: rotate(30deg);
-  }
-  11% {
-    transform: rotate(-28deg);
-  }
-  13% {
-    transform: rotate(26deg);
-  }
-  15% {
-    transform: rotate(-24deg);
-  }
-  17% {
-    transform: rotate(22deg);
-  }
-  19% {
-    transform: rotate(-20deg);
-  }
-  21% {
-    transform: rotate(18deg);
-  }
-  23% {
-    transform: rotate(-16deg);
-  }
-  25% {
-    transform: rotate(14deg);
-  }
-  27% {
-    transform: rotate(-12deg);
-  }
-  29% {
-    transform: rotate(10deg);
-  }
-  31% {
-    transform: rotate(-8deg);
-  }
-  33% {
-    transform: rotate(6deg);
-  }
-  35% {
-    transform: rotate(-4deg);
-  }
-  37% {
-    transform: rotate(2deg);
-  }
-  39% {
-    transform: rotate(-1deg);
-  }
-  41% {
-    transform: rotate(1deg);
+  .title-content {
+    @media screen and (max-width: $breakpoint-md) {
+      text-align: center;
+      width: 100%;
+    }
   }
 
-  43% {
-    transform: rotate(0);
+  .actions-content {
+    .q-field {
+      padding-bottom: 0 !important;
+    }
+    .q-field__append .q-icon {
+      color: $tertiary;
+    }
+    @media screen and (max-width: $breakpoint-md) {
+      width: 100%;
+    }
   }
-  100% {
-    transform: rotate(0);
+
+  .description-content {
+    line-height: 1;
+    color: $grey-8;
+    font-size: 14px;
+  }
+
+  .page-input-search {
+    @media screen and (max-width: $breakpoint-md) {
+      width: 100%;
+    }
+
+    .q-field__control, .q-field__control:after, .q-field__control-container, .q-field__append {
+      //min-height: 34px;
+      //max-height: 34px;
+    }
+    .q-field__control, .q-field__prepend, .q-field__append {
+      height: 34px;
+    }
+  }
+
+  #dynamicFieldComponent {
+    .q-field.q-field--float .q-field__label {
+      color: $primary;
+    }
+
+    .q-field__control {
+      .q-field__append .q-icon {
+        color: $tertiary;
+      }
+
+      .q-field__append:last-child .q-icon {
+        color: $primary;
+      }
+    }
+  }
+
+  .q-menu {
+    .q-list {
+      .q-item {
+        padding: 3px 10px 3px 3px;
+
+        .q-item__section--avatar {
+          min-width: 50px;
+          padding-right: 10px;
+          color: $primary;
+
+          i {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes ring {
+    0% {
+      transform: rotate(0);
+    }
+    1% {
+      transform: rotate(30deg);
+    }
+    3% {
+      transform: rotate(-28deg);
+    }
+    5% {
+      transform: rotate(34deg);
+    }
+    7% {
+      transform: rotate(-32deg);
+    }
+    9% {
+      transform: rotate(30deg);
+    }
+    11% {
+      transform: rotate(-28deg);
+    }
+    13% {
+      transform: rotate(26deg);
+    }
+    15% {
+      transform: rotate(-24deg);
+    }
+    17% {
+      transform: rotate(22deg);
+    }
+    19% {
+      transform: rotate(-20deg);
+    }
+    21% {
+      transform: rotate(18deg);
+    }
+    23% {
+      transform: rotate(-16deg);
+    }
+    25% {
+      transform: rotate(14deg);
+    }
+    27% {
+      transform: rotate(-12deg);
+    }
+    29% {
+      transform: rotate(10deg);
+    }
+    31% {
+      transform: rotate(-8deg);
+    }
+    33% {
+      transform: rotate(6deg);
+    }
+    35% {
+      transform: rotate(-4deg);
+    }
+    37% {
+      transform: rotate(2deg);
+    }
+    39% {
+      transform: rotate(-1deg);
+    }
+    41% {
+      transform: rotate(1deg);
+    }
+    43% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(0);
+    }
   }
 }
 </style>

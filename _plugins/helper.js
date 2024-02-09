@@ -398,18 +398,18 @@ class Helper {
       navigator.clipboard.writeText(text).then(function () {
         alert.info({
           icon: 'fas fa-copy',
-          message: Vue.prototype.$tr(message)
+          message: message+"(pt)"//[ptc]
         });
       }, function (err) {
         alert.error({
           icon: 'fas fa-copy',
-          message: Vue.prototype.$tr('isite.cms.messages.failedCopyToClipboard')
+          message: 'isite.cms.messages.failedCopyToClipboard(PT)'//[ptc]
         });
       });
     } catch (error) {
       alert.error({
         icon: 'fas fa-copy',
-        message: Vue.prototype.$tr('isite.cms.messages.failedCopyToClipboard')
+        message: 'isite.cms.messages.failedCopyToClipboard(PT)'//[ptc]
       });
     }
   }
@@ -596,15 +596,17 @@ class Helper {
         const remplaceFilter = url.replace(regex, ":").replace(regex2, ",");
         const remplaceObject = eval("({" + remplaceFilter + "})");
         Object.keys(remplaceObject).forEach((key) => {
-          if (Vue.prototype.$filter.fields.hasOwnProperty(key)) {
-            remplaceObject[key] = String(remplaceObject[key]);
-          }
+          //[ptc]
+          // if (Vue.prototype.$filter.fields.hasOwnProperty(key)) {
+          //   remplaceObject[key] = String(remplaceObject[key]);
+          // }
         });
         return remplaceObject || {};
       }
       return {};
     } catch (error) {
-      Vue.prototype.$alert.error('The filter url is misspelled');
+      //[ptc]
+      //Vue.prototype.$alert.error('The filter url is misspelled');
       console.log(error);
     }
   }
@@ -645,18 +647,18 @@ class Helper {
       navigator.clipboard.write([image]).then(function () {
         alert.info({
           icon: 'fas fa-copy',
-          message: Vue.prototype.$tr(message)
+          message: message+"(pt)"//[ptc]
         });
       }, function (err) {
         alert.error({
           icon: 'fas fa-copy',
-          message: Vue.prototype.$tr('isite.cms.messages.failedCopyToClipboard')
+          message: 'isite.cms.messages.failedCopyToClipboard(PT)'//[ptc]
         });
       });
     } catch (error) {
       alert.error({
         icon: 'fas fa-copy',
-        message: Vue.prototype.$tr('isite.cms.messages.failedCopyToClipboard')
+        message: 'isite.cms.messages.failedCopyToClipboard(PT)'//[ptc]
       });
     }
   }

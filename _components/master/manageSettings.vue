@@ -105,17 +105,21 @@
     }
   }
 </script>
-<style lang="stylus">
-  #componentSelectSettings
-    border 1px solid $grey-4
+<style lang="scss">
+  #componentSelectSettings {
+    border: 1px solid $grey-4;
 
-    .q-card-title
-      .q-subheading
-        line-height 2.5
-        max-height 40px
+    .q-card-title {
+      .q-subheading {
+        line-height: 2.5;
+        max-height: 40px;
+      }
+    }
 
-    .q-collapsible
-      .q-item-side
-        color $primary
-
+    .q-collapsible {
+      .q-item-side {
+        color: $primary;
+      }
+    }
+  }
 </style>

@@ -58,7 +58,7 @@
                 v-for="(action, keyAction) in actionsAutomations"
                 :key="keyAction"
                 v-bind="action.props"
-                v-if="action.vIf != undefined ? action.vIf : true"
+                v-if="action?.vIf != undefined ? action?.vIf : true"
                 @click.native="runAction(action)"
               >
                 <q-item-section avatar>
@@ -333,4 +333,5 @@ export default {
 .kd-list-without-arrow .q-item__section--avatar {
   @apply tw-mx-1 tw-pr-1 !important tw-min-w-0 !important;
 }
+
 </style>

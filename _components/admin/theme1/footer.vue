@@ -6,7 +6,7 @@
       <div id="footerContent" class="row q-md-hide items-center" v-if="appConfig.mode == 'iadmin'">
         <!-- Menu -->
         <div id="footerMobileMenu" class="item-footer col cursor-pointer"
-             @click="$eventBus.$emit('toggleMasterDrawer','menu')">
+             @click="eventBus.emit('toggleMasterDrawer','menu')">
           <q-icon class="item-icon" name="fas fa-bars"/>
           <div>Menu</div>
         </div>
@@ -38,13 +38,8 @@
           <div>{{ $trp('isite.cms.label.other') }}</div>
         </div>
       </div>
-      <!--Footer panel-->
-      <div id="footerIpanel" v-else>
-        <div id="webComponent">
-          <embedded-footer-ipanel v-if="loadFooterIpanel"></embedded-footer-ipanel>
-        </div>
-      </div>
     </q-footer>
+    <!--Dialog other actions-->
     <!--Dialog other actions-->
     <q-dialog v-model="modal.show" position="bottom" v-if="appConfig.mode == 'iadmin' ? true : false">
       <q-card style="width: 350px">
@@ -62,7 +57,7 @@
         <q-card-section class="row items-center no-wrap q-pa-none">
           <q-list separator class="full-width" v-close-popup>
             <!--Settings-->
-            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','config')">
+            <q-item clickable v-ripple @click.native="eventBus.emit('toggleMasterDrawer','config')">
               <q-item-section avatar>
                 <q-icon color="primary" name="fa-light fa-folder-gear"/>
               </q-item-section>
@@ -77,14 +72,14 @@
             </q-item>
             <!--Chat action-->
             <q-item clickable v-ripple v-if="$auth.hasAccess('ichat.conversations.index')"
-                    @click.native="$eventBus.$emit('toggleMasterDrawer','chat')">
+                    @click.native="eventBus.emit('toggleMasterDrawer','chat')">
               <q-item-section avatar>
                 <q-icon color="primary" name="far fa-comment-alt"/>
               </q-item-section>
               <q-item-section class="ellipsis">Chat</q-item-section>
             </q-item>
             <!--Checking action-->
-            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','checkin')"
+            <q-item clickable v-ripple @click.native="eventBus.emit('toggleMasterDrawer','checkin')"
                     v-if="$auth.hasAccess('icheckin.shifts.create')">
               <q-item-section avatar>
                 <q-icon color="primary" name="fas fa-stopwatch"/>
@@ -92,7 +87,7 @@
               <q-item-section class="ellipsis">{{ $tr('icheckin.cms.sidebar.checkin') }}</q-item-section>
             </q-item>
             <!--Recommendation action-->
-            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','recommendation')"
+            <q-item clickable v-ripple @click.native="eventBus.emit('toggleMasterDrawer','recommendation')"
                     v-if="params.recommendations ? true : false">
               <q-item-section avatar>
                 <q-icon color="primary" name="fas fa-hat-wizard"/>
@@ -100,7 +95,7 @@
               <q-item-section class="ellipsis">{{ $trp('isite.cms.label.recommendation') }}</q-item-section>
             </q-item>
             <!--Notification action-->
-            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','notification')"
+            <q-item clickable v-ripple @click.native="eventBus.emit('toggleMasterDrawer','notification')"
                     v-if="$auth.hasAccess('notification.notifications.manage')">
               <q-item-section avatar>
                 <q-icon color="primary" name="fa-light fa-bell"/>
@@ -115,9 +110,11 @@
   </div>
 </template>
 <script>
+import eventBus from '@imagina/qsite/_plugins/eventBus'
+
 export default {
   beforeDestroy() {
-    this.$eventBus.$off('setMobileMainAction')
+    eventBus.off('setMobileMainAction')
   },
   props: {},
   components: {},
@@ -138,10 +135,10 @@ export default {
     return {
       mainAction: config('app.mobilMainAction'),
       appConfig: config('app'),
-      loadFooterIpanel: false,
       modal: {
         show: false
-      }
+      },
+      eventBus
     }
   },
   computed: {
@@ -161,49 +158,9 @@ export default {
   },
   methods: {
     init() {
-      this.$eventBus.$on('setMobileMainAction', (data) => {
+      eventBus.on('setMobileMainAction', (data) => {
         this.mainAction = {...this.mainAction, ...data}
       })
-      //Get footer ipanel
-      //this.getFooterIpanel()
-    },
-    getFooterIpanel() {
-      if (config('app.mode') == 'ipanel') {
-        this.$remember.async({
-          key: 'footerIpanelHTML',
-          seconds: (3600 * 3),
-          refresh: false,
-          callBack: () => {
-            return new Promise((resolve, reject) => {
-              let baseUrl = this.$store.state.qsiteApp.baseUrl
-              this.$axios.get(baseUrl + '/isite/footer').then(response => {
-                resolve(response)
-              }).catch(error => {
-                console.error('[FOOTER-IPANEL]', error.response)
-                reject(error.response)
-              })
-            })
-          }
-        }).then(response => {
-          //Define Template
-          var template = document.createElement('template')
-          template.innerHTML = response.data
-
-          //Load weeb component
-          window.customElements.define('embedded-footer-ipanel', class EmbeddedWebview extends HTMLElement {
-                connectedCallback() {
-                  const shadow = this.attachShadow({mode: 'open'});
-                  shadow.appendChild(document.importNode(template.content, true))
-                }
-              }
-          );
-
-          //Allow load header web component
-          this.loadFooterIpanel = true
-        }).catch(error => {
-          console.error('[FOOTER-IPANEL]', error)
-        })
-      }
     },
     //Do main action
     doMainAction() {
@@ -217,32 +174,29 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#footerContent
-  background-color $primary
-  color white
+<style lang="scss">
+#footerContent {
+  background-color: $primary;
+  color: white;
 
-  .item-footer
-    text-align center
-    font-size 11px
-    padding 10px 0
+  .item-footer {
+    text-align: center;
+    font-size: 11px;
+    padding: 10px 0;
 
-    .item-icon
-      font-size 20px
-      margin-bottom 3px
+    .item-icon {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+  }
 
-  #item-main
-    border-radius 50%
-    width 50px
-    height 50px
-    margin auto
-    font-size 26px
-    color white
-
-#footerIpanel
-  background-color transparent
-  border-top 1px solid $grey-4
-
-  #webComponent
-    all initial
+  #item-main {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    font-size: 26px;
+    color: white;
+  }
+}
 </style>

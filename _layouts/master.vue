@@ -29,18 +29,19 @@
       <!--Router view-->
       <div id="routerPageContent" class="layout-padding">
         <router-view v-if="appState.loadPage"/>
-        <Alert/>
+        <!--[ptc]-->
+        <!--<Alert/>-->
       </div>
     </q-page-container>
 
     <!---Cropper-->
     <cropper-component ref="cropperComponent"/>
 
-    <!-- Activities -->
-    <activities v-for="(activity, keyACt) in globalActivities" :key="keyACt" v-bind="activity"/>
+    <!-- Admin popUp -->
+        <activities v-bind="globalActivities.adminPopup"/>
 
     <!-- Activities Actions -->
-    <activities-actions/>
+        <activities-actions/>
 
     <!-- FOOTER -->
     <component :is="components.footer"/>
@@ -48,7 +49,6 @@
 </template>
 
 <script>
-import chat from '@imagina/qchat/_components/advancedChat'
 //Components Admin
 import headerAdminTheme1 from '@imagina/qsite/_components/admin/theme1/header'
 import headerAdminTheme2 from '@imagina/qsite/_components/admin/theme2/header'
@@ -84,7 +84,6 @@ export default {
     }
   },
   components: {
-    chat,
     cropperComponent,
     activitiesActions,
     //Admin
@@ -182,14 +181,14 @@ export default {
       const page = this.pagesConfig.find(item => item.system_name.toLowerCase() === this.homePage)
       //Set Home page and current page
       const pages = this.useLegacyStructure ? this.$route.name.indexOf("app.home") == -1 ? [config(`pages.mainqsite.home`), this.$route.meta] : [config(`pages.mainqsite.home`)]
-          : this.$route.name.indexOf("app.home") == -1 ? [page, this.$route.meta] : [page]
+        : this.$route.name.indexOf("app.home") == -1 ? [page, this.$route.meta] : [page]
       //Get page from breadcrum
       breadcrumbs.forEach((pageName) => {
         if (this.useLegacyStructure) {
           pages.splice(1, 0, config(`pages.${pageName}`))
         } else {
           const base = this.pagesConfig.find(
-              (item) => item.system_name.toLowerCase() == pageName.toLowerCase()
+            (item) => item.system_name.toLowerCase() == pageName.toLowerCase()
           );
           pages.splice(1, 0, base)
         }
@@ -285,7 +284,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="scss">
 #layoutMaster {
   #routerPageContent {
     position: relative;
@@ -295,8 +294,7 @@ export default {
     width: 100%;
     position: fixed;
     z-index: 2;
-    background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%)
-
+    background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%);
     #subContent {
       padding: 8px 10px 8px 16px;
       border-radius: $custom-radius 0 0 0;

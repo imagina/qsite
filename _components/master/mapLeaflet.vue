@@ -1,32 +1,32 @@
 <template>
   <div id="mapLeafletcomponent" class="full-width">
     <!-- search geolocation -->
-    <q-select :options="geolocations" v-model="address" emit-value behavior="menu" input-debounce="700"
-              use-input map-options outlined dense bg-color="white" :label="label" clearable class="q-mb-md"
-              @filter="filterFn" @input="emitResponseValue" :loading="searchLoading" v-if="!readOnly"
-              hint="eg. Avenida la francia, calle San Bernando 34..."/>
+<!--    <q-select :options="geolocations" v-model="address" emit-value behavior="menu" input-debounce="700"-->
+<!--              use-input map-options outlined dense bg-color="white" :label="label" clearable class="q-mb-md"-->
+<!--              @filter="filterFn" @input="emitResponseValue" :loading="searchLoading" v-if="!readOnly"-->
+<!--              hint="eg. Avenida la francia, calle San Bernando 34..."/>-->
 
-    <!--Map-->
-    <l-map id="lMap" v-if="success && center" :zoom="mapZoom" :center="center"
-           :style="`height : ${height}`" ref="map" @click="mapClickEvent">
-      <!--Layer-->
-      <l-tile-layer name="OpenStreetMap" layer-type="base" :token="token"
-                    attribution='&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-      <!--Marker-->
-      <l-marker v-if="marker" :lat-lng="marker"/>
-    </l-map>
+<!--    &lt;!&ndash;Map&ndash;&gt;-->
+<!--    <l-map id="lMap" v-if="success && center" :zoom="mapZoom" :center="center"-->
+<!--           :style="`height : ${height}`" ref="map" @click="mapClickEvent">-->
+<!--      &lt;!&ndash;Layer&ndash;&gt;-->
+<!--      <l-tile-layer name="OpenStreetMap" layer-type="base" :token="token"-->
+<!--                    attribution='&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors'-->
+<!--                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>-->
+<!--      &lt;!&ndash;Marker&ndash;&gt;-->
+<!--      <l-marker v-if="marker" :lat-lng="marker"/>-->
+<!--    </l-map>-->
   </div>
 </template>
 
 <script>
-import {Icon, latLng} from "leaflet";
-import {LMap, LMarker, LTileLayer} from 'vue2-leaflet';
-import 'leaflet/dist/leaflet.css';
-import {OpenStreetMapProvider} from 'leaflet-geosearch'
+// import {Icon, latLng} from "leaflet";
+// import {LMap, LMarker, LTileLayer} from 'vue2-leaflet';
+// import 'leaflet/dist/leaflet.css';
+// import {OpenStreetMapProvider} from 'leaflet-geosearch'
 
 export default {
-  components: {LMap, LTileLayer, LMarker},
+  //components: {LMap, LTileLayer, LMarker},
   props: {
     value: {default: false},
     type: {default: 'positionMarkerMap'},
@@ -130,12 +130,12 @@ export default {
     },
     //Fix marker icon image
     fixMarkerIconImage() {
-      delete Icon.Default.prototype._getIconUrl;
-      Icon.Default.mergeOptions({
-        iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-        iconUrl: require('leaflet/dist/images/marker-icon.png'),
-        shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-      });
+      // delete Icon.Default.prototype._getIconUrl;
+      // Icon.Default.mergeOptions({
+      //   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      //   iconUrl: require('leaflet/dist/images/marker-icon.png'),
+      //   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+      // });
     },
     filterFn(val, update, abort) {
       update(async () => {
@@ -179,8 +179,10 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-#mapLeafletcomponent
-  #lMap
-    width 100%
+<style lang="scss">
+#mapLeafletcomponent {
+  #lMap {
+    width: 100%;
+  }
+}
 </style>

@@ -80,7 +80,7 @@ export default {
       return this.actions && this.actions.length && this.actionsData.length;
     },
     showActionMenu() {
-      return (action) => (action.vIf != undefined ? action.vIf : true);
+      return (action) => (action?.vIf != undefined ? action?.vIf : true);
     },
   },
   methods: {
@@ -94,15 +94,19 @@ export default {
   },
 };
 </script >
-<style lang="stylus">
-.btn-menu-component__menu
-  padding 8px
-  min-width auto
-  border-radius 5px
-  .q-list
-    min-width 150px
-  .q-item
-    padding 8px
-    .q-icon
-      margin-right 10px
+<style lang="scss">
+.btn-menu-component__menu {
+  padding: 8px;
+  min-width: auto;
+  border-radius: 5px;
+  .q-list {
+    min-width: 150px;
+  }
+  .q-item {
+    padding: 8px;
+    .q-icon {
+      margin-right: 10px;
+    }
+  }
+}
 </style>

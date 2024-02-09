@@ -182,7 +182,7 @@ class Middleware {
 }
 
 //Boot
-export default async ({router, store, Vue, app, ssrContext}) => {
+export default async ({router, store, ssrContext}) => {
   let middleware = new Middleware(router, store)//Define class middleware
   await middleware.checkBearer(ssrContext ? ssrContext.req.get('href') : window.location.href)//Check bearer
   await middleware.checkLogin()//Check login
@@ -194,7 +194,7 @@ export default async ({router, store, Vue, app, ssrContext}) => {
     //Validate if go to next route
     if (!middleware.allowNavigate) {
       middleware.allowNavigate = true
-      return next(false)
+      next(false)
     }
 
     //Validate route authentication and permissions

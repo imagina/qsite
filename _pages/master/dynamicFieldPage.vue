@@ -56,7 +56,8 @@ export default {
           props: {
             crudType: 'select',
             imageField: 'mediaFiles.mainimage.url',
-            crudData: import('@imagina/qblog/_crud/categories'),
+            //[ptc]
+            //crudData: import('@imagina/qblog/_crud/categories'),
             customData: {
               read: {
                 requestParams: {include: 'parent', filter: {status: 1}}
@@ -231,6 +232,42 @@ export default {
             }
           }
         },
+        localizedPhone: {
+          ...globalData,
+          type: 'localizedPhone',
+          props: {
+            label: 'type: localizedPhone',
+            mask:"###-###-####"
+          },
+        },
+        multiDynamifield : {
+            value : [],
+            type : 'multiplier',
+            props : {
+                label : 'Multiple Dynamic Fields',
+                isDraggable: true, // Default true
+                maxQuantity: 7, // Default 5
+                fields : {
+                    localizedPhone: {
+                      ...globalData,
+                      type: 'localizedPhone',
+                      colClass: "col-12",
+                      props: {
+                        label: 'type: localizedPhone',
+                        mask:"###-###-####"
+                      },
+                    },
+                    numberPhone : {
+                        value : null,
+                        type : 'input',
+                        colClass: "col-12",
+                        props : {
+                          label: 'Email'
+                        }
+                    }
+                }
+            }
+        },
       }
     }
   },
@@ -240,5 +277,5 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="scss">
 </style>

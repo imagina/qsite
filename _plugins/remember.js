@@ -83,8 +83,4 @@ class Remember {
 
 const remember = new Remember()
 
-export default ({Vue}) => {
-  Vue.prototype.$remember = remember
-}
-
 export {remember}

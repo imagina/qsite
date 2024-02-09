@@ -6,7 +6,7 @@ import {Loading} from 'quasar'
 
 export default function ({app, router, store, Vue, ssrContext}) {
   //Open Loading
-  Loading.show()
+  //[ptc]Loading.show()
   //=========== Set base url to axios
   let baseUrl = config('app.baseUrl')
   let tagsToParceHost = ['http://', 'https://', ':8080', ':3000', 'www.']
@@ -114,7 +114,7 @@ export default function ({app, router, store, Vue, ssrContext}) {
         let status = error.response.status;
         switch (status) {
           case 401:
-            let routeName = router.currentRoute.name
+            let routeName = router.currentRoute.value.name
             //Logout
             if ((routeName != 'auth.login') && (routeName != 'auth.change.password'))
               router.push({name: 'auth.logout'})
@@ -158,5 +158,5 @@ export default function ({app, router, store, Vue, ssrContext}) {
   //axios.defaults.httpsAgent = new https.Agent({rejectUnauthorized: false})
 
   //============= Set as global
-  Vue.prototype.$axios = axios
+  app.config.globalProperties.$axios = axios
 }

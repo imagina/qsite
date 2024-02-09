@@ -19,7 +19,9 @@
         class="tw-p-3 tw-h-auto tw-flex tw-space-x-4 tw-overflow-x-auto"
         @change="reorderColumns"
       >
-        <div v-if="!loading" v-for="(column, index) in kanbanColumns">
+        <div v-if="!loading" v-for="(column, index) in kanbanColumns"
+         :class="{'notMoveBetweenColumns': column.type !== 1}"
+        >
           <kanbanColumn
             :key="index"
             :column-data="column"
@@ -234,7 +236,18 @@ export default {
             padding: "3px 15px",
           },
           action: this.openAutomationRulesModal,
-        };
+        },
+        {
+          vIf: this.$auth.hasAccess('requestable.statuses.manage'),
+          label: this.$tr('isite.cms.form.status'),
+          props: {
+            icon: 'fa-duotone fa-swap-arrows',
+            padding: "3px 15px",
+          },
+          action: () => {
+            kanbanStore().setModalStatus(true)
+          },
+        }];
     },
     funnel() {
       return {
@@ -323,7 +336,7 @@ export default {
         setTimeout(() => {
           this.loading = false;
         }, 100);
-        
+
       } catch (error) {
         this.loading = false;
         this.kanbanColumns = [];
@@ -380,9 +393,9 @@ export default {
         const parameters = { params: {}, refresh };
         const search = this.automation && !this.search ? {} : { search: this.search };
         parameters.params.include = route.include;
-        parameters.params.filter = { 
-          [route.filter.name]: column.id, 
-          ...this.$filter.values, 
+        parameters.params.filter = {
+          [route.filter.name]: column.id,
+          ...this.filterPlugin.values,
           ...search,
           order: {way: 'desc'}
         };
@@ -398,14 +411,19 @@ export default {
     getCardList(response) {
       return {
         total: response.meta.page.total,
-        data: response.data.map((card) => ({
-          title: card.name || `${card.creator.firstName} ${card.creator.lastName}` || card.title,
-          type: card.type || null,
-          fields: card.fields || [],
-          category: card.category || [],
-          statusId: card.statusId,
-          ...card,
-        })),
+        data: response.data.map((card) => {
+          const nameCreator = card.creator
+            ? `${card.creator.firstName} ${card.creator.lastName}`
+            : null;
+          return {
+            title: card.name || nameCreator || card.title,
+            type: card.type || null,
+            fields: card.fields || [],
+            category: card.category || [],
+            statusId: card.statusId,
+            ...card,
+          }
+        }),
       };
     },
     async addKanbanCard(column, page) {
@@ -586,7 +604,7 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+<style lang="scss">
 .kanbanBtnCtn .q-btn {
   border-radius: 10px;
 }
