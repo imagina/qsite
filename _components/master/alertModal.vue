@@ -22,8 +22,8 @@
         <!--Message-->
         <div v-html="paramsModal.message" class="q-mb-lg"></div>
         <!--button Actions-->
-        <div 
-          id="actions" 
+        <div
+          id="actions"
           class="row justify-end q-gutter-sm">
           <q-btn v-for="(actionProps, keyAction) in actionsModal" :key="keyAction" v-bind="actionProps" v-close-popup
                  @click="callBack(actionProps)"/>
@@ -103,9 +103,11 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#alertModalComponent
-  #cardContent
-    width var(--modalWidth)
-    max-width 99%
+<style lang="scss">
+#alertModalComponent {
+  #cardContent {
+    width: var(--modalWidth);
+    max-width: 99%;
+  }
+}
 </style>

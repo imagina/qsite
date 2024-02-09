@@ -95,10 +95,25 @@ export const getSelectedLocalesSelect = (state) => {
   return selectLanguages
 };
 
-export const getConfigApp = (state) => (path) => {
+export const getConfigApp = (state) => (path, getConfigByName = false) => {
   let response = state.configs
   let keys = path.toLowerCase().split(".")
-  //Parse the config object
+  if (getConfigByName) {
+    let allConfigs = {}
+    for (const key in response) {
+      allConfigs[key] = getConfigByPath(response[key], keys)
+    }
+    response = allConfigs;
+
+  } else {
+    response = getConfigByPath(response, keys)
+  }
+  //Response
+  return response
+}
+
+//Parse the config object
+function getConfigByPath(response, keys) {
   keys.forEach(key => {
     if (response) {
       //Search the next key as lowercase
@@ -107,6 +122,5 @@ export const getConfigApp = (state) => (path) => {
       response = response[nextKey];
     }
   })
-  //Response
-  return response
+  return response;
 }

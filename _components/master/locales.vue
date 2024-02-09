@@ -364,21 +364,27 @@
   }
 </script>
 
-<style lang="stylus">
-  #componentLocales
-    .config-buttom
-      .q-icon
-        margin-right 5px
-        font-size 14px
+<style lang="scss">
+  #componentLocales {
+    .config-buttom {
+      .q-icon {
+        margin-right: 5px;
+        font-size: 14px;
+      }
+    }
 
-  .popover-config-locale
-    .content
-      max-height 90vh !important
+    .popover-config-locale {
+      .content {
+        max-height: 90vh !important;
 
-      .title
-        .q-btn
-          position absolute
-          top 0
-          right 0
-
+        .title {
+          .q-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+        }
+      }
+    }
+  }
 </style>

@@ -78,18 +78,23 @@ export default {
   methods: {}
 }
 </script>
-<style lang="stylus">
-.flex-break
-  flex: 1 0 100% !important
-  height: 0 !important
+<style lang="scss">
+.flex-break {
+  flex: 1 0 100% !important;
+  height: 0 !important;
+}
 
-.example-container
-  .example-cell
-    margin: 1px
-    padding: 4px 8px
-    box-shadow: inset 0 0 0 2px $grey-6
+.example-container {
+  .example-cell {
+    margin: 1px;
+    padding: 4px 8px;
+    box-shadow: inset 0 0 0 2px $grey-6;
+  }
+}
 
-#indexMasterPage
-  #logoContent
-    min-height calc(100vh - 200px)
+#indexMasterPage {
+  #logoContent {
+    min-height: calc(100vh - 200px);
+  }
+}
 </style>

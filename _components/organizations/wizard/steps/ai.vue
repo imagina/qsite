@@ -1,5 +1,5 @@
 <template>
-  <div class="step-ai" >
+  <div class="step-ai tw-overflow-y-hidden" >
     <div v-if="stepContent" class="tw-max-w-xl tw-mx-auto" :class="{'form-inactive' : !activeForm }">
 
       <h2 class="step-title">{{ stepContent.title  }}</h2>
@@ -12,14 +12,16 @@
       </div>
       <div class="tw-mt-6" v-if="activeForm">
         <div class="tw-pl-4 tw-text-xs">Completa el siguiente formulario </div>
-          <dynamic-form
-            v-model="form"
-            :form-id="formId"
-            formType="grid"
-            no-actions
-            ref="ai-form"
-            default-col-class="col-6"
-          />
+          <div style="min-height: 100px">
+            <dynamic-form
+              v-model="form"
+              :form-id="formId"
+              formType="grid"
+              no-actions
+              ref="ai-form"
+              default-col-class="col-6"
+            />
+          </div>
       </div>
     </div>
 
@@ -34,7 +36,7 @@
   </div>
 </template>
 <script>
-import {STEP_NAME_AI} from './model/constant.js';
+import storeWizard from './store/index.ts';
 
 export default {
   props: {
@@ -51,40 +53,31 @@ export default {
       formId: '',
     }
   },
-  inject: {
-    infoBase: {
-      type: Object,
-      default: () => {
-      },
-    },
-  },
   mounted() {
     this.$nextTick(async function () {
       this.getData();
-      this.verifyNext();
       this.getStepInfo();
     })
   },
   watch: {
-    activeForm(newName, oldName) {
-      this.verifyNext();
+    activeForm(newValue, oldValue) {
+      storeWizard.data.form.check = newValue
+      if(newValue){        
+      } else  {
+        storeWizard.data.form.data = false
+      }
+      this.$emit('updateData', newValue)
+    }, 
+    form(newValue, oldValue){
+      storeWizard.data.form.data = newValue
     }
   },
   methods: {
     async getData() {
-      console.log(this.infoBase);
-      if (this.infoBase && this.infoBase.form) {
-        this.activeForm = this.infoBase.form.check;
-        this.form = this.infoBase.form.info;
-      } else {
-        // Sino hay nada es porque recargo entonces verifico que tiene cache
-        const info = await this.$cache.get.item('org-wizard-data');
-        if (info != null && info.form) {
-          this.activeForm = info.form.check;
-          this.form = info.form.info;
-        } 
+      if (storeWizard.data.form?.check) {        
+        this.activeForm = storeWizard.data.form.check;
+        this.form = storeWizard.data.form.data;
       }
-
     },
     async verifyForm(){
       try {
@@ -92,31 +85,18 @@ export default {
         if(this.$refs['ai-form']){
           let validate = await this.$refs['ai-form'].validateCompleteForm();
           if(validate){
-            this.$emit("update", {active: true, check: this.activeForm, info: this.form});
             resp = true;
-          } else {
-            this.$emit("update", {active: true, check: this.activeForm, info: ''});
           }
         } else {
-          this.$emit("update", {active: true, check: this.activeForm, info: ''});
+          console.log('no form')
         }
         return resp
       } catch (error) {
         console.log(error);
       }
     },
-    verifyNext() {
-      console.log(this.activeForm);
-      if(this.activeForm) {
-        //  quiere decir que tiene que llenar el formulario
-        this.verifyForm();
-      } else {
-        // quiere decir que puede pasar sin llenar el formulario
-        this.$emit("update", {active: true, check: this.activeForm, info: ''});
-      }
-    },
     async getStepInfo() {
-      this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_AI);
+      this.stepContent = storeWizard.infoAi
       this.formId = this.stepContent.formId;
     }
   }
@@ -128,8 +108,8 @@ export default {
   animation: fade-in-left 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 .step-ai > .form-inactive {
-  @apply tw-flex tw-min-h-screen tw-flex-col tw-justify-center;
-  margin-top: -95px;
+  @apply tw-flex tw-flex-col tw-justify-center;
+  height: calc(100vh - 320px);
 }
 .step-ai #dynamicFormComponent .box {
   @apply tw-shadow-none !important;

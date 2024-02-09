@@ -2,7 +2,7 @@
   <div id="masterDrawers2">
     <!-- MENU -->
     <q-drawer id="menuMaster2" class="no-shadow" v-model="drawer.menu" ref="menuMaster"
-              :mini="miniState" @click.capture="miniState ? $eventBus.$emit('toggleMasterDrawer','menu') : null">
+              :mini="miniState" @click.capture="miniState ? eventBus.emit('toggleMasterDrawer','menu') : null">
       <!--Logo-->
       <div v-show="!miniState" id="logoSite2" class="relative-position">
         <q-img contain :src="logo" style="height: 80px; min-height: 80px"/>
@@ -13,7 +13,8 @@
       <!--List iadmin-->
       <q-scroll-area id="adminMenu" class="bg-primary" :style="`height: calc(100vh - 146px`">
         <!--Menu-->
-        <menu-list ref="menuList" group :translatable="menuTranslatable" :menu="menuSelect"/>
+        <menu-list ref="menuList" group :translatable="menuTranslatable" :menu="menuSelect"
+                   :with-tooltip="miniState" :tooltip-props="{anchor:'center right'}"/>
       </q-scroll-area>
     </q-drawer>
 
@@ -23,14 +24,9 @@
     </q-drawer>
 
     <!-- Chat -->
-    <!--    <q-drawer bordered id="chatMaster" overlay v-model="drawer.chat" side="right"-->
-    <!--              v-if="$auth.hasAccess('ichat.conversations.index')">-->
-    <!--      <chat-list/>-->
-    <!--    </q-drawer>-->
-
-    <!--Master filter-->
-    <q-drawer bordered id="drawerFilterMaster" v-model="drawer.filter" side="right" v-if="filter.load" :overlay="false">
-      <master-filter/>
+    <q-drawer bordered id="chatMaster" overlay v-model="drawer.chat" side="right"
+              v-if="$auth.hasAccess('ichat.conversations.index')">
+      <chat-list/>
     </q-drawer>
 
     <!--Recommendation-->
@@ -59,20 +55,20 @@ import sidebarMixins from '@imagina/qsite/_mixins/sidebarMixins'
 import configList from '@imagina/qsite/_components/master/configList'
 import chatList from '@imagina/qchat/_components/drawerChatList'
 import menuList from '@imagina/qsite/_components/master/recursiveItem'
-import masterFilter from '@imagina/qsite/_components/master/masterFilter'
 import checkin from '@imagina/qcheckin/_components/checkin'
 import masterRecommendation from '@imagina/qsite/_components/master/masterRecommendations'
 import masterNotifications from '@imagina/qnotification/_components/drawerNotifications'
 import offline from '@imagina/qoffline/_components/drawerOffline'
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
-    this.$eventBus.$off('toggleMasterDrawer')
-    this.$eventBus.$off('openMasterDrawer')
+    eventBus.off('toggleMasterDrawer')
+    eventBus.off('openMasterDrawer')
   },
   mixins: [sidebarMixins],
   props: {},
-  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation, masterNotifications, offline},
+  components: {menuList, configList, chatList, checkin, masterRecommendation, masterNotifications},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -90,14 +86,13 @@ export default {
         menu: false,
         config: false,
         chat: false,
-        filter: false,
         checkin: false,
         recommendation: false,
         notification: false,
         offline: false
       },
       appConfig: config('app'),
-      filter: this.$filter
+      eventBus
     }
   },
   computed: {
@@ -159,9 +154,9 @@ export default {
     },
     handlerEvent() {
       //handler toggleMasterDrawer
-      this.$eventBus.$on('toggleMasterDrawer', (drawerName) => this.toggleDrawer(drawerName))
+      eventBus.on('toggleMasterDrawer', (drawerName) => this.toggleDrawer(drawerName))
       //handler openMasterDrawer
-      this.$eventBus.$on('openMasterDrawer', (drawerName) => this.drawer[drawerName] = true)
+      eventBus.on('openMasterDrawer', (drawerName) => this.drawer[drawerName] = true)
     },
     //Show drawer specific
     toggleDrawer(drawerName) {
@@ -170,9 +165,9 @@ export default {
         if (drawer != drawerName) {
           if ((drawer == 'menu') && (this.windowSize != 'mobile')) {
             this.miniState = true
-          } else if (drawer == 'recommendation') {
-            this.drawer[drawer] = (this.windowSize == 'mobile') ? false : true
-          } else this.drawer[drawer] = false
+          } else {
+            this.drawer[drawer] = false
+          }
         }
       }
       //Toogle drawer
@@ -191,105 +186,137 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#masterDrawers2
-  background-color $primary
+<style lang="scss">
+#masterDrawers2 {
+  background-color: $primary;
 
-  #menuMaster2
-    aside
-      background $primary
-      z-index 3000
+  #menuMaster2 {
+    aside {
+      background: $primary;
+      z-index: 3000;
+    }
 
-    #logoSite2
-      padding 20px 25px 26px 25px
-      height 120px
-      background-color #FFFFFF
+    #logoSite2 {
+      padding: 20px 25px 26px 25px;
+      height: 120px;
+      background-color: #FFFFFF;
+    }
 
-    #miniLogoSite
-      padding 30px 7px
-      height 120px
-      background-color #FFFFFF
+    #miniLogoSite {
+      padding: 30px 7px;
+      height: 120px;
+      background-color: #FFFFFF;
+    }
 
-    #versionContent
-      padding 3px 15px
-      font-size 13px
+    #versionContent {
+      padding: 3px 15px;
+      font-size: 13px;
+    }
 
-    .q-item
-      padding-left 0
-      background-color $primary
-      min-height 50px
-      color var(--q-color-contrast)
+    .q-item {
+      padding-left: 0;
+      background-color: $primary;
+      min-height: 50px;
+      color: var(--q-color-contrast);
 
-      .q-focus-helper
-        opacity 0
+      .q-focus-helper {
+        opacity: 0;
+      }
 
-      .q-item__section--avatar
-        padding 0 18px !important
+      .q-item__section--avatar {
+        padding: 0 18px !important;
+      }
 
-      .q-item__section
-        font-weight 600
+      .q-item__section,
+      .q-icon {
+        color: var(--q-color-contrast);
+      }
+    }
 
-      .q-item__section, .q-icon
-        color var(--q-color-contrast)
+    .content-item {
+      > .q-item {
+        .q-item__section--main {
+          font-size: 16px;
+        }
 
-    .content-item
-      > .q-item
-        .q-item__section--main
-          font-size 16px
+        .q-icon {
+          font-size: 20px;
+        }
 
-        .q-icon
-          font-size: 20px
+        &:hover,
+        &.item-is-active {
+          background-color: $secondary;
+          border-radius: 0 15px 15px 0;
+          font-weight: 900;
+        }
+      }
 
-        &:hover, &.item-is-active
-          background-color $secondary
-          border-radius: 0 15px 15px 0
-          font-weight 900
+      > .q-expansion-item {
+        background-color: $primary;
 
-      > .q-expansion-item
-        background-color $primary
+        .q-expansion-item__container > .q-item {
+          .q-item__label {
+            font-size: 15px;
+          }
 
-        .q-expansion-item__container > .q-item
-          .q-item__label
-            font-size 15px
+          .q-icon {
+            font-size: 20px;
+          }
 
-          .q-icon
-            font-size: 20px
+          &:hover,
+          &.item-is-active {
+            border-radius: 0 15px 15px 0;
+            background-color: $secondary;
+            font-weight: 900;
+          }
+        }
 
-          &:hover, &.item-is-active
-            border-radius: 0 15px 15px 0
-            background-color $secondary
-            font-weight 900
+        .q-expansion-item__container > .q-expansion-item__content {
+          padding: 0 0 0 3px;
+          border-left: 18px solid $primary;
 
-        .q-expansion-item__container > .q-expansion-item__content
-          padding 0 0 0 3px
-          border-left 18px solid $primary
+          #listMenu {
+            .content-item {
+              border-left: 3px solid $secondary;
+            }
+          }
 
-          #listMenu
-            .content-item
-              border-left 3px solid $secondary
+          .q-item {
+            min-height: 40px;
+            margin-left: -1px;
 
-          .q-item
-            min-height 40px
-            margin-left -1px
+            .q-item__section,
+            .q-icon {
+              color: var(--q-color-contrast);
+              font-size: 14px;
+              font-weight: 600;
+            }
 
-            .q-item__section, .q-icon
-              color var(--q-color-contrast)
-              font-size 14px
-              font-weight 600
+            .q-icon {
+              display: none;
+            }
 
-            .q-icon
-              display none
+            &:hover,
+            &.item-is-active {
+              background-color: $secondary;
 
-            &:hover, &.item-is-active
-              background-color $secondary
+              .q-item__section,
+              .q-icon {
+                color: var(--q-color-contrast);
+              }
+            }
+          }
+        }
+      }
+    }
 
-              .q-item__section, .q-icon
-                color var(--q-color-contrast)
+    .expansion-selected {
+      background-color: $primary;
+    }
 
-    .expansion-selected
-      background-color $primary
-
-    .q-drawer--mini .q-item
-      border-radius 0 !important
-
+    .q-drawer--mini .q-item {
+      border-radius: 0 !important;
+    }
+  }
+}
 </style>

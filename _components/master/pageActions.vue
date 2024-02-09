@@ -15,14 +15,14 @@
                v-if="extraActions && extraActions.includes('search') && searchAction"
                @input="$emit('search', $clone(search))">
         <template v-slot:prepend>
-          <q-icon color="tertiary" size="xs" name="fa-duotone fa-magnifying-glass"/>
+          <q-icon color="tertiary" size="xs" name="fa-light fa-magnifying-glass"/>
         </template>
       </q-input>
       <!--Button Actions-->
       <div v-for="(btn, keyAction) in actions" :key="keyAction">
         <!-- if the button is dropdown -->
-        <q-btn-dropdown split v-bind="{...buttonProps}"
-                        v-if="btn.type == 'btn-dropdown'" outline
+        <q-btn-dropdown split v-bind="{...buttonProps}" padding="xs 15px"
+                        v-if="btn.type == 'btn-dropdown'" class="btn-border-dropdown-custom"
         >
           <template v-slot:label>
             <div class="row items-center no-wrap" @click="refreshByTime(timeRefresh)">
@@ -54,9 +54,14 @@
       </div>
     </div>
     <!--Description-->
-    <div v-if="description" class="ellipsis-2-lines col-12 description-content">{{ description }}</div>
+    <span
+      v-if="description"
+      class="col-12 description-content"
+    >
+      {{ description }}
+    </span>
     <!--Filter data-->
-    <div class="col-12 tw-mt-3" v-if="(filter.hasValues || Object.keys(quickFilters).length) && !isAppOffline">
+    <div class="col-12 tw-mt-3" v-if="filter.hasValues || Object.keys(quickFilters).length">
       <!--<q-separator class="q-mb-sm"/>-->
       <div class="text-blue-grey ellipsis text-caption items-center row">
         <q-icon name="fa-light fa-filter" class="q-mr-xs" color="amber" size="18px"/>
@@ -81,11 +86,17 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
+    <!-- Master Filter Component -->
+    <master-filter :show="drawer.filter" v-if="filter.load"/>
+    <master-synchronizable v-model="syncParams" v-if="$auth.hasAccess('isite.synchronizables.index')" ref="syncComponent" />
   </div>
 </template>
 <script>
 //Components
 import masterExport from "@imagina/qsite/_components/master/masterExport"
+import masterSynchronizable from "@imagina/qsite/_components/master/masterSynchronizable"
+import masterFilter from "@imagina/qsite/_components/master/masterFilter"
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
@@ -105,9 +116,29 @@ export default {
       type: Boolean,
       default: () => false,
     },
-    tourName: {default: null}
+    tourName: {default: null},
+    help: {
+      required: false,
+      type: Object,
+      default: () => {}
+    },
   },
-  components: {masterExport},
+  inject: {
+    filterPlugin: {
+      from: 'filterPlugin',
+      default: {
+        name: false,
+        fields: {},
+        values: {},
+        callBack: false,
+        pagination: {},
+        load: false,
+        hasValues: false,
+        storeFilter: false,
+      }
+    }
+  },
+  components: {masterExport, masterSynchronizable, masterFilter},
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -117,11 +148,15 @@ export default {
   data() {
     return {
       exportParams: false,
+      syncParams: false,
       search: null,
       filterData: {},
       refreshIntervalId: null,
       titleRefresh: this.$tr('isite.cms.label.refreshAtOnce'),
-      timeRefresh: 0
+      timeRefresh: 0,
+      drawer: {
+        filter: false
+      },
     }
   },
   computed: {
@@ -130,8 +165,10 @@ export default {
     },
     //Return filter data
     filter() {
-      this.filterData = this.$clone(this.$filter.values)
-      return this.$filter
+      this.filterData = this.$clone(this.filterPlugin.values)
+      return this.filterPlugin
+      //this.filterData = this.$clone(this.$filter.values)
+      //return this.$filter
     },
     //Return params of subHeader
     params() {
@@ -144,9 +181,9 @@ export default {
         rounded: true,
         dense: true,
         unelevated: true,
-        color: "primary",
+        textColor: "primary",
+        style: "border: 1px solid rgba(0, 13, 71, 0.15)",
         class: `btn-${this.size}`,
-        outline: true,
         noCaps: true,
       }
     },
@@ -156,12 +193,21 @@ export default {
       let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
 
       let response = [
+        //Export Icommerce
+        {
+          label: this.$tr('isite.cms.label.migration'),
+          vIf: (this.syncParams && !excludeActions.includes('sync')),
+          props: {
+            icon: 'fa-light fa-folder-tree'
+          },
+          action: () => this.$refs.syncComponent.show()
+        },
         //Export
         {
           label: this.$tr('isite.cms.label.export'),
-          vIf: (this.exportParams && !excludeActions.includes('export') && !this.isAppOffline),
+          vIf: (this.exportParams && !excludeActions.includes('export')),
           props: {
-            icon: 'fa-duotone fa-file-arrow-down'
+            icon: 'fa-light fa-file-arrow-down'
           },
           action: () => this.$refs.exportComponent.showReport()
         },
@@ -170,7 +216,7 @@ export default {
           label: 'Tour',
           vIf: (this.tourName && !config("app.disableTours")),
           props: {
-            icon: 'fa-duotone fa-shoe-prints',
+            icon: 'fa-light fa-shoe-prints',
             id: 'actionStartTour'
           },
           action: () => this.startTour(true)
@@ -183,17 +229,17 @@ export default {
           props: {
             icon: 'fas fa-hat-wizard'
           },
-          action: () => this.$eventBus.$emit('toggleMasterDrawer', 'recommendation')
+          action: () => eventBus.emit('toggleMasterDrawer', 'recommendation')
         },
         //Filter
         {
           label: this.$tr('isite.cms.label.filter'),
           vIf: (this.filter.load && !excludeActions.includes('filter') && !this.isAppOffline),
           props: {
-            icon: 'fa-duotone fa-filter',
+            icon: 'fa-light fa-filter',
             id: 'filter-button-crud',
           },
-          action: () => this.$eventBus.$emit('toggleMasterDrawer', 'filter')
+          action: () => this.toggleMasterFilter(true)
         },
         //Refresh
         {
@@ -201,7 +247,7 @@ export default {
           type: this.multipleRefresh ? 'btn-dropdown' : '',
           vIf: (this.params.refresh && !excludeActions.includes('refresh') && !this.isAppOffline),
           props: {
-            icon: 'fa-duotone fa-rotate-right',
+            icon: 'fa-light fa-rotate-right',
             id: 'refresh-button-crud'
           },
           items: [
@@ -210,7 +256,7 @@ export default {
               action: () => this.refreshByTime(0)
             },
             {
-              label: this.$tr('isite.cms.label.refreshEveryMinute', {min: 1}),
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 1}),
               action: () => this.refreshByTime(1)
             },
             {
@@ -240,8 +286,8 @@ export default {
             vIf: this.params.create && this.params.hasPermission.create,
             props: {
               label: this.$tr(`isite.cms.label.new`),
-              icon: 'fa-duotone fa-plus',
-              color: "primary",
+              icon: 'fa-light fa-plus',
+              textColor: "primary",
               round: false,
               rounded: true,
               padding: '3px 15px',
@@ -251,6 +297,9 @@ export default {
           })
       }
 
+      //force styles
+      response = response.map(item => ({...item, props : {...item.props, color : 'white', outline: false}}))
+
       //Response
       return response.filter(item => item.vIf !== undefined ? item.vIf : true)
     },
@@ -259,22 +308,34 @@ export default {
       var response = {}
       //Get quick filters
       if (this.$q.platform.is.desktop) {
-        Object.keys(this.filter.fields).forEach(fieldName => {
-          var fieldfilter = this.filter.fields[fieldName]
-          if (fieldfilter.quickFilter) {
-            response[fieldName] = {
-              ...fieldfilter,
-              colClass: "col-12 col-md-4 col-xl-3"
+        if(this.filter.fields) {
+          Object.keys(this.filter.fields).forEach(fieldName => {
+            var fieldfilter = this.filter.fields[fieldName]
+            if (fieldfilter.quickFilter) {
+              response[fieldName] = {
+                ...fieldfilter,
+                colClass: "col-12 col-md-4 col-xl-3"
+              }
+              if (!this.filterData[fieldName]) this.filterData[fieldName] = (fieldfilter.value || null)
             }
-            if (!this.filterData[fieldName]) this.$set(this.filterData, fieldName, fieldfilter.value || null)
-          }
-        })
+          })
+        }
       }
       //Response
       return response
     },
     //Page Documentation
-    pageDocumentation() {
+    pageDocumentation(){
+      //crud's help
+      if(this.help?.title && this.help?.description){
+        return  {
+          title: this.help.title,
+          description: this.help.description,
+          icon: this.help?.icon || this.$route.meta.icon,
+          class: this.help?.class || 'q-ml-sm'
+        }
+      }
+
       let response = null
       //Get params from page permission
       let params = this.$helper.getInfoFromPermission(this.$route.meta.permission)
@@ -284,20 +345,24 @@ export default {
         //Search the config
         response = this.$store.getters['qsiteApp/getConfigApp'](configName)
       }
-      //Response
-      return !response ? null : {
-        title: this.title,
-        description: response,
-        icon: this.$route.meta.icon,
-        class: 'q-ml-sm'
+
+      if (response){
+        return {
+          title: this.title,
+          description: response,
+          icon: this.$route.meta.icon,
+          class: 'q-ml-sm'
+        }
       }
+      return false
     }
   },
   methods: {
     init() {
-      this.$root.$on('page.data.filter.read', (readValues) => {
-        this.$set(this.filter, 'readValues', readValues)
-      })
+      this.handlerEvent()
+    },
+    handlerEvent() {
+      eventBus.on('toggleMasterDrawer', () => this.toggleMasterFilter(false))
     },
     refreshByTime(time) {
       this.timeRefresh = time;
@@ -322,10 +387,8 @@ export default {
     },
     //Emit filter
     emitFilter() {
-      //Add Values
-      this.$filter.addValues(this.filterData)
-      //Call back
-      if (this.filter && this.filter.callBack) this.filter.callBack(this.filter)
+      this.filterPlugin.addValues(this.filterData)
+      if (this.filterPlugin && this.filterPlugin.callBack) this.filterPlugin.callBack();
     },
     clearInterval() {
       if (this.refreshIntervalId) {
@@ -347,142 +410,169 @@ export default {
           }
         ]
       })
+    },
+    toggleMasterFilter(value){
+      this.drawer.filter = value;
     }
   }
 }
 </script>
-<style lang="stylus">
-#pageActionscomponent
-  #titleCrudTable
-    font-size 20px
+<style lang="scss">
+#pageActionscomponent {
+  #titleCrudTable {
+    font-size: 20px;
+  }
 
   .animated {
     animation: ring 10s .7s ease-in-out infinite;
   }
 
-  .title-content
-    @media screen and (max-width: $breakpoint-md)
-      text-align center
-      width 100%
-
-  .actions-content
-    .q-field__append .q-icon
-      color: $tertiary
-    @media screen and (max-width: $breakpoint-md)
-      width 100%
-
-  .description-content
-    line-height 1
-    color $grey-8
-    font-size 14px
-
-  .page-input-search
-    @media screen and (max-width: $breakpoint-md)
-      width 100%
-
-    .q-field__control, .q-field__control:after, .q-field__control-container, .q-field__append
-      //min-height 34px
-      //max-height 34px
-    .q-field__control, .q-field__prepend, .q-field__append
-      height: 34px
-
-  #dynamicFieldComponent
-    .q-field.q-field--float .q-field__label
-      color: $primary
-
-    .q-field__control
-      .q-field__append .q-icon
-        color: $tertiary
-
-      .q-field__append:last-child .q-icon
-        color: $primary
-
-.q-menu
-  .q-list
-    .q-item
-      padding: 3px 10px 3px 3px;
-
-      .q-item__section--avatar
-        min-width: 50px;
-        padding-right 10px
-        color $primary
-
-        i
-          font-size 16px
-
-@keyframes ring {
-  0% {
-    transform: rotate(0);
-  }
-  1% {
-    transform: rotate(30deg);
-  }
-  3% {
-    transform: rotate(-28deg);
-  }
-  5% {
-    transform: rotate(34deg);
-  }
-  7% {
-    transform: rotate(-32deg);
-  }
-  9% {
-    transform: rotate(30deg);
-  }
-  11% {
-    transform: rotate(-28deg);
-  }
-  13% {
-    transform: rotate(26deg);
-  }
-  15% {
-    transform: rotate(-24deg);
-  }
-  17% {
-    transform: rotate(22deg);
-  }
-  19% {
-    transform: rotate(-20deg);
-  }
-  21% {
-    transform: rotate(18deg);
-  }
-  23% {
-    transform: rotate(-16deg);
-  }
-  25% {
-    transform: rotate(14deg);
-  }
-  27% {
-    transform: rotate(-12deg);
-  }
-  29% {
-    transform: rotate(10deg);
-  }
-  31% {
-    transform: rotate(-8deg);
-  }
-  33% {
-    transform: rotate(6deg);
-  }
-  35% {
-    transform: rotate(-4deg);
-  }
-  37% {
-    transform: rotate(2deg);
-  }
-  39% {
-    transform: rotate(-1deg);
-  }
-  41% {
-    transform: rotate(1deg);
+  .title-content {
+    @media screen and (max-width: $breakpoint-md) {
+      text-align: center;
+      width: 100%;
+    }
   }
 
-  43% {
-    transform: rotate(0);
+  .actions-content {
+    .q-field {
+      padding-bottom: 0 !important;
+    }
+    .q-field__append .q-icon {
+      color: $tertiary;
+    }
+    @media screen and (max-width: $breakpoint-md) {
+      width: 100%;
+    }
   }
-  100% {
-    transform: rotate(0);
+
+  .description-content {
+    line-height: 1;
+    color: $grey-8;
+    font-size: 14px;
+  }
+
+  .page-input-search {
+    @media screen and (max-width: $breakpoint-md) {
+      width: 100%;
+    }
+
+    .q-field__control, .q-field__control:after, .q-field__control-container, .q-field__append {
+      //min-height: 34px;
+      //max-height: 34px;
+    }
+    .q-field__control, .q-field__prepend, .q-field__append {
+      height: 34px;
+    }
+  }
+
+  #dynamicFieldComponent {
+    .q-field.q-field--float .q-field__label {
+      color: $primary;
+    }
+
+    .q-field__control {
+      .q-field__append .q-icon {
+        color: $tertiary;
+      }
+
+      .q-field__append:last-child .q-icon {
+        color: $primary;
+      }
+    }
+  }
+
+  .q-menu {
+    .q-list {
+      .q-item {
+        padding: 3px 10px 3px 3px;
+
+        .q-item__section--avatar {
+          min-width: 50px;
+          padding-right: 10px;
+          color: $primary;
+
+          i {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes ring {
+    0% {
+      transform: rotate(0);
+    }
+    1% {
+      transform: rotate(30deg);
+    }
+    3% {
+      transform: rotate(-28deg);
+    }
+    5% {
+      transform: rotate(34deg);
+    }
+    7% {
+      transform: rotate(-32deg);
+    }
+    9% {
+      transform: rotate(30deg);
+    }
+    11% {
+      transform: rotate(-28deg);
+    }
+    13% {
+      transform: rotate(26deg);
+    }
+    15% {
+      transform: rotate(-24deg);
+    }
+    17% {
+      transform: rotate(22deg);
+    }
+    19% {
+      transform: rotate(-20deg);
+    }
+    21% {
+      transform: rotate(18deg);
+    }
+    23% {
+      transform: rotate(-16deg);
+    }
+    25% {
+      transform: rotate(14deg);
+    }
+    27% {
+      transform: rotate(-12deg);
+    }
+    29% {
+      transform: rotate(10deg);
+    }
+    31% {
+      transform: rotate(-8deg);
+    }
+    33% {
+      transform: rotate(6deg);
+    }
+    35% {
+      transform: rotate(-4deg);
+    }
+    37% {
+      transform: rotate(2deg);
+    }
+    39% {
+      transform: rotate(-1deg);
+    }
+    41% {
+      transform: rotate(1deg);
+    }
+    43% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(0);
+    }
   }
 }
 </style>

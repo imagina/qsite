@@ -3,7 +3,6 @@ import company from '../company';
 import plans from '../plans';
 import themes from '../themes';
 import terms from '../terms';
-import register from '../register';
 import welcome from '../welcome';
 import summary from '../summary';
 import ai from '../ai';

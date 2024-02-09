@@ -160,26 +160,32 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#modalIconListContent
-  .icon-list-content
-    max-height 500px
-    overflow-y scroll
+<style lang="scss">
+#modalIconListContent {
+  .icon-list-content {
+    max-height: 500px;
+    overflow-y: scroll;
 
-    .remove-icon
-      text-align center
+    .remove-icon {
+      text-align: center;
 
-      .empty-icon
-        width 35px
-        height 35px
-        border dashed $blue-grey 1px
-        margin auto
+      .empty-icon {
+        width: 35px;
+        height: 35px;
+        border: dashed $blue-grey 1px;
+        margin: auto;
+      }
+    }
 
-    .icon-content
-      text-align center
-      cursor pointer
-      padding 10px
+    .icon-content {
+      text-align: center;
+      cursor: pointer;
+      padding: 10px;
 
-      &:hover
-        background-color $grey-3
+      &:hover {
+        background-color: $grey-3;
+      }
+    }
+  }
+}
 </style>

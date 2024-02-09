@@ -146,7 +146,10 @@
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
             <slot name="before-options"/>
             <q-item>
-              <q-item-section class="text-grey">
+              <q-item-section class="text-grey" v-if="field.loadOptions.filterByQuery">
+                {{ fieldProps.hint }}
+              </q-item-section>
+              <q-item-section class="text-grey" v-else>
                 {{ $tr('isite.cms.message.notFound') }}
               </q-item-section>
             </q-item>
@@ -161,6 +164,15 @@
               <!--Icon-->
               <q-item-section v-else-if="scope.opt.icon" avatar>
                 <q-icon size="20px" :name="scope.opt.icon" class="q-mr-sm"/>
+              </q-item-section>
+              <!--Image-->
+              <q-item-section avatar v-if="field.props.imageField">
+                <q-avatar>
+                  <img
+                    :src="getImageField(scope.opt.id)"
+                    :style="'height: 24px; width: 24px; border-radius: 50%;'"
+                  >
+                </q-avatar>
               </q-item-section>
               <!--Labels-->
               <q-item-section>
@@ -197,12 +209,29 @@
           <template slot="after-options">
             <slot name="after-options"></slot>
           </template>
+          <template v-slot:before v-if="selectImg">
+            <q-avatar>
+              <img :src="selectImg">
+            </q-avatar>
+          </template>
         </q-select>
         <!--tree select-->
         <q-field v-model="responseValue" v-if="loadField('treeSelect')" :label="fieldLabel"
                  v-bind="fieldProps.fieldComponent" :class="`${field.help ? 'treeselect-dynamic-field' : ''}`">
           <tree-select v-model="responseValue" :options="formatOptions" placeholder="" v-bind="fieldProps.field"
                        @select="(node, instanceId) => $emit('select', {node, instanceId})">
+              <template slot="option-label" slot-scope="{node}">
+                <label>
+                  <!-- Image -->
+                  <q-img
+                    class="q-mr-xs"
+                    v-if="field.props.imageField"
+                    :src="getImageField(node.id)"
+                    :style="'height: 24px; width: 24px; border-radius: 50%;'"
+                  />
+                  {{ node.label }}
+                </label>
+              </template>
             <!--Before options slot-->
             <template slot="before-list">
               <slot name="before-options"></slot>
@@ -350,6 +379,17 @@
             :options="formatOptions"
             :class="`${field.help ? 'expression-dinamyc-field' : ''}`"
         />
+        <localizedPhone
+            v-if="loadField('localizedPhone')"
+            v-model="responseValue"
+            :fieldProps="fieldProps"
+        />
+
+        <multipleDynamicFields
+          v-if="loadField('multiplier')"
+          v-model="responseValue"
+          :fieldProps="fieldProps"
+        />
         <!--Code Editor-->
         <q-field v-model="responseValue" v-if="loadField('code')"
                  v-bind="fieldProps.fieldComponent"
@@ -358,9 +398,26 @@
             <div class="text-grey-8 q-mb-xs" v-if="fieldProps.field.label">
               {{ fieldProps.field.label }} [{{ fieldProps.field.options.mode }}]
             </div>
-            <codemirror v-model="responseValue" :options="fieldProps.field.options"/>
+<!--            <codemirror v-model="responseValue" :options="fieldProps.field.options"/>-->
           </div>
         </q-field>
+
+        <!--copy-->
+        <q-input v-model="responseValue" v-if="loadField('copy')" v-bind="fieldProps"
+                 :ref="`copy-${fieldKey}`" :label="fieldLabel"
+                 :class="`${field.help ? 'copy-dynamic-field' : ''}`"
+        >
+          <template v-slot:append>
+            <!--Copy button-->
+            <q-btn
+                :label="$trp('isite.cms.label.copy')"
+                flat
+                no-caps
+                @click="$helper.copyToClipboard(responseValue)"
+                color="primary"
+            />
+          </template>
+        </q-input>
       </div>
     </div>
   </div>
@@ -386,16 +443,20 @@ import selectMedia from '@imagina/qmedia/_components/selectMedia'
 import googleMapMarker from '@imagina/qsite/_components/master/googleMapMarker'
 import JsonEditorVue from 'json-editor-vue'
 import expressionField from '@imagina/qsite/_components/master/expressionField/index.vue';
+import localizedPhone from '@imagina/qsite/_components/master/localizedPhone/index.vue';
+import multipleDynamicFields from '@imagina/qsite/_components/master/multipleDynamicFields/views'
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 //Code mirror
-import {codemirror} from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/mode/css/css.js'
-import 'codemirror/mode/sass/sass.js'
-import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/mode/htmlembedded/htmlembedded.js'
-import 'codemirror/mode/php/php.js'
-import 'codemirror/theme/base16-dark.css'
-import 'codemirror/addon/selection/active-line.js'
+//[ptc]import {codemirror} from 'vue-codemirror'
+//[ptc]
+// import 'codemirror/lib/codemirror.css'
+// import 'codemirror/mode/css/css.js'
+// import 'codemirror/mode/sass/sass.js'
+// import 'codemirror/mode/javascript/javascript.js'
+// import 'codemirror/mode/htmlembedded/htmlembedded.js'
+// import 'codemirror/mode/php/php.js'
+// import 'codemirror/theme/base16-dark.css'
+// import 'codemirror/addon/selection/active-line.js'
 
 export default {
   name: 'dynamicField',
@@ -412,7 +473,8 @@ export default {
     keyField: {
       type: String,
       default: () => '',
-    }
+    },
+    enableCache: {default: false}
   },
   components: {
     managePermissions,
@@ -432,7 +494,9 @@ export default {
     googleMapMarker,
     JsonEditorVue,
     expressionField,
-    codemirror
+    //codemirror,
+    localizedPhone,
+    multipleDynamicFields,
   },
   watch: {
     value: {
@@ -502,14 +566,17 @@ export default {
           ['fullscreen']
         ]
       },
-      sortOptions: true
+      sortOptions: true,
+      imageFields: [],
     }
   },
   computed: {
-    //Return label to field
-    isAppOffline() {
-      return this.$store.state.qofflineMaster.isAppOffline;
+    selectImg() {
+      const data = this.rootOptions.find(item => item.id == this.responseValue) || {};
+
+      return data.img || null;
     },
+    //Return label to field
     fieldLabel() {
       let response = ''
       if (this.field.props && this.field.props.label) {
@@ -991,6 +1058,16 @@ export default {
             }
           }
           break;
+        case'copy':
+          props = {
+            bgColor: 'white',
+            readonly: true,
+            outlined: true,
+            dense: true,
+            inputClass: 'ellipsis',
+            ...props
+          }
+          break;
       }
 
       //Add ruler to required field
@@ -1027,14 +1104,15 @@ export default {
           if (item.id || item.id >= 0) item.id = item.id.toString()
           //convert children
           if (item.children) item.children = toString(item.children)
+          this.addImageField(item)
         })
 
         //sort by label
         if (this.sortOptions) {
           items.sort((a, b) => {
-              if (a.label > b.label) return 1
-              if (a.label < b.label) return -1
-              return 0;
+            if (a.label > b.label) return 1
+            if (a.label < b.label) return -1
+            return 0;
           })
         }
 
@@ -1217,6 +1295,11 @@ export default {
           class: 'absolute-right',
           margin: '1em',
           load: true
+        },
+        positionMarkerMap: {
+          class: 'absolute-right',
+          margin: '1em',
+          load: true
         }
       }
       return objectOptions[this.field.type] || result
@@ -1331,6 +1414,9 @@ export default {
         case 'code':
           this.responseValue = typeof propValue != "string" ? JSON.stringify(propValue) : propValue
           break
+        case 'multiplier':
+          this.responseValue = (Array.isArray(propValue)) ? propValue : []
+          break
         default :
           this.responseValue = propValue || null
           break
@@ -1350,7 +1436,7 @@ export default {
             }
           })
         } else {
-          this.responseValue = propValue ? this.$clone(this.fieldProps.emitValue ? propValue.toString() : propValue) : propValue
+          this.responseValue = propValue || propValue == 0 ? this.$clone(this.fieldProps.emitValue ? propValue.toString() : propValue) : propValue
         }
       }
     },
@@ -1361,27 +1447,22 @@ export default {
           let componentCrud = this.$refs.crudComponent
           if (componentCrud) {
             //Activate listen to chanel
-            this.$root.$on(`crudForm${componentCrud.params.apiRoute}Created`, async () => {
-              await this.getOptions()//Get options
+            eventBus.on(`crudForm${componentCrud.params.apiRoute}Created`, async () => {
+              this.getOptions()//Get options
             })
           }
         }
       }, 500)
     },
     //Get options if is load options
-    async getOptions(query = false) {
+    getOptions(query = false) {
       return new Promise((resolve, reject) => {
         this.loading = true//Open loading
         let loadOptions = this.$clone(this.field.loadOptions || {})
         //Instance default options keeping the options for the selected values
         let defaultOptions = this.$clone([
           ...(this.field.props?.options || []),
-          ...this.rootOptions.filter(opt => {
-            if( this.responseValue && typeof this.responseValue !== 'object') {
-              return this.responseValue && this.responseValue.includes((opt.value || opt.id).toString())
-            }
-            return this.responseValue && this.responseValue[opt.value || opt.id];
-          })
+          ...this.rootOptions.filter(opt => this.responseValue && this.responseValue.includes((opt.value || opt.id).toString()))
         ])
 
         //==== Request options
@@ -1392,6 +1473,8 @@ export default {
 
           //enable cache by isite setting
           let enableCache = this.$store.getters['qsiteApp/getSettingValueByName']('isite::enableDynamicFieldsCache')
+          //enable cache by params
+          if(this.enableCache) enableCache = 1
 
           let params = {//Params to request
             refresh: enableCache == '1' ? false : true,
@@ -1414,19 +1497,25 @@ export default {
             }
           }
           const parametersUrl = loadOptions.parametersUrl || {};
-          const crud = Object.keys(parametersUrl).length > 0 
-            ? this.$crud.get(loadOptions.apiRoute, params, parametersUrl) 
-            : this.$crud.index(loadOptions.apiRoute, params);
+          const crud = Object.keys(parametersUrl).length > 0 ? this.$crud.get : this.$crud.index;
           //Request
-          crud.then(response => {
+          crud(loadOptions.apiRoute, params, parametersUrl).then(response => {
             if (this.keyField !== '') {
               const keyData = {[this.keyField]: response.data}
               this.$helper.setDynamicSelectList(keyData);
             }
             this.rootOptionsData = this.$clone(response.data)
+
+            //Emit the loadedOptions
+            if(loadOptions.loadedOptions) loadOptions.loadedOptions(response.data)
+
+            this.rootOptionsData.forEach(item => {
+              this.addImageField(item)
+            })
+
             let formatedOptions = []
             //Format response
-            response.data = response.data.map((item, index) => ({...item, id: item.id || (index + 1)}))
+            response.data = response.data.map((item, index) => ({...item, id: item.id >= 0 ? item.id : (index + 1)}))
             formatedOptions = ['select', 'expression'].includes(this.field.type) ?
                 this.$array.select(response.data, loadOptions.select || fieldSelect) :
                 this.$array.tree(response.data, loadOptions.select || fieldSelect)
@@ -1437,12 +1526,7 @@ export default {
             resolve(true)
           }).catch(error => {
             this.$apiResponse.handleError(error, () => {
-              if (!this.isAppOffline) {
-                this.$alert.error({
-                  message: this.$tr('isite.cms.message.errorRequest'), 
-                  pos: 'bottom'
-                })
-              }
+              this.$alert.error({message: this.$tr('isite.cms.message.errorRequest'), pos: 'bottom'})
               this.loading = false
               reject(true)
             })
@@ -1495,7 +1579,7 @@ export default {
       let response = this.$clone(this.responseValue)
 
       if (JSON.stringify(value) !== JSON.stringify(response)) {
-        //decode when is json
+                //decode when is json
         if (this.field.type == "json" && (typeof response == "string"))
           response = JSON.parse(response)
         //Emit input data
@@ -1517,7 +1601,7 @@ export default {
       //Validate permission
       if (field.permission && !this.$auth.hasAccess(field.permission)) response = false
       //Validate vIf prop
-      if (response && field.props && (field.props.vIf != undefined)) response = field.props.vIf
+      if (response && field.props && (field.props?.vIf != undefined)) response = field.props?.vIf
       //Response
       return response
     },
@@ -1567,6 +1651,15 @@ export default {
         })
       }
 
+      //Hint message for filterByQuery
+      if (loadOptions && loadOptions.filterByQuery) {
+        if (val.length > 2) {
+          if (!this.rootOptions.length) {
+            this.fieldProps.hint = `${this.$tr('isite.cms.message.noResultsFoundTryAnotherSearchValue')}`
+          }
+        }
+      }
+
       //Emit filter Value
       this.$emit("filter", val)
     },
@@ -1583,7 +1676,7 @@ export default {
           )
           //Validate if there is the option for the value
           if (loadOptions.filterByQuery && !includeAll) {
-            let fieldSelect = loadOptions.select || {label: 'title', id: 'id'}
+            let fieldSelect = loadOptions.select || {label: 'title', id: 'id', img: 'mainImage'}
             //Instance request params
             let requestParams = {
               refresh: true,
@@ -1600,8 +1693,10 @@ export default {
             this.$crud.index(loadOptions.apiRoute, requestParams).then(response => {
               this.rootOptions = [
                 ...this.rootOptions,
-                ...this.$array.select(response.data, fieldSelect)
+                ...this.$array.select(response.data, fieldSelect),
               ]
+              //Emit the loadedOptions
+              if(loadOptions.loadedOptions) loadOptions.loadedOptions(response.data)
             }).catch(error => {
               this.$apiResponse.handleError(error, () => {
               })
@@ -1609,71 +1704,116 @@ export default {
           }
         }
       }
-    }
+    },
+    addImageField(item){
+      if(this.field.props.imageField) {
+        const src = _.get(item, this.field.props.imageField, '')
+        this.imageFields.push({id: item.id, src: src})
+      }
+    },
+    getImageField(id){
+      const item = this.imageFields.find((e) => e.id == id )
+      return item.src
+    },
   }
 }
 </script>
-<style lang="stylus">
-#dynamicFieldComponent
-
+<style lang="scss">
+#dynamicFieldComponent {
   .q-field--outlined .q-field__control {
-    padding-letf 12px
-    padding-right 40px
+    padding-left: 12px;
   }
 
   .expression-dinamyc-field {
-    width: calc(100% - 40px)
+    width: calc(100% - 40px);
   }
 
-  .jsoneditor-vue
+  .jsoneditor-vue {
     width: 100%;
     height: 400px;
+  }
 
-  .checkbox-field
-    .q-field__control-container
-      padding-top 0 !important
+  .checkbox-field {
+    .q-field__control-container {
+      padding-top: 0 !important;
+    }
+  }
 
-  .field-no-padding
-    .q-field__control
-      padding 0 !important
-      overflow hidden
-      border-radius $custom-radius-items
+  .field-no-padding {
+    .q-field__control {
+      padding: 0 !important;
+      overflow: hidden;
+      border-radius: $custom-radius-items;
 
-      .q-field__control-container
-        padding 0 !important
+      .q-field__control-container {
+        padding: 0 !important;
+      }
+    }
+  }
 
-  .vue-treeselect
-    .vue-treeselect__control
-      background transparent !important
-      border 0
-      max-height 26px
-      padding-right 0px
+  .vue-treeselect {
+    .vue-treeselect__control {
+      background: transparent !important;
+      border: 0;
+      max-height: 26px;
+      padding-right: 0px;
 
-      .vue-treeselect__single-value
-        line-height 1.9
-        padding 0
+      .vue-treeselect__single-value {
+        line-height: 1.9;
+        padding: 0;
+      }
+    }
+  }
 
-  .dynamic-field__color
-    .q-field__control
-      border-radius $custom-radius-items
+  .dynamic-field__color {
+    .q-field__control {
+      border-radius: $custom-radius-items;
+    }
 
-    &.text-t-dark
-      .q-icon, .q-field__label, input
-        color $dark
+    &.text-t-dark {
+      .q-icon, .q-field__label, input {
+        color: $dark;
+      }
+    }
 
-    &.text-t-light
-      .q-icon, .q-field__label, input
-        color white
+    &.text-t-light {
+      .q-icon, .q-field__label, input {
+        color: white;
+      }
+    }
+  }
 
-  #bannerField
-    .content
-      border-radius $custom-radius-items
-      border 2px solid
-      overflow hidden
+  #bannerField {
+    .content {
+      border-radius: $custom-radius-items;
+      border: 2px solid;
+      overflow: hidden;
 
-      &__message
-        line-height 1
+      &__message {
+        line-height: 1;
+      }
+    }
+  }
 
-#ckEditorComponent
-  width 100%
+  #ckEditorComponent {
+    width: 100%;
+  }
+
+  // help padding-right
+  .crud-dynamic-field,
+  .input-dynamic-field,
+  .search-dynamic-field,
+  .date-dynamic-field,
+  .hour-dynamic-field,
+  .full-date-dynamic-field,
+  .select-dynamic-field,
+  .treeselect-dynamic-field,
+  .input-color-dynamic-field,
+  .copy-dynamic-field,
+  .select-icon-dinamyc-field {
+    .q-field__control {
+      padding-right: 40px;
+    }
+  }
+}
 </style>

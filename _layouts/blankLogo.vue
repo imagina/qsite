@@ -46,22 +46,25 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-#layoutBlankLogo
-  background-color $custom-accent-color
+<style lang="scss">
+#layoutBlankLogo {
+  background-color: $custom-accent-color;
 
-  .wrapp__logo
-    text-align center
-    position relative
-    height 145px
-    max-height 270px
-    padding 30px 15px
-    border-radius 10px
-    overflow hidden
+  .wrapp__logo {
+    text-align: center;
+    position: relative;
+    height: 145px;
+    max-height: 270px;
+    padding: 30px 15px;
+    border-radius: 10px;
+    overflow: hidden;
 
-    img
-      margin-left auto
-      margin-right auto
-      max-height 100px
-      max-width 100%
+    img {
+      margin-left: auto;
+      margin-right: auto;
+      max-height: 100px;
+      max-width: 100%;
+    }
+  }
+}
 </style>

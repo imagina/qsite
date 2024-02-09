@@ -123,13 +123,15 @@ export default {
 };
 </script>
 
-<style lang="stylus">
-#signatureContent
-  border 1px solid $grey-5
-  border-radius $custom-radius
+<style lang="scss">
+#signatureContent {
+  border: 1px solid $grey-5;
+  border-radius: $custom-radius;
 
-  #btnActions
-    position absolute
-    top 5px
-    right 5px
+  #btnActions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+}
 </style>

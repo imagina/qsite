@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+//[ptc]
+// Vue.use(Vuex)
 
 //Get all stores
 let coreStores = config('stores')

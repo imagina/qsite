@@ -1,7 +1,7 @@
 <template>
   <div id="fileListComponent">
     <!--Table-->
-    <q-table :data="tableData" :columns="tableColumns" :pagination.sync="table.pagination" :grid="table.grid"
+    <q-table :rows="tableData" :columns="tableColumns" :pagination.sync="table.pagination" :grid="table.grid"
              :hide-pagination="!allowPagination" :rows-per-page-options="table.rowsPerPageOptions"
              @request="getDataTable" :loading="loading" hide-no-data :hide-header="hideHeader">
       <!---Top content-->
@@ -19,10 +19,18 @@
           <!--Actions-->
           <div id="tableActions" class="row q-gutter-sm" v-if="!readonly">
             <!--customActions-->
-            <q-btn v-for="(item, itemKey) in actions" :key="itemKey" class="btn-small" v-bind="item"
-                   v-if="item.vIf != undefined ? item.vIf : true" @click="item.action()" no-caps>
-              <q-tooltip v-if="item.tooltip">{{ item.tooltip }}.</q-tooltip>
-            </q-btn>
+            <template v-for="(item, itemKey) in actions">
+              <q-btn
+                :key="itemKey"
+                class="btn-small"
+                v-bind="item"
+                v-if="item?.vIf != undefined ? item?.vIf : true"
+                @click="item.action()"
+                no-caps
+              >
+                <q-tooltip v-if="item.tooltip">{{ item.tooltip }}.</q-tooltip>
+              </q-btn>
+            </template>
             <!--Order-->
             <q-btn v-if="allowOrder" class="btn-small" round unelevated outline color="blue-grey"
                    :icon="`fas fa-arrow-${table.filter.order.way == 'asc' ? 'up' : 'down'}`" @click="toggleOrder()">
@@ -46,33 +54,74 @@
           <!--Loop every items and set as dragabble-->
           <draggable group="bocksBlocks" v-model="table.data" class="row" :disabled="!draggable" handle=".drag-handle">
             <!--Files-->
-            <div v-for="(itemRow, itemRowKey) in tableData" :key="itemRowKey" :class="`${gridColClass} q-pa-xs`">
+            <div v-for="(itemRow, itemRowKey) in tableData"
+              :key="itemRowKey"
+              :class="`${gridColClass} q-pa-xs`"
+            >
               <!---Card-->
-              <div v-if="gridType == 'card'" class="file-card cursor-pointer">
+              <div v-if="gridType == 'card'"
+                :class="`file-card cursor-pointer ${isSelected(itemRow.filename)}`"
+              >
                 <!--Image Preview-->
-                <div class="tw-absolute tw-right-0">
-                    <q-btn 
-                      round 
-                      color="primary" 
+                <!--select file-->
+                <div class="tw-absolute tw-left-0">
+                    <q-checkbox v-if="allowSelect"
+                      v-model="table.selected"
+                      :val="itemRow.filename"
+                      :class="`${table.selected.includes(itemRow.filename) ? '' : (isDesktop ? 'showOnHover' : '') }`"
+                      color="primary"
+                      keep-color
+                      checked-icon="fa-sharp fa-solid fa-circle-check"
+                      unchecked-icon="fa-light fa-circle"
+                      size="lg"
+                    />
+                </div>
+                <div class="tw-absolute tw-left-0 tw-bottom-20 text-blue-grey">
+                  <q-btn
+                    class="q-ml-sm "
+                    :class="{'showOnHover' : isDesktop}"
+                    @click="fileAction(itemRow)"
+                    icon="fa-solid fa-eye"
+                    :label="$tr('isite.cms.label.quickLook')"
+                    size="sm"
+                    dense
+                    rounded
+                    no-caps
+                    unelevated
+                    style="border: 1px solid teal;background: white; font-size: 12px;z-index: 10"
+                  />
+                </div>
+                <div class="tw-absolute tw-right-0" :class="{'showOnHover' : isDesktop}">
+                    <q-btn
+                      round
+                      color="primary"
                       icon="fa-light fa-file-arrow-down"
                       size="sm"
-                      @click="downloadFile(itemRow)" 
+                      @click="downloadFile(itemRow)"
+                      class="q-ma-sm"
                     >
                       <q-tooltip>
                         {{ $tr('isite.cms.label.download') }}
                       </q-tooltip>
                     </q-btn>
                 </div>
-                <div v-if="itemRow.isImage" class="file-card_img img-as-bg" @click="fileAction(itemRow)"
-                     :style="`background-image: url('${itemRow.mediumThumb}')`">
+                <div
+                  v-if="itemRow.isImage"
+                  class="file-card_img img-as-bg"
+                  :style="`background-image: url('${getImage(itemRow)}')`"
+                  @click="markAsSelected($event, itemRow.filename)"
+                >
                   <!--Tooltip-->
                   <q-tooltip anchor="center middle" self="center middle" :delay="500">
                     {{ itemRow.filename }}
                   </q-tooltip>
                 </div>
                 <!--Icon-->
-                <div v-else class="file-card_icon img-as-bg row items-center justify-center"
-                     @click="fileAction(itemRow)">
+                <div
+                  v-else
+                  class="file-card_icon img-as-bg row items-center justify-center bg-white"
+                  @click="markAsSelected($event, itemRow.filename)"
+                >
                   <q-icon :name="itemRow.icon" color="blue-grey"/>
                   <!--Tooltip-->
                   <q-tooltip anchor="center middle" self="center middle" :delay="500">
@@ -83,15 +132,21 @@
                 <div class="file-card__bottom">
                   <!--Actions-->
                   <div v-if="!readonly" class="file-card__bottom_actions row items-center justify-between">
-                    <div v-if="true"
-                         :class="`full-width file-card__bottom_title ellipsis ${draggable ? 'drag-handle' : ''}`">
+                    <div
+                      v-if="true"
+                      :class="`full-width file-card__bottom_title ellipsis ${draggable ? 'drag-handle' : ''}`"
+                      @click="markAsSelected($event, itemRow.filename)"
+                    >
                       <div class="q-pa-sm ellipsis">{{ itemRow.filename }}</div>
                       <q-separator inset/>
                     </div>
-                    <!--select file-->
-                    <q-checkbox v-if="allowSelect" v-model="table.selected" :val="itemRow.filename" color="green"/>
                     <!-- File id -->
-                    <div class="q-px-sm text-caption text-grey-9"><b>ID: {{ itemRow.id }}</b></div>
+                    <div
+                      class="q-px-sm text-caption text-grey-9"
+                      @click="markAsSelected($event, itemRow.filename)"
+                    >
+                      <b>ID: {{ itemRow.id }}</b>
+                    </div>
                     <!--button Actions-->
                     <btn-menu class="float-right" :actions="itemActions" :action-data="itemRow"/>
                   </div>
@@ -101,7 +156,7 @@
               <div v-else-if="gridType == 'chip'" :class="`file-chip ${draggable ? 'drag-handle' : 'cursor-pointer'}`">
                 <!--Image Preview-->
                 <div v-if="itemRow.isImage" class="file-chip__img img-as-bg" @click="fileAction(itemRow)"
-                     :style="`background-image: url('${itemRow.mediumThumb}')`">
+                     :style="`background-image: url('${getImage(itemRow)}')`">
                 </div>
                 <!--Icon-->
                 <q-icon v-else :name="`fas fa-${itemRow.isFolder ? 'folder' : 'file'}`" class="file-chip__icon"
@@ -141,7 +196,7 @@
             <!--Icon-->
             <q-icon v-if="!props.row.isImage" :name="`fas fa-${props.row.isFolder ? 'folder' : 'file'}`"/>
             <!--Image-->
-            <div class="file-image" v-else :style="`background-image: url('${props.row.mediumThumb}')`"></div>
+            <div class="file-image" v-else :style="`background-image: url('${getImage(props.row)}')`"></div>
             <!--Filename-->
             {{ props.value }}
           </div>
@@ -175,6 +230,13 @@
     </div>
     <!--Image preview-->
     <avatar-image ref="avatarImage" no-preview/>
+    <!---MS Docs-->
+    <master-modal v-model="modalDocs.show" :title="`${modalDocs.fileName}`" width="100%">
+      <iframe
+        :src="`https://view.officeapps.live.com/op/view.aspx?src=${modalDocs.src}`"
+        width="100%" style="height: calc(100vh - 272px)"
+      />
+    </master-modal>
     <!---PDF preview-->
     <master-modal v-model="modalPdf.show" :title="`PDF | ${modalPdf.fileName}`" width="100%">
       <iframe :src="modalPdf.src" width="100%" style="height: calc(100vh - 272px)"/>
@@ -288,6 +350,11 @@ export default {
         },
         selected: []
       },
+      modalDocs: {
+        show: false,
+        src: false,
+        fileName: '',
+      },
       modalPdf: {
         show: false,
         src: false,
@@ -382,6 +449,12 @@ export default {
       let quantityEmpty = (this.quantity - this.tableData.length)
       return (quantityEmpty >= 1) ? (quantityEmpty > 3 ? 3 : quantityEmpty) : 0
     },
+    isSelected(){
+      return name => this.table.selected.includes(name) ? 'selectable--selected scale-down' : (this.allowSelect ? 'selectable' : '')
+    },
+    isDesktop(){
+      return this.$q.screen.gt.sm
+    }
   },
   methods: {
     init() {
@@ -449,15 +522,27 @@ export default {
     },
     //Do Item action
     fileAction(file) {
+      //MS office extensions
+      const msFileExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pps']
+
       //Action if is image
       if (file.isImage) {
-        this.$refs.avatarImage.open(file.mediumThumb)
+        const src = this.getImage(file)
+        this.$refs.avatarImage.open(src)
+      }
+      //Action if is MS doc
+      if(msFileExtensions.includes(file.extension)){
+        this.modalDocs = {
+          show: true,
+          src: file.url,
+          fileName: file.filename
+        }
       }
       //Action if is PDF
       if (file.extension == 'pdf') {
         this.modalPdf = {
           show: true,
-          src: file.path,
+          src: file.url,
           fileName: file.filename
         }
       }
@@ -465,7 +550,7 @@ export default {
       if (file.extension == 'mp3') {
         this.modalAudio = {
           show: true,
-          src: file.path,
+          src: file.url,
           fileName: file.filename
         }
       }
@@ -473,7 +558,7 @@ export default {
       if (file.extension == 'mp4') {
         this.modalVideo = {
           show: true,
-          src: file.path,
+          src: file.url,
           fileName: file.filename
         }
       }
@@ -511,7 +596,7 @@ export default {
       this.$emit('selected', this.$clone(this.selectedFiles))
     },
     downloadFile(file) {
-      const fileUrl = file.path;
+      const fileUrl = file.url;
       const fileName = file.filename;
       const downloadLink = document.createElement('a');
       downloadLink.href = fileUrl;
@@ -523,113 +608,161 @@ export default {
         document.body.removeChild(downloadLink);
       }, 100);
     },
+    markAsSelected(event, name){
+      if (event?.pointerType == 'touch') return false
+      if (this.table.selected.includes(name) ) {
+        this.table.selected = this.table.selected.filter(element => element != name );
+      } else {
+        this.table.selected.push(name)
+      }
+      this.handlerSelectedFiles()
+    },
+    //Get Image Url depends of Disk
+    getImage(file) {
+      return file.disk == "privatemedia" ? file.url : file.mediumThumb
+    }
   }
 }
 </script>
-<style lang="stylus">
-#fileListComponent
-  .q-table__container
-    width 100%
-    box-shadow none
-    color $grey-9
-    padding 10px
+<style lang="scss">
+#fileListComponent {
+  .q-table__container {
+    width: 100%;
+    box-shadow: none;
+    color: $grey-9;
+    padding: 10px;
 
-    .q-table__top
-      padding 0
+    .q-table__top {
+      padding: 0;
+    }
 
-    thead
-      th
-        font-size 16px
+    thead {
+      th {
+        font-size: 16px;
+      }
+    }
 
-    .td-filename //Table styles
+    .td-filename { //Table styles
+      .item-file {
+        width: max-content;
 
-      .item-file
-        width max-content
+        .q-icon {
+          font-size: 25px;
+          margin-right: 15px;
+        }
 
-        .q-icon
-          font-size 25px
-          margin-right 15px
+        .file-image {
+          margin-right: 15px;
+          height: 36px;
+          width: 36px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+        }
+      }
+    }
 
-        .file-image
-          margin-right 15px
-          height 36px
-          width 36px
-          background-repeat no-repeat
-          background-position center
-          background-size cover
+    .file-card:hover .showOnHover {
+      display: block;
+    }
 
-    .file-card //Card styles
-      color $grey-9
-      background-color $grey-4
-      border 1px solid $grey-3
-      border-radius 5px
-      overflow hidden
-      position relative
-
-      .file-card_img, .file-card_icon
-        height 120px
-        width 100%
-
-      .file-card_icon
-        .q-icon
-          font-size 50px
-
-      .file-card__bottom
-        width 100%
-        background-color white
-        position relative
-
-        &_title
-          font-size 12px
-          color $grey-9
-          text-transform lowercase
-
-    .file-chip
-      border 1px solid $grey-5
-      padding 5px
-      border-radius 5px
-      color $grey-8
+    .file-card { //Card styles
+      color: $grey-9;
+      background-color: $grey-4;
+      border: 2px solid $grey-3;
+      border-radius: 4px;
+      overflow: hidden;
       position: relative;
-      min-height 38px
 
-      .file-chip__img
-        position absolute
-        left 5px
-        top 6.5px
-        height 18px
-        width 18px
+      .showOnHover {
+        display: none;
+      }
 
-      .file-chip__icon
-        position absolute
-        left 5px
-        top 6.5px
-        font-size 18px
-        margin-right 5px
+      .file-card_img, .file-card_icon {
+        height: 120px;
+        width: 100%;
+      }
 
-      .file-chip__title
-        padding-left 23px
-        padding-right 20px
-        text-transform lowercase
+      .file-card_icon {
+        .q-icon {
+          font-size: 50px;
+        }
+      }
 
-      .file-chip__actions
-        position absolute
-        right 2px
-        top 0
+      .file-card__bottom {
+        width: 100%;
+        background-color: white;
+        position: relative;
 
-  .file-item-quantity
-    cursor pointer
-    height 188px
-    border 2px dotted $grey-5
-    border-radius 5px
-    color $grey-5
+        &_title {
+          font-size: 12px;
+          color: $grey-9;
+          text-transform: lowercase;
+        }
+      }
+    }
 
-  th:last-child, td:last-child
-    background-color white
-    position: sticky
-    right: 0
-    z-index: 1
+    .file-chip {
+      border: 1px solid $grey-5;
+      padding: 5px;
+      border-radius: 5px;
+      color: $grey-8;
+      position: relative;
+      min-height: 38px;
 
-  .drag-handle
-    cursor move
+      .file-chip__img {
+        position: absolute;
+        left: 5px;
+        top: 6.5px;
+        height: 18px;
+        width: 18px;
+      }
+
+      .file-chip__icon {
+        position: absolute;
+        left: 5px;
+        top: 6.5px;
+        font-size: 18px;
+        margin-right: 5px;
+      }
+
+      .file-chip__title {
+        padding-left: 23px;
+        padding-right: 20px;
+        text-transform: lowercase;
+      }
+
+      .file-chip__actions {
+        position: absolute;
+        right: 2px;
+        top: 0;
+      }
+    }
+
+    .file-item-quantity {
+      cursor: pointer;
+      height: 188px;
+      border: 2px dotted $grey-5;
+      border-radius: 5px;
+      color: $grey-5;
+    }
+
+    th:last-child, td:last-child {
+      background-color: white;
+      position: sticky;
+      right: 0;
+      z-index: 1;
+    }
+
+    .drag-handle {
+      cursor: move;
+    }
+
+    .scale-down {
+      transition: all 0.2s ease-in-out;
+      transform: scale(0.9) !important;
+    }
+  }
+}
 </style>
 

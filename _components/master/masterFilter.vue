@@ -1,4 +1,13 @@
 <template>
+  <q-dialog
+      id="drawerFilterMaster"
+      v-model="showDialog"
+      persistent
+      maximized
+      position="right"
+      v-if="filter.load"
+    >
+  <q-card style="width: 350px;">
   <div id="masterFilterComponent" v-if="filter">
     <!-- Header -->
     <div id="masterFilterContent">
@@ -10,7 +19,7 @@
         </div>
         <!-- Close icon -->
         <q-icon name="fas fa-times" color="blue-grey" size="20px" class="cursor-pointer"
-                @click="$eventBus.$emit('toggleMasterDrawer', 'filter')"/>
+                @click="eventBus.emit('toggleMasterDrawer', 'filter')"/>
       </div>
 
       <!--Tabs-->
@@ -39,13 +48,13 @@
               </div>
               <!--Input search-->
               <dynamic-field v-model="filterValues.search"
-                             :field="{...filter.fields.search, props : {debounce : '0'}}"/>
+                             :field="{...filter.fields.search, props : {debounce : '0'}}" :enableCache="dynamicFieldCache" />
             </div>
             <!--Date-->
             <div v-if="filter.fields && filter.fields.date" class="q-mb-sm">
               <!--Fields date-->
               <dynamic-field v-for="(fieldDate, key) in dateFields" :key="key" :field="fieldDate" class="q-mb-sm"
-                             v-model="filterValues.date[fieldDate.name || key]"/>
+                             v-model="filterValues.date[fieldDate.name || key]" :enableCache="dynamicFieldCache" />
             </div>
             <!--Pagination-->
             <div v-if="filter.fields && filter.fields.pagination" class="q-mb-sm">
@@ -56,12 +65,12 @@
               </div>
               <!--Fields pagination-->
               <dynamic-field v-for="(fieldPagination, key) in paginationFields" :field="fieldPagination" class="q-mb-sm"
-                             v-model="pagination[fieldPagination.name || key]" :key="key"/>
+                             v-model="pagination[fieldPagination.name || key]" :key="key" :enableCache="dynamicFieldCache" />
             </div>
             <!--others Fields-->
             <dynamic-field v-for="(field, key) in filter.fields" :key="key" v-model="filterValues[field.name || key]"
-                           v-if="['search','pagination'].indexOf(key) == -1" class="q-mb-sm" :field="field"
-                           @inputReadOnly="data => $set(readOnlyData, (field.name || key), data)"/>
+                           v-if="['search','pagination'].indexOf(key) == -1" class="q-mb-sm" :field="field" :enableCache="dynamicFieldCache"
+                           @inputReadOnly="data => readOnlyData[field.name || key] = data"/>
           </div>
         </q-tab-panel>
       </q-tab-panels>
@@ -71,15 +80,44 @@
     <div class="absolute-bottom text-center bg-white tw-p-3" ref="footerContent">
       <q-separator class="tw-mb-3"/>
       <q-btn :label="$tr('isite.cms.label.search')" unelevated color="primary" no-caps class="tw-w-full" rounded
-             @click="emitFilter(), $eventBus.$emit('toggleMasterDrawer','filter')"/>
+             @click="emitFilter(), eventBus.emit('toggleMasterDrawer','filter')"/>
     </div>
   </div>
+  </q-card>
+    </q-dialog>
 </template>
 <script>
+import eventBus from '@imagina/qsite/_plugins/eventBus'
+
 export default {
-  props: {},
-  components: {},
+  inject: {
+    filterPlugin: {
+      from: 'filterPlugin',
+      default: {
+        name: false,
+        fields: {},
+        values: {},
+        callBack: false,
+        pagination: {},
+        load: false,
+        hasValues: false,
+        storeFilter: false,
+      }
+    }
+  },
+  props : {
+    show: {
+      type: Boolean,
+      default: () => false,
+    },
+  },
+  components: {
+
+  },
   watch: {
+    show(newValue){
+      this.showDialog = this.$clone(newValue)
+    },
     '$filter': {
       deep: true,
       handler: function (newValue, oldValue) {
@@ -96,30 +134,30 @@ export default {
     '$route.name': {
       deep: true,
       handler: function (newValue) {
-        this.$filter.reset()
+        this.filterPlugin.reset()
       }
     },
     readOnlyData: {
       deep: true,
       handler: async function () {
-        if (this.$filter.storeFilter && this.currentUrlFilter.length > 0) {
+        if(this.filterPlugin.storeFilter && this.currentUrlFilter.length > 0 ) {
           const obj = await this.$helper.convertStringToObject();
           Object.keys(this.readOnlyData).forEach((key) => {
-            if (obj.hasOwnProperty(key)) {
+            if(obj.hasOwnProperty(key)) {
               this.readOnlyData[key].value = obj[key];
             }
           })
-          this.$root.$emit('page.data.filter.read', this.$clone(this.readOnlyData))
+          this.filterPlugin.readValues = this.$clone(this.readOnlyData)
           return;
         }
-        this.$root.$emit('page.data.filter.read', this.$clone(this.readOnlyData));
+        this.filterPlugin.readValues = this.$clone(this.readOnlyData)
       }
     }
   },
   created() {
     this.$nextTick(async function () {
       const origin = window.location.href.split('?');
-      if (origin.length === 2) {
+      if(origin.length === 2) {
         this.currentUrlFilter = origin[1] || '';
       }
       await this.init();
@@ -127,21 +165,24 @@ export default {
   },
   data() {
     return {
+      showDialog: false,
       tabName: 'tabForm',
       filterValues: {},
       pagination: {},
       readOnlyData: {},
       currentUrlFilter: '',
+      dynamicFieldCache: true,
+      eventBus,
     }
   },
   computed: {
     filter() {
-      if (this.$filter.storeFilter && this.currentUrlFilter.length > 0) {
+      if(this.filterPlugin.storeFilter && this.currentUrlFilter.length > 0) {
         this.filterValues = this.$helper.convertStringToObject();
       }
-      if (!this.$filter.storeFilter && this.$filter.values) this.filterValues = this.$clone(this.$filter.values)
-      if (this.$filter.pagination) this.pagination = this.$clone(this.$filter.pagination)
-      return this.$filter
+      if (!this.filterPlugin.storeFilter && this.filterPlugin.values) this.filterValues = this.$clone(this.filterPlugin.values)
+      if (this.filterPlugin.pagination) this.pagination = this.$clone(this.filterPlugin.pagination)
+      return this.filterPlugin
     },
     dateFields() {
       let filterDate = this.$clone(this.filterValues.date)
@@ -249,31 +290,30 @@ export default {
   },
   methods: {
     async init() {
-      const filterValues = this.$filter.storeFilter && this.currentUrlFilter.length > 0
-          ? await this.$helper.convertStringToObject()
-          : this.filterValues;
+      const filterValues = this.filterPlugin.storeFilter && this.currentUrlFilter.length > 0
+        ? await this.$helper.convertStringToObject()
+        : this.filterValues;
       this.filterValues = filterValues || {};
       await this.emitFilter(true);
     },
     //Emit filter
     async emitFilter(filterBtn = false) {
-      if (!filterBtn) {
-        if (this.$filter.storeFilter) {
+      if(!filterBtn) {
+        if(this.filterPlugin.storeFilter) {
           const objUrl = await this.$helper.convertStringToObject();
           const type = objUrl.type ? {type: objUrl.type} : {};
           const date = objUrl.dateStart && objUrl.dateEnd
-              ? {dateEnd: objUrl.dateEnd, dateStart: objUrl.dateStart}
-              : {};
+          ? { dateEnd: objUrl.dateEnd, dateStart: objUrl.dateStart}
+          : {};
           this.filterValues = {...this.filterValues, ...type, ...date};
         }
         this.currentUrlFilter = '';
       }
       this.changeDate();
-      this.$filter.addValues(this.filterValues);
-      if (this.$filter.storeFilter) {
+      this.filterPlugin.addValues(this.filterValues);
+      if(this.filterPlugin.storeFilter) {
         this.mutateCurrentURL();
-      }
-      ;
+      };
       //Emit Filter
       if (this.filter && this.filter.callBack) {
         this.filter.callBack(this.filter)//Call back
@@ -285,8 +325,8 @@ export default {
       try {
         let paramsUrl = '';
         Object.keys(this.filterValues).forEach((item, index) => {
-          if (this.$filter.fields.hasOwnProperty(item)) {
-            if (index === 0) {
+          if(this.filterPlugin.fields.hasOwnProperty(item)) {
+            if(index === 0) {
               paramsUrl += this.validateObjectFilter('?', item);
             } else {
               paramsUrl += this.validateObjectFilter('&', item);
@@ -302,10 +342,10 @@ export default {
     },
     // validate Object Filter
     validateObjectFilter(operator = '?', item) {
-      if (this.filterValues[item]) {
-        if (typeof this.filterValues[item] === 'object'
-            || Array.isArray(this.filterValues[item])) {
-          return `${operator}${item}=${JSON.stringify(this.filterValues[item])}`;
+      if(this.filterValues[item]) {
+        if(typeof this.filterValues[item] === 'object'
+          || Array.isArray(this.filterValues[item])) {
+          return  `${operator}${item}=${JSON.stringify(this.filterValues[item])}`;
         }
         return `${operator}${item}=${this.filterValues[item]}`;
       }
@@ -417,19 +457,23 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#masterFilterComponent
-  #tabsContent
-    .q-tab__content
-      min-width auto
-
-  .q-field.q-field--float .q-field__label
-    color: $primary
-
-  .q-field__control
-    .q-field__append .q-icon
-      color: $tertiary
-
-    .q-field__append:last-child .q-icon
-      color: $primary
+<style lang="scss">
+#masterFilterComponent {
+  #tabsContent {
+    .q-tab__content {
+      min-width: auto;
+    }
+  }
+  .q-field.q-field--float .q-field__label {
+    color: $primary;
+  }
+  .q-field__control {
+    .q-field__append .q-icon {
+      color: $tertiary;
+    }
+    .q-field__append:last-child .q-icon {
+      color: $primary;
+    }
+  }
+}
 </style>

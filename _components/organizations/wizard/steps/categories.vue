@@ -77,18 +77,12 @@
   </div>
 </template>
 <script>
-import storeStepWizard from './store/index.ts';
-import {
-  LIMIT_PAGE,
-  STEP_NAME_CATEGORIES } from './model/constant.js';
-import { urlToHttpOptions } from 'url';
-export default {
-  props: {
-    info: {
-      type: Array,
-      default: () => [],
-    },
-  },
+import storeWizard from './store/index.ts';
+import services from '@imagina/qsite/_components/organizations/wizard/steps/services/services.ts';
+
+import { LIMIT_PAGE } from './model/constant.js';
+
+export default { 
   data() {
     return {
       loading: false,
@@ -102,18 +96,12 @@ export default {
   },
   mounted() {
     this.$nextTick(async function () {
+      storeWizard.nextStepButton = false;
       this.getDataBase();
       this.getCategorySelected();
-      this.navNext();
       this.getStepInfo();
     })
-  },
-  inject: {
-    infoBase: {
-      type: Object,
-      default: () => {},
-    }
-  },
+  },  
   computed: {
     formFields() {
       return {
@@ -133,60 +121,36 @@ export default {
   methods: {
     selectData(item) {
       this.selected=item;
-      this.navNext();
+      storeWizard.data.category = this.selected
+      storeWizard.nextStepButton = true;
+      this.$emit('updateData', item)    
     },
-    navNext() {
-      if(this.selected){
-        this.$emit("update",  { active: true, info: this.selected});
-      }else {
-        this.$emit("update", { active: false});
-      }
-    },
-    async getCategorySelected() {
-      try {
-        this.loading = true;
-        if(this.infoBase && this.infoBase.category !== null) {
-          this.selected=this.infoBase.category;
-          this.loading = false;
-        } else {
-          // Sino hay nada es porque recargo entonces verifico que tiene cache
-          const info = await this.$cache.get.item('org-wizard-data');
-          if(info != null && info.category !== null) {
-            this.selected=info.category;
-            this.$emit("update", { active: true, info: this.selected});
-          } else {
-            this.$emit("update",  { active: false });
-          }
-          this.loading = false;
-        }
-
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    deselectCategory(value) {
+      this.selected="";
+      storeWizard.data.category = this.selected
+      storeWizard.nextStepButton = false;
+      this.$emit('updateData', '')
+      this.name=value;      
+    },    
     async getDataBase() {
-      try {
-        const categories = await this.$cache.get.item('org-wizard-categories');
-        if(categories.length>0){
-          this.categories= categories;
-        } else {
-          // por si borraron el cache
-          this.categoryCache()
-        }
-
-      } catch (error) {
-        console.log(error);
-      }
+      this.categories= storeWizard.categories;
     },
+    async getCategorySelected() {      
+      this.loading = true;          
+      if(storeWizard.data.category) {
+        this.selected=storeWizard.data.category
+        storeWizard.nextStepButton = true;
+      }
+      this.loading = false;
+    },    
     async getCategoriesSearch() {
       try {
         if((this.name!==null) && this.name.length>3) {
           this.deselectCategory(this.name);
           this.loading = true;
-          const categories = await storeStepWizard().getCategoriesSearch(this.name);
+          const categories = await services().getCategoriesSearch(this.name);
           this.loading = false;
           this.categories = categories;
-
         } else {
           this.getDataBase();
         }
@@ -195,19 +159,10 @@ export default {
         console.log(error);
       }
     },
-    deselectCategory(value) {
-      this.selected="";
-      this.name=value;
-      this.navNext();
-    },
     async getStepInfo() {
-      this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_CATEGORIES);
+      this.stepContent = storeWizard.infoCategories
     },
-    async categoryCache(){
-      const categoriesNew  = await storeStepWizard().getCategories();
-      await this.$cache.set('org-wizard-categories',  categoriesNew );
-      this.categories= categoriesNew;
-    }
+    
   }
 }
 </script>

@@ -1,102 +1,107 @@
-import Vue from 'vue';
-import baseService from '@imagina/qcrud/_services/baseService.js';
-import cache from '@imagina/qsite/_plugins/cache'
+import Vue, {reactive, computed} from 'vue';
 
-export default function storeStepWizard() {
-  async function getInfoWizard(systemName: string) {
-    try {
-      const response = await baseService.show(
-        'apiRoutes.qgamification.categories',
-        'admin_organization_wizard',
-        {
-          refresh: false, params: {filter: {field: 'system_name'}, include: "activities"}
-        });
-      return response.data.activities;
-    } catch (error) {
-      console.log('Error info general');
-    }
-  }
+import {  
+  STEP_NAME_TERMS,
+  STEP_NAME_COMPANY,
+  STEP_NAME_CATEGORIES,
+  STEP_NAME_THEMES,
+  STEP_NAME_PLANS,
+  STEP_NAME_WELCOME,
+  STEP_NAME_SUMMARY,
+  STEP_NAME_AI,
+} from '@imagina/qsite/_components/organizations/wizard/steps/model/constant';
 
-  async function getCategories() {
-    try {
-      const requestParams = {refresh: true}
-      const response = await baseService.index('apiRoutes.qsite.categories', requestParams);
-      const categories = response.data.sort((a, b) => a.title.localeCompare(b.title));
-      cache.set('org-wizard-categories', categories)
-      return categories;
-    } catch (error) {
-      console.log('Error al cargar las categorias');
-    }
-  }
-
-  async function getCategoriesSearch(text: string) {
-    try {
-      const params = {
-        filter: {
-          search: text
-        }
-      };
-      const response = await baseService.index('apiRoutes.qsite.categories', {refresh: true, params});
-      const categories = response.data.sort((a, b) => a.title.localeCompare(b.title));
-      return categories;
-    } catch (error) {
-      console.log('Error al cargar las categorias');
-    }
-  }
-
-  //Return the data plans
-  async function getPlans(planBaseId: number) {
-    try {
-      //Get plans with product relation
-      const paramsPlans = {
-        refresh: true,
-        params: {include: 'product', filter: {internal: false}}
-      };
-      let plans = await baseService.index('apiRoutes.qplan.plans', paramsPlans);
-
-      // Get full data of products
-      const paramsProducts = {
-        refresh: true, params: {
-          filter: {id: plans.data.map(plan => plan.product.id), status: true},
-          include: 'productOptions,optionValues,relatedProducts'
-        }
-      };
-      let products = await baseService.index('apiRoutes.qcommerce.products', paramsProducts);
-
-      //Validate optionValues (Frequency)
-      products.data.forEach((product, index) => {
-        if (!product.optionValues.length) {
-          let plan = plans.data.find(plan => plan.product.id == product.id)
-          products.data[index].optionValues = [{optionValue: plan.frequency, price: plan.price,}]
-        }
-      })
-      //save in cache
-      cache.set('org-wizard-plans', products.data)
-      //Response
-      return products.data;
-    } catch
-      (error) {
-      console.error('Error al cargar los planes', error);
-      return []
-    }
-  }
-
-  async function getPlan(planId: number) {
-    try {
-      const params = {
-        filter: {
-          id: planId,
-        },
-        include: 'productOptions,optionValues,relatedProducts,categories'
-      };
-      let response = await baseService.index('apiRoutes.qcommerce.products', {refresh: true, params});
-      return response.data;
-    } catch (error) {
-      console.log('Error al cargar los planes');
-    }
-  }
-
-
-  return {getInfoWizard, getCategories, getCategoriesSearch, getPlans, getPlan}
+function findInfoWizard(key){
+  return state.infoWizard.find((item) => item?.systemName === key);
 }
 
+//stores forms data, selections etc...
+const data = {
+  user: false,
+  terms: {check: false, email: false },
+  category: false,
+  layout: false,
+  plan: false,
+  organization: '',
+  form: {check: false, data: {}},
+};
+
+const state = reactive({
+  infoWizard: [{systemName:''}],
+  categories: false,
+  step: 0,
+  previousStepButton: true, 
+  nextStepButton: true,
+  data
+})
+
+const store = computed(() => ({
+  get infoWizard(){
+    return state.infoWizard;
+  },
+  set infoWizard(value){
+    state.infoWizard = value
+  },
+  get categories(){
+    return state.categories;
+  },
+  set categories(value){
+    state.categories = value
+  },
+  
+  get step(){
+    return state.step;
+  },
+  set step(value){
+    state.step = value
+  },
+  get previousStepButton(){
+    return state.previousStepButton;
+  },
+  set previousStepButton(value){
+    state.previousStepButton = value
+  },
+  get nextStepButton(){
+    return state.nextStepButton;
+  },
+  set nextStepButton(value){
+    state.nextStepButton = value
+  },
+  // data
+  get data(){
+    return state.data
+  },
+  set data(value){
+    state.data = value
+  },
+ // data atributes  
+  
+  // getters //
+  get infoWelcome(){
+    return findInfoWizard(STEP_NAME_WELCOME);
+  },
+  get infoTerms(){
+    return findInfoWizard(STEP_NAME_TERMS);
+  },
+  get infoCompany(){
+    return findInfoWizard(STEP_NAME_COMPANY);
+  },
+  get infoCategories(){
+    return findInfoWizard(STEP_NAME_CATEGORIES);
+  },
+  get infoPlans(){
+    return findInfoWizard(STEP_NAME_PLANS);
+  },
+  get infoThemes(){
+    return findInfoWizard(STEP_NAME_THEMES);
+  },
+  get infoAi(){
+    return findInfoWizard(STEP_NAME_AI);
+  },
+  get infoSummary(){
+    return findInfoWizard(STEP_NAME_SUMMARY);
+  }
+
+})).value;
+
+export default store

@@ -5,8 +5,8 @@
       <!-- Toolbar  -->
       <div :class="'q-hide q-md-show'">
         <q-toolbar id="toolbarTop">
-          <q-btn v-if="appConfig.mode === 'iadmin'" icon="fas fa-bars" unelevated 
-            class="text-primary buttonToogleMenuClose" @click="$eventBus.$emit('toggleMasterDrawer','menu')"/>
+          <q-btn v-if="appConfig.mode === 'iadmin'" icon="fas fa-bars" unelevated
+            class="text-primary buttonToogleMenuClose" @click="eventBus.emit('toggleMasterDrawer','menu')"/>
           <q-toolbar-title/>
           <!--Site Actions-->
           <site-actions/>
@@ -18,6 +18,7 @@
 <script>
 //Components
 import siteActions from '@imagina/qsite/_components/master/siteActions'
+import eventBus from '@imagina/qsite/_plugins/eventBus'
 
 export default {
   props: {},
@@ -34,6 +35,7 @@ export default {
       logo: this.$store.state.qsiteApp.logo,
       appConfig: config('app'),
       loadHeaderIpanel: false,
+      eventBus
     }
   },
   computed: {
@@ -89,14 +91,18 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#masterAdminHeader
-  .q-header
-    background-color white
-    .buttonToogleMenuClose
-      position absolute
-      top 8px
-      left 5px
-  #toolbarTop
-    position relative
+<style lang="scss">
+#masterAdminHeader {
+  .q-header {
+    background-color: white;
+    .buttonToogleMenuClose {
+      position: absolute;
+      top: 8px;
+      left: 5px;
+    }
+  }
+  #toolbarTop {
+    position: relative;
+  }
+}
 </style>

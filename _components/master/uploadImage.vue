@@ -138,36 +138,44 @@
   }
 </script>
 
-<style lang="stylus">
-  #uploadImageComponent
-    margin 0 auto
-    position relative
-    width 100%
+<style lang="scss">
+  #uploadImageComponent {
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
 
-    .img-file
-      position relative
-      margin 0 auto
-      background-size cover
-      background-position center
-      background-repeat no-repeat
-      max-width 100%
+    .img-file {
+      position: relative;
+      margin: 0 auto;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      max-width: 100%;
+    }
 
-    #actionbutton
-      position absolute
-      bottom 0
-      right 5%
-      height 45px !important
-      width 45px !important
-      width max-content
+    #actionbutton {
+      position: absolute;
+      bottom: 0;
+      right: 5%;
+      height: 45px !important;
+      width: 45px !important;
+      width: max-content;
+    }
 
-    .loading
-      position absolute
-      height 100%
-      width 100%
-      overflow hidden
-  #avatarImageComponent
-    width 100% !important
-    .avatar-img-content
-      border-radius 0px !important
-      width 100% !important
+    .loading {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+  }
+
+  #avatarImageComponent {
+    width: 100% !important;
+
+    .avatar-img-content {
+      border-radius: 0px !important;
+      width: 100% !important;
+    }
+  }
 </style>

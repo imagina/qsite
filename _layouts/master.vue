@@ -12,35 +12,40 @@
       <offlineAlert v-if="isAppOffline"/>
       <div id="routeInformationContent" v-if="appConfig.mode == 'iadmin'"
            :class="`q-hide q-md-show ${iadminTheme == 1 ? 'bg-primary' : 'bg-white'}`">
-        <div id="subContent" class="row items-center">
-          <!-- Back Button -->
-          <q-btn icon="fas fa-arrow-left" unelevated round color="primary" class="btn-small q-mr-md"
-                 @click="$helper.backHistory()">
-            <q-tooltip>{{ $tr('isite.cms.label.back') }}</q-tooltip>
-          </q-btn>
-          <!--Breadcrumb-->
-          <q-breadcrumbs class="text-blue-grey">
-            <q-breadcrumbs-el v-for="(item, key) in breadcrumbs" :key="key" :label="item.label" :icon="item.icon"
-                              :to="item.to ? {name : item.to} : false"/>
-          </q-breadcrumbs>
+        <div id="subContent" class="row justify-between items-center">
+          <div class="row items-center">
+            <!-- Back Button -->
+            <q-btn icon="fas fa-arrow-left" unelevated round color="primary" class="btn-small q-mr-md"
+                   @click="$helper.backHistory()">
+              <q-tooltip>{{ $tr('isite.cms.label.back') }}</q-tooltip>
+            </q-btn>
+            <!--Breadcrumb-->
+            <q-breadcrumbs class="text-blue-grey">
+              <q-breadcrumbs-el v-for="(item, key) in breadcrumbs" :key="key" :label="item.label" :icon="item.icon"
+                                :to="item.to ? {name : item.to} : false"/>
+            </q-breadcrumbs>
+          </div>
+          <!-- Help Center -->
+          <activities v-bind="globalActivities.helpCenter"/>
         </div>
       </div>
       <div id="fakeRouteInformationContent" class="q-hide q-md-show" v-if="appConfig.mode == 'iadmin'"></div>
       <!--Router view-->
       <div id="routerPageContent" class="layout-padding">
         <router-view v-if="appState.loadPage"/>
-        <Alert/>
+        <!--[ptc]-->
+        <!--<Alert/>-->
       </div>
     </q-page-container>
 
     <!---Cropper-->
     <cropper-component ref="cropperComponent"/>
 
-    <!-- Activities -->
-    <activities v-for="(activity, keyACt) in globalActivities" :key="keyACt" v-bind="activity"/>
+    <!-- Admin popUp -->
+        <activities v-bind="globalActivities.adminPopup"/>
 
     <!-- Activities Actions -->
-    <activities-actions/>
+        <activities-actions/>
 
     <!-- FOOTER -->
     <component :is="components.footer"/>
@@ -48,7 +53,6 @@
 </template>
 
 <script>
-import chat from '@imagina/qchat/_components/advancedChat'
 //Components Admin
 import headerAdminTheme1 from '@imagina/qsite/_components/admin/theme1/header'
 import headerAdminTheme2 from '@imagina/qsite/_components/admin/theme2/header'
@@ -63,7 +67,8 @@ import footerPanel from '@imagina/qsite/_components/panel/footer'
 //Components
 import cropperComponent from '@imagina/qsite/_components/master/cropper'
 import activitiesActions from '@imagina/qgamification/_components/activitiesActions/index.vue'
-import Alert from '@imagina/qoffline/_components/alert.vue';
+//[ptc]
+//import Alert from '@imagina/qoffline/_components/alert.vue'
 import Progressrequest from '@imagina/qoffline/_components/Progressrequest.vue';
 import offlineAlert from '@imagina/qsite/_components/master/offlineAlert.vue';
 
@@ -75,6 +80,7 @@ export default {
     let siteName = this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name')
     let siteDescription = this.$store.getters['qsiteApp/getSettingValueByName']('core::site-description')
     let iconHref = this.$store.getters['qsiteApp/getSettingMediaByName']('isite::favicon').path
+
     return {
       title: `${this.useLegacyStructure ? this.$tr(routeTitle) : routeTitle} | ${siteName}`,
       meta: {
@@ -84,7 +90,6 @@ export default {
     }
   },
   components: {
-    chat,
     cropperComponent,
     activitiesActions,
     //Admin
@@ -99,9 +104,10 @@ export default {
     drawersPanel,
     footerPanel,
     //Offline
-    Alert,
     Progressrequest,
     offlineAlert
+    //[ptc] Alert
+    //Alert
   },
   watch: {
     shouldChangePassword(data) {
@@ -115,7 +121,7 @@ export default {
   },
   mounted() {
     this.$nextTick(async function () {
-      this.init();
+      this.init()
     })
   },
   data() {
@@ -124,7 +130,7 @@ export default {
       homePage: 'isite_cms_main_home',
       modalForce: {
         shouldChangePassword: false
-      },
+      }
     }
   },
   computed: {
@@ -182,14 +188,14 @@ export default {
       const page = this.pagesConfig.find(item => item.system_name.toLowerCase() === this.homePage)
       //Set Home page and current page
       const pages = this.useLegacyStructure ? this.$route.name.indexOf("app.home") == -1 ? [config(`pages.mainqsite.home`), this.$route.meta] : [config(`pages.mainqsite.home`)]
-          : this.$route.name.indexOf("app.home") == -1 ? [page, this.$route.meta] : [page]
+        : this.$route.name.indexOf("app.home") == -1 ? [page, this.$route.meta] : [page]
       //Get page from breadcrum
       breadcrumbs.forEach((pageName) => {
         if (this.useLegacyStructure) {
           pages.splice(1, 0, config(`pages.${pageName}`))
         } else {
           const base = this.pagesConfig.find(
-              (item) => item.system_name.toLowerCase() == pageName.toLowerCase()
+            (item) => item.system_name.toLowerCase() == pageName.toLowerCase()
           );
           pages.splice(1, 0, base)
         }
@@ -215,27 +221,21 @@ export default {
     },
     //Activities
     globalActivities() {
-      const activities = [
-        {
+      return {
+        helpCenter: {
           systemName: 'help_center',
           view: 'button',
           vIf: this.$q.platform.is.desktop,
-          style: {
-            position: 'fixed',
-            bottom: '20px',
-            right: '20px'
-          },
           btnProps: {
-            color: 'info'
+            color: 'info',
+            flat: true
           }
         },
-        {
+        adminPopup: {
           systemName: 'admin_popup',
           view: 'popup'
         }
-      ].filter(act => act.vIf)
-
-      return activities
+      }
     }
   },
   methods: {
@@ -285,7 +285,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="scss">
 #layoutMaster {
   #routerPageContent {
     position: relative;
@@ -295,8 +295,7 @@ export default {
     width: 100%;
     position: fixed;
     z-index: 2;
-    background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%)
-
+    background: linear-gradient(180deg, #F1F4FA 0%, #FFFFFF 100%);
     #subContent {
       padding: 8px 10px 8px 16px;
       border-radius: $custom-radius 0 0 0;

@@ -301,7 +301,7 @@ class Helper {
       else if (permitValues) {
         let optValue = opt.value.toString()//Parse value
         if (typeof (permitValues) == 'object') {
-          Object.keys(permitValues).forEach(item => {
+          permitValues.forEach(item => {
             if (item.toString() == optValue) responseOptions.push(opt)
           })
         } else if (permitValues.toString() == optValue) responseOptions.push(opt)
@@ -398,18 +398,18 @@ class Helper {
       navigator.clipboard.writeText(text).then(function () {
         alert.info({
           icon: 'fas fa-copy',
-          message: Vue.prototype.$tr(message)
+          message: message+"(pt)"//[ptc]
         });
       }, function (err) {
         alert.error({
           icon: 'fas fa-copy',
-          message: Vue.prototype.$tr('isite.cms.messages.failedCopyToClipboard')
+          message: 'isite.cms.messages.failedCopyToClipboard(PT)'//[ptc]
         });
       });
     } catch (error) {
       alert.error({
         icon: 'fas fa-copy',
-        message: Vue.prototype.$tr('isite.cms.messages.failedCopyToClipboard')
+        message: 'isite.cms.messages.failedCopyToClipboard(PT)'//[ptc]
       });
     }
   }
@@ -596,15 +596,17 @@ class Helper {
         const remplaceFilter = url.replace(regex, ":").replace(regex2, ",");
         const remplaceObject = eval("({" + remplaceFilter + "})");
         Object.keys(remplaceObject).forEach((key) => {
-          if (Vue.prototype.$filter.fields.hasOwnProperty(key)) {
-            remplaceObject[key] = String(remplaceObject[key]);
-          }
+          //[ptc]
+          // if (Vue.prototype.$filter.fields.hasOwnProperty(key)) {
+          //   remplaceObject[key] = String(remplaceObject[key]);
+          // }
         });
         return remplaceObject || {};
       }
       return {};
     } catch (error) {
-      Vue.prototype.$alert.error('The filter url is misspelled');
+      //[ptc]
+      //Vue.prototype.$alert.error('The filter url is misspelled');
       console.log(error);
     }
   }
@@ -632,6 +634,52 @@ class Helper {
     }
 
     return true;
+  }
+
+  //Copy to clipboard Base64
+  async copyBase64ToClipboard(base64 = '', message = 'isite.cms.messages.copyToClipboard') {
+    try {
+      //Get blob of base64Image
+      const blob = await fetch(base64).then(r => r.blob())
+      //Transform in a clipboard
+      const image = new ClipboardItem({'image/png': blob})
+
+      navigator.clipboard.write([image]).then(function () {
+        alert.info({
+          icon: 'fas fa-copy',
+          message: message+"(pt)"//[ptc]
+        });
+      }, function (err) {
+        alert.error({
+          icon: 'fas fa-copy',
+          message: 'isite.cms.messages.failedCopyToClipboard(PT)'//[ptc]
+        });
+      });
+    } catch (error) {
+      alert.error({
+        icon: 'fas fa-copy',
+        message: 'isite.cms.messages.failedCopyToClipboard(PT)'//[ptc]
+      });
+    }
+  }
+
+  //Depp merge objects
+  deepMergeObjects(obj1, obj2) {
+    // Create a new object to hold the merged values
+    let result = {...obj1};
+
+    // Iterate over the properties of the second object
+    for (let key in obj2) {
+      // If the property is an object and exists in both, merge them
+      if (typeof obj2[key] === 'object' && obj1[key]) {
+        result[key] = this.deepMergeObjects(obj1[key], obj2[key]);
+      } else {
+        // Otherwise, just use the property from the second object
+        result[key] = obj2[key];
+      }
+    }
+
+    return result;
   }
 }
 

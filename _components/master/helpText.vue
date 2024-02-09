@@ -28,8 +28,8 @@
 export default {
   props: {
     icon: {default: null},
-    title: {type: String, default: null},
-    description: {type: String},
+    title: {type: String, default: null, required: true},
+    description: {type: String, required: true},
     btnStyle: {type: String, default: ''}
   },
   components: {},
@@ -48,15 +48,17 @@ export default {
   methods: {}
 }
 </script>
-<style lang="stylus">
-#helpTextMenu
-  border 2px solid $info
-  padding 10px 15px
-  border-radius $custom-radius-items
+<style lang="scss">
+#helpTextMenu {
+  border: 2px solid $info;
+  padding: 10px 15px;
+  border-radius: $custom-radius-items;
 
-  #contentHelp
-    max-width 20em
-    line-height 1.3
-    color $blue-grey
-    text-align justify
+  #contentHelp {
+    max-width: 20em;
+    line-height: 1.3;
+    color: $blue-grey;
+    text-align: justify;
+  }
+}
 </style>

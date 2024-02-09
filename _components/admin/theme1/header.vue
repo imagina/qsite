@@ -87,11 +87,14 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#masterAdminHeader
-  .q-header
-    background-color white
+<style lang="scss">
+#masterAdminHeader {
+  .q-header {
+    background-color: white;
+  }
 
-  #toolbarTop
-    position relative
+  #toolbarTop {
+    position: relative;
+  }
+}
 </style>

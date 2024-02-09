@@ -1,4 +1,3 @@
-import Vue from "vue";
 import moment from "moment";
 
 class DatePlugin {
@@ -133,8 +132,8 @@ class DatePlugin {
   getHumanCalendar(date, optionsCalendar = {}) {
     return moment(date).calendar(null, {
       sameDay: 'hh:mm a',
-      nextDay: `[${Vue.prototype.$tr('isite.cms.label.tomorrow')}]`,
-      lastDay: `[${Vue.prototype.$tr('isite.cms.label.yesterday')}]`,
+      nextDay: `[Tomorrow]`,
+      lastDay: `[Yesterday]`,
       lastWeek: 'dddd',
       sameElse: 'MM/DD/YYYY',
       ...optionsCalendar

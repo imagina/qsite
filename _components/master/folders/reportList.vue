@@ -16,9 +16,12 @@
       :move="move"
     >
       <q-item
+        clickable
         class="
           tw-py-3 
           tw-border-b 
+          tw-bg-white 
+          folder-item
         "
         v-for="(report, index) in uniqBy(folder.reportList)"
         :key="report.id"
@@ -34,7 +37,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label 
-            class="tw-font-bold" 
+            class="tw-font-bold folder-title" 
             lines="1"
           >
            <span 
@@ -55,7 +58,7 @@
             icon="more_vert"
           >
             <q-menu>
-              <q-list class="list-report-menu">
+              <q-list class="list-report-menu" separator>
                 <q-item 
                   clickable
                   v-close-popup
@@ -166,6 +169,25 @@ export default {
   },
 };
 </script>
-
 <style>
+.folder-item:hover .folder-title {
+  color: var(--q-color-primary);
+}
+.folder-item .q-focus-helper:before,
+.folder-item .q-focus-helper:after,
+.list-report-menu .q-focus-helper:before,
+.list-report-menu .q-focus-helper:after {
+    background: var(--q-color-primary) !important;
+    opacity: 1 !important;
+}
+.list-report-menu .q-item {
+    min-height: 46px;
+}
+.folder-item .q-item__section--avatar .q-icon {
+  color: var(--q-color-primary);
+  background: var(--q-color-primary);
+  opacity: .5;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 </style>

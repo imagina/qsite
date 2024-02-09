@@ -52,12 +52,14 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#iframePostcomponent
-  height 100%
-  width 100%
+<style lang="scss">
+#iframePostcomponent {
+  height: 100%;
+  width: 100%;
 
-  iframe
-    height 100%
-    width 100%
+  iframe {
+    height: 100%;
+    width: 100%;
+  }
+}
 </style>

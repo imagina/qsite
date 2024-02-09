@@ -1,7 +1,7 @@
 //Emulate Click with delay
 function emulateClick(btn) {
   return new Promise(resolve => {
-    btn.click();
+    btn?.click();
     setTimeout(() => resolve(true), 1000);
   })
 }
@@ -15,7 +15,7 @@ async function getIconsData() {
   for (const item of items) {
     itemCategoryName = item.getElementsByClassName('nowrap')
     categoryName = itemCategoryName[0].textContent
-    btn = item.getElementsByTagName('a')
+    const btn = item.getElementsByTagName('a')
     await emulateClick(btn[0])
 
     iconsData[categoryName] = []

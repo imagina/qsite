@@ -172,7 +172,7 @@ export default {
             },
             action: () => {
               let dayIndex = this.schedule.findIndex(day => day.iso == this.dayEdit.iso)
-              this.$set(this.schedule, dayIndex, this.$clone(this.dayEdit))
+              this.schedule[dayIndex] = this.$clone(this.dayEdit)
               this.modal.show = false
             }
           }
@@ -259,13 +259,16 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-#modalScheduleContent
-  .modal-content
-    padding-right 45px
+<style lang="scss">
+#modalScheduleContent {
+  .modal-content {
+    padding-right: 45px;
 
-    .remove-action
-      position absolute
-      top 6px
-      right 0
+    .remove-action {
+      position: absolute;
+      top: 6px;
+      right: 0;
+    }
+  }
+}
 </style>

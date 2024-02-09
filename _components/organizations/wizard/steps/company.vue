@@ -20,39 +20,26 @@
   </div>
 </template>
 <script>
-import storeStepWizard from './store/index.ts';
-import {STEP_NAME_COMPANY} from './model/constant.js';
+import storeWizard from './store/index.ts';
 
-export default {
-  props: {
-    info: {
-      type: Array,
-      default: () => [],
-    },
-  },
+export default {  
   data() {
     return {
       name: '',
       stepContent: '',
     }
-  },
-  inject: {
-    infoBase: {
-      type: Object,
-      default: () => {
-      },
-    },
-  },
+  },  
   mounted() {
     this.$nextTick(async function () {
       this.getData();
-      this.navNext();
       this.getStepInfo();
     })
   },
   watch: {
     name(newName, oldName) {
-      this.navNext();
+      if(newName){
+        this.checkName();  
+      }      
     }
   },
   computed: {
@@ -72,31 +59,41 @@ export default {
     },
   },
   methods: {
-    async getData() {
-
-      if (this.infoBase && (this.infoBase.organization !== '')) {
-        this.name = this.infoBase.organization;
-      } else {
-        // Sino hay nada es porque recargo entonces verifico que tiene cache
-        const info = await this.$cache.get.item('org-wizard-data');
-        if (info != null && info.organization !== '') {
-          this.name = info.organization;
-        } else {
-          this.$emit("update", {active: false});
-        }
+    async getData() {      
+      if (storeWizard.data.organization !== '') {
+        this.name = storeWizard.data.organization;
       }
-
     },
-    navNext() {
+    checkName() {
       if (this.name.length > 5) {
-        this.$emit("update", {active: true, info: this.name});
+        storeWizard.nextStepButton = true;
+        storeWizard.data.organization = this.name;
       } else {
-        this.$emit("update", {active: false});
+        storeWizard.nextStepButton = false
       }
     },
     getStepInfo() {
-      this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_COMPANY);
+      this.stepContent = storeWizard.infoCompany
     },
+    async checkOrganizationName(name){
+      return new Promise((resolve, reject) => {
+        //Requets params
+        let requestParams = {
+          refresh: true,
+          params: {
+            filter: {field: 'title'}
+          }
+        }
+        //Request        
+        this.$crud.show('apiRoutes.qsite.organizations', name, requestParams).then(response => {        
+          resolve(response.data)
+        }).catch(error => {
+          this.$apiResponse.handleError(error, () => {        
+            reject(error)
+          })
+        })
+      })    
+    }
   }
 }
 </script>

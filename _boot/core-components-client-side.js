@@ -1,4 +1,4 @@
-export default ({app, router, store, Vue}) => {
+export default ({ app, router, store }) => {
   //Components
   let components = [
     //{name: 'name-component', component: Component}
@@ -6,7 +6,7 @@ export default ({app, router, store, Vue}) => {
 
   //Register components
   components.forEach(item => {
-    Vue.use(item.component)
-    Vue.component(item.name, item.component)
+    app.use(item.component)
+    app.component(item.name, item.component)
   })
 }
