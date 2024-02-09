@@ -63,7 +63,8 @@
   </div>
 </template>
 <script>
-import { STEP_NAME_SUMMARY } from './model/constant.js';
+import storeWizard from './store/index.ts';
+
 export default {
   components: {},
   data() {
@@ -73,18 +74,6 @@ export default {
       stepContent: ''
     }
   },
-  props: {
-    info: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  inject: {
-    infoBase: {
-      type: Object,
-      default: () => {},
-    },
-  },
   mounted() {
     this.$nextTick(async function () {
       this.getStepInfo();
@@ -93,25 +82,13 @@ export default {
   },
   methods: {
     async getStepInfo() {
-      this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_SUMMARY);
+      this.stepContent = storeWizard.infoSummary
     },
     async getDataSelected() {
       try {
         this.loading = true;
-        if(this.infoBase) {
-            this.selected=this.infoBase;
-            this.$emit("update", {active: true});
-            this.loading = false;
-        } else {
-          // Sino hay nada es porque recargo entonces verifico que tiene cache
-          const info = await this.$cache.get.item('org-wizard-data');
-          if(info != null) {
-              this.selected=info;
-              this.$emit("update", {active: true});
-          } 
-          this.loading = false;
-        }
-        console.log(this.selected);
+        this.selected = storeWizard.data;
+        this.loading = false;
       } catch (error) {
         console.log(error);
       }

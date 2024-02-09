@@ -13,8 +13,78 @@
     "
     :style="{ borderLeftColor: colorColumn }"
   >
-    <div class="tw-flex tw-justify-between">
-      <p
+    <section class="tw-flex tw-justify-between">
+      <div class="tw-w-full">
+        <div class="tw-flex">
+          <span
+            class="
+              tw-text-gray-700
+              tw-font-semibold
+              tw-font-sans
+              tw-tracking-wide
+              tw-text-sm
+              tw-w-full
+            "
+          >
+            {{ cardData.title }}
+          </span>
+          <q-btn-dropdown
+            round
+            color="gray-4"
+            flat
+            size="10px"
+            padding="5px 5px"
+            class="
+              kd-without-arrow
+              tw-float-right 
+              tw-cursor-pointer 
+              tw-text-xs 
+              tw-bg-gray-100
+              tw-h-7
+            "
+            icon="fa-solid fa-ellipsis"
+          >
+            <q-list
+              dense
+              class="
+                tw-p-2 
+                kd-list-without-arrow 
+                tw-bg-gray-100 
+                tw-text-xs"
+            >
+              <q-item
+                clickable
+                v-close-popup
+                v-for="(action, keyAction) in actionsAutomations"
+                :key="keyAction"
+                v-bind="action.props"
+                v-if="action.vIf != undefined ? action.vIf : true"
+                @click.native="runAction(action)"
+              >
+                <q-item-section avatar>
+                  <q-icon :name="action.icon" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>
+                    {{ action.label || action.tooltip }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
+        </div>
+      </div>
+    </section>
+    <div
+      v-if="cardData.type"
+      class="
+        tw-flex 
+        tw-mt-1 
+        tw-justify-between 
+        tw-items-center
+      "
+    >
+      <span 
         class="
           tw-text-gray-700
           tw-font-semibold
@@ -98,6 +168,33 @@
         <b>{{ $tr('isite.cms.label.date') }} *</b> {{ cardData.createdAt }}
       </span>
     </div>
+    <figure 
+      class="
+        tw-flex
+        tw-mt-4
+        tw-cursor-pointer
+      "
+      v-if="fullName"
+    >
+      <img 
+        class="
+          tw-w-5
+          tw-h-5
+          tw-rounded-md
+        "
+        :src="urlAvatar"
+      />
+      <q-tooltip
+        anchor="top left"
+        self="bottom left"
+        :offset="[10, 10]"
+        :delay="100" 
+      >
+        <p>
+          {{ fullName.firstName + ' ' + fullName.lastName }}
+        </p>
+      </q-tooltip>
+    </figure>
   </div>
 </template>
 
@@ -139,9 +236,33 @@ export default {
       default: () => "#00000",
     },
   },
+  data() {
+    return {
+      cardDataDefault: {
+        id: 0,
+        title: '',
+        type: '',
+        createdAt: '',
+        fields: [],
+        responsible: {
+          firstName: '',
+          lastName: '',
+        },
+      },
+    };
+  },
   computed: {
     actions() {
       return this.crudfieldActions(this.cardData);
+    },
+    fullName() {
+      const firstName = this.cardData?.responsible?.firstName || ''
+      const lastName = this.cardData?.responsible?.lastName || ''
+      return { firstName, lastName }
+    },
+    urlAvatar() {
+      return  this.cardData?.responsible?.mediaFiles?.profile?.largeThumb || 
+              this.quserState.userData.mainImage
     },
     actionsAutomations() {
       let response = [

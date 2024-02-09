@@ -84,7 +84,7 @@
   </div>
 </template>
 <script>
-import storeStepWizard from './store/index.ts';
+import storeWizard from './store/index.ts';
 import {
   PLAN_BASE_ID,
   STEP_NAME_PLANS
@@ -116,7 +116,7 @@ export default {
   },
   mounted() {
     this.$nextTick(async function () {
-      this.navNext();
+      storeWizard.nextStepButton = false;
       this.getData();
       this.getPlanSelected();
       this.getStepInfo();
@@ -126,35 +126,19 @@ export default {
     selectPlan(plan) {
       plan.active = !plan.active;
       this.selected = plan;
-      this.navNext();
-    },
-    navNext() {
-      if (this.selected !== '') {
-        this.$emit("update", {active: true, info: this.selected});
-      } else {
-        this.$emit("update", {active: false});
-      }
-    },
+      storeWizard.data.plan = this.selected;
+      storeWizard.nextStepButton = true;
+      this.$emit('updateData', plan)
+
+    },    
     async getPlanSelected() {
       try {
-        this.loading = true;
-        if (this.infoBase && (this.infoBase.plan !== null)) {
-          this.selected = this.infoBase.plan;
+        if (storeWizard.data.plan) {
+          this.selected = storeWizard.data.plan;
           this.tabActive = this.selected.optionValue;
-          this.navNext();
-          this.loading = false;
-        } else {
-          // Sino hay nada es porque recargo entonces verifico que tiene cache
-          const info = await this.$cache.get.item('org-wizard-data');
-          if (info != null && info.plan !== null) {
-            this.selected = info.plan;
-            this.tabActive = this.selected.optionValue;
-            this.$emit("update", {active: true, info: this.selected});
-          } else {
-            this.$emit("update", {active: false});
-          }
-          this.loading = false;
+          storeWizard.nextStepButton = true;
         }
+        this.loading = false;
 
       } catch (error) {
         console.log(error);
@@ -190,21 +174,11 @@ export default {
         return []
       }  
     },
-    async getData() {
-
-      const plans = await this.$cache.get.item('org-wizard-plans');
-      if (plans.length > 0) {
-        this.plans = this.mapInfoPlan(plans);
-      } else {
-        // quiere decir que borraron el cache entonces, lo busco y guardo nuevamente
-        const plansNew = await storeStepWizard().getPlans(PLAN_BASE_ID);
-        await this.$cache.set('org-wizard-plans', plansNew);
-        this.plans = this.mapInfoPlan(plansNew);
-      }
-      //console.log(this.plans);
+    async getData() {      
+      this.plans = this.mapInfoPlan(storeWizard.plans);
     },
     async getStepInfo() {
-      this.stepContent = await this.info.find((item) => item.systemName === STEP_NAME_PLANS);
+      this.stepContent = storeWizard.infoPlans
     },
   }
 }

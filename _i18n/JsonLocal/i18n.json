@@ -665,7 +665,8 @@
           "decimal_place": "Decimal",
           "value": "Value",
           "status": "Status",
-          "default_currency": "Default Currency"
+          "default_currency": "Default Currency",
+          "warehouses": "Warehouses"
         },
         "newProduct": "New Product",
         "updateProduct": "Update Product",
@@ -714,6 +715,8 @@
         "subtotal": "Subtotal",
         "shipping": "Shipping",
         "orderHistory": "Order History",
+        "newWarehouse": "New Warehouse",
+        "updateWarehouse": "Edit Warehouse",
         "form": {
           "formContent": "Here you can find the information related to the name, slug, summary and description.",
           "statusContent": "Here you can change the status of your product.",
@@ -809,7 +812,14 @@
           "symbolLeft": "Símbolo Izquierdo",
           "symbolRight": "Símbolo Derecho",
           "running": "Activo",
-          "finished": "Finalizado"
+          "finished": "Finalizado",
+          "mapHelp": "Search for the address or locate the warehouse on the map.",
+          "productWarehouse": "Warehouses",
+          "productWarehouseContent" : "Select the different warehouses where your product is located.",
+          "generalWarehouse": "General warehouse",
+          "generalWarehouseHelp": "You can efficiently manage detailed information for each product, segmented according to the different warehouses. This way, you can organize and centrally manage specific data for your products at each location, simplifying inventory management and optimizing your operational control.",
+          "warehouseByOptions": "Warehouse by options",
+          "warehouseByOptionsHelp": "We provide you with the ability to efficiently manage detailed information for each product option, organized according to different warehouses. This allows you to centralize the management of specific data for each variant at each location, simplifying inventory administration and optimizing operational control effectively."
         },
         "message": {
           "warnAddOpt": "To add options, you must first create the product",
@@ -950,7 +960,14 @@
           "lastLogin": "Last login",
           "defaultAddress": "Default address",
           "documentType": "Document type",
-          "documentnumber": "Document number"
+          "documentnumber": "Document number",
+          "emailLogin": "Continue With Email",
+          "sendEmailToVerify": "We have sent an email to <b>{email}</b> where you will find a secure link to access. Please check your inbox to access securely.",
+          "introMessage": "Enter your email, and we'll send you a link to connect quickly and securely",
+          "checkYourEmail": "Check your email",
+          "notReceivedEmail": "Have you not received the email?",
+          "checkYourSpamFolder": "Check your spam folder.",
+          "resendEmail": "Resend email"
         },
         "message": {
           "emailExist": "Email already exist",
@@ -1896,7 +1913,8 @@
           "requestedBy": "Requested By",
           "feature": "Feature | Features",
           "fieldsDetails": "Fields Details",
-          "filtersDetails": "Filters Details"
+          "filtersDetails": "Filters Details",
+          "warehouse": "Warehouse"
         },
         "configList": {
           "loggedAs": "logged as",
@@ -1947,7 +1965,37 @@
         },
         "newBlock": "New Block",
         "updateBlock": "Update Block",
-        "block": "Block | Blocks"
+        "block": "Block | Blocks",
+        "chooseBlock": "Choose a Block",
+        "layout": "Layout | Layouts",
+        "newLayout": "Create New Layout",
+        "layouts": "Layouts",
+        "blockEdit": "Block Edit",
+        "label": {
+          "grid": "Grid",
+          "preview": "Preview",
+          "chooseLayout": "Choose a layout",
+          "newLayout": "New Layout",
+          "updateLayout": "Update Layout",
+          "sureChangeLayout": "Do you want to change the layout?",
+          "descriptionSureChangeLayout": "You are going to change the layout, if you have unsaved changes they will be lost",
+          "blocks": "Blocks",
+          "localBlocks": "Locals",
+          "libraryBlocks": "Library",
+          "system": "System",
+          "sortPosition": "Sort Position",
+          "blockContent": "Block Content",
+          "title": "Title",
+          "subtitle": "Subtitle",
+          "bannerMessage": "Select a unique 'System Name' that identifies the block and then the component you want to customize...",
+          "content": "Content",
+          "attributes": "Attributes",
+          "discard": "Discard",
+          "apply": "Apply",
+          "editBlockAttributes": "Edit block attributes",
+          "sureDiscardBlock": "Have you saved your changes?",
+          "descriptionSureDiscardBlock": "If you continue with this action, you will lose all your progress. Take a moment to make sure!"
+        }
       }
     }
   },
@@ -2617,7 +2665,8 @@
           "decimal_place": "Decimal",
           "value": "valor",
           "status": "Estado",
-          "default_currency": "Moneda predeterminada"
+          "default_currency": "Moneda predeterminada",
+          "warehouses": "Bodegas"
         },
         "newProduct": "Nuevo Producto",
         "updateProduct": "Actualizar Producto",
@@ -2666,6 +2715,8 @@
         "subtotal": "Total parcial",
         "shipping": "Envío",
         "orderHistory": "Historial de Orden",
+        "newWarehouse": "Nueva Bodega",
+        "updateWarehouse": "Editar Bodega",
         "form": {
           "formContent": "Aquí podrás encontrar la información relacionada al nombre, slug, resumen y descripción.",
           "statusContent": "Aquí podrás cambiar el estado de tu producto.",
@@ -2761,7 +2812,14 @@
           "symbolLeft": "Símbolo Izquierdo",
           "symbolRight": "Símbolo Derecho",
           "running": "Activo",
-          "finished": "Finalizado"
+          "finished": "Finalizado",
+          "mapHelp": "Busca la dirección o localíza la bodega en el mapa.",
+          "productWarehouse": "Bodegas",
+          "productWarehouseContent" : "Selecciona las diferentes bodegas donde se encuentra ubicado tu producto.",
+          "generalWarehouse": "Bodega general",
+          "generalWarehouseHelp": "Puedes gestionar de manera eficiente la información detallada de cada producto, segmentada de acuerdo a las distintas bodegas. Así, puedes organizar y administrar de forma centralizada los datos específicos de tus productos en cada ubicación, simplificando la gestión de inventario y optimizando tu control operativo.",
+          "warehouseByOptions": "Bodega por Opcion",
+          "warehouseByOptionsHelp": "Te brindamos la capacidad de administrar de manera eficiente la información detallada de cada opción de producto, organizada según las distintas bodegas. Esto te permite centralizar la gestión de datos específicos para cada variante en cada ubicación, simplificando la administración del inventario y mejorando el control operativo de manera óptima."
         },
         "message": {
           "warnAddOpt": "Para agregar opciones, primero debe crear el producto",
@@ -2902,7 +2960,14 @@
           "lastLogin": "Ultima sesión",
           "defaultAddress": "Dirección por defecto",
           "documentType": "Tipo de documento",
-          "documentnumber": "Numero de documento"
+          "documentnumber": "Numero de documento",
+          "emailLogin": "Continuar con Email",
+          "sendEmailToVerify": "Hemos enviado un correo electrónico a <b>{email}</b> en donde encontrarás un enlace seguro para acceder. Por favor, verifica tu bandeja de entrada para acceder de manera segura.",
+          "introMessage": "Ingresa tu email, te enviaremos un link para conectarte de forma rápida y segura",
+          "checkYourEmail": "Comprueba tu correo electronico",
+          "notReceivedEmail": "¿No has recibido el correo electronico?",
+          "checkYourSpamFolder": "Comprueba la carpeta de correo no deseado.",
+          "resendEmail": "Volver a enviar correo electronico"
         },
         "message": {
           "emailExist": "El email ya está registrado",
@@ -3714,7 +3779,8 @@
           "requestedBy": "Solicitado Por",
           "feature": "Característica | Características",
           "fieldsDetails": "Detalles de la Característica",
-          "filtersDetails": "Detalles de los filtros"
+          "filtersDetails": "Detalles de los filtros",
+          "warehouse": "Bodega"
         },
         "configList": {
           "loggedAs": "Registrado como",
@@ -3758,7 +3824,37 @@
         "updateBlock": "Actualizar Bloque",
         "block": "Bloque | Bloques",
         "blockDesign": "Diseño del Bloque",
-        "chooseBlock": "Selecciona un bloque"
+        "chooseBlock": "Selecciona un bloque",
+        "chooseBlock": "Selecciona un Bloque",
+        "layout": "Layout | Layouts",
+        "newLayout": "Crea un nuevo Layout",
+        "layouts": "Layouts",
+        "blockEdit": "Editar bloque",
+        "label": {
+          "grid": "Grilla",
+          "preview": "Vista Previa",
+          "chooseLayout": "Escoge un Layout",
+          "newLayout": "Nuevo Layout",
+          "updateLayout": "Actualizar Layout",
+          "sureChangeLayout": "¿Deseas cambiar de layout?",
+          "descriptionSureChangeLayout": "Vas a cambiar de layout, si tienes cambios sin guardar se perderan",
+          "blocks": "Bloques",
+          "localBlocks": "Locales",
+          "libraryBlocks": "Libreria",
+          "system": "Sistema",
+          "sortPosition": "Posición en la Grilla",
+          "blockContent": "Contenido del Bloque",
+          "title": "Titulo",
+          "subtitle": "Subtitulo",
+          "bannerMessage": "Selecciona un 'Nombre de Sistema' unico que identifique el bloque y luego el componente que quieres perzonalizar...",
+          "content": "Contenido",
+          "attributes": "Atributos",
+          "discard": "Descartar",
+          "apply": "Aplicar",
+          "editBlockAttributes": "Editar los atributos del bloque",
+          "sureDiscardBlock": "¿Has guardado tus cambios?",
+          "descriptionSureDiscardBlock": "Si continuas con esta acción, perderás todo tu progreso. ¡Tómate un momento para asegurarte!"
+        }
       }
     }
   }

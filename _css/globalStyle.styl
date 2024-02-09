@@ -378,3 +378,36 @@ import('@riophae/vue-treeselect/dist/vue-treeselect.css')
     right: -8px
     bottom: -8px
     border 2px solid $primary
+
+.cursor-actionable
+.cursor-actionable
+  color #2067b0
+  cursor pointer
+  max-width max-content
+  &:hover
+    border-bottom: 2px dotted #2067b0
+
+.selectable
+  border: 2px solid transparent important
+  border-radius: 4px !important
+  z-index: 0 !important
+
+.selectable--selected
+.selectable:active
+.selectable:hover
+    background-color: $primary !important
+    border: 2px solid $primary !important
+    border-radius: 4px !important
+    color: #fff
+    cursor: pointer
+    transform: scale(1.1)
+    transition: all 0.2s ease-in-out;
+    z-index: 10 !important
+
+.alternating-colors > :nth-child(odd) {
+  background-color: $indigo-1;
+}
+
+.alternating-colors >:nth-child(even) {
+  background-color: white;
+}

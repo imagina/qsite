@@ -28,8 +28,8 @@
 export default {
   props: {
     icon: {default: null},
-    title: {type: String, default: null},
-    description: {type: String},
+    title: {type: String, default: null, required: true},
+    description: {type: String, required: true},
     btnStyle: {type: String, default: ''}
   },
   components: {},

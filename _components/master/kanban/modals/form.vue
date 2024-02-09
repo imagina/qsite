@@ -22,10 +22,11 @@
           </div>
           <div v-if="funnelForm">
             <dynamic-form
-              v-if="formCategory.vIf"
-              v-model="form"
-              :form-id="formCategory.formId"
-              @submit="saveForm()"
+                :requestParams="requestParams"
+                v-if="formCategory.vIf"
+                v-model="form"
+                :form-id="formCategory.formId"
+                @submit="saveForm()"
             />
           </div>
         </div>
@@ -73,6 +74,11 @@ export default {
       dynamicFieldForm: {},
       loading: false,
       title: null,
+      requestParams: {
+        filter: {
+          renderLocation: 'requestable'
+        }
+      },
     };
   },
   computed: {
@@ -85,15 +91,15 @@ export default {
     formFields() {
       const userData = this.$store.state.quserAuth.userData;
       return {
-        createdBy: {
+        sourceId: {
           value: null,
           type: 'crud',
-          permission: 'requestable.requestables.edit-created-by',
+          permission: 'requestable.sources.index',
           props: {
             crudType: 'select',
             crudData: import('@imagina/quser/_crud/users'),
             crudProps: {
-              label: this.$tr('isite.cms.form.createdBy'),
+              label: this.$tr('isite.cms.label.source'),
               rules: [
                 val => !!val || this.$tr('isite.cms.message.fieldRequired')
               ],
@@ -101,32 +107,55 @@ export default {
             config: {
               filterByQuery: true,
               options: {
-                label: 'fullName', value: 'id'
+                label: 'title', value: 'id'
               }
             }
           },
         },
-        requestedBy: {
+        requestedById: {
           value: null,
-          type: 'crud',
-          permission: "requestable.requestables.filter-requested-by",
+          type: "crud",
+          permission: 'profile.user.index',
           props: {
-            crudType: 'select',
-            crudData: import('@imagina/quser/_crud/users'),
+            crudType: "select",
+            crudData: import("@imagina/quser/_crud/users"),
             crudProps: {
               label: this.$tr('isite.cms.form.requestedBy'),
               rules: [
+                (val) => !!val || this.$tr("isite.cms.message.fieldRequired"),
+              ],
+            },
+            config: {
+              filterByQuery: true,
+              options: {
+                label: "fullName",
+                value: "id",
+              },
+            },
+          },
+        },
+        responsibleId: {
+          value: null,
+          type: 'crud',
+          permission: 'profile.user.index',
+          props: {
+            crudType: 'select',
+            crudData: import('@imagina/quser/_crud/users'),
+            crudProps: {
+              vIf: this.$auth.hasAccess('profile.user.index') && this.$auth.hasAccess('requestable.requestables.assign-responsible'),
+              label: this.$tr('requestable.cms.label.responsible'),
+              rules: [
                 val => !!val || this.$tr('isite.cms.message.fieldRequired')
               ],
             },
             config: {
               filterByQuery: true,
               options: {
-                label: 'fullName', value: 'id'
+                label: 'fullName', value: 'id',
               }
             }
           },
-        },
+        }
       }
     },
   },

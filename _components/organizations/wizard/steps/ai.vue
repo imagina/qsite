@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-import {STEP_NAME_AI} from './model/constant.js';
+import storeWizard from './store/index.ts';
 
 export default {
   props: {
@@ -51,40 +51,31 @@ export default {
       formId: '',
     }
   },
-  inject: {
-    infoBase: {
-      type: Object,
-      default: () => {
-      },
-    },
-  },
   mounted() {
     this.$nextTick(async function () {
       this.getData();
-      this.verifyNext();
       this.getStepInfo();
     })
   },
   watch: {
-    activeForm(newName, oldName) {
-      this.verifyNext();
+    activeForm(newValue, oldValue) {
+      storeWizard.data.form.check = newValue
+      if(newValue){        
+      } else  {
+        storeWizard.data.form.data = false
+      }
+      this.$emit('updateData', newValue)
+    }, 
+    form(newValue, oldValue){
+      storeWizard.data.form.data = newValue
     }
   },
   methods: {
     async getData() {
-      console.log(this.infoBase);
-      if (this.infoBase && this.infoBase.form) {
-        this.activeForm = this.infoBase.form.check;
-        this.form = this.infoBase.form.info;
-      } else {
-        // Sino hay nada es porque recargo entonces verifico que tiene cache
-        const info = await this.$cache.get.item('org-wizard-data');
-        if (info != null && info.form) {
-          this.activeForm = info.form.check;
-          this.form = info.form.info;
-        } 
+      if (storeWizard.data.form?.check) {        
+        this.activeForm = storeWizard.data.form.check;
+        this.form = storeWizard.data.form.data;
       }
-
     },
     async verifyForm(){
       try {
@@ -92,31 +83,18 @@ export default {
         if(this.$refs['ai-form']){
           let validate = await this.$refs['ai-form'].validateCompleteForm();
           if(validate){
-            this.$emit("update", {active: true, check: this.activeForm, info: this.form});
             resp = true;
-          } else {
-            this.$emit("update", {active: true, check: this.activeForm, info: ''});
           }
         } else {
-          this.$emit("update", {active: true, check: this.activeForm, info: ''});
+          console.log('no form')
         }
         return resp
       } catch (error) {
         console.log(error);
       }
     },
-    verifyNext() {
-      console.log(this.activeForm);
-      if(this.activeForm) {
-        //  quiere decir que tiene que llenar el formulario
-        this.verifyForm();
-      } else {
-        // quiere decir que puede pasar sin llenar el formulario
-        this.$emit("update", {active: true, check: this.activeForm, info: ''});
-      }
-    },
     async getStepInfo() {
-      this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_AI);
+      this.stepContent = storeWizard.infoAi
       this.formId = this.stepContent.formId;
     }
   }

@@ -132,7 +132,7 @@ export default {
       //handler toggleMasterDrawer
       this.$eventBus.$on('toggleMasterDrawer', (drawerName) => this.toggleDrawer(drawerName))
       //handler openMasterDrawer
-      this.$eventBus.$on('openMasterDrawer', (drawerName) => drawerName === 'recommendation' ? this.drawer[drawerName] = false : this.drawer[drawerName] = true)
+      this.$eventBus.$on('openMasterDrawer', (drawerName) => this.drawer[drawerName] = true)
     },
     //Show drawer specific
     toggleDrawer(drawerName) {
@@ -141,9 +141,9 @@ export default {
         if (drawer != drawerName) {
           if ((drawer == 'menu') && (this.windowSize != 'mobile')) {
             this.miniState = true
-          } else if (drawer == 'recommendation') {
-            this.drawer[drawer] = (this.windowSize == 'mobile') ? false : true
-          } else this.drawer[drawer] = false
+          } else {
+            this.drawer[drawer] = false
+          }
         }
       }
       //Toogle drawer

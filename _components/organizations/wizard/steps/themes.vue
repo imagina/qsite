@@ -3,8 +3,8 @@
     <h2 v-if="stepContent" class="step-title">{{stepContent.title}}</h2>
     
     <div class="step-loading" v-if="loading"><div></div><div></div></div>
-    <div class="row tw-justify-center tw-px-2 md:tw-px-4 tw-mb-6" v-else>
-      <div class="col-12 tw-text-xs tw-mt-2 tw-px-3" v-show="selected">
+    <div class="row tw-justify-center tw-px-2" v-else>
+      <div class="col-12 tw-text-xs tw-mt-2 tw-px-3" v-if="selected">
         {{ $tr('isite.cms.message.selectedTemplate') }} : <span class="tw-font-bold"> {{selected.name}}</span>
       </div>
       <div class="col-12" v-if="themes.length>0">
@@ -50,14 +50,9 @@
   </div>
 </template>
 <script>
-import { STEP_NAME_THEMES } from './model/constant.js';
+import storeWizard from './store/index.ts';
+
 export default {
-  props: {
-    info: {
-      type: Array,
-      default: () => [],
-    },
-  },
   data() {
     return {
       loading: false,
@@ -66,15 +61,9 @@ export default {
       themes: [],
     }
   },
-  inject: {
-    infoBase: {
-      type: Object,
-      default: () => {},
-    },
-  },
   mounted() {
-    this.$nextTick(async function () {
-      this.navNext();
+    this.$nextTick(async function () {      
+      storeWizard.nextStepButton = false;
       this.getThemeSelected();
       this.getThemes();
       this.getStepInfo();
@@ -83,67 +72,46 @@ export default {
   methods: {
     selectData(item) {
       this.selected= item;
-      this.navNext(this.infoBase);
-    },
-    navNext() {
-      if(this.selected!==''){
-        this.$emit("update", { active: true, info: this.selected });
-      }else {
-        this.$emit("update", { active: false });
-      }
+      storeWizard.data.layout = item
+      storeWizard.nextStepButton = true;
+      this.$emit('updateData', item)
     },
     async getThemeSelected() {
-      try {
-        this.loading = true;
-        if(this.infoBase && (this.infoBase.layout !== null)) {
-          if(this.infoBase.layout.planId == this.infoBase.plan.planId) {
-            this.selected=this.infoBase.layout;
-            this.$emit("update", { active: true, info: this.selected});
+      try {        
+        if(storeWizard.data.layout) {
+          if(storeWizard.data.layout.planId == storeWizard.data.plan.planId) {
+            this.selected=storeWizard.data.layout;
+            storeWizard.nextStepButton = true;
           }
-          this.loading = false;
-        } else {
-          // Sino hay nada es porque recargo entonces verifico que tiene cache
-          const info = await this.$cache.get.item('org-wizard-data');
-          if(info != null && info.layout !== null) {
-            if(info.layout.planId == info.plan.planId) {
-              this.selected=info.layout;
-              this.$emit("update", { active: true, info: this.selected});
-            }
-          } else {
-            this.$emit("update",  { active: false });
-          }
-          this.loading = false;
-        }
+        }          
+        this.loading = false;
+        
       } catch (error) {
         console.log(error);
       }
     },
     async getThemes() {
       try {
-       if(this.infoBase && this.infoBase.plan !== null) {
-          let themes = this.infoBase.plan.planRelatedProducts;
+        const plan = storeWizard.data.plan
+        if(plan) {
+          let themes = plan.planRelatedProducts;
           this.themes = themes.map((item) => ({
             ...item,
-            planId: this.infoBase.plan.planId
-          }));
-       } else {
-        // Sino hay nada es porque recargo entonces verifico que tiene cache
-        const info = await this.$cache.get.item('org-wizard-data');
-        if(info != null && info.plan !== null) {
-          let themes = info.plan.planRelatedProducts;
-          this.themes = themes.map((item) => ({
-            ...item,
-            planId: info.plan.planId
+            planId: plan.planId
           }));
         }
-       }
-
       } catch (error) {
         console.log(error);
       }
     },
     getStepInfo() {
-      this.stepContent = this.info.find((item) => item.systemName === STEP_NAME_THEMES);
+      this.stepContent = storeWizard.infoThemes
+    },
+    forceScroll(){
+      const scroll = document.getElementsByClassName('scroll')
+      if(scroll){
+        scroll[0].style.overflowY = 'scroll';
+      }
     }
   }
 }

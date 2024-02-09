@@ -141,7 +141,6 @@ export default {
     init() {
       this.resetData()
       this.getData()
-      setTimeout(() => this.$eventBus.$emit('openMasterDrawer', 'recommendation'), 1000)
       //Watch window size
       window.addEventListener('resize', () => {
         this.windowWith = window.innerWidth

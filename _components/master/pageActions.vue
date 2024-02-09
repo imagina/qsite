@@ -54,7 +54,12 @@
       </div>
     </div>
     <!--Description-->
-    <div v-if="description" class="ellipsis-2-lines col-12 description-content">{{ description }}</div>
+    <span
+      v-if="description"
+      class="col-12 description-content"
+    >
+      {{ description }}
+    </span>
     <!--Filter data-->
     <div class="col-12 tw-mt-3" v-if="(filter.hasValues || Object.keys(quickFilters).length) && !isAppOffline">
       <!--<q-separator class="q-mb-sm"/>-->
@@ -105,7 +110,12 @@ export default {
       type: Boolean,
       default: () => false,
     },
-    tourName: {default: null}
+    tourName: {default: null},
+    help: {
+      required: false,
+      type: Object,
+      default: () => {}
+    },
   },
   components: {masterExport},
   watch: {},
@@ -274,7 +284,17 @@ export default {
       return response
     },
     //Page Documentation
-    pageDocumentation() {
+    pageDocumentation(){
+      //crud's help
+      if(this.help?.title && this.help?.description){
+        return  {
+          title: this.help.title,
+          description: this.help.description,
+          icon: this.help?.icon || this.$route.meta.icon,
+          class: this.help?.class || 'q-ml-sm'
+        }
+      }
+
       let response = null
       //Get params from page permission
       let params = this.$helper.getInfoFromPermission(this.$route.meta.permission)
@@ -284,13 +304,16 @@ export default {
         //Search the config
         response = this.$store.getters['qsiteApp/getConfigApp'](configName)
       }
-      //Response
-      return !response ? null : {
-        title: this.title,
-        description: response,
-        icon: this.$route.meta.icon,
-        class: 'q-ml-sm'
+
+      if (response){
+        return {
+          title: this.title,
+          description: response,
+          icon: this.$route.meta.icon,
+          class: 'q-ml-sm'
+        }
       }
+      return false
     }
   },
   methods: {
@@ -366,6 +389,8 @@ export default {
       width 100%
 
   .actions-content
+    .q-field
+      padding-bottom 0 !important
     .q-field__append .q-icon
       color: $tertiary
     @media screen and (max-width: $breakpoint-md)

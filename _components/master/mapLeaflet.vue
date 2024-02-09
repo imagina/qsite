@@ -32,7 +32,13 @@ export default {
     type: {default: 'positionMarkerMap'},
     height: {default: '400px'},
     label: {default: ''},
-    readOnly: {type: Boolean, default: false}
+    readOnly: {type: Boolean, default: false},
+    defaultCenter: {
+      default: () => {
+        return {lat: '4.642129714308486', lng: '-74.11376953125001' }
+      }
+    },
+    emitDefault: {type: Boolean, default: false}
   },
   watch: {
     value: {
@@ -91,7 +97,7 @@ export default {
     //Set default values
     async setDefaultValue() {
       if (!this.marker) this.success = false//Reset map
-      let center = ['4.642129714308486', '-74.11376953125001']//Default center
+      let center = [this.defaultCenter.lat, this.defaultCenter.lng]//Default center
 
       //Validate map types
       switch (this.type) {
@@ -113,10 +119,13 @@ export default {
           }
           break;
       }
-
       setTimeout(() => {
         this.center = this.$clone(center)//Set default center
         this.success = true//Reset map
+        if(this.emitDefault){
+          this.mapZoom = 8
+          this.$emit('input', this.$clone({lat: this.defaultCenter.lat, lng: this.defaultCenter.lng}))
+        }
       }, 500)
     },
     //Fix marker icon image

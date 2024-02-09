@@ -10,6 +10,7 @@
 //components
 import indexAdmin from '@imagina/qsite/_pages/admin/index'
 import indexPanel from '@imagina/qsite/_pages/panel/index'
+import '@imagina/qsite/interface'
 
 export default {
   props: {},

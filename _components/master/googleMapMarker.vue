@@ -15,9 +15,12 @@ export default {
     value: {default: null},
     defaultCenter: {
       default: () => {
-        return {lat: 4.280543843910044, lng: -74.22308176743537}
+        return {lat: 4.642129714308486, lng: -74.11376953125001}
       }
     },
+    emitDefault: {
+      default: false
+    }
   },
   watch: {
     value: {
@@ -55,6 +58,12 @@ export default {
         this.initMap()
         this.initAutocomplete()
         this.setMarkerFromValue()
+        if(this.emitDefault) {
+          this.$emit('input', this.$clone({lat: this.defaultCenter.lat, lng: this.defaultCenter.lng}))
+          setTimeout(() => {
+            this.map.setZoom(8)
+          }, 50)
+        }
       }, 500)
     },
     //Init Map

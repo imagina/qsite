@@ -18,7 +18,6 @@
       <q-form v-bind="structure.form.props" v-if="structure.form.directives.vIf"
               @validation-error="structure.form.events.validateError()">
         <!--Language-->
-
         <div v-bind="structure.wrapperLocales.props" v-show="structure.wrapperLocales.directives.vShow">
           <locales v-model="locale" ref="localeComponent" :form="$refs.formContent"/>
         </div>
@@ -27,24 +26,40 @@
           <!--Columns-->
           <component v-for="(column, keyColumn) in structure.columns()" :key="keyColumn" v-bind="column.props">
             <!--Blocks-->
-            <component v-for="(block, keyBlock) in column.blocks" :key="keyBlock" v-bind="block.props" class="position-relative">
-              <help-text v-if="block.help" :title="block.help.title" :description="block.help.description" class="position-right"/>
+            <component v-for="(block, keyBlock) in column.blocks" :key="keyBlock" v-bind="block.props"
+                       class="position-relative">
+              <help-text v-if="block.help" :title="block.help.title" :description="block.help.description"
+                         class="position-right"/>
               <div :class="block.childClass">
                 <!--Top step Info-->
-                <div class="step-top-content" v-if="block.title || block.description">
+                <div class="step-top-content row items-center q-mb-md"
+                     v-if="block.title || block.description || (canEditForm && (keyBlock == 0))">
                   <!--Title-->
-                  <div class="box-title q-mb-md"
-                       v-if="block.title && !['stepVertical','collapsible'].includes(formType)">
+                  <div class="box-title col-6"
+                       v-show="block.title && !['stepVertical','collapsible'].includes(formType)">
                     {{ block.title }}
                   </div>
+                  <!--Actions-->
+                  <div :class="`col-6 text-right ${block.title ? '' : 'offset-6'}`">
+                    <q-btn text-color="primary" outline rounded v-if="canEditForm && (keyBlock == 0)" dense class="btn-small"
+                           icon="fa-solid fa-pencil"
+                           style="border: 1px solid rgba(0, 13, 71, 0.15)"
+                           @click="$refs.editFormModal.editForm(formId)">
+                      <q-tooltip>
+                        {{ $tr('iforms.cms.label.editForm') }}
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
                   <!--Description-->
-                  <div class="text-caption q-mb-md text-grey-8" v-if="block.description">{{ block.description }}</div>
+                  <div class="text-caption text-grey-8 col-12" v-if="block.description">{{ block.description }}</div>
                 </div>
                 <!--Fields-->
                 <div class="row q-col-gutter-x-md q-mb-sm">
-                  <div v-for="(field, key) in block.fields" :key="key"
-                       v-if="(field.type != 'hidden') && (field.vIf != undefined ? field.vIf : true)"
-                       :class="field.children ? 'col-12' : (field.colClass || field.columns || defaultColClass)">
+                  <div
+                      v-for="(field, key) in block.fields" :key="key"
+                      v-if="hidenFields(field)"
+                      :class="field.children ? 'col-12' : (field.colClass || field.columns || defaultColClass)"
+                  >
                     <!--fake field-->
                     <div v-if="field.type === 'fileList'">
                       <fileListComponent v-bind="field.files" @selected="files => selectedFile(files)"/>
@@ -99,16 +114,53 @@
       <!--Innerloading-->
       <inner-loading :visible="(loading || innerLoading) ? true : false"/>
     </div>
+    <!-- Feedback after submit-->
+    <div v-if="withFeedBack && showFeedBack">
+      <div class="box box-auto-height justify-center">
+        <div class="row">
+          <div class="col-12 text-center q-gutter-y-sm">
+            <div>
+              <q-icon
+                  name="fa-light fa-envelope-circle-check"
+                  color="green"
+                  size="xl"
+              />
+            </div>
+            <div>
+              <p class="text-subtitle1">
+                {{ successText }}
+              </p>
+            </div>
+            <div>
+              <q-btn
+                  unelevated
+                  rounded
+                  no-caps
+                  @click="setNewForm"
+                  :label="$tr('iforms.cms.feedBack.newForm')"
+                  type="button"
+                  color="primary"
+                  icon="fa-light fa-envelope"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Edit form Modal-->
+    <edit-form-modal ref="editFormModal" @hide="init"/>
   </div>
 </template>
 
 <script>
 import fileListComponent from '@imagina/qsite/_components/master/fileList';
 import layoutStore from '@imagina/qsite/_store/layoutStore.js'
+import editFormModal from '@imagina/qform/_components/editFormModal/index.vue'
 
 export default {
   components: {
-    fileListComponent
+    fileListComponent,
+    editFormModal,
   },
   props: {
     value: {
@@ -118,8 +170,8 @@ export default {
     },
     help: {
       type: Object,
-      default(){
-        return { description: "Some description..." }
+      default() {
+        return {description: "Some description..."}
       }
     },
     loading: {type: Boolean, default: false},
@@ -142,7 +194,15 @@ export default {
       validator: (value) => [1, 2, 3].includes(value)
     },
     noResetWithBlocksUpdate: {type: Boolean, default: false},
-    boxStyle: {type: Boolean, default: true}
+    boxStyle: {type: Boolean, default: true},
+    noSave: {type: Boolean, default: false},
+    withFeedBack: {type: Boolean, default: false},
+    requestParams: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
   },
   watch: {
     value: {
@@ -181,7 +241,9 @@ export default {
       locale: {},
       step: 0,
       innerLoading: false,
-      formBlocks: false
+      formBlocks: false,
+      showForm: true,
+      showFeedBack: false,
     }
   },
   computed: {
@@ -449,7 +511,15 @@ export default {
       }
 
       //Add captcha field
-      if (this.useCaptcha && blocks.length) blocks[blocks.length - 1].fields.captcha = {type: 'captcha'}
+      if (this.useCaptcha && blocks.length) {
+        const lastBlock = blocks[blocks.length - 1]
+
+        if (!Array.isArray(lastBlock.fields)) {
+          lastBlock.fields.captcha = {type: 'captcha'}
+        } else {
+          lastBlock.fields.push({type: 'captcha', name: 'captcha', value: ''})
+        }
+      }
 
       //Validate if field should be translatable
       blocks.forEach((block, blockKey) => {
@@ -550,6 +620,19 @@ export default {
       })
       //Response
       return fields
+    },
+    //Returns success text after submit
+    successText() {
+      return this.formBlocks.successText ?? this.$tr('iforms.cms.feedBack.message')
+    },
+    hidenFields() {
+      return field => (field.type != 'hidden') &&
+          (field.vIf != undefined ? field.vIf : true)
+
+    },
+    // Validate if the dynamicForm is a backendForm and can edit it
+    canEditForm() {
+      return this.formId && this.$auth.hasAccess('iforms.forms.edit')
     }
   },
   methods: {
@@ -574,7 +657,10 @@ export default {
         //Request Params
         let requestParams = {
           refresh: true,
-          params: {include: 'blocks.fields'}
+          params: {
+            include: 'blocks.fields',
+            ...this.requestParams,
+          },
         }
 
         //Request
@@ -761,6 +847,14 @@ export default {
               this.innerLoading = false
               this.reset()
               this.$emit('sent', this.$clone(this.locale.form))
+
+              //feedBack
+              if (this.withFeedBack && response?.data) {
+                this.showForm = false;
+                this.showFeedBack = true
+                this.$emit('feedBack', this.$clone(response.data))
+              }
+
             }).catch(error => {
               this.innerLoading = false
             })
@@ -784,6 +878,12 @@ export default {
       const fileId = file.length === 0 ? null : file[0].id;
       layoutStore().setSelectedLayout(fileId);
     },
+    setNewForm() {
+      this.reset()
+      this.locale.form = false
+      this.init()
+      this.$emit('newForm')
+    }
   }
 }
 </script>
@@ -791,12 +891,15 @@ export default {
 <style lang="stylus">
 #dynamicFormComponentContent
   //min-height 150px
-  .position-relative{
+
+  .position-relative {
     position: relative
   }
+
   .position-right
     position absolute
     right 16px
+
   #stepperContent
     padding 0
 

@@ -55,6 +55,7 @@ export default {
           type: 'crud',
           props: {
             crudType: 'select',
+            imageField: 'mediaFiles.mainimage.url',
             crudData: import('@imagina/qblog/_crud/categories'),
             customData: {
               read: {
@@ -96,7 +97,8 @@ export default {
           type: 'select',
           props: {
             label: 'type: select',
-            options: []
+            options: [],
+            imageField: 'mainImage',
           },
           loadOptions: {
             apiRoute: 'apiRoutes.quser.users',
@@ -106,7 +108,14 @@ export default {
         treeSelect: {
           ...globalData,
           type: 'treeSelect',
-          props: {label: 'type: treeSelect'}
+          props: {
+            label: 'type: treeSelect',
+            imageField: 'mediaFiles.mainimage.url',
+          },
+          loadOptions: {
+            apiRoute: 'apiRoutes.qcommerce.categories',
+            select: {label: 'title', id: 'id'},
+          }
         },
         html: {
           ...globalData,
