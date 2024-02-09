@@ -32,6 +32,11 @@ export default {
               format: val => val ? val.map(item => `${item.firstName} ${item.lastName}`).join(', ') : ''
             },
             {
+              name: 'emails', label: this.$trp('isite.cms.label.email'), field: 'users',
+              align: 'left', classes: 'ellipsis', style: 'max-width : 250px',
+              format: val => val ? val.map(item => item.email).join(', ') : ''
+            },
+            {
               name: 'createdAt', label: this.$tr('isite.cms.form.createdAt'), field: 'createdAt',
               format: val => val ? this.$trd(val) : '-',
               align: 'left', sortable: true
