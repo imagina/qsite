@@ -1,4 +1,4 @@
-import cache from "@imagina/qsite/_plugins/cache";
+import cache from "modules/qsite/_plugins/cache";
 import clone from 'lodash.clonedeep'
 
 class Filter {

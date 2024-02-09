@@ -8,7 +8,7 @@
 </template>
 <script>
   //Components
-  import googleMap from '@imagina/qsite/_components/master/googleMap'
+  import googleMap from 'modules/qsite/_components/master/googleMap'
 
   export default {
     props: {

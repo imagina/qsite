@@ -16,7 +16,7 @@
           tw-pt-48
           tw-bg-white
           tw-bg-opacity-75
-          tw-z-20 
+          tw-z-20
         "
       >
         <q-spinner color="primary" size="2em" />
@@ -38,26 +38,26 @@
           tw-transition
           tw-duration-150
           tw-ease-out
-          hover:tw-ease-in 
+          hover:tw-ease-in
           hover:tw--translate-y-1 icon-plus
         "
         v-if="!disableCrud && hover && columnData.type !== 2"
         @click="addColumnKanban"
       >
-        <i 
+        <i
           class="
-            fas 
-            fa-plus 
-            tw-text-gray-400 
-            tw-drop-shadow-lg" 
+            fas
+            fa-plus
+            tw-text-gray-400
+            tw-drop-shadow-lg"
         />
       </button>
       <div
         class="
-          tw-flex 
-          tw-w-full 
-          tw-py-2 
-          tw-px-3 
+          tw-flex
+          tw-w-full
+          tw-py-2
+          tw-px-3
           tw-rounded-lg
           arrowKanbanName
         "
@@ -66,7 +66,7 @@
         :style="{ background: columnData.color }"
       >
         <div class="arrowKanban" :style="{ background: columnData.color }"></div>
-        <div 
+        <div
           class="tw-flex tw-w-full kanbanName"
         >
           <div class="tw-w-10/12">
@@ -82,7 +82,7 @@
               "
               :class="{ 'tw-text-white': columnData.color }"
             >
-              {{ columnData.title }} 
+              {{ columnData.title }}
             </p>
             <dynamic-field
               v-else
@@ -95,11 +95,11 @@
           <div
             v-if="!disableCrud && arrowKanbanNameHover && !columnData.new"
             class="
-              tw-w-1/12 
-              tw-text-xs 
-              tw-cursor-pointer 
+              tw-w-1/12
+              tw-text-xs
+              tw-cursor-pointer
               icon-edit "
-            :class="{ 'tw-text-white': columnData.color }" 
+            :class="{ 'tw-text-white': columnData.color }"
           >
             <q-btn
               flat
@@ -114,10 +114,10 @@
           </div>
           <div
             v-if="!disableCrud && arrowKanbanNameHover && !columnData.new"
-            class="tw-w-1/12 
-              tw-text-xs 
+            class="tw-w-1/12
+              tw-text-xs
               tw-cursor-pointer icon-edit"
-            :class="{ 'tw-text-white': columnData.color }" 
+            :class="{ 'tw-text-white': columnData.color }"
           >
             <q-btn
               flat
@@ -127,8 +127,8 @@
               size="6px"
               @click="addCard(columnData.id)"
             >
-              <q-tooltip> 
-                  {{ $trp('isite.cms.label.refresh') }} 
+              <q-tooltip>
+                  {{ $trp('isite.cms.label.refresh') }}
               </q-tooltip>
             </q-btn>
           </div>
@@ -182,22 +182,22 @@
         </div>
       </div>
       <div class="c-plus">
-        <q-btn 
-          flat 
+        <q-btn
+          flat
           class="
-            tw-w-full 
-            hover:tw-text-white 
+            tw-w-full
+            hover:tw-text-white
             hover:tw-bg-gray-200"
           @click="openFormComponentModal(columnData.id, columnData.title)"
           :disabled="typeof columnData.id == 'string'"
           >
-          <i class="fa-solid fa-plus"></i> 
+          <i class="fa-solid fa-plus"></i>
         </q-btn>
       </div>
-      <div class="c-body 
-                  tw-shadow 
-                  tw-overflow-y-auto 
-                  tw-overflow-x-hidden 
+      <div class="c-body
+                  tw-shadow
+                  tw-overflow-y-auto
+                  tw-overflow-x-hidden
                   tw-mb-4 tw-px-2"
                 >
         <draggable
@@ -254,8 +254,8 @@
 
 <script>
 import draggable from "vuedraggable";
-import kanbanCard from "@imagina/qsite/_components/master/kanban/kanbanCard.vue";
-import kanbanStore from "@imagina/qsite/_components/master/kanban/store/kanbanStore.js";
+import kanbanCard from "modules/qsite/_components/master/kanban/kanbanCard.vue";
+import kanbanStore from "modules/qsite/_components/master/kanban/store/kanbanStore.js";
 const modelColumn = {
     id: null,
     title: null,
@@ -284,7 +284,7 @@ export default {
   },
   inject: [
     'saveStatusOrdering',
-    'saveColumn', 
+    'saveColumn',
     'addKanbanCard',
     'deleteColumn',
     'updateColumn',

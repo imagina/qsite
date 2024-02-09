@@ -113,8 +113,8 @@
 </template>
 
 <script>
-import kanbanColumn from "@imagina/qsite/_components/master/kanban/kanbanColumn.vue";
-import kanbanStore from "@imagina/qsite/_components/master/kanban/store/kanbanStore.js";
+import kanbanColumn from "modules/qsite/_components/master/kanban/kanbanColumn.vue";
+import kanbanStore from "modules/qsite/_components/master/kanban/store/kanbanStore.js";
 import automationRules from "./automationRules/index.vue";
 import draggable from "vuedraggable";
 import formComponent from './modals/form.vue';

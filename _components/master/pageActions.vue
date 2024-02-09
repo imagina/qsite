@@ -93,10 +93,10 @@
 </template>
 <script>
 //Components
-import masterExport from "@imagina/qsite/_components/master/masterExport"
-import masterSynchronizable from "@imagina/qsite/_components/master/masterSynchronizable"
-import masterFilter from "@imagina/qsite/_components/master/masterFilter"
-import eventBus from '@imagina/qsite/_plugins/eventBus'
+import masterExport from "modules/qsite/_components/master/masterExport"
+import masterSynchronizable from "modules/qsite/_components/master/masterSynchronizable"
+import masterFilter from "modules/qsite/_components/master/masterFilter"
+import eventBus from 'modules/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {

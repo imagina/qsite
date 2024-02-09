@@ -1,6 +1,6 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
 import {debounce} from 'quasar';
-import handleGrid from '@imagina/qsite/_components/v3/handleGrid/index.vue';
+import handleGrid from 'modules/qsite/_components/v3/handleGrid/index.vue';
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties

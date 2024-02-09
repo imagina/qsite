@@ -1,5 +1,5 @@
 import Vue, { computed, onBeforeMount, getCurrentInstance } from "vue";
-import store from "@imagina/qsite/_components/master/kanban/modals/analytics/store";
+import store from "modules/qsite/_components/master/kanban/modals/analytics/store";
 import changeDate from '../actions/changeDate'
 import show from '../actions/show'
 

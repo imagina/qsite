@@ -1,5 +1,5 @@
 import {computed, reactive} from "vue";
-//import {StateKeyInterface} from '@imagina/qsite/_components/v3/demo/interface'
+//import {StateKeyInterface} from 'modules/qsite/_components/v3/demo/interface'
 
 interface StateInterface {
     itemSelected: any

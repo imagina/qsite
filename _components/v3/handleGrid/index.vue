@@ -60,7 +60,7 @@
 </template>
 <script>
 import {defineComponent} from 'vue'
-import controller from "@imagina/qsite/_components/v3/handleGrid/controller";
+import controller from "modules/qsite/_components/v3/handleGrid/controller";
 //components
 import draggable from 'vuedraggable'
 

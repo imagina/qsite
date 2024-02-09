@@ -15,7 +15,7 @@ import {
     STEP_PLANS,
     STEP_SUMMARY,
     STEP_AI,
-} from '@imagina/qsite/_components/organizations/wizard/steps/model/constant';
+} from 'modules/qsite/_components/organizations/wizard/steps/model/constant';
 
 
 

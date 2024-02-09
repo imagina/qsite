@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import drawersBlank from '@imagina/qsite/_components/admin/theme2/drawersBlank.vue'
+  import drawersBlank from 'modules/qsite/_components/admin/theme2/drawersBlank.vue'
   export default {
     components: {
       drawersBlank

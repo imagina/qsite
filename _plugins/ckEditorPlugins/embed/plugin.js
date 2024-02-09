@@ -1,5 +1,5 @@
-import embedModal from '@imagina/qsite/_plugins/ckEditorPlugins/embed/dialog'
-import { getUrlParamValue, isFacebookVideo, isFacebookPost, getInstagramId, availableUrls } from '@imagina/qsite/_plugins/ckEditorPlugins/embed/utils';
+import embedModal from 'modules/qsite/_plugins/ckEditorPlugins/embed/dialog'
+import { getUrlParamValue, isFacebookVideo, isFacebookPost, getInstagramId, availableUrls } from 'modules/qsite/_plugins/ckEditorPlugins/embed/utils';
 class PluginEmbed {
     load(CKEDITOR) {
         CKEDITOR.plugins.add('simplebox', {
@@ -36,11 +36,11 @@ class PluginEmbed {
                             if (url.includes(availableUrls.facebook) || url.includes(availableUrls.facebookWatch)) {
                                 if (isFacebookVideo(url)) {
                                     iframe.innerHTML = `
-                          <iframe 
+                          <iframe
                               src="https://www.facebook.com/plugins/video.php?href=${url}&show_text=0&width=560
                               https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F20531316728%2Fposts%2F10154009990506729%2F&width=500&show_text=true&height=292&appId"
-                              width="560" height="315" 
-                              style="border:none;overflow:hidden" 
+                              width="560" height="315"
+                              style="border:none;overflow:hidden"
                               scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"
                           ></iframe>
                         `;
@@ -48,7 +48,7 @@ class PluginEmbed {
                                 }
                                 if (isFacebookPost(url)) {
                                     iframe.innerHTML = `
-                          <iframe 
+                          <iframe
                               src="https://www.facebook.com/plugins/post.php?href=${url}&width=500&show_text=true&height=292&appId" width="500" height="292" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
                           </iframe>
                         `;

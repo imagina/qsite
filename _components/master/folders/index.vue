@@ -16,7 +16,7 @@
         handle=".folder-title-drag"
         @change="saveOrderFolders"
       >
-        <folder 
+        <folder
             v-for="folder in folderList"
             :key="folder.id"
             :folder="folder"
@@ -31,7 +31,7 @@ import draggable from "vuedraggable";
 import reportList from './reportList.vue';
 import folder from './folderList.vue';
 import foldersStore from './store/foldersStore.js';
-import cache from '@imagina/qsite/_plugins/cache';
+import cache from 'modules/qsite/_plugins/cache';
 
 export default {
   props: {

@@ -3,7 +3,7 @@ root component of the app, where all global subcomponents are located
 
 # Installation
 ```bash
-npm i @imagina/qsite@1.0.0
+npm i ./src/modules/qsite@1.0.0
 ```
 
 # Usage
@@ -11,23 +11,23 @@ In this root component, there are several global sub components such as tables a
 
 ## Charts component
 
-displays the following graphs. 
+displays the following graphs.
 **line chart, bar chart, pie chart, and donut chart**.
 
-### Usage 
+### Usage
 each graph must send these three values ​​by props.
 - type: the type of chart to display.
 - dataLabel: the labels to show.
 - dataSet: the data to be displayed
 
- 
+
 ```js
  <template>
   <q-charts :chartsData="chartData" />
  <template />
 
 <script>
-import QCharts from '@imagina/qsite/_components/master/charts.vue'
+import QCharts from 'modules/qsite/_components/master/charts.vue'
 export default {
   component: { Qchart }
   computed: {
@@ -46,7 +46,7 @@ export default {
   }
 }
 <script/>
-``` 
+```
 
 
 ## Contributing

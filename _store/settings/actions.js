@@ -1,7 +1,7 @@
-import cache from '@imagina/qsite/_plugins/cache'
+import cache from 'modules/qsite/_plugins/cache'
 import axios from 'axios'
-import config from '@imagina/qsite/_config/master/index'
-import crud from '@imagina/qcrud/_services/baseService'
+import config from 'modules/qsite/_config/master/index'
+import crud from 'modules/qcrud/_services/baseService'
 import {colors, AddressbarColor} from 'quasar'
 import Quasar from 'quasar'
 
@@ -128,7 +128,7 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {locale: false, v
     })
 
     //Set default language to i18n
-    import(`@imagina/qsite/_i18n/master/index`).then(({default: messages}) => {
+    import(`modules/qsite/_i18n/master/index`).then(({default: messages}) => {
       try {
         Vue.i18n.locale = locale
         Vue.i18n.setLocaleMessage(locale, messages[locale])

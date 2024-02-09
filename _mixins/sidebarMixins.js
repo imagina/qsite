@@ -1,5 +1,5 @@
 //class
-import AutoLoadSidebars from '@imagina/qsite/_config/master/application/menu'
+import AutoLoadSidebars from 'modules/qsite/_config/master/application/menu'
 
 export default {
   created() {

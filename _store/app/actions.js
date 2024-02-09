@@ -1,12 +1,12 @@
 //Plugins
-import config from '@imagina/qsite/_config/master/index'
-import cache from '@imagina/qsite/_plugins/cache'
-import crud from "@imagina/qcrud/_services/baseService";
+import config from 'modules/qsite/_config/master/index'
+import cache from 'modules/qsite/_plugins/cache'
+import crud from "modules/qcrud/_services/baseService";
 import cloneDeep from 'lodash.clonedeep'
 import axios from "axios";
 import { Quasar, Loading, setCssVar, AddressbarColor } from 'quasar';
-import filter from '@imagina/qsite/_plugins/filter'
-import helper from '@imagina/qsite/_plugins/helper'
+import filter from 'modules/qsite/_plugins/filter'
+import helper from 'modules/qsite/_plugins/helper'
 import configApp from "src/config/app"
 import moment from "moment";
 import momentz from "moment-timezone";
@@ -210,7 +210,7 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
     })
 
     //Set default language to i18n
-    //import(`@imagina/qsite/_i18n/master/index`).then(({default: messages}) => {
+    //import(`modules/qsite/_i18n/master/index`).then(({default: messages}) => {
     dispatch('qtranslationMaster/GET_TRANSLATIONS', {refresh: false}, {root: true}).then(({default: messages}) => {
       try {
         Vue.i18n.locale = locale

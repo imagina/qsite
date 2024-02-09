@@ -25,10 +25,10 @@
     <div class="step-loading" v-show="loading">
       <div></div>
       <div></div>
-    </div>    
+    </div>
     <!-- keep-alive -->
     <div class="page-wizard tw-w-full tw-relative">
-      <q-stepper 
+      <q-stepper
         v-model="currentStep"
         ref="stepper"
       >
@@ -37,7 +37,7 @@
               <div class="tw-pt-3 md:tw-pt-4 tw-pb-1">
                 <div class="row justify-between">
                   <div class="col-4">
-                    <q-btn 
+                    <q-btn
                       rounded
                       no-caps
                       :disabled="!activatePreviousButton"
@@ -82,9 +82,9 @@
           :done="step.done"
           class="q-pb-xl"
           :style="(step.id == themes) ? 'max-height: calc(100vh - 180px);' : ''"
-        >        
+        >
           <component ref="stepComponent"
-            :is="step.component" 
+            :is="step.component"
             @updateData="updateData(data)"
             @nextStep="nextStep()"
             v-if="!loading"
@@ -96,19 +96,19 @@
   </div>
 </template>
 <script>
-import modelSteps from '@imagina/qsite/_components/organizations/wizard/steps/model/steps.js';
-import storeWizard from '@imagina/qsite/_components/organizations/wizard/steps/store/index.ts';
-import services  from '@imagina/qsite/_components/organizations/wizard/steps/services/services.ts';
+import modelSteps from 'modules/qsite/_components/organizations/wizard/steps/model/steps.js';
+import storeWizard from 'modules/qsite/_components/organizations/wizard/steps/store/index.ts';
+import services  from 'modules/qsite/_components/organizations/wizard/steps/services/services.ts';
 
 import {
   STEP_WELCOME,
   STEP_TERMS,
-  STEP_COMPANY,  
+  STEP_COMPANY,
   STEP_THEMES,
   STEP_SUMMARY,
   STEP_AI,
   PLAN_BASE_ID
-} from '@imagina/qsite/_components/organizations/wizard/steps/model/constant';
+} from 'modules/qsite/_components/organizations/wizard/steps/model/constant';
 
 export default {
   beforeDestroy() {},
@@ -121,13 +121,13 @@ export default {
     },
     showStepperNavigation(){
       return  this.currentStep != STEP_WELCOME
-    }, 
+    },
     activatePreviousButton(){
       return storeWizard.previousStepButton;
     },
     activateNextButton(){
       return storeWizard.nextStepButton;
-    }, 
+    },
     getStep(){
       return storeWizard.step
     }
@@ -140,8 +140,8 @@ export default {
       currentStep: 0,
       progress: 0,
       steps: modelSteps,
-      progressPercent: 0,      
-      urlBase: this.$store.state.qsiteApp.baseUrl,      
+      progressPercent: 0,
+      urlBase: this.$store.state.qsiteApp.baseUrl,
       dataUrl: { // datos que vienen de la url
         planId: '',
         billingCycle: '',
@@ -151,20 +151,20 @@ export default {
       summary: STEP_SUMMARY,
       themes: STEP_THEMES,
       terms: STEP_TERMS,
-      buttonLoading: false,     
+      buttonLoading: false,
     }
-  },  
+  },
   mounted() {
     this.$nextTick(async function () {
       this.init();
     })
-  },  
+  },
   methods: {
     async init() {
       await this.getInfo();
       await this.configProgress();
     },
-    
+
     async getInfo() {
       this.loading = true
       try {
@@ -173,20 +173,20 @@ export default {
         console.log(error);
       }
 
-      
+
       /* check and get info */
       storeWizard.infoWizard = await services().getInfoWizard()
 
       /* check and get categories */
-      let categories = await this.$cache.get.item('org-wizard-categories');      
+      let categories = await this.$cache.get.item('org-wizard-categories');
       if( !categories?.length>0){
         categories = await services().getCategories()
         this.$cache.set('org-wizard-categories', categories)
       }
-      storeWizard.categories = categories      
+      storeWizard.categories = categories
 
       /* check and get plans */
-      let plans = await this.$cache.get.item('org-wizard-plans');      
+      let plans = await this.$cache.get.item('org-wizard-plans');
       if( !plans?.length>0){
         plans = await services().getPlans(PLAN_BASE_ID)
         this.$cache.set('org-wizard-plans', plans)
@@ -194,13 +194,13 @@ export default {
       storeWizard.plans = plans
 
       /* check and set step */
-      storeWizard.step = await this.$cache.get.item('org-wizard-step')      
-      storeWizard.step = storeWizard.step ?? STEP_WELCOME      
-      
+      storeWizard.step = await this.$cache.get.item('org-wizard-step')
+      storeWizard.step = storeWizard.step ?? STEP_WELCOME
+
       /* check and get user data */
-      const data = await this.$cache.get.item('org-wizard-data')      
+      const data = await this.$cache.get.item('org-wizard-data')
       storeWizard.data.user = storeWizard.data.user ?? data?.user
-      storeWizard.data.terms = data?.terms ? data.terms : storeWizard.data.terms      
+      storeWizard.data.terms = data?.terms ? data.terms : storeWizard.data.terms
       storeWizard.data.organization = data?.organization ?? ''
       storeWizard.data.category = data?.category ?? false
       storeWizard.data.plan = data?.plan ?? false
@@ -210,17 +210,17 @@ export default {
     },
 
     async configProgress() {
-      this.progressPercent = 1 / (this.steps.length - 1);      
+      this.progressPercent = 1 / (this.steps.length - 1);
       this.currentStep = storeWizard.step
       this.progress = this.progressPercent * this.currentStep;
     },
 
-    async nextStep(){      
+    async nextStep(){
       // check organization name
       if(this.currentStep == STEP_COMPANY){
         this.buttonLoading = true;
         const companyExist = await this.$refs.stepComponent[0].checkOrganizationName(storeWizard.data.organization)
-        this.buttonLoading = false;        
+        this.buttonLoading = false;
         if(companyExist && companyExist?.title){
           this.$alert.info({
             mode: 'modal',
@@ -234,10 +234,10 @@ export default {
 
       /* validate Ai form */
       if(this.currentStep == STEP_AI){
-        if(storeWizard.data.form.check){          
+        if(storeWizard.data.form.check){
           let validate = await this.$refs.stepComponent[0].verifyForm();
           if(!validate){
-            return false;          
+            return false;
           }
         }
       }
@@ -245,18 +245,18 @@ export default {
       /* submit wizard */
       if(this.currentStep == STEP_SUMMARY){
         this.redirectAfterWizard()
-        return false 
+        return false
       }
-      
+
       this.currentStep+= 1;
       storeWizard.step = this.currentStep;
-      this.updateData()      
+      this.updateData()
       this.configProgress()
       this.$refs.stepper.next();
-      
+
     },
     previousStep() {
-      this.currentStep-=1;      
+      this.currentStep-=1;
       storeWizard.step = this.currentStep;
       this.updateData()
       this.configProgress()
@@ -281,7 +281,7 @@ export default {
         planId: storeWizard.data.plan.product.entity.id, //Keep this to works with local type
         formIA: storeWizard.data.form.data //Keep this to works with local type
       }
-      
+
       //Validate and get the url to redirect
       switch (wizardType) {
         case 'weygo':
@@ -290,8 +290,8 @@ export default {
           //Add parameters to the url
           Object.keys(params).forEach(paramName => url += `&${paramName}=${params[paramName]}`)
           break
-        default://Local          
-          
+        default://Local
+
           this.$alert.info({
             mode: 'modal',
             title: this.siteName,
@@ -300,9 +300,9 @@ export default {
             actions: []
           })
           //Request
-          const response = await this.$crud.create('apiRoutes.qplan.buy', params).catch(error => {          
+          const response = await this.$crud.create('apiRoutes.qplan.buy', params).catch(error => {
             this.$alert.error({message: `${this.$tr('isite.cms.message.recordNoCreated')}`})
-          })          
+          })
           if (response.data && response.data.redirectTo) url = response.data.redirectTo
           break
       }
@@ -316,7 +316,7 @@ export default {
         this.$helper.openExternalURL(url, false)
       }
     },
-    
+
   }
 }
 </script>

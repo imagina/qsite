@@ -1,5 +1,5 @@
-import crud from '@imagina/qcrud/_services/baseService'
-import helper from '@imagina/qsite/_plugins/helper'
+import crud from 'modules/qcrud/_services/baseService'
+import helper from 'modules/qsite/_plugins/helper'
 
 export default class Hook {
   constructor(store) {

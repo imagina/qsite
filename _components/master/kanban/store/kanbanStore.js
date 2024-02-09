@@ -1,5 +1,5 @@
 import { reactive } from 'vue';
-import baseService from '@imagina/qcrud/_services/baseService.js';
+import baseService from 'modules/qcrud/_services/baseService.js';
 import getKanbanCardList from './actions/getKanbanCardList.js';
 import getColumns from './actions/getColumns.js';
 import deleteColumn from './actions/deleteColumn.js';

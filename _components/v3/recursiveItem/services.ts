@@ -1,4 +1,4 @@
-import baseService from '@imagina/qcrud/_services/baseService'
+import baseService from 'modules/qcrud/_services/baseService'
 
 export default {
   // requestName(refresh = false, params = {}): Promise<any> {

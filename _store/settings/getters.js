@@ -1,4 +1,4 @@
-import array from '@imagina/qsite/_plugins/array'
+import array from 'modules/qsite/_plugins/array'
 import cloneDeep from 'lodash.clonedeep'
 
 export const getState = (state) => (name) => {

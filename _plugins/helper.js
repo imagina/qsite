@@ -1,4 +1,4 @@
-import alert from '@imagina/qsite/_plugins/alert'
+import alert from 'modules/qsite/_plugins/alert'
 import Vue from 'vue'
 
 class Helper {

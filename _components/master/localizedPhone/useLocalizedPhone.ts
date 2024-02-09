@@ -1,5 +1,5 @@
 import { ref, computed, onMounted, watchEffect } from 'vue';
-import getCountries from '@imagina/qsite/_components/master/localizedPhone/actions/getCountries';
+import getCountries from 'modules/qsite/_components/master/localizedPhone/actions/getCountries';
 export default function useLocalizedPhone(props: any = {}, emit: any = null) {
   const valuePhone = computed(() => props.value);
   const countryDefault = {name: 'Colombia', iso3: 'COL', callingCode: 57 };
@@ -44,7 +44,7 @@ export default function useLocalizedPhone(props: any = {}, emit: any = null) {
   }
   async function setCountries() {
     listCountries.value = await getCountries();
-  } 
+  }
   async function init() {
     const country: any = listCountries.value.find(item => {
       const country: any = item;
@@ -66,7 +66,7 @@ export default function useLocalizedPhone(props: any = {}, emit: any = null) {
     searchTerm.value = '';
     emit("input", `${seletdCountry.value.callingCode}${inputDataComputed.value}`);
   }
-  
+
   watchEffect(async () => {
     if (!isDrop.value) {
       searchTerm.value = '';

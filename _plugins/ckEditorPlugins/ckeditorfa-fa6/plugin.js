@@ -1,15 +1,15 @@
-import pluginFaModal from '@imagina/qsite/_plugins/ckEditorPlugins/ckeditorfa-fa6/dialogs/ckeditorfa.js'
+import pluginFaModal from 'modules/qsite/_plugins/ckEditorPlugins/ckeditorfa-fa6/dialogs/ckeditorfa.js'
 
 class PluginFa {
 	load(CKEDITOR) {
-		CKEDITOR.plugins.add('ckeditorfa', { 
+		CKEDITOR.plugins.add('ckeditorfa', {
 			icons:'ckeditorfa',
-			init:function(editor){				
+			init:function(editor){
 				editor.addCommand('ckeditorfa', new CKEDITOR.dialogCommand('ckeditorFaDialog', { allowedContent:'span(!fa-*)' } ));
 				editor.ui.addButton('ckeditorfa', { label:'FontAwesome6 icons',command:'ckeditorfa',toolbar:'insert' });
 				pluginFaModal.load(CKEDITOR)
 				CKEDITOR.dialog.add('ckeditorFaDialog', pluginFaModal);
-			},		
+			},
 		});
 	}
 }

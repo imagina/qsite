@@ -17,10 +17,10 @@
 </template>
 <script>
 //Mixins
-import zoneConfigMixing from "@imagina/qmedia/_mixins/zoneConfigMixins"
+import zoneConfigMixing from "modules/qmedia/_mixins/zoneConfigMixins"
 //components
-import fileList from '@imagina/qsite/_components/master/fileList'
-import eventBus from '@imagina/qsite/_plugins/eventBus'
+import fileList from 'modules/qsite/_components/master/fileList'
+import eventBus from 'modules/qsite/_plugins/eventBus'
 
 export default {
   name: 'uploaderComponentMaster',

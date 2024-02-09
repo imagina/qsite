@@ -18,7 +18,7 @@ class AutoLoadTranslations {
     Object.keys(this.languages).forEach(lang => {
       //Load core translations
       try {
-        let core = require(`@imagina/qsite/_i18n/master/${lang}/index`).default
+        let core = require(`modules/qsite/_i18n/master/${lang}/index`).default
         this.languages[lang] = {...this.languages[lang], ...core}
       } catch (e) {
       }
@@ -41,7 +41,7 @@ class AutoLoadTranslations {
       this.modules.forEach(moduleName => {
         //Search module y node_modules
         try {
-          let translation = require(`@imagina/${moduleName}/_i18n/${lang}/index`).default
+          let translation = require(`modules/${moduleName}/_i18n/${lang}/index`).default
           this.languages[lang][moduleName] = translation
         } catch (e) {
         }
@@ -49,7 +49,7 @@ class AutoLoadTranslations {
         //Search module in project
         if (!process.env.isExtension) {
           try {
-            let translation = require(`src/modules/${moduleName}/_i18n/${lang}/index`).default
+            let translation = require(`modules/${moduleName}/_i18n/${lang}/index`).default
             this.languages[lang][moduleName] = translation
           } catch (e) {
           }

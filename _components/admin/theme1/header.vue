@@ -15,7 +15,7 @@
 </template>
 <script>
 //Components
-import siteActions from '@imagina/qsite/_components/master/siteActions'
+import siteActions from 'modules/qsite/_components/master/siteActions'
 
 export default {
   props: {},

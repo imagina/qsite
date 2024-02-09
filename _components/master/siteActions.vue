@@ -3,9 +3,9 @@
     <div :class="`row q-gutter-${gutter}`">
       <!--Actions-->
       <template v-for="(btn, keyAction) in actions.buttons">
-        <q-btn  
-          v-if="btn?.vIf != undefined ? btn.vIf : true" 
-          :key="keyAction" 
+        <q-btn
+          v-if="btn?.vIf != undefined ? btn.vIf : true"
+          :key="keyAction"
           v-bind="btn.props"
           @click="btn.action != undefined ? btn.action() : null"
         >
@@ -68,8 +68,8 @@
             <!--Right content-->
             <div class="column text-left">
               <template v-for="(btn, keyAction) in actions.menu">
-                <q-btn 
-                  :key="keyAction" 
+                <q-btn
+                  :key="keyAction"
                   v-bind="btn.props"
                   v-if="btn?.vIf != undefined ? btn.vIf : true" v-close-popup padding="xs md"
                   @click="btn.action != undefined ? btn.action() : null"
@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-import eventBus from '@imagina/qsite/_plugins/eventBus'
+import eventBus from 'modules/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {

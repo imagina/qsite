@@ -4,7 +4,7 @@
 </template>
 <script lang="ts">
 import {defineComponent} from 'vue'
-import controller from '@imagina/qsite/_components/v3/demo/controller'
+import controller from 'modules/qsite/_components/v3/demo/controller'
 
 export default defineComponent({
   props: {},

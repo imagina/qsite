@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-import controller from "@imagina/qsite/_components/v3/recursiveItem/controller";
+import controller from "modules/qsite/_components/v3/recursiveItem/controller";
 
 export default {
   name: 'recursiveMenu',

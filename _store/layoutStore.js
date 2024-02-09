@@ -1,5 +1,5 @@
 import Vue, {reactive, getCurrentInstance} from "vue";
-import baseService from '@imagina/qcrud/_services/baseService.js';
+import baseService from 'modules/qcrud/_services/baseService.js';
 
 //[ptc]const proxy = getCurrentInstance().appContext.config.globalProperties
 const data = {

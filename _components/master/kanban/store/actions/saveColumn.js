@@ -1,5 +1,5 @@
 import kanbanStore from '../kanbanStore.js';
-import baseService from '@imagina/qcrud/_services/baseService.js';
+import baseService from 'modules/qcrud/_services/baseService.js';
 
 export default async function saveColumn(data) {
     try {

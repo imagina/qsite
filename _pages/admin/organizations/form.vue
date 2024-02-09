@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import layoutStore from '@imagina/qsite/_store/layoutStore.js'
+import layoutStore from 'modules/qsite/_store/layoutStore.js'
 
 export default {
   props: {

@@ -1,6 +1,6 @@
 import Vue, {reactive, computed} from 'vue';
 
-import {  
+import {
   STEP_NAME_TERMS,
   STEP_NAME_COMPANY,
   STEP_NAME_CATEGORIES,
@@ -9,7 +9,7 @@ import {
   STEP_NAME_WELCOME,
   STEP_NAME_SUMMARY,
   STEP_NAME_AI,
-} from '@imagina/qsite/_components/organizations/wizard/steps/model/constant';
+} from 'modules/qsite/_components/organizations/wizard/steps/model/constant';
 
 function findInfoWizard(key){
   return state.infoWizard.find((item) => item?.systemName === key);
@@ -30,7 +30,7 @@ const state = reactive({
   infoWizard: [{systemName:''}],
   categories: false,
   step: 0,
-  previousStepButton: true, 
+  previousStepButton: true,
   nextStepButton: true,
   data
 })
@@ -48,7 +48,7 @@ const store = computed(() => ({
   set categories(value){
     state.categories = value
   },
-  
+
   get step(){
     return state.step;
   },
@@ -74,8 +74,8 @@ const store = computed(() => ({
   set data(value){
     state.data = value
   },
- // data atributes  
-  
+ // data atributes
+
   // getters //
   get infoWelcome(){
     return findInfoWizard(STEP_NAME_WELCOME);

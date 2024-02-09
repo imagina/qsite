@@ -10,9 +10,9 @@
       :loading="loading"
       @hide="hidden"
     >
-        <dynamic-field 
-          :field="field.date" 
-          v-model="filterDate" 
+        <dynamic-field
+          :field="field.date"
+          v-model="filterDate"
         />
         <QCharts v-if="chartsData" :chartsData="chartsData" />
     </master-modal>
@@ -21,13 +21,13 @@
 <script lang="ts">
 import { defineComponent, computed, onBeforeMount } from "vue";
 import store from './store/index'
-import QCharts from '@imagina/qsite/_components/master/charts.vue';
+import QCharts from 'modules/qsite/_components/master/charts.vue';
 import useModalAnalytics from './uses/useModalAnalytics'
 
 export default defineComponent({
   components: {
     QCharts,
-  },  
+  },
   setup(props) {
     return {...useModalAnalytics()};
   },

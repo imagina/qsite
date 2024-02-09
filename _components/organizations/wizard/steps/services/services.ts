@@ -1,4 +1,4 @@
-import baseService from '@imagina/qcrud/_services/baseService.js';
+import baseService from 'modules/qcrud/_services/baseService.js';
 
 export default function services() {
   async function getInfoWizard(systemName: string) {
@@ -19,7 +19,7 @@ export default function services() {
     try {
       const requestParams = {refresh: true}
       const response = await baseService.index('apiRoutes.qsite.categories', requestParams);
-      const categories = response.data.sort((a, b) => a.title.localeCompare(b.title));      
+      const categories = response.data.sort((a, b) => a.title.localeCompare(b.title));
       return categories;
     } catch (error) {
       console.log('Error in wizard/services.getCategories ' + error);
@@ -67,7 +67,7 @@ export default function services() {
           products.data[index].optionValues = [{optionValue: plan.frequency, price: plan.price,}]
         }
       })
-      
+
       return products.data;
     } catch
       (error) {

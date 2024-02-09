@@ -103,7 +103,7 @@ export default {
   computed: {
     crudRecommendationParams() {
       return {
-        crudData: import('@imagina/qsite/_crud/recommendations'),
+        crudData: import('modules/qsite/_crud/recommendations'),
         type: "only-create",
         ref: "recommendations",
         customData: {

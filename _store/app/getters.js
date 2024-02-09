@@ -1,5 +1,5 @@
-import array from '@imagina/qsite/_plugins/array'
-import helper from '@imagina/qsite/_plugins/helper'
+import array from 'modules/qsite/_plugins/array'
+import helper from 'modules/qsite/_plugins/helper'
 import cloneDeep from 'lodash.clonedeep'
 
 export const getExtra = (state) => (name) => {

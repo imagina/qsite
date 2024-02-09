@@ -1,5 +1,5 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, onUnmounted} from "vue";
-import store from '@imagina/qsite/_components/v3/recursiveItem/store'
+import store from 'modules/qsite/_components/v3/recursiveItem/store'
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties

@@ -32,8 +32,8 @@
                     :config="editorConfig"
                 />
                 <div>
-                  <dynamic-field 
-                    :field="files" 
+                  <dynamic-field
+                    :field="files"
                     class="tw-py-2 tw-hidden"
                   />
                 </div>
@@ -60,8 +60,8 @@
                   </div>
                 </div>
               </div>
-              <div 
-                v-if="loadingComment" 
+              <div
+                v-if="loadingComment"
                 class="tw-py-8"
               >
                 <q-spinner
@@ -84,8 +84,8 @@
                 >
                  <div class="tw-p-4 tw-rounded-md tw-bg-white">
                     <div>
-                      <h4 
-                      class="tw-text-sm" 
+                      <h4
+                      class="tw-text-sm"
                       v-if="item.userProfile"
                     >
                       <strong v-if="!Boolean(item.internal)">
@@ -103,7 +103,7 @@
                       v-if="item.active"
                     ></CKEditor>
                     <div v-else>
-                      <div 
+                      <div
                        class="tw-flex tw-border tw-p-2"
                        :class="{'tw-cursor-pointer': !Boolean(item.internal) }"
                       >
@@ -173,15 +173,15 @@
 </template>
 
 <script lang="ts">
-import Vue, 
-{ defineComponent, computed, ref} 
+import Vue,
+{ defineComponent, computed, ref}
 from "vue";
-import CKEditor from "@imagina/qsite/_components/master/ckEditor.vue";
-import { 
+import CKEditor from "modules/qsite/_components/master/ckEditor.vue";
+import {
   apiRouteDefault,
   commentableTypeDefault,
   permissionsCommentsDefault,
-} from "@imagina/qsite/_components/master/comments/contracts/comments";
+} from "modules/qsite/_components/master/comments/contracts/comments";
 import useComments from './uses/useComments'
 export default defineComponent({
    components: { CKEditor },

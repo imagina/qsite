@@ -9,7 +9,7 @@ import {
   commentsContract,
   commentableTypeDefault,
   permissionsCommentsDefault,
-} from "@imagina/qsite/_components/master/comments/contracts/comments";
+} from "modules/qsite/_components/master/comments/contracts/comments";
 
 /**
  * A Vue Composition API function for managing comments functionality.

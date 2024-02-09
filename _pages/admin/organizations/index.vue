@@ -28,13 +28,13 @@ export default {
       const loadDirectForm = organizations.length == 1 ? true : false
       //Instance component to crud
       const componentCrud = {
-        is: () => import('@imagina/qcrud/_components/crud'),
-        crudData: import('@imagina/qsite/_crud/organizations'),
+        is: () => import('modules/qcrud/_components/crud'),
+        crudData: import('modules/qsite/_crud/organizations'),
         title: this.$route.meta.title
       }
       //Instance component to organization form
       const componentForm = {
-        is: () => import('@imagina/qsite/_pages/admin/organizations/form'),
+        is: () => import('modules/qsite/_pages/admin/organizations/form'),
         organizationId: organizations.length ? organizations[0].id : null
       }
       return loadDirectForm ? componentForm : componentCrud

@@ -426,26 +426,26 @@
 //Plugins
 import {colors} from 'quasar'
 //Component
-import recursiveSelect from '@imagina/qsite/_components/master/recursiveListSelect'
-import managePermissions from '@imagina/qsite/_components/master/managePermissions'
-import manageSettings from '@imagina/qsite/_components/master/manageSettings'
-import media from '@imagina/qmedia/_components/form'
-import uploadImage from '@imagina/qsite/_components/master/uploadImage'
-import schedulesForm from '@imagina/qsite/_components/master/schedules'
-import ckEditor from '@imagina/qsite/_components/master/ckEditor'
-import mapLeaflet from '@imagina/qsite/_components/master/mapLeaflet'
-import signature from '@imagina/qsite/_components/master/signature'
-import uploader from '@imagina/qsite/_components/master/uploader'
-import selectIcon from '@imagina/qsite/_components/master/selectIcon'
-import captcha from '@imagina/qsite/_components/master/captcha'
-import schedulable from '@imagina/qsite/_components/master/schedulable'
-import selectMedia from '@imagina/qmedia/_components/selectMedia'
-import googleMapMarker from '@imagina/qsite/_components/master/googleMapMarker'
+import recursiveSelect from 'modules/qsite/_components/master/recursiveListSelect'
+import managePermissions from 'modules/qsite/_components/master/managePermissions'
+import manageSettings from 'modules/qsite/_components/master/manageSettings'
+import media from 'modules/qmedia/_components/form'
+import uploadImage from 'modules/qsite/_components/master/uploadImage'
+import schedulesForm from 'modules/qsite/_components/master/schedules'
+import ckEditor from 'modules/qsite/_components/master/ckEditor'
+import mapLeaflet from 'modules/qsite/_components/master/mapLeaflet'
+import signature from 'modules/qsite/_components/master/signature'
+import uploader from 'modules/qsite/_components/master/uploader'
+import selectIcon from 'modules/qsite/_components/master/selectIcon'
+import captcha from 'modules/qsite/_components/master/captcha'
+import schedulable from 'modules/qsite/_components/master/schedulable'
+import selectMedia from 'modules/qmedia/_components/selectMedia'
+import googleMapMarker from 'modules/qsite/_components/master/googleMapMarker'
 import JsonEditorVue from 'json-editor-vue'
-import expressionField from '@imagina/qsite/_components/master/expressionField/index.vue';
-import localizedPhone from '@imagina/qsite/_components/master/localizedPhone/index.vue';
-import multipleDynamicFields from '@imagina/qsite/_components/master/multipleDynamicFields/views'
-import eventBus from '@imagina/qsite/_plugins/eventBus'
+import expressionField from 'modules/qsite/_components/master/expressionField/index.vue';
+import localizedPhone from 'modules/qsite/_components/master/localizedPhone/index.vue';
+import multipleDynamicFields from 'modules/qsite/_components/master/multipleDynamicFields/views'
+import eventBus from 'modules/qsite/_plugins/eventBus'
 //Code mirror
 //[ptc]import {codemirror} from 'vue-codemirror'
 //[ptc]

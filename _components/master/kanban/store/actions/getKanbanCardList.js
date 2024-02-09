@@ -1,5 +1,5 @@
 import getCardList from './getCardList.js';
-import baseService from '@imagina/qcrud/_services/baseService.js';
+import baseService from 'modules/qcrud/_services/baseService.js';
 import kanbanStore from '../kanbanStore.js';
 
 export default async function getKanbanCardList(column, page) {

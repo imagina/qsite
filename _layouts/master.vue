@@ -53,21 +53,21 @@
 
 <script>
 //Components Admin
-import headerAdminTheme1 from '@imagina/qsite/_components/admin/theme1/header'
-import headerAdminTheme2 from '@imagina/qsite/_components/admin/theme2/header'
-import drawersAdminTheme1 from '@imagina/qsite/_components/admin/theme1/drawers'
-import drawersAdminTheme2 from '@imagina/qsite/_components/admin/theme2/drawers'
-import footerAdminTheme1 from '@imagina/qsite/_components/admin/theme1/footer'
-import footerAdminTheme2 from '@imagina/qsite/_components/admin/theme2/footer'
+import headerAdminTheme1 from 'modules/qsite/_components/admin/theme1/header'
+import headerAdminTheme2 from 'modules/qsite/_components/admin/theme2/header'
+import drawersAdminTheme1 from 'modules/qsite/_components/admin/theme1/drawers'
+import drawersAdminTheme2 from 'modules/qsite/_components/admin/theme2/drawers'
+import footerAdminTheme1 from 'modules/qsite/_components/admin/theme1/footer'
+import footerAdminTheme2 from 'modules/qsite/_components/admin/theme2/footer'
 //Components Panel
-import headerPanel from '@imagina/qsite/_components/panel/header'
-import drawersPanel from '@imagina/qsite/_components/panel/drawers'
-import footerPanel from '@imagina/qsite/_components/panel/footer'
+import headerPanel from 'modules/qsite/_components/panel/header'
+import drawersPanel from 'modules/qsite/_components/panel/drawers'
+import footerPanel from 'modules/qsite/_components/panel/footer'
 //Components
-import cropperComponent from '@imagina/qsite/_components/master/cropper'
-import activitiesActions from '@imagina/qgamification/_components/activitiesActions/index.vue'
+import cropperComponent from 'modules/qsite/_components/master/cropper'
+import activitiesActions from 'modules/qgamification/_components/activitiesActions/index.vue'
 //[ptc]
-//import Alert from '@imagina/qoffline/_components/alert.vue'
+//import Alert from 'modules/qoffline/_components/alert.vue'
 
 export default {
   name: "MasterLayout",

@@ -3,14 +3,14 @@
     <div class="row justify-center align-center">
       <div class="col-12 col-sm-10 col-md-11">
         <div class="tw-mx-auto lg:tw-w-3/5 tw-mt-4">
-          <h2 class="step-title-1 text-primary">{{stepContent.title}}</h2> 
+          <h2 class="step-title-1 text-primary">{{stepContent.title}}</h2>
           <div class="tw-text-xs md:tw-text-xl lg:tw-px-8 tw-text-center tw-pb-4 md:tw-pb-6"
               v-html="stepContent.description">
           </div>
           <q-img v-if="stepContent.mediaFiles" contain
                 :src="stepContent.mediaFiles.mainimage.extraLargeThumb"
                 :ratio="1/1" class="tw-h-44"
-          /> 
+          />
           <div class="text-center tw-mt-6">
             <q-btn  rounded
                     class="tw-text-center"
@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import storeWizard from '@imagina/qsite/_components/organizations/wizard/steps/store/index.ts';
+import storeWizard from 'modules/qsite/_components/organizations/wizard/steps/store/index.ts';
 
 export default {
   components: {},

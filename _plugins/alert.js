@@ -3,7 +3,7 @@ import {Notify} from 'quasar'
 import {Dialog} from 'quasar'
 
 //Components
-import alertModal from '@imagina/qsite/_components/master/alertModal'
+import alertModal from 'modules/qsite/_components/master/alertModal'
 
 class Alert {
   constructor() {

@@ -15,7 +15,7 @@
 </template>
 <script>
 import {defineComponent} from 'vue'
-import controller from '@imagina/qsite/_components/v3/iframePost/controller'
+import controller from 'modules/qsite/_components/v3/iframePost/controller'
 
 export default defineComponent({
   props: {

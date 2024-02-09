@@ -1,4 +1,4 @@
-import gridModal from '@imagina/qsite/_plugins/ckEditorPlugins/grid/dialog'
+import gridModal from 'modules/qsite/_plugins/ckEditorPlugins/grid/dialog'
 
 class PluginGrid {
   load(CKEDITOR) {

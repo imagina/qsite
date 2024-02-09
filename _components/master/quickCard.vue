@@ -137,8 +137,8 @@
   </div>
 </template>
 <script>
-import QCharts from '@imagina/qsite/_components/master/charts.vue';
-import eventBus from '@imagina/qsite/_plugins/eventBus'
+import QCharts from 'modules/qsite/_components/master/charts.vue';
+import eventBus from 'modules/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {

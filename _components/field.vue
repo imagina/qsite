@@ -110,14 +110,14 @@
   </div>
 </template>
 <script>
-  import alert from '@imagina/qsite/_plugins/alert'
+  import alert from 'modules/qsite/_plugins/alert'
 
   /*Components*/
-  import mediaForm from '@imagina/qmedia/_components/form'
-  import textMulti from '@imagina/qsite/_components/customFields/textMulti'
-  import checkboxMulti from '@imagina/qsite/_components/customFields/checkboxMulti'
-  import registerExtraFields from '@imagina/qsite/_components/customFields/registerExtraFields'
-  import addressExtraFields from '@imagina/qsite/_components/customFields/addressExtraFields'
+  import mediaForm from 'modules/qmedia/_components/form'
+  import textMulti from 'modules/qsite/_components/customFields/textMulti'
+  import checkboxMulti from 'modules/qsite/_components/customFields/checkboxMulti'
+  import registerExtraFields from 'modules/qsite/_components/customFields/registerExtraFields'
+  import addressExtraFields from 'modules/qsite/_components/customFields/addressExtraFields'
 
   export default {
     props: ['setting', 'label'],

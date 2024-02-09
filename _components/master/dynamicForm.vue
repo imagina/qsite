@@ -155,10 +155,10 @@
 </template>
 
 <script>
-import fileListComponent from '@imagina/qsite/_components/master/fileList';
-import layoutStore from '@imagina/qsite/_store/layoutStore.js';
+import fileListComponent from 'modules/qsite/_components/master/fileList';
+import layoutStore from 'modules/qsite/_store/layoutStore.js';
 //[ptc]
-//import editFormModal from '@imagina/qform/_components/editFormModal/index.vue'
+//import editFormModal from 'modules/qform/_components/editFormModal/index.vue'
 
 export default {
   components: {

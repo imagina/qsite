@@ -16,13 +16,13 @@
 </template>
 <script>
   /*Plugins*/
-  import alert from '@imagina/qsite/_plugins/alert'
+  import alert from 'modules/qsite/_plugins/alert'
 
   /*Components*/
-  import field from '@imagina/qsite/_components/field'
+  import field from 'modules/qsite/_components/field'
 
   /*Services*/
-  import siteService from '@imagina/qsite/_services/index'
+  import siteService from 'modules/qsite/_services/index'
 
   export default {
     props: {

@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import iconsFontaweson5 from '@imagina/qsite/_resources/icons/fontAweson5'
-import iconsFontaweson4 from '@imagina/qsite/_resources/icons/fontAweson4'
+import iconsFontaweson5 from 'modules/qsite/_resources/icons/fontAweson5'
+import iconsFontaweson4 from 'modules/qsite/_resources/icons/fontAweson4'
 
 export default {
   props: {

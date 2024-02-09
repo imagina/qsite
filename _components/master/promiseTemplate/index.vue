@@ -1,11 +1,11 @@
 <template>
     <div>
     <span v-if="isLoading">
-        <i 
+        <i
           class="
-           fa-duotone 
-           fa-spinner-third 
-           fa-spin 
+           fa-duotone
+           fa-spinner-third
+           fa-spin
            fa-pulse" >
         </i>
     </span>
@@ -17,13 +17,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import usePromised, { UsePromisedTemplateContract } from '@imagina/qsite/_components/master/promiseTemplate/usePromisedTemplate';
+import usePromised, { UsePromisedTemplateContract } from 'modules/qsite/_components/master/promiseTemplate/usePromisedTemplate';
 export default defineComponent({
     props: {
     isLoading: {
         type: Boolean,
         default: () => false,
-    },    
+    },
     promise: {
       required: true
     }

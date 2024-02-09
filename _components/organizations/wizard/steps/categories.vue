@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="tw-px-2 md:tw-px-6" v-else>
-      {{ $tr('isite.cms.message.noCategories') }} 
+      {{ $tr('isite.cms.message.noCategories') }}
     </div>
   </div>
 
@@ -78,11 +78,11 @@
 </template>
 <script>
 import storeWizard from './store/index.ts';
-import services from '@imagina/qsite/_components/organizations/wizard/steps/services/services.ts';
+import services from 'modules/qsite/_components/organizations/wizard/steps/services/services.ts';
 
 import { LIMIT_PAGE } from './model/constant.js';
 
-export default { 
+export default {
   data() {
     return {
       loading: false,
@@ -101,7 +101,7 @@ export default {
       this.getCategorySelected();
       this.getStepInfo();
     })
-  },  
+  },
   computed: {
     formFields() {
       return {
@@ -123,26 +123,26 @@ export default {
       this.selected=item;
       storeWizard.data.category = this.selected
       storeWizard.nextStepButton = true;
-      this.$emit('updateData', item)    
+      this.$emit('updateData', item)
     },
     deselectCategory(value) {
       this.selected="";
       storeWizard.data.category = this.selected
       storeWizard.nextStepButton = false;
       this.$emit('updateData', '')
-      this.name=value;      
-    },    
+      this.name=value;
+    },
     async getDataBase() {
       this.categories= storeWizard.categories;
     },
-    async getCategorySelected() {      
-      this.loading = true;          
+    async getCategorySelected() {
+      this.loading = true;
       if(storeWizard.data.category) {
         this.selected=storeWizard.data.category
         storeWizard.nextStepButton = true;
       }
       this.loading = false;
-    },    
+    },
     async getCategoriesSearch() {
       try {
         if((this.name!==null) && this.name.length>3) {
@@ -162,7 +162,7 @@ export default {
     async getStepInfo() {
       this.stepContent = storeWizard.infoCategories
     },
-    
+
   }
 }
 </script>

@@ -41,7 +41,7 @@
 </template>
 <script>
   //Component
-  import dynamicField from '@imagina/qsite/_components/master/dynamicField'
+  import dynamicField from 'modules/qsite/_components/master/dynamicField'
 
   export default {
     props: {

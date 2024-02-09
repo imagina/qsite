@@ -61,7 +61,7 @@
   </master-modal>
 </template>
 <script>
-import eventBus from '@imagina/qsite/_plugins/eventBus'
+import eventBus from 'modules/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {

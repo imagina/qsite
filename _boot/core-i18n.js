@@ -1,13 +1,13 @@
 import { createI18n } from 'vue-i18n'
 import * as moment from 'moment'
-import cache from '@imagina/qsite/_plugins/cache'
-import helper from '@imagina/qsite/_plugins/helper'
+import cache from 'modules/qsite/_plugins/cache'
+import helper from 'modules/qsite/_plugins/helper'
 
 // i18n data
-import customFormats from '@imagina/qsite/_i18n/master/formats/customFormats'
-import numberFormats from '@imagina/qsite/_i18n/master/formats/currencyFormats'
-import dateTimeFormats from '@imagina/qsite/_i18n/master/formats/dateTimeFormats'
-import messagesLocal from '@imagina/qsite/_i18n/JsonLocal/i18n.json'
+import customFormats from 'modules/qsite/_i18n/master/formats/customFormats'
+import numberFormats from 'modules/qsite/_i18n/master/formats/currencyFormats'
+import dateTimeFormats from 'modules/qsite/_i18n/master/formats/dateTimeFormats'
+import messagesLocal from 'modules/qsite/_i18n/JsonLocal/i18n.json'
 
 export default async ({ app, store, ssrContext }) => {
   //Request messages

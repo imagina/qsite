@@ -24,8 +24,8 @@
 </template>
 <script>
 //Components
-import siteActions from '@imagina/qsite/_components/master/siteActions'
-import eventBus from '@imagina/qsite/_plugins/eventBus'
+import siteActions from 'modules/qsite/_components/master/siteActions'
+import eventBus from 'modules/qsite/_plugins/eventBus'
 
 export default {
   beforeDestroy() {
