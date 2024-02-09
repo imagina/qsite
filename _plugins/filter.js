@@ -1,5 +1,4 @@
 import cache from "@imagina/qsite/_plugins/cache";
-import eventbus from "@imagina/qsite/_plugins/eventBus";
 import clone from 'lodash.clonedeep'
 
 class Filter {
@@ -30,7 +29,6 @@ class Filter {
   //Load filter
   setFilter(params = {}) {
     return new Promise(async (resolve, reject) => {
-      if (!window.navigator.onLine) return resolve(true)
       this.storeFilter = params.storeFilter ? params.storeFilter : false;
       this.setfilterByName(params.name)//load filter by name
       this.addFields(params.fields)//Add fields
@@ -212,6 +210,14 @@ class Filter {
         this.hasValues = true
       }
     }
+  }
+  // returns a new intance with custom cache name
+  getInstance(cacheName = false){
+    const filter = new Filter()
+    if(cacheName){
+      filter.cacheName = `${filter.cacheName}__${cacheName}`
+    }
+    return filter
   }
 }
 

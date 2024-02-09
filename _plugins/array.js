@@ -1,3 +1,5 @@
+import lodash from 'lodash'
+
 class Array {
   constructor() {
   }
@@ -75,7 +77,7 @@ class Array {
    * }]
    *
    */
-  select(dataArray, fields = {label: 'title', id: 'id'}) {
+  select(dataArray, fields = {label: 'title', id: 'id', img: 'mainImage'}) {
     let response = []
     dataArray.forEach((item) => {
       let label = typeof fields.label != 'function' ? item[fields.label] :
@@ -84,10 +86,10 @@ class Array {
       response.push({
         label: label,
         id: item[fields.id],
-        value: item[fields.id]
+        value: item[fields.id],
+        img: item[fields.img] || null
       })
     })
-
     return response
   }
 
@@ -259,6 +261,9 @@ class Array {
     return false;  // No common element found
   }
 
+  mergeUniqueBy(dataToMerge, keyToCompare = '') {
+    return lodash.uniqBy(dataToMerge, keyToCompare)
+  }
 }
 
 const array = new Array();
