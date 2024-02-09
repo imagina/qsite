@@ -54,10 +54,17 @@ const state = reactive({
         },
     },
     payloadStatus: { ...modelPayload },
+    modalStatus: false,
 });
 
 export default function kanbanStore() {
     /* start of mutualization set and get*/
+    function getModalStatus() {
+        return state.modalStatus;
+    }
+    function setModalStatus(data) {
+        state.modalStatus = data;
+    }
     function getKanbanColumn() {
         return state.kanbanColumn;
     }
@@ -182,5 +189,7 @@ export default function kanbanStore() {
         getFunnel,
         setRoutes,
         getRoutes,
+        getModalStatus,
+        setModalStatus
     }
 }
