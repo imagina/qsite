@@ -169,11 +169,7 @@ export default {
     automation: {
       type: Boolean,
       default: () => false,
-    },
-    fieldActions: {
-      type: Function,
-      default: () => false,
-    },
+    },    
   },
   provide() {
     return {
