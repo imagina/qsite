@@ -54,7 +54,7 @@
                       size="md"
                       @click="cancelText()"
                       padding="4px 4px"
-                      icon="close"
+                      icon="fa fa-close"
                       color="primary"
                     />
                   </div>
@@ -149,7 +149,7 @@
                           size="md"
                           @click="updateComment('cancel', item.id)"
                           padding="4px 4px"
-                          icon="close"
+                          icon="fa fa-close"
                           color="primary"
                         >
                           <q-tooltip>{{

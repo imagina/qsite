@@ -14,7 +14,7 @@
         <!--Header-->
         <q-toolbar class="bg-primary text-white">
           <q-toolbar-title>{{ `${$tr('isite.cms.label.select')} ${$tr('isite.cms.form.icon')}` }}</q-toolbar-title>
-          <q-btn flat v-close-popup round dense icon="close"/>
+          <q-btn flat v-close-popup round dense icon="fa fa-close"/>
         </q-toolbar>
 
         <!--Content-->

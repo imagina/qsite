@@ -48,7 +48,7 @@
           <q-icon class="item-icon" name="fas fa-ellipsis-v"/>
           <q-toolbar-title> {{ $trp('isite.cms.label.other') }}</q-toolbar-title>
           <!--Close bottom-->
-          <q-btn flat round dense icon="close" v-close-popup/>
+          <q-btn flat round dense icon="fa fa-close" v-close-popup/>
         </q-toolbar>
 
         <!--Separator-->
@@ -187,6 +187,12 @@ export default {
     .item-icon {
       font-size: 20px;
       margin-bottom: 3px;
+    }
+  }
+
+  #footerMobileProfile {
+    img {
+      padding: 0;
     }
   }
 

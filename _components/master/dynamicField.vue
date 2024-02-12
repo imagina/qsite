@@ -36,7 +36,7 @@
             <q-icon :name="fieldProps.icon" size="18px"/>
           </template>
           <template v-slot:append v-if="isFieldPassword">
-            <q-icon :name="showPassword ? 'visibility' : 'visibility_off'" class="cursor-pointer"
+            <q-icon :name="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'" class="cursor-pointer"
                     @click="showPassword = !showPassword"/>
           </template>
         </q-input>
@@ -47,7 +47,7 @@
             <q-icon :name="fieldProps.icon" size="18px"/>
           </template>
           <template v-slot:append v-if="isFieldPassword">
-            <q-icon :name="showPassword ? 'visibility' : 'visibility_off'" class="cursor-pointer"
+            <q-icon :name="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'" class="cursor-pointer"
                     @click="showPassword = !showPassword"/>
           </template>
         </q-input>
