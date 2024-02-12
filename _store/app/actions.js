@@ -1,5 +1,5 @@
 //Plugins
-import config from 'modules/qsite/_config/master/index'
+import config from 'src/config/plugin'
 import cache from 'modules/qsite/_plugins/cache'
 import crud from "modules/qcrud/_services/baseService";
 import cloneDeep from 'lodash.clonedeep'

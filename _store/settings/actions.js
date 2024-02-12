@@ -1,6 +1,5 @@
 import cache from 'modules/qsite/_plugins/cache'
 import axios from 'axios'
-import config from 'modules/qsite/_config/master/index'
 import crud from 'modules/qcrud/_services/baseService'
 import {colors, AddressbarColor} from 'quasar'
 import Quasar from 'quasar'

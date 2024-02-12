@@ -1,5 +1,6 @@
 //class
-import AutoLoadSidebars from 'modules/qsite/_config/master/application/menu'
+import AutoLoadSidebars from 'src/config/menu'
+import sidebar from 'src/config/sidebar'
 
 export default {
   created() {
@@ -12,7 +13,7 @@ export default {
     return {
       menu: [],
       menuTranslatable: false,
-      menuLocal: config('sidebar'),
+      menuLocal: sidebar,
     }
   },
   computed: {
