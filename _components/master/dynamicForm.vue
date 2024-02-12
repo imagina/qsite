@@ -800,7 +800,7 @@ export default {
         } else {//Set to response
           response[fieldKey] = {
             ...field,
-            ...((field.isFakeField && !field.fakeFieldName) ? { fakeFieldName: 'options' } : {})
+            ...((field?.isFakeField && !field?.fakeFieldName) ? { fakeFieldName: 'options' } : {})
           };
         }
       });
