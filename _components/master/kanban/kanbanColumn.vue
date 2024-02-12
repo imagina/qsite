@@ -189,7 +189,7 @@
             hover:tw-text-white 
             hover:tw-bg-gray-200"
           @click="openFormComponentModal(columnData.id, columnData.title)"
-          :disabled="typeof columnData.id == 'string'"
+          :disabled="allowCreateRequestable"
           >
           <i class="fa-solid fa-plus"></i> 
         </q-btn>
@@ -335,6 +335,9 @@ export default {
     kanbanCard,
   },
   computed: {
+    allowCreateRequestable() {
+      return typeof this.columnData.id == 'string' || !this.$auth.hasAccess('requestable.requestables.create');
+    },
     inputDynamicField() {
       return {
         value: null,
