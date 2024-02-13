@@ -11,7 +11,7 @@
     </div>
 
     <!--Quick cards-->
-    <div v-if="quickCards.list1.length">
+    <div v-if="quickCards.list1 && quickCards.list1.length">
       <div class="row q-col-gutter-x-md">
         <!-- QuickCards -->
         <div id="quickCardsContent" class="col-12">
@@ -42,6 +42,7 @@ export default {
     this.$nextTick(function () {
       setTimeout(() => {
         this.loading = false;
+        this.setQuickCards()
         this.$tour.start(this.tourName)
       }, 1000);
     })
@@ -50,31 +51,37 @@ export default {
     return {
       testSchedule: false,
       loading: false,
+      quickCards: {},
       tourName: this.$q.platform.is.desktop ? 'admin_home_tour' : 'admin_home_tour_mobile'
     }
   },
   computed: {
-    //Return quick Cards of all modules
-    quickCards() {
+  },
+  methods: {
+    async setQuickCards(){
       //Get quick cards
       let quickCards = []
-      let mainConfigs = markRaw(Object.values(config('main')).map(item => item.quickCards || []))
+      let mainConfigs = Object.values(config('main')).map(item => item.quickCards || [])
       mainConfigs.forEach(item => quickCards = quickCards.concat(item))
       //Validate Permissions
       let quickCardsToShow = []
-      quickCards.forEach((card, index) => {
-        if (!card.permission || this.$auth.hasAccess(card.permission)) quickCardsToShow.push(card)
-      })
+      for (const card of quickCards){
+        if (!card.permission || this.$auth.hasAccess(card.permission)){
+          const qcComponent = await card.component()
+          card.component = markRaw(qcComponent.default)
+          quickCardsToShow.push(card)
+        }
+      }
+
       //Divide quick cards
       let response = {
         list1: (quickCardsToShow.length >= 2) ? quickCardsToShow.slice(0, (quickCardsToShow.length / 2)) : quickCardsToShow,
         list2: (quickCardsToShow.length >= 2) ? quickCardsToShow.slice((quickCardsToShow.length / 2), quickCardsToShow.length) : []
       }
       //Response
-      return response
+      this.quickCards = response
     }
-  },
-  methods: {}
+  }
 }
 </script>
 <style lang="scss">

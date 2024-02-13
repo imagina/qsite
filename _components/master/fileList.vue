@@ -10,7 +10,7 @@
           <!--Left content-->
           <div class="text-blue-grey text-subtitle1">
             <!---Title-->
-            <q-icon v-if="icon" :name="icon" class="q-mr-sm"/>
+            <q-icon v-if="icon" :name="icon" class="q-mr-sm" />
             <!---Title-->
             <b v-if="title">{{ title }}</b>
             <!--Counter-->
@@ -45,146 +45,152 @@
         </div>
         <!--Separator-->
         <div class="full-width q-mt-sm" v-if="title">
-          <q-separator/>
+          <q-separator />
         </div>
       </template>
       <!--Custom Grid-->
       <template v-slot:item="props">
         <div class="col-12" v-if="props.rowIndex == firstIndexTableData">
           <!--Loop every items and set as dragabble-->
-          <draggable group="bocksBlocks" v-model="table.data" class="row" :disabled="!draggable" handle=".drag-handle">
-            <!--Files-->
-            <div v-for="(itemRow, itemRowKey) in tableData"
-              :key="itemRowKey"
-              :class="`${gridColClass} q-pa-xs`"
-            >
-              <!---Card-->
-              <div v-if="gridType == 'card'"
-                :class="`file-card cursor-pointer ${isSelected(itemRow.filename)}`"
-              >
-                <!--Image Preview-->
-                <!--select file-->
-                <div class="tw-absolute tw-left-0">
+          <draggable
+            v-model="table.data"
+            :group="{ name: 'bocksBlocks' }"
+            :disabled="!draggable"
+            item-key="id"
+            handle=".drag-handle">
+            <!-- Files -->
+            <template #item="{element}">
+              <div>
+
+                <!---Card-->
+                <div v-if="gridType == 'card'"
+                     :class="`file-card cursor-pointer ${isSelected(element.filename)}`"
+                >
+                  <!--Image Preview-->
+                  <!--select file-->
+                  <div class="tw-absolute tw-left-0">
                     <q-checkbox v-if="allowSelect"
-                      v-model="table.selected"
-                      :val="itemRow.filename"
-                      :class="`${table.selected.includes(itemRow.filename) ? '' : (isDesktop ? 'showOnHover' : '') }`"
-                      color="primary"
-                      keep-color
-                      checked-icon="fa-sharp fa-solid fa-circle-check"
-                      unchecked-icon="fa-light fa-circle"
-                      size="lg"
+                                v-model="table.selected"
+                                :val="element.filename"
+                                :class="`${table.selected.includes(element.filename) ? '' : (isDesktop ? 'showOnHover' : '') }`"
+                                color="primary"
+                                keep-color
+                                checked-icon="fa-sharp fa-solid fa-circle-check"
+                                unchecked-icon="fa-light fa-circle"
+                                size="lg"
                     />
-                </div>
-                <div class="tw-absolute tw-left-0 tw-bottom-20 text-blue-grey">
-                  <q-btn
-                    class="q-ml-sm "
-                    :class="{'showOnHover' : isDesktop}"
-                    @click="fileAction(itemRow)"
-                    icon="fa-solid fa-eye"
-                    :label="$tr('isite.cms.label.quickLook')"
-                    size="sm"
-                    dense
-                    rounded
-                    no-caps
-                    unelevated
-                    style="border: 1px solid teal;background: white; font-size: 12px;z-index: 10"
-                  />
-                </div>
-                <div class="tw-absolute tw-right-0" :class="{'showOnHover' : isDesktop}">
+                  </div>
+                  <div class="tw-absolute tw-left-0 tw-bottom-20 text-blue-grey">
+                    <q-btn
+                      class="q-ml-sm "
+                      :class="{'showOnHover' : isDesktop}"
+                      @click="fileAction(element)"
+                      icon="fa-solid fa-eye"
+                      :label="$tr('isite.cms.label.quickLook')"
+                      size="sm"
+                      dense
+                      rounded
+                      no-caps
+                      unelevated
+                      style="border: 1px solid teal;background: white; font-size: 12px;z-index: 10"
+                    />
+                  </div>
+                  <div class="tw-absolute tw-right-0" :class="{'showOnHover' : isDesktop}">
                     <q-btn
                       round
                       color="primary"
                       icon="fa-light fa-file-arrow-down"
                       size="sm"
-                      @click="downloadFile(itemRow)"
+                      @click="downloadFile(element)"
                       class="q-ma-sm"
                     >
                       <q-tooltip>
                         {{ $tr('isite.cms.label.download') }}
                       </q-tooltip>
                     </q-btn>
+                  </div>
+                  <div
+                    v-if="element.isImage"
+                    class="file-card_img img-as-bg"
+                    :style="`background-image: url('${getImage(element)}')`"
+                    @click="markAsSelected($event, ielement.filename)"
+                  >
+                    <!--Tooltip-->
+                    <q-tooltip anchor="center middle" self="center middle" :delay="500">
+                      {{ element.filename }}
+                    </q-tooltip>
+                  </div>
+                  <!--Icon-->
+                  <div
+                    v-else
+                    class="file-card_icon img-as-bg row items-center justify-center bg-white"
+                    @click="markAsSelected($event, element.filename)"
+                  >
+                    <q-icon :name="element.icon" color="blue-grey" />
+                    <!--Tooltip-->
+                    <q-tooltip anchor="center middle" self="center middle" :delay="500">
+                      {{ element.filename }}
+                    </q-tooltip>
+                  </div>
+                  <!--Bottom content-->
+                  <div class="file-card__bottom">
+                    <!--Actions-->
+                    <div v-if="!readonly" class="file-card__bottom_actions row items-center justify-between">
+                      <div
+                        :class="`full-width file-card__bottom_title ellipsis ${draggable ? 'drag-handle' : ''}`"
+                        @click="markAsSelected($event, element.filename)"
+                      >
+                        <div class="q-pa-sm ellipsis">{{ element.filename }}</div>
+                        <q-separator inset />
+                      </div>
+                      <!-- File id -->
+                      <div
+                        class="q-px-sm text-caption text-grey-9"
+                        @click="markAsSelected($event, element.filename)"
+                      >
+                        <b>ID: {{ element.id }}</b>
+                      </div>
+                      <!--button Actions-->
+                      <btn-menu class="float-right" :actions="itemActions" :action-data="element" />
+                    </div>
+                  </div>
                 </div>
-                <div
-                  v-if="itemRow.isImage"
-                  class="file-card_img img-as-bg"
-                  :style="`background-image: url('${getImage(itemRow)}')`"
-                  @click="markAsSelected($event, itemRow.filename)"
-                >
-                  <!--Tooltip-->
-                  <q-tooltip anchor="center middle" self="center middle" :delay="500">
-                    {{ itemRow.filename }}
-                  </q-tooltip>
-                </div>
-                <!--Icon-->
-                <div
-                  v-else
-                  class="file-card_icon img-as-bg row items-center justify-center bg-white"
-                  @click="markAsSelected($event, itemRow.filename)"
-                >
-                  <q-icon :name="itemRow.icon" color="blue-grey"/>
-                  <!--Tooltip-->
-                  <q-tooltip anchor="center middle" self="center middle" :delay="500">
-                    {{ itemRow.filename }}
-                  </q-tooltip>
-                </div>
-                <!--Bottom content-->
-                <div class="file-card__bottom">
+                <!--Chips-->
+                <div v-else-if="gridType == 'chip'"
+                     :class="`file-chip ${draggable ? 'drag-handle' : 'cursor-pointer'}`">
+                  <!--Image Preview-->
+                  <div v-if="element.isImage" class="file-chip__img img-as-bg" @click="fileAction(element)"
+                       :style="`background-image: url('${getImage(element)}')`">
+                  </div>
+                  <!--Icon-->
+                  <q-icon v-else :name="`fas fa-${element.isFolder ? 'folder' : 'file'}`" class="file-chip__icon"
+                          @click="fileAction(element)" />
+                  <!--Title-->
+                  <div class="file-chip__title ellipsis" @click="fileAction(element)">
+                    {{ element.filename }}
+                    <!--Tooltip-->
+                    <q-tooltip anchor="center middle" self="center middle" :delay="500">
+                      {{ element.filename }}
+                    </q-tooltip>
+                  </div>
                   <!--Actions-->
-                  <div v-if="!readonly" class="file-card__bottom_actions row items-center justify-between">
-                    <div
-                      v-if="true"
-                      :class="`full-width file-card__bottom_title ellipsis ${draggable ? 'drag-handle' : ''}`"
-                      @click="markAsSelected($event, itemRow.filename)"
-                    >
-                      <div class="q-pa-sm ellipsis">{{ itemRow.filename }}</div>
-                      <q-separator inset/>
-                    </div>
-                    <!-- File id -->
-                    <div
-                      class="q-px-sm text-caption text-grey-9"
-                      @click="markAsSelected($event, itemRow.filename)"
-                    >
-                      <b>ID: {{ itemRow.id }}</b>
-                    </div>
+                  <div class="file-chip__actions">
+                    <!--select file-->
+                    <q-checkbox v-if="allowSelect" v-model="table.selected" :val="element.filename" color="green" />
                     <!--button Actions-->
-                    <btn-menu class="float-right" :actions="itemActions" :action-data="itemRow"/>
+                    <btn-menu class="" :actions="itemActions" :action-data="element" />
+                  </div>
+                </div>
+
+                <!--Quantity files-->
+                <div v-if="!readonly && quantity && (gridType == 'card')" :class="`${gridColClass} q-pa-xs`"
+                     v-for="itemNum in emptyQuantityFiles" :key="`item${itemNum}`">
+                  <div class="file-item-quantity row items-center justify-center" @click="$emit('emptyFileAction')">
+                    <q-icon name="fas fa-photo-video" size="45px" />
                   </div>
                 </div>
               </div>
-              <!--Chips-->
-              <div v-else-if="gridType == 'chip'" :class="`file-chip ${draggable ? 'drag-handle' : 'cursor-pointer'}`">
-                <!--Image Preview-->
-                <div v-if="itemRow.isImage" class="file-chip__img img-as-bg" @click="fileAction(itemRow)"
-                     :style="`background-image: url('${getImage(itemRow)}')`">
-                </div>
-                <!--Icon-->
-                <q-icon v-else :name="`fas fa-${itemRow.isFolder ? 'folder' : 'file'}`" class="file-chip__icon"
-                        @click="fileAction(itemRow)"/>
-                <!--Title-->
-                <div class="file-chip__title ellipsis" @click="fileAction(itemRow)">
-                  {{ itemRow.filename }}
-                  <!--Tooltip-->
-                  <q-tooltip anchor="center middle" self="center middle" :delay="500">
-                    {{ itemRow.filename }}
-                  </q-tooltip>
-                </div>
-                <!--Actions-->
-                <div class="file-chip__actions">
-                  <!--select file-->
-                  <q-checkbox v-if="allowSelect" v-model="table.selected" :val="itemRow.filename" color="green"/>
-                  <!--button Actions-->
-                  <btn-menu class="" :actions="itemActions" :action-data="itemRow"/>
-                </div>
-              </div>
-            </div>
-            <!--Quantity files-->
-            <div v-if="!readonly && quantity && (gridType == 'card')" :class="`${gridColClass} q-pa-xs`"
-                 v-for="itemNum in emptyQuantityFiles" :key="`item${itemNum}`">
-              <div class="file-item-quantity row items-center justify-center" @click="$emit('emptyFileAction')">
-                <q-icon name="fas fa-photo-video" size="45px"/>
-              </div>
-            </div>
+            </template>
           </draggable>
         </div>
       </template>
@@ -194,7 +200,7 @@
         <q-td v-if="props.col.name == 'filename'" :props="props" class="td-filename">
           <div @click="fileAction(props.row)" class="item-file row items-center cursor-pointer">
             <!--Icon-->
-            <q-icon v-if="!props.row.isImage" :name="`fas fa-${props.row.isFolder ? 'folder' : 'file'}`"/>
+            <q-icon v-if="!props.row.isImage" :name="`fas fa-${props.row.isFolder ? 'folder' : 'file'}`" />
             <!--Image-->
             <div class="file-image" v-else :style="`background-image: url('${getImage(props.row)}')`"></div>
             <!--Filename-->
@@ -206,12 +212,12 @@
           <!--Actions-->
           <div class="file-card__bottom_actions">
             <!--button Actions-->
-            <btn-menu class="" :actions="itemActions" :action-data="props.row"/>
+            <btn-menu class="" :actions="itemActions" :action-data="props.row" />
           </div>
         </q-td>
         <!-- selector -->
         <q-td v-else-if="props.col.name == 'selectColum'">
-          <q-checkbox v-model="table.selected" :val="props.row.filename" color="green"/>
+          <q-checkbox v-model="table.selected" :val="props.row.filename" color="green" />
         </q-td>
         <!--Default columns-->
         <q-td v-else :props="props" :title="props.value">
@@ -224,12 +230,12 @@
       <div v-if="quantity && (gridType == 'card')" :class="`${gridColClass} q-pa-xs`"
            v-for="itemNum in emptyQuantityFiles" :key="`item${itemNum}`">
         <div class="file-item-quantity row items-center justify-center" @click="$emit('emptyFileAction')">
-          <q-icon name="fas fa-photo-video" size="45px"/>
+          <q-icon name="fas fa-photo-video" size="45px" />
         </div>
       </div>
     </div>
     <!--Image preview-->
-    <avatar-image ref="avatarImage" no-preview/>
+    <avatar-image ref="avatarImage" no-preview />
     <!---MS Docs-->
     <master-modal v-model="modalDocs.show" :title="`${modalDocs.fileName}`" width="100%">
       <iframe
@@ -239,7 +245,7 @@
     </master-modal>
     <!---PDF preview-->
     <master-modal v-model="modalPdf.show" :title="`PDF | ${modalPdf.fileName}`" width="100%">
-      <iframe :src="modalPdf.src" width="100%" style="height: calc(100vh - 272px)"/>
+      <iframe :src="modalPdf.src" width="100%" style="height: calc(100vh - 272px)" />
     </master-modal>
     <!---Audio preview-->
     <master-modal v-model="modalAudio.show" :title="`Audio | ${modalAudio.fileName}`">
@@ -259,75 +265,75 @@
 </template>
 <script>
 //components
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
 
 export default {
   name: 'fileListComponent',
-  components: {draggable},
+  components: { draggable },
   props: {
-    value: {default: null},
-    gridType: {type: String, default: 'card'},
-    icon: {default: false},
-    title: {default: false},
-    allowCounter: {type: Boolean, default: false},
-    allowOrder: {type: Boolean, default: false},
-    allowChangeView: {type: Boolean, default: false},
+    value: { default: null },
+    gridType: { type: String, default: 'card' },
+    icon: { default: false },
+    title: { default: false },
+    allowCounter: { type: Boolean, default: false },
+    allowOrder: { type: Boolean, default: false },
+    allowChangeView: { type: Boolean, default: false },
     actions: {
       type: Array, default: () => {
-        return []
+        return [];
       }
     },
-    gridColClass: {default: 'col-6 col-md-3 col-lg-2'},
+    gridColClass: { default: 'col-6 col-md-3 col-lg-2' },
     itemActions: {
       type: Array, default: () => {
-        return []
+        return [];
       }
     },
-    allowPagination: {type: Boolean, default: false},
-    loadFiles: {default: false},
-    allowSelect: {type: Number, default: 0},
-    draggable: {type: Boolean, default: false},
-    quantity: {default: 0},
-    hideHeader: {type: Boolean, default: false},
-    readonly: {type: Boolean, default: false},
-    selectedFile: {default: null}
+    allowPagination: { type: Boolean, default: false },
+    loadFiles: { default: false },
+    allowSelect: { type: Number, default: 0 },
+    draggable: { type: Boolean, default: false },
+    quantity: { default: 0 },
+    hideHeader: { type: Boolean, default: false },
+    readonly: { type: Boolean, default: false },
+    selectedFile: { default: null }
   },
   watch: {
     value: {
       deep: true,
-      handler: function (newValue, oldValue) {
+      handler: function(newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(this.table.data))
-          this.table.data = this.$clone(newValue)
+          this.table.data = this.$clone(newValue);
       }
     },
     'table.data': {
       deep: true,
-      handler: function (newValue, oldValue) {
+      handler: function(newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue))
-          this.$emit('input', this.$clone(newValue))
+          this.$emit('input', this.$clone(newValue));
       }
     },
     loadFiles: {
       deep: true,
-      handler: function (newValue, oldValue) {
+      handler: function(newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
-          this.table.pagination.page = 1
-          this.getData()
+          this.table.pagination.page = 1;
+          this.getData();
         }
       }
     },
     'table.selected': {
       deep: true,
-      handler: function (newValue, oldValue) {
+      handler: function(newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue))
-          this.handlerSelectedFiles()
+          this.handlerSelectedFiles();
       }
     }
   },
   mounted() {
-    this.$nextTick(function () {
-      this.init()
-    })
+    this.$nextTick(function() {
+      this.init();
+    });
   },
   data() {
     return {
@@ -353,12 +359,12 @@ export default {
       modalDocs: {
         show: false,
         src: false,
-        fileName: '',
+        fileName: ''
       },
       modalPdf: {
         show: false,
         src: false,
-        fileName: '',
+        fileName: ''
       },
       modalAudio: {
         show: false,
@@ -371,7 +377,7 @@ export default {
         fileName: ''
       },
       selectedFiles: []
-    }
+    };
   },
   computed: {
     //Table columns
@@ -388,29 +394,29 @@ export default {
         {
           name: 'type', label: this.$tr('isite.cms.form.type'), align: 'left', field: 'id',
           format: (val, row) => row ? (row.isFolder ? this.$tr('isite.cms.label.folder') :
-              (row.isImage ? this.$tr('isite.cms.label.image') : this.$tr('isite.cms.label.file'))) : ''
+            (row.isImage ? this.$tr('isite.cms.label.image') : this.$tr('isite.cms.label.file'))) : ''
         },
         {
           name: 'created_at', label: this.$tr('isite.cms.form.createdAt'), field: 'createdAt',
-          sortable: true, format: val => val ? this.$trd(val, {type: 'long'}) : '-'
+          sortable: true, format: val => val ? this.$trd(val, { type: 'long' }) : '-'
         },
         {
           name: 'filesize', label: this.$tr('isite.cms.label.size'), field: 'filesize',
           format: val => val ? this.$helper.formatBytes(val) : '-'
         },
-        {name: 'actions', label: this.$trp('isite.cms.label.action')},
-      ]
+        { name: 'actions', label: this.$trp('isite.cms.label.action') }
+      ];
       //Add selector column
       if (this.allowSelect) columns.unshift({
         name: 'selectColum', label: '', align: 'center'
-      },)
+      });
       //Response
-      return columns
+      return columns;
     },
     //Table data
     tableData() {
       //Get data table
-      let items = this.table.data || []
+      let items = this.table.data || [];
       if (this.selectedFile) {
         const fileName = this.table.data.filter(item => item.id === this.selectedFile).map(item => item.filename);
         this.table.selected = fileName;
@@ -425,41 +431,41 @@ export default {
         docx: 'fas fa-file-word',
         doc: 'fas fa-file-word',
         pptx: 'fas fa-file-powerpoint',
-        ppt: 'fas fa-file-powerpoint',
-      }
+        ppt: 'fas fa-file-powerpoint'
+      };
 
       //Transform data
       items.forEach(item => {
         //Set icon by extension
-        item.icon = item.isFolder ? 'fas fa-folder' : (iconByExtension[item.extension] || 'fas fa-file')
+        item.icon = item.isFolder ? 'fas fa-folder' : (iconByExtension[item.extension] || 'fas fa-file');
         //Vlaidate extra format to image type
-        if (['svg', 'jfif'].includes(item.extension)) item.isImage = true
-      })
+        if (['svg', 'jfif'].includes(item.extension)) item.isImage = true;
+      });
 
       //Response
-      return items
+      return items;
     },
     //Return first index from current tableData
     firstIndexTableData() {
-      let pagination = this.$clone(this.table.pagination)
-      return ((pagination.rowsPerPage * pagination.page) - pagination.rowsPerPage)
+      let pagination = this.$clone(this.table.pagination);
+      return ((pagination.rowsPerPage * pagination.page) - pagination.rowsPerPage);
     },
     //return empty files to selec
     emptyQuantityFiles() {
-      let quantityEmpty = (this.quantity - this.tableData.length)
-      return (quantityEmpty >= 1) ? (quantityEmpty > 3 ? 3 : quantityEmpty) : 0
+      let quantityEmpty = (this.quantity - this.tableData.length);
+      return (quantityEmpty >= 1) ? (quantityEmpty > 3 ? 3 : quantityEmpty) : 0;
     },
-    isSelected(){
-      return name => this.table.selected.includes(name) ? 'selectable--selected scale-down' : (this.allowSelect ? 'selectable' : '')
+    isSelected() {
+      return name => this.table.selected.includes(name) ? 'selectable--selected scale-down' : (this.allowSelect ? 'selectable' : '');
     },
-    isDesktop(){
-      return this.$q.screen.gt.sm
+    isDesktop() {
+      return this.$q.screen.gt.sm;
     }
   },
   methods: {
     init() {
-      this.table.data = this.$clone(this.value)
-      this.getData()
+      this.table.data = this.$clone(this.value);
+      this.getData();
     },
     //Get data
     getData(refresh = false) {
@@ -467,21 +473,21 @@ export default {
       this.getDataTable({
         pagination: this.$clone(this.table.pagination),
         filter: this.$clone(this.table.filter)
-      }, refresh)
+      }, refresh);
     },
     //Get data table
-    getDataTable({pagination, filter}, refresh = false) {
+    getDataTable({ pagination, filter }, refresh = false) {
       return new Promise((resolve, reject) => {
         //Validate loadFiles options
-        if (!this.loadFiles || !this.loadFiles.apiRoute) return resolve(false)
+        if (!this.loadFiles || !this.loadFiles.apiRoute) return resolve(false);
         //Loading
-        this.loading = true
+        this.loading = true;
         //Update table filters
         this.table.filter = this.$clone({
           ...this.table.filter,
           ...(filter || {}),
-          ...((this.loadFiles && this.loadFiles.requestParams) ? (this.loadFiles.requestParams.filter || {}) : {}),
-        })
+          ...((this.loadFiles && this.loadFiles.requestParams) ? (this.loadFiles.requestParams.filter || {}) : {})
+        });
         //Request params
         let requestParams = {
           refresh: true,
@@ -490,53 +496,53 @@ export default {
             take: pagination.rowsPerPage,
             filter: this.$clone(this.table.filter)
           }
-        }
+        };
         //Set order by
         if (pagination.sortBy) {
           requestParams.params.filter.order = {
             field: pagination.sortBy,
             way: pagination.descending ? 'desc' : 'asc'
-          }
+          };
         }
 
         //Request
         this.$crud.index(this.loadFiles.apiRoute, requestParams).then(response => {
           //Emit event to notice loaded files
-          this.$emit('loaded')
+          this.$emit('loaded');
           //Set table data
-          this.table.data = response.data
+          this.table.data = response.data;
           //Set pagination
-          this.table.pagination.page = this.$clone(response.meta.page.currentPage)
-          this.table.pagination.rowsNumber = this.$clone(response.meta.page.total)
-          this.table.pagination.rowsPerPage = this.$clone(response.meta.page.perPage)
-          this.table.pagination.lastPage = this.$clone(response.meta.page.lastPage)
-          this.table.pagination.sortBy = this.$clone(pagination.sortBy)
-          this.table.pagination.descending = this.$clone(pagination.descending)
-          this.loading = false
+          this.table.pagination.page = this.$clone(response.meta.page.currentPage);
+          this.table.pagination.rowsNumber = this.$clone(response.meta.page.total);
+          this.table.pagination.rowsPerPage = this.$clone(response.meta.page.perPage);
+          this.table.pagination.lastPage = this.$clone(response.meta.page.lastPage);
+          this.table.pagination.sortBy = this.$clone(pagination.sortBy);
+          this.table.pagination.descending = this.$clone(pagination.descending);
+          this.loading = false;
         }).catch(error => {
           this.$apiResponse.handleError(error, () => {
-            this.loading = false
-          })
-        })
-      })
+            this.loading = false;
+          });
+        });
+      });
     },
     //Do Item action
     fileAction(file) {
       //MS office extensions
-      const msFileExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pps']
+      const msFileExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pps'];
 
       //Action if is image
       if (file.isImage) {
-        const src = this.getImage(file)
-        this.$refs.avatarImage.open(src)
+        const src = this.getImage(file);
+        this.$refs.avatarImage.open(src);
       }
       //Action if is MS doc
-      if(msFileExtensions.includes(file.extension)){
+      if (msFileExtensions.includes(file.extension)) {
         this.modalDocs = {
           show: true,
           src: file.url,
           fileName: file.filename
-        }
+        };
       }
       //Action if is PDF
       if (file.extension == 'pdf') {
@@ -544,7 +550,7 @@ export default {
           show: true,
           src: file.url,
           fileName: file.filename
-        }
+        };
       }
       //Action if is mp3
       if (file.extension == 'mp3') {
@@ -552,7 +558,7 @@ export default {
           show: true,
           src: file.url,
           fileName: file.filename
-        }
+        };
       }
       //Action if is mp4
       if (file.extension == 'mp4') {
@@ -560,40 +566,40 @@ export default {
           show: true,
           src: file.url,
           fileName: file.filename
-        }
+        };
       }
       //Emit selection item
-      this.$emit('clickItem', file)
+      this.$emit('clickItem', file);
     },
     //Toggle order
     toggleOrder() {
-      this.table.filter.order.way = this.$clone(this.table.filter.order.way == 'asc' ? 'desc' : 'asc')
-      this.table.pagination.page = 1
-      this.getData()
+      this.table.filter.order.way = this.$clone(this.table.filter.order.way == 'asc' ? 'desc' : 'asc');
+      this.table.pagination.page = 1;
+      this.getData();
     },
     //Handler selected files data
     handlerSelectedFiles() {
-      let dataFiles = []
-      let selectedFiles = this.$clone(this.table.selected.reverse().slice(0, this.allowSelect))
+      let dataFiles = [];
+      let selectedFiles = this.$clone(this.table.selected.reverse().slice(0, this.allowSelect));
 
       //Validate keep selected files
       this.selectedFiles.forEach(file => {
-        if (selectedFiles.includes(file.filename)) dataFiles.push(file)
-      })
+        if (selectedFiles.includes(file.filename)) dataFiles.push(file);
+      });
 
       //Validate new files selected
       selectedFiles.forEach(filename => {
         if (!this.selectedFiles.map(file => file.filename).includes(filename)) {
-          dataFiles.push(this.table.data.find(file => file.filename == filename))
+          dataFiles.push(this.table.data.find(file => file.filename == filename));
         }
-      })
+      });
 
       //Set selected files
-      this.table.selected = this.$clone(selectedFiles)
-      this.selectedFiles = this.$clone(dataFiles)
+      this.table.selected = this.$clone(selectedFiles);
+      this.selectedFiles = this.$clone(dataFiles);
 
       //Emit selected files
-      this.$emit('selected', this.$clone(this.selectedFiles))
+      this.$emit('selected', this.$clone(this.selectedFiles));
     },
     downloadFile(file) {
       const fileUrl = file.url;
@@ -608,21 +614,21 @@ export default {
         document.body.removeChild(downloadLink);
       }, 100);
     },
-    markAsSelected(event, name){
-      if (event?.pointerType == 'touch') return false
-      if (this.table.selected.includes(name) ) {
-        this.table.selected = this.table.selected.filter(element => element != name );
+    markAsSelected(event, name) {
+      if (event?.pointerType == 'touch') return false;
+      if (this.table.selected.includes(name)) {
+        this.table.selected = this.table.selected.filter(element => element != name);
       } else {
-        this.table.selected.push(name)
+        this.table.selected.push(name);
       }
-      this.handlerSelectedFiles()
+      this.handlerSelectedFiles();
     },
     //Get Image Url depends of Disk
     getImage(file) {
-      return file.disk == "privatemedia" ? file.url : file.mediumThumb
+      return file.disk == 'privatemedia' ? file.url : file.mediumThumb;
     }
   }
-}
+};
 </script>
 <style lang="scss">
 #fileListComponent {

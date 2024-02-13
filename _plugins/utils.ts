@@ -8,11 +8,11 @@ import hook from 'modules/qsite/_plugins/hook.js'
 import eventBus from 'modules/qsite/_plugins/eventBus.js'
 import filter from 'modules/qsite/_plugins/filter.js'
 import cacheOffline from 'modules/qsite/_plugins/cacheOffline.js'
-import findValue from 'modules/qsite/_plugins/findValue.js'
 import lodash from 'lodash'
 import moment from 'moment'
 import {uid} from 'quasar'
 import {openURL} from 'quasar'
+import i18n from 'modules/qsite/_plugins/i18n'
 
 export default {
   alert,
@@ -25,10 +25,10 @@ export default {
   eventBus,
   filter,
   cacheOffline,
-  findValue,
   lodash,
   moment,
   uid,
   openURL,
+  i18n,
 }
 
