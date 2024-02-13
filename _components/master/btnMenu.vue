@@ -17,21 +17,22 @@
       self="top right"
     >
       <q-list dense separator>
-        <q-item
-          v-for="(action, keyAction) in actionsData"
-          :key="keyAction"
-          v-bind="action.props"
-          v-close-popup
-          v-if="showActionMenu(action)"
-          @click.native="runAction(action)"
-        >
-          <q-item-section>
-            <div class="row items-center text-blue-grey">
-              <q-icon :name="action.icon" color="blue-grey" size="16px" />
-              {{ action.label || action.tooltip }}
-            </div>
-          </q-item-section>
-        </q-item>
+        <template v-for="(action, keyAction) in actionsData">
+          <q-item
+            :key="keyAction"
+            v-bind="action.props"
+            v-close-popup
+            v-if="showActionMenu(action)"
+            @click.native="runAction(action)"
+          >
+            <q-item-section>
+              <div class="row items-center text-blue-grey">
+                <q-icon :name="action.icon" color="blue-grey" size="16px" />
+                {{ action.label || action.tooltip }}
+              </div>
+            </q-item-section>
+          </q-item>
+        </template>
       </q-list>
     </q-menu>
   </q-btn>
