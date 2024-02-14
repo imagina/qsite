@@ -19,16 +19,18 @@
         :force-fallback="true"
         class="tw-flex tw-overflow-x-auto tw-overflow-y-hidden tw-mx-2"
         @end="saveStatusOrdering('inProgress')"
+        item-key="name"
       >
-        <statuses
-          v-for="(status, index) in statusList.inProgress"
-          :key="status.id"
-          :status="status"
-          class="tw-mb-3"
-          :total="statusList.inProgress.length"
-          @add="addStatus(index, 'inProgress')"
-          @delete="deleteStatus(status.id, 'inProgress')"
-        />
+        <template #item="{ status, index }">
+          <statuses
+            :key="status.id"
+            :status="status"
+            class="tw-mb-3"
+            :total="statusList.inProgress.length"
+            @add="addStatus(index, 'inProgress')"
+            @delete="deleteStatus(status.id, 'inProgress')"
+          />
+        </template>
       </draggable>
     </div>
   </div>
@@ -36,11 +38,13 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
+import draggable from "vuedraggable";
 import statuses from '../../statuses/index.vue'
 
 export default defineComponent({
   components: {
-    statuses
+    statuses,
+    draggable
   },
   props: {
     title: {

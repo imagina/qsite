@@ -15,12 +15,14 @@
         ghostClass="ghost"
         handle=".folder-title-drag"
         @change="saveOrderFolders"
+        item-key="name"
       >
-        <folder
-            v-for="folder in folderList"
+        <template #item="{ folder }">
+          <folder
             :key="folder.id"
             :folder="folder"
-        />
+          />
+        </template>
       </draggable>
     </div>
   </div>

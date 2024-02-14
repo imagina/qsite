@@ -1,20 +1,27 @@
 <template>
   <div class="row">
     <section id="panel-editor-component" class="full-width">
-      <draggable class="row q-col-gutter-lg q-pb-md" v-model="items" :group="{ name: 'items' }"
-                 @input="updateSortOrder">
-        <div :class="element[gridPosField]" v-for="element in items" :key="element.id">
-          <div :class="`panel-editor-component__component ${verifyKeys(element,childsFieldName) ? 'hasChild' : ''}`">
-            <div class="absolute-right q-ma-sm">
-              <div class="row q-gutter-xs">
-                <!--Actions-->
-                <q-btn v-for="(action, actIndex) in actions" :key="actIndex" :icon="action.icon"
-                       v-bind="actionButtonProps" @click="action.action(element)">
-                  <q-tooltip>{{ action.label }}</q-tooltip>
-                </q-btn>
-                <!--Grid position action-->
-                <q-btn v-if="verifyKeys(element,gridPosField)" v-bind="actionButtonProps">
-                  <q-popup-edit
+      <draggable
+        class="row q-col-gutter-lg q-pb-md"
+        v-model="items"
+        :group="{ name: 'items' }"
+        @input="updateSortOrder"
+        item-key="name"
+        :list="items"
+      >
+        <template #item="{ element }">
+          <div :class="element[gridPosField]" :key="element.id">
+            <div :class="`panel-editor-component__component ${verifyKeys(element,childsFieldName) ? 'hasChild' : ''}`">
+              <div class="absolute-right q-ma-sm">
+                <div class="row q-gutter-xs">
+                  <!--Actions-->
+                  <q-btn v-for="(action, actIndex) in actions" :key="actIndex" :icon="action.icon"
+                         v-bind="actionButtonProps" @click="action.action(element)">
+                    <q-tooltip>{{ action.label }}</q-tooltip>
+                  </q-btn>
+                  <!--Grid position action-->
+                  <q-btn v-if="verifyKeys(element,gridPosField)" v-bind="actionButtonProps">
+                    <q-popup-edit
                       v-model="element[gridPosField]"
                       :title="element[titleField]"
                       buttons
@@ -22,32 +29,33 @@
                       :label-cancel="$tr('isite.cms.label.cancel')"
                       v-slot="scope"
                       @save="() => saveGrid()"
-                  >
-                    <dynamic-field v-model="scope.value"
-                                   :field="{type: 'input', props: {autofocus : true, label: $tr('isite.cms.label.gridPosition')}}"/>
-                  </q-popup-edit>
-                  <q-tooltip>{{ $tr('isite.cms.label.gridPosition') }}</q-tooltip>
-                </q-btn>
-              </div>
-            </div>
-            <p>{{ element[titleField] }}</p>
-            <q-btn v-if="canAddNewItem" class="add-btn" unelevated no-caps rounded color="cyan"
-                   @click="addItem(element)">
-              <div class="row items-center no-wrap">
-                <q-icon left name="fa-regular fa-grid-2-plus" size="xs"/>
-                <div class="text-center">
-                  Añadir
+                    >
+                      <dynamic-field v-model="scope.value"
+                                     :field="{type: 'input', props: {autofocus : true, label: $tr('isite.cms.label.gridPosition')}}"/>
+                    </q-popup-edit>
+                    <q-tooltip>{{ $tr('isite.cms.label.gridPosition') }}</q-tooltip>
+                  </q-btn>
                 </div>
               </div>
-            </q-btn>
+              <p>{{ element[titleField] }}</p>
+              <q-btn v-if="canAddNewItem" class="add-btn" unelevated no-caps rounded color="cyan"
+                     @click="addItem(element)">
+                <div class="row items-center no-wrap">
+                  <q-icon left name="fa-regular fa-grid-2-plus" size="xs"/>
+                  <div class="text-center">
+                    Añadir
+                  </div>
+                </div>
+              </q-btn>
 
-            <div v-if="verifyKeys(element,childsFieldName)" class="full-width q-px-md">
-              <handle-grid v-model="element[childsFieldName]" v-bind="childProps" @input="updateSortOrder"
-                @create="(val) => addedChildItem(val.index, element.id, val)" ref="refHandleGrid"/>
+              <div v-if="verifyKeys(element,childsFieldName)" class="full-width q-px-md">
+                <handle-grid v-model="element[childsFieldName]" v-bind="childProps" @input="updateSortOrder"
+                             @create="(val) => addedChildItem(val.index, element.id, val)" ref="refHandleGrid"/>
+              </div>
+
             </div>
-
           </div>
-        </div>
+        </template>
       </draggable>
       <div v-if="canAddNewItem && value.length == 0" class="add-new-item" @click="addItem()">
         <div class="text-center q-pa-lg">

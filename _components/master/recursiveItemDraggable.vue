@@ -5,41 +5,45 @@
         tag="div"
         v-bind="dragOptions"
         :list="items"
-        :group="{ name: 'g1' }">
-      <div
+        :group="{ name: 'g1' }"
+        item-key="name"
+    >
+      <template #item="{ item }">
+        <div
           class="drag-group"
-          v-for="(item, index) in items"
-          :key="item.id">
-        <!-- list -->
-        <div class="row justify-between items-center q-mb-xs q-mt-xs">
-          <!-- name -->
-          <div class="col-10 row q-py-xs blue-green items-center">
-            <div class="q-px-xs" :class="{'q-py-md': item.subTitle }">
-              <q-icon class="cursor-pointer q-px-sm" color="blue-grey" name="fa-light fa-bars"/>
-            </div>
-            <div class="text-subtitle2 text-weight-light" :class="{'q-py-xs': item.subTitle}">
-              {{ item.title }}
-              <span v-if="!!item.subTitle" class="block text-caption text-grey-8">
+          :key="item.id"
+        >
+          <!-- list -->
+          <div class="row justify-between items-center q-mb-xs q-mt-xs">
+            <!-- name -->
+            <div class="col-10 row q-py-xs blue-green items-center">
+              <div class="q-px-xs" :class="{'q-py-md': item.subTitle }">
+                <q-icon class="cursor-pointer q-px-sm" color="blue-grey" name="fa-light fa-bars"/>
+              </div>
+              <div class="text-subtitle2 text-weight-light" :class="{'q-py-xs': item.subTitle}">
+                {{ item.title }}
+                <span v-if="!!item.subTitle" class="block text-caption text-grey-8">
                 {{ item.subTitle }}
               </span>
+              </div>
             </div>
-          </div>
-          <!-- menu actions -->
-          <div class="col-2 text-right q-py-xs relative-position">
-            <btn-menu
+            <!-- menu actions -->
+            <div class="col-2 text-right q-py-xs relative-position">
+              <btn-menu
                 v-if="item.actions.length"
                 :actions="item.actions"
                 :action-data="item"
-            />
+              />
+            </div>
           </div>
-        </div>
-        <!-- recursive dragabble -->
-        <nestedDraggable
+          <!-- recursive dragabble -->
+          <nestedDraggable
             :class="`${item.children.length} ?: q-mb-xs`"
             :items="item.children"
             v-if="nested"
-        />
-      </div>
+          />
+        </div>
+      </template>
     </draggable>
   </div>
 </template>

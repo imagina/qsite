@@ -1,17 +1,17 @@
 <template>
-  <div 
+  <div
     class="
-      tw-space-y-2 
-      tw-border 
+      tw-space-y-2
+      tw-border
       tw-border-gray-200
       tw-rounded-md
     "
     >
-    <div 
+    <div
       class="
-        tw-w-full 
+        tw-w-full
         tw-px-3
-        tw-py-2 
+        tw-py-2
         tw-text-xs
         tw-font-light
         tw-border-b
@@ -22,76 +22,78 @@
       {{ fieldProps.label }}
     </div>
     <div>
-      <draggable 
-        v-model="fields" 
+      <draggable
+        v-model="fields"
         :animation="200"
         handle=".dot-vertical"
         class="tw-h-500"
         :class="{'tw-overflow-y-scroll': fields.length > 0}"
         ref="refDraggable"
+        item-key="name"
       >
-        <div
-          v-for="(field, keyField) in fields"
-          :key="keyField"
-          class="
-            row 
-            q-col-gutter-xs 
-            tw-mb-1 
-            tw-border 
-            tw-border-gray-200 
-            tw-mx-3
-            tw-px-2
-            tw-rounded-md 
-            tw-mt-1
-          "
-        >
-         <div 
-          class="tw-w-full"
-          v-if="fieldProps.isDraggable"
-        >
-            <i 
-              class="
-                tw-cursor-move
-                fa-solid 
-                fa-grip-dots
-                dot-vertical 
-                tw-text-sm 
-                tw-text-gray-500
-              " 
-            />
-         </div>
+        <template #item="{ field, keyField }">
           <div
-            v-for="key in Object.keys(field)"
-            :key="key"
-            :class="defaultField[key] && defaultField[key].colClass"
+            :key="keyField"
+            class="
+              row
+              q-col-gutter-xs
+              tw-mb-1
+              tw-border
+              tw-border-gray-200
+              tw-mx-3
+              tw-px-2
+              tw-rounded-md
+              tw-mt-1
+            "
           >
-            <dynamic-field
-              v-model="fields[keyField][key]"
-              :field="defaultField[key]"
-            />
-          </div>
-          <div class="tw-w-full tw-text-right">
-            <q-btn
-              color="red"
-              icon="fa-light fa-trash-can"
-              size="xs"
-              flat
-              round
-              :disabled="isMinQuantity"
-              @click="deleteItem(keyField)"
+            <div
+              class="tw-w-full"
+              v-if="fieldProps.isDraggable"
             >
-              <q-tooltip>
-                {{ $tr('isite.cms.label.delete') }}
-              </q-tooltip>
-            </q-btn>
+              <i
+                class="
+                tw-cursor-move
+                fa-solid
+                fa-grip-dots
+                dot-vertical
+                tw-text-sm
+                tw-text-gray-500
+              "
+              />
+            </div>
+            <div
+              v-for="key in Object.keys(field)"
+              :key="key"
+              :class="defaultField[key] && defaultField[key].colClass"
+            >
+              <dynamic-field
+                v-model="fields[keyField][key]"
+                :field="defaultField[key]"
+              />
+            </div>
+            <div class="tw-w-full tw-text-right">
+              <q-btn
+                color="red"
+                icon="fa-light fa-trash-can"
+                size="xs"
+                flat
+                round
+                :disabled="isMinQuantity"
+                @click="deleteItem(keyField)"
+              >
+                <q-tooltip>
+                  {{ $tr('isite.cms.label.delete') }}
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
-        </div>
-        <div 
+        </template>
+        <div
           v-if="fields.length === 0"
           class="
-           tw-w-full 
+           tw-w-full
            tw-text-center
-           tw-text-sx 
+           tw-text-sx
            tw-text-gray-500
            tw-py-2"
         >
@@ -101,11 +103,11 @@
           No data
         </div>
       </draggable>
-      <div 
+      <div
         class="
          tw-my-2
-         tw-px-2 
-         tw-w-full 
+         tw-px-2
+         tw-w-full
          tw-text-right"
       >
         <q-btn

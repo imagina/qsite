@@ -213,15 +213,17 @@
           @start="dragColumn = true"
           @end="move"
           @change="countTotalRecords"
+          item-key="name"
         >
-          <kanbanCard
-            v-for="(item, index) in columnData.data"
-            :key="item.id"
-            :cardData="item"
-            :colorColumn="columnData.color"
-            class="tw-cursor-pointer"
-            :id="item.id"
-          />
+          <template #item="{ element }">
+            <kanbanCard
+              :key="element.id"
+              :cardData="element"
+              :colorColumn="columnData.color"
+              class="tw-cursor-pointer"
+              :id="element.id"
+            />
+          </template>
           <div class="tw-text-center tw-h-5 tw-rounded">
             <q-banner
               inline-actions

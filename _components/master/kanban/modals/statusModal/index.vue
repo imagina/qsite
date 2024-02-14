@@ -31,18 +31,20 @@
             :force-fallback="true"
             class="tw-flex tw-overflow-x-auto tw-overflow-y-hidden tw-mx-2"
             @end="saveStatusOrdering('inProgress')"
+            item-key="name"
           >
-            <statuses
-              v-for="(status, index) in statusList.inProgress"
-              :key="status.id"
-              :status="status"
-              class="tw-mb-3"
-              :total="statusList.inProgress.length"
-              @add="addStatus(index, 'inProgress')"
-              @delete="deleteStatus(status.id, 'inProgress')"
-              @saveColumn="saveColumn"
-              @updateColumn="updateColumn"
-            />
+            <template #item="{ status, index }">
+              <statuses
+                :key="status.id"
+                :status="status"
+                class="tw-mb-3"
+                :total="statusList.inProgress.length"
+                @add="addStatus(index, 'inProgress')"
+                @delete="deleteStatus(status.id, 'inProgress')"
+                @saveColumn="saveColumn"
+                @updateColumn="updateColumn"
+              />
+            </template>
           </draggable>
         </div>
       </div>
@@ -68,17 +70,18 @@
             class="tw-flex tw-overflow-x-auto tw-overflow-y-hidden tw-mx-2"
             @end="saveStatusOrdering('failed')"
           >
-            <statuses
-              v-for="(status, index) in statusList.failed"
-              :key="status.id"
-              :status="status"
-              class="tw-mb-3"
-              :total="statusList.failed.length"
-              @add="addStatus(index, 'failed')"
-              @delete="deleteStatus(status.id, 'failed')"
-              @saveColumn="saveColumn"
-              @updateColumn="updateColumn"
-            />
+            <template #item="{ status, index }">
+              <statuses
+                :key="status.id"
+                :status="status"
+                class="tw-mb-3"
+                :total="statusList.failed.length"
+                @add="addStatus(index, 'failed')"
+                @delete="deleteStatus(status.id, 'failed')"
+                @saveColumn="saveColumn"
+                @updateColumn="updateColumn"
+              />
+            </template>
           </draggable>
         </div>
       </div>
