@@ -1,12 +1,12 @@
 <template>
   <q-dialog
     v-model="show"
-    :content-class="`master-dialog${customPosition ? '-custom' : ''}`"
+    :class="`master-dialog${customPosition ? '-custom' : ''}`"
     v-on="$attrs"
     :maximized="maximized"
     :persistent="persistent"
     :position="customPosition ? 'right' : 'standard'"
-    :content-style="masterModalWidthSize"
+    :style="masterModalWidthSize"
   >
     <!--Content-->
     <div :id="id || 'masterModalContent'" :style="customPosition ? '' : `min-width: ${width}`"

@@ -12,7 +12,7 @@
   >
     <q-menu
       max-width="200px"
-      content-class="btn-menu-component__menu"
+      class="btn-menu-component__menu"
       anchor="bottom right"
       self="top right"
     >

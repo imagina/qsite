@@ -218,8 +218,7 @@
         <!--tree select-->
         <q-field v-model="responseValue" v-if="loadField('treeSelect')" :label="fieldLabel"
                  v-bind="fieldProps.fieldComponent" :class="`${field.help ? 'treeselect-dynamic-field' : ''}`">
-          <tree-select v-model="responseValue" :options="formatOptions" placeholder="" v-bind="fieldProps.field"
-                       @select="(node, instanceId) => $emit('select', {node, instanceId})">
+          <tree-select v-model="responseValue" :options="formatOptions" placeholder="">
               <template slot="option-label" slot-scope="{node}">
                 <label>
                   <!-- Image -->
@@ -248,12 +247,12 @@
           <recursive-select v-model="responseValue" class="bg-white full-width" :items="options"/>
         </q-field>
         <!--Checkbox-->
-        <q-field v-model="responseValue" v-if="loadField('checkbox')" label="" class="field-no-padding"
-                 v-bind="fieldProps.fieldComponent">
+        <q-field v-model="responseValue" v-if="loadField('checkbox')" class="field-no-padding"
+                 v-bind="fieldProps.fieldComponent" label="">
           <q-item tag="label" dense style="padding: 0">
             <!--checkbox-->
             <q-item-section side style="padding: 0">
-              <q-checkbox v-model="responseValue" label="" v-bind="fieldProps.field"/>
+              <q-checkbox v-model="responseValue" v-bind="fieldProps.field" label=""/>
             </q-item-section>
             <!--Label-->
             <q-item-section v-if="fieldProps.field.label">
