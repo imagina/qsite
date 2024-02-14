@@ -13,16 +13,17 @@
   export default {
     props: {
       label: {default: false},
-      value: {default: 0},
+      modelValue: {default: 0},
       min: {default: 0},
       max: {default: 10},
       width: {default: '100px'}
     },
+    emits: ['update:modelValue'],
     components: {},
     watch: {
-      value(newValue, oldValue) {
+      modelValue(newValue, oldValue) {
         if (newValue != oldValue) {
-          this.response = this.$clone(this.value)
+          this.response = this.$clone(this.modelValue)
         }
       },
       response(value) {
@@ -36,12 +37,12 @@
         if (quantity > max) this.response = max
 
         //Emit response
-        this.$emit('input', this.response)
+        this.$emit('update:modelValue', this.response)
       }
     },
     mounted() {
       this.$nextTick(function () {
-        this.response = this.$clone(this.value)
+        this.response = this.$clone(this.modelValue)
       })
     },
     data() {

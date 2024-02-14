@@ -41,7 +41,7 @@
 export default {
   name: 'signature',
   props: {
-    value: null,
+    modelValue: null,
     width: {default: '100%'},
     height: {default: '150px'},
     emitFile: {type: Boolean, default: false},
@@ -51,8 +51,9 @@ export default {
       default: () => false,
     }
   },
+  emits: ['update:modelValue'],
   watch: {
-    value() {
+    modelValue() {
       this.init()
     },
   },
@@ -70,9 +71,9 @@ export default {
   },
   methods: {
     init() {
-      this.model = this.value;
+      this.model = this.modelValue;
       if(this.$refs.signature) {
-        this.$refs.signature.fromDataURL(this.value);
+        this.$refs.signature.fromDataURL(this.modelValue);
       }
       this.options.images = [{src: this.model, x: 0, y: 0}]
     },
@@ -83,7 +84,7 @@ export default {
     onEnd() {
       const {isEmpty, data} = this.$refs.signature.saveSignature();
       this.model = data || null
-      this.$emit('input', this.model)
+      this.$emit('update:modelValue', this.model)
     },
     undo() {
       this.$refs.signature.undoSignature()

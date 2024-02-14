@@ -32,6 +32,7 @@ import storeWizard from 'modules/qsite/_components/organizations/wizard/steps/st
 
 export default {
   components: {},
+  emits: ['nextStep'],
   data() {
     return {
       stepContent: ''

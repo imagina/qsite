@@ -11,7 +11,7 @@
   import sidebarMixins from 'modules/qsite/_mixins/sidebarMixins'
   //Components
   import masterFilter from 'modules/qsite/_components/master/masterFilter'
-  import eventBus from 'modules/qsite/_plugins/eventBus'
+  import { eventBus } from 'src/plugins/utils'
 
   export default {
     beforeDestroy() {

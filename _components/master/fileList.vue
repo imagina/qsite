@@ -85,7 +85,7 @@
                       class="q-ml-sm "
                       :class="{'showOnHover' : isDesktop}"
                       @click="fileAction(element)"
-                      icon="fa-solid fa-eye"
+                      icon="fa-light fa-eye"
                       :label="$tr('isite.cms.label.quickLook')"
                       size="sm"
                       dense
@@ -271,7 +271,7 @@ export default {
   name: 'fileListComponent',
   components: { draggable },
   props: {
-    value: { default: null },
+    modelValue: { default: null },
     gridType: { type: String, default: 'card' },
     icon: { default: false },
     title: { default: false },
@@ -298,8 +298,9 @@ export default {
     readonly: { type: Boolean, default: false },
     selectedFile: { default: null }
   },
+  emits: ['update:modelValue','emptyFileAction','loaded','clickItem','selected'],
   watch: {
-    value: {
+    modelValue: {
       deep: true,
       handler: function(newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(this.table.data))
@@ -310,7 +311,7 @@ export default {
       deep: true,
       handler: function(newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue))
-          this.$emit('input', this.$clone(newValue));
+          this.$emit('update:modelValue', this.$clone(newValue));
       }
     },
     loadFiles: {
@@ -464,7 +465,7 @@ export default {
   },
   methods: {
     init() {
-      this.table.data = this.$clone(this.value);
+      this.table.data = this.$clone(this.modelValue);
       this.getData();
     },
     //Get data

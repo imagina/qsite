@@ -1,76 +1,79 @@
 <template>
-  <master-modal v-model="showModal" icon="fas fa-file-download" width="380px" :loading="loading"
-                :title="modalTitle" @hide="reset()" @show="init()" custom-position>
-    <div class="relative-position" v-if="!loading">
-      <div class="row q-col-gutter-md">
-        <!--Generate new report-->
-        <div id="newReportContent" class="col-12" v-if="!customExportData && allowCreation">
-          <!--Title-->
-          <div class="text-blue-grey q-mb-sm">
-            <b>{{ $tr('isite.cms.messages.newReport') }}</b>
-          </div>
-          <!--Text help Item-->
-          <div class="text-caption q-mb-xs" v-if="exportItem && paramsItem.item"
-               v-html="$tr('isite.cms.messages.newExportItemHelpText', {id: paramsItem.item.id})"></div>
-          <!--Text help-->
-          <div class="text-caption q-mb-xs" v-else
-               v-html="$tr('isite.cms.messages.newExportHelpText', {pageTitle: pageTitle})"></div>
-          <!--Actions-->
-          <div class="text-right q-mt-md">
-            <!--Extra filter fields-->
-            <q-form autocorrect="off" autocomplete="off" ref="formContent" class="row full-width"
-                    @submit="newReport()" @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
-              <!--Fields-->
-              <dynamic-field v-for="(field, keyField) in filterFields" :key="keyField"
-                             :field="field" class="col-12" v-model="filters[keyField]"/>
-              <!--Submit-->
-              <div class="text-right col-12">
-                <q-btn :label="$tr('isite.cms.label.create')" color="green" rounded unelevated size="13px"
-                       padding="xs sm" type="submit" :disable="reportQueue ? true : false"/>
-              </div>
-            </q-form>
-          </div>
-        </div>
-        <!--Last Report information-->
-        <div id="lastReportContent" v-if="fileExport.length" class="q-mb-md col-12">
-          <div v-for="(file, keyFile) in fileExport" :key="keyFile">
-            <q-separator class="q-my-md"/>
+  <div>
+    <master-modal v-model="showModal" icon="fas fa-file-download" width="380px" :loading="loading"
+                  :title="modalTitle" @hide="reset()" @show="init()" custom-position>
+      <div class="relative-position" v-if="!loading">
+        <div class="row q-col-gutter-md">
+          <!--Generate new report-->
+          <div id="newReportContent" class="col-12" v-if="!customExportData && allowCreation">
             <!--Title-->
             <div class="text-blue-grey q-mb-sm">
-              <b>{{ $tr('isite.cms.messages.lastReport') }}{{ file.fileFormat ? ` (${file.fileFormat})` : '' }}</b>
+              <b>{{ $tr('isite.cms.messages.newReport') }}</b>
             </div>
-            <!--Date-->
-            <div class="text-caption">
-              <label class="text-blue-grey">{{ $tr('isite.cms.label.date') }}:</label>
-              {{ $trd(file.lastModified, {type: 'long'}) }}
-            </div>
-            <!--Size-->
-            <div class="text-caption">
-              <label class="text-blue-grey">{{ $tr('isite.cms.label.size') }}:</label>
-              {{ $helper.formatBytes(file.size) }}
-            </div>
-            <!--Action-->
+            <!--Text help Item-->
+            <div class="text-caption q-mb-xs" v-if="exportItem && paramsItem.item"
+                 v-html="$tr('isite.cms.messages.newExportItemHelpText', {id: paramsItem.item.id})"></div>
+            <!--Text help-->
+            <div class="text-caption q-mb-xs" v-else
+                 v-html="$tr('isite.cms.messages.newExportHelpText', {pageTitle: pageTitle})"></div>
+            <!--Actions-->
             <div class="text-right q-mt-md">
-              <q-btn :label="$tr('isite.cms.label.download')" color="green" rounded unelevated size="13px"
-                     padding="xs sm" @click="$helper.downloadFromURL(file.path)"/>
+              <!--Extra filter fields-->
+              <q-form autocorrect="off" autocomplete="off" ref="formContent" class="row full-width"
+                      @submit="newReport()" @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
+                <!--Fields-->
+                <dynamic-field v-for="(field, keyField) in filterFields" :key="keyField"
+                               :field="field" class="col-12" v-model="filters[keyField]" />
+                <!--Submit-->
+                <div class="text-right col-12">
+                  <q-btn :label="$tr('isite.cms.label.create')" color="green" rounded unelevated size="13px"
+                         padding="xs sm" type="submit" :disable="reportQueue ? true : false" />
+                </div>
+              </q-form>
+            </div>
+          </div>
+          <!--Last Report information-->
+          <div id="lastReportContent" v-if="fileExport.length" class="q-mb-md col-12">
+            <div v-for="(file, keyFile) in fileExport" :key="keyFile">
+              <q-separator class="q-my-md" />
+              <!--Title-->
+              <div class="text-blue-grey q-mb-sm">
+                <b>{{ $tr('isite.cms.messages.lastReport') }}{{ file.fileFormat ? ` (${file.fileFormat})` : '' }}</b>
+              </div>
+              <!--Date-->
+              <div class="text-caption">
+                <label class="text-blue-grey">{{ $tr('isite.cms.label.date') }}:</label>
+                {{ $trd(file.lastModified, { type: 'long' }) }}
+              </div>
+              <!--Size-->
+              <div class="text-caption">
+                <label class="text-blue-grey">{{ $tr('isite.cms.label.size') }}:</label>
+                {{ $helper.formatBytes(file.size) }}
+              </div>
+              <!--Action-->
+              <div class="text-right q-mt-md">
+                <q-btn :label="$tr('isite.cms.label.download')" color="green" rounded unelevated size="13px"
+                       padding="xs sm" @click="$helper.downloadFromURL(file.path)" />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </master-modal>
+    </master-modal>
+  </div>
 </template>
 <script>
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils';
 
 export default {
   beforeDestroy() {
-    eventBus.off('export.data.refresh')
-    eventBus.off('isite.export.ready')
+    eventBus.off('export.data.refresh');
+    eventBus.off('isite.export.ready');
   },
   props: {
-    exportItem: {type: Boolean, default: false}
+    exportItem: { type: Boolean, default: false }
   },
+  emits: ['update:modelValue'],
   inject: {
     filterPlugin: {
       from: 'filterPlugin',
@@ -82,7 +85,7 @@ export default {
         pagination: {},
         load: false,
         hasValues: false,
-        storeFilter: false,
+        storeFilter: false
       }
     }
   },
@@ -90,23 +93,23 @@ export default {
   watch: {
     '$route.name': {
       deep: true,
-      handler: function (newValue) {
-        this.init()
+      handler: function(newValue) {
+        this.init();
       }
     },
     'offline': {
       deep: true,
-      handler: function (newValue) {
-        if(!newValue) {
-          this.init()
+      handler: function(newValue) {
+        if (!newValue) {
+          this.init();
         }
       }
-    },
+    }
   },
   mounted() {
-    this.$nextTick(function () {
-      this.init()
-    })
+    this.$nextTick(function() {
+      this.init();
+    });
   },
   data() {
     return {
@@ -117,7 +120,7 @@ export default {
       showModal: false,
       fileExport: [],
       filters: {}
-    }
+    };
   },
   computed: {
     offline() {
@@ -125,25 +128,25 @@ export default {
     },
     //Page title
     pageTitle() {
-      const useLegacyStructure = parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::legacyStructureCMS') || 0)
-      return useLegacyStructure ? this.$tr(this.$route.meta.title) : this.$route.meta.title
+      const useLegacyStructure = parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::legacyStructureCMS') || 0);
+      return useLegacyStructure ? this.$tr(this.$route.meta.title) : this.$route.meta.title;
     },
     //Modal export title
     modalTitle() {
       //Default response
-      let response = `${this.$tr('isite.cms.label.export')} | `
+      let response = `${this.$tr('isite.cms.label.export')} | `;
       //Extra titel
       if (this.exportItem)
-        response += `${this.$tr('isite.cms.label.record')} ID: ${this.paramsItem.item ? this.paramsItem.item.id : ''}`
+        response += `${this.$tr('isite.cms.label.record')} ID: ${this.paramsItem.item ? this.paramsItem.item.id : ''}`;
       else
-        response += this.pageTitle
+        response += this.pageTitle;
       //Response
-      return response
+      return response;
     },
     //filter fields
     filterFields() {
       //Instance default filter fields
-      var fields = (this.params.exportFields || {})
+      var fields = (this.params.exportFields || {});
 
       //Add format fields
       if (this.params.formats && Array.isArray(this.params.formats)) {
@@ -154,10 +157,10 @@ export default {
             label: this.$tr('isite.cms.label.format'),
             readonly: this.params.formats.length >= 2 ? false : true,
             options: this.params.formats.map(format => {
-              return {label: format, value: format}
+              return { label: format, value: format };
             })
           }
-        }
+        };
       }
 
       //Add warning reportQueue
@@ -166,34 +169,34 @@ export default {
           type: 'banner',
           props: {
             message: this.$tr('isite.cms.reportQueue', {
-              date: this.$trd(this.reportQueue, {type: 'long'})
+              date: this.$trd(this.reportQueue, { type: 'long' })
             }),
             color: 'warning'
           }
-        }
+        };
       }
 
       //Response
-      return fields
+      return fields;
     },
     //Allow Downloads from custom config
     allowCreation() {
-      return this.params.allowCreation !== undefined ? this.params.allowCreation : true
+      return this.params.allowCreation !== undefined ? this.params.allowCreation : true;
     },
     //Validate if already there is exporting a report
     reportQueue() {
-      let lockReport = this.fileExport.find(item => item.reportQueue)
-      return lockReport?.reportQueue || null
+      let lockReport = this.fileExport.find(item => item.reportQueue);
+      return lockReport?.reportQueue || null;
     }
   },
   methods: {
     init() {
       //Get data
-      this.getData()
+      this.getData();
       //Listen event to push new messages
       eventBus.on('isite.export.ready', (response) => {
         this.$alert.info({
-          message: this.$tr('isite.cms.messages.exportReady', {fileName: response.data.fileName}),
+          message: this.$tr('isite.cms.messages.exportReady', { fileName: response.data.fileName }),
           timeOut: 12000,
           actions: [
             {
@@ -201,28 +204,28 @@ export default {
               icon: 'fas fa-file-download',
               color: 'white',
               handler: () => {
-                this.showReport(response.data)
+                this.showReport(response.data);
               }
             }
           ]
-        })
-      })
+        });
+      });
       //Listen refresh report
-      eventBus.on('export.data.refresh', () => this.getData(true))
+      eventBus.on('export.data.refresh', () => this.getData(true));
     },
     //Get data
     async getData() {
-      this.loading = true
-      await this.getExportConfig()//get export config
-      await this.getExportData()//Get export data
-      this.loading = false
+      this.loading = true;
+      await this.getExportConfig();//get export config
+      await this.getExportData();//Get export data
+      this.loading = false;
     },
     //Get export config
     getExportConfig() {
       return new Promise((resolve, reject) => {
-        this.params = false//Reset params
-        let routeParams = this.$helper.getInfoFromPermission(this.$route.meta.permission)
-        if (!routeParams) return resolve(false)
+        this.params = false;//Reset params
+        let routeParams = this.$helper.getInfoFromPermission(this.$route.meta.permission);
+        if (!routeParams) return resolve(false);
 
         //Request Params
         let requestParams = {
@@ -232,102 +235,102 @@ export default {
               configName: `${routeParams.module}.config.exportable.${routeParams.entity}${this.exportItem ? 'Item' : ''}`
             }
           }
-        }
+        };
 
         //Request
         this.$crud.index('apiRoutes.qsite.configs', requestParams).then(response => {
-          this.params = this.$clone(response.data)
-          this.$emit('input', this.$clone(response.data))
-          resolve(response.data)
+          this.params = this.$clone(response.data);
+          this.$emit('update:modelValue', this.$clone(response.data));
+          resolve(response.data);
         }).catch(error => {
-          resolve(false)
-        })
-      })
+          resolve(false);
+        });
+      });
     },
     //Get data
     getExportData() {
       return new Promise(async (resolve, reject) => {
-        if (!this.params) return resolve(false)
-        this.loading = true
+        if (!this.params) return resolve(false);
+        this.loading = true;
         const filter = await this.storeFilter();
         //Request params
         let requestParams = {
           refresh: true,
           params: {
-            exportParams: this.exportItem ? {...this.params, ...(this.paramsItem.exportParams || {})} : this.params,
+            exportParams: this.exportItem ? { ...this.params, ...(this.paramsItem.exportParams || {}) } : this.params,
             filter: this.exportItem ? (this.paramsItem.filter || {}) : (filter ? filter.values : {})
           }
-        }
+        };
 
         //Request
         this.$crud.index('apiRoutes.qsite.export', requestParams).then(response => {
-          this.fileExport = Array.isArray(response.data) ? response.data : [response.data]
-          resolve(response.data)
+          this.fileExport = Array.isArray(response.data) ? response.data : [response.data];
+          resolve(response.data);
         }).catch(error => {
-          resolve(error)
-        })
-      })
+          resolve(error);
+        });
+      });
     },
     //Request new report
     newReport() {
       return new Promise(async (resolve, reject) => {
-        this.loading = true
+        this.loading = true;
         //Instance de apiRoute
-        const apiRoute = this.params.apiRoute || 'apiRoutes.qsite.export'
+        const apiRoute = this.params.apiRoute || 'apiRoutes.qsite.export';
         const filter = await this.storeFilter();
         //Request params
         let requestParams = {
           exportParams: {
-            ...(this.exportItem ? {...this.params, ...(this.paramsItem.exportParams || {})} : this.params),
+            ...(this.exportItem ? { ...this.params, ...(this.paramsItem.exportParams || {}) } : this.params),
             fileFormat: this.filters.fileFormat
           },
           filter: {
             ...(this.exportItem ? (this.paramsItem.filter || {}) : (filter ? filter.values : {})),
             ...this.filters
           }
-        }
+        };
 
         //Request
         this.$crud.post(apiRoute, requestParams).then(response => {
-          this.$alert.info(this.$tr('isite.cms.messages.reportInProgress', {fileName: this.params.fileName}))
-          this.showModal = false
+          this.$alert.info(this.$tr('isite.cms.messages.reportInProgress', { fileName: this.params.fileName }));
+          this.showModal = false;
         }).catch(error => {
-          this.loading = false
-        })
-      })
+          this.loading = false;
+        });
+      });
     },
     //Show report
     showReport(customExportData) {
-      this.customExportData = this.$clone(customExportData)
-      this.showModal = true
+      this.customExportData = this.$clone(customExportData);
+      this.showModal = true;
     },
     //Show report Item
     showReportItem(params) {
-      this.paramsItem = params
-      this.showModal = true
+      this.paramsItem = params;
+      this.showModal = true;
     },
     //Reset
     reset() {
-      this.loading = false
-      this.customExportData = false
-      this.fileExport = []
-      this.filters = {}
+      this.loading = false;
+      this.customExportData = false;
+      this.fileExport = [];
+      this.filters = {};
     },
     async getCurrentFilterDate(lastStart, lastEnd) {
       try {
         let lastStartM = this.$moment(lastStart)
-            .startOf('day')
-            .format("YYYY-MM-DD HH:mm:ss");
+          .startOf('day')
+          .format('YYYY-MM-DD HH:mm:ss');
         let lastEndM = this.$moment(lastEnd)
-            .endOf('day')
-            .format("YYYY-MM-DD HH:mm:ss");
+          .endOf('day')
+          .format('YYYY-MM-DD HH:mm:ss');
         return {
           date: {
-            field: "inbound_scheduled_arrival",
-            type: "custom",
+            field: 'inbound_scheduled_arrival',
+            type: 'custom',
             from: lastStartM,
-            to: lastEndM,
-          },
+            to: lastEndM
+          }
         };
       } catch (error) {
         console.log(error);
@@ -335,9 +338,9 @@ export default {
     },
     async storeFilter() {
       const filterClone = this.filterPlugin.storeFilter
-          ? {values: await this.$helper.convertStringToObject()}
-          : this.$clone(this.filterPlugin);
-      let filter = {...filterClone};
+        ? { values: await this.$helper.convertStringToObject() }
+        : this.$clone(this.filterPlugin);
+      let filter = { ...filterClone };
       if (this.filterPlugin.storeFilter) {
         if (filter.values.dateStart && filter.values.dateEnd) {
           const dateFilter = await this.getCurrentFilterDate(filter.values.dateStart, filter.values.dateEnd);
@@ -346,14 +349,14 @@ export default {
           delete filter.values.dateEnd;
           filter.values = {
             ...dateFilter,
-            ...filter.values,
-          }
+            ...filter.values
+          };
         }
       }
       return filter;
-    },
+    }
   }
-}
+};
 </script>
 <style lang="scss">
 </style>

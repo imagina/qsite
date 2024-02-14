@@ -120,15 +120,16 @@
 <script>
   export default {
     props: {
-      value: {
+      modelValue: {
         type: Object, default: () => {
           return {}
         }
       },
       allowInherit: {default: false}
     },
+    emits: ['update:modelValue'],
     watch: {
-      value: {
+      modelValue: {
         handler: function (newValue, oldValue) {
           if (JSON.stringify(newValue) !== JSON.stringify(this.getPermissions()))
             this.formatPermissions()
@@ -138,7 +139,7 @@
       'modal.listPermissions': {
         handler: function () {
           if (Object.keys(this.modal.listPermissions).length) {
-            this.$emit('input', this.getPermissions())//Emit permissions
+            this.$emit('update:modelValue', this.getPermissions())//Emit permissions
           }
         },
         deep: true
@@ -272,7 +273,7 @@
               Object.keys(entity).forEach(permissionName => {
                 let permissionFullName = `${entityName}.${permissionName}`//Get fullname of permission
                 //Get value of permission
-                let valuePermission = this.$clone(this.value[permissionFullName])//Find in value prop
+                let valuePermission = this.$clone(this.modelValue[permissionFullName])//Find in value prop
                 if (typeof (valuePermission) != 'boolean') valuePermission = (this.allowInherit ? 0 : false)
                 //Add to response
                 listToRender[permissionNames[0]][entityPermissionName][permissionName] = this.$clone(valuePermission)

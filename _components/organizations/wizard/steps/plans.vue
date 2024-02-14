@@ -5,7 +5,7 @@
       <div></div>
       <div></div>
     </div>
-    
+
     <div v-else>
       <div v-if="tab.length>0">
         <q-tabs
@@ -97,6 +97,7 @@ export default {
       default: () => [],
     },
   },
+  emits: ['updateData'],
   data() {
     return {
       loading: false,
@@ -130,7 +131,7 @@ export default {
       storeWizard.nextStepButton = true;
       this.$emit('updateData', plan)
 
-    },    
+    },
     async getPlanSelected() {
       try {
         if (storeWizard.data.plan) {
@@ -172,9 +173,9 @@ export default {
         return plan.flatMap(item => item);
       } else {
         return []
-      }  
+      }
     },
-    async getData() {      
+    async getData() {
       this.plans = this.mapInfoPlan(storeWizard.plans);
     },
     async getStepInfo() {

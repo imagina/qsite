@@ -36,7 +36,7 @@
             <q-icon :name="fieldProps.icon" size="18px"/>
           </template>
           <template v-slot:append v-if="isFieldPassword">
-            <q-icon :name="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'" class="cursor-pointer"
+            <q-icon :name="showPassword ? 'fa-light fa-eye' : 'fa-light fa-eye-slash'" class="cursor-pointer"
                     @click="showPassword = !showPassword"/>
           </template>
         </q-input>
@@ -47,7 +47,7 @@
             <q-icon :name="fieldProps.icon" size="18px"/>
           </template>
           <template v-slot:append v-if="isFieldPassword">
-            <q-icon :name="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'" class="cursor-pointer"
+            <q-icon :name="showPassword ? 'fa-light fa-eye' : 'fa-light fa-eye-slash'" class="cursor-pointer"
                     @click="showPassword = !showPassword"/>
           </template>
         </q-input>
@@ -88,7 +88,7 @@
                     class="cursor-pointer"
                     color="blue-grey">
               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                <q-date v-model="responseValue" @input="() => $refs.qDateProxy.hide()"
+                <q-date v-model="responseValue" @update:modelValue="() => $refs.qDateProxy.hide()"
                         v-bind="fieldProps.slot"/>
               </q-popup-proxy>
             </q-icon>
@@ -108,7 +108,7 @@
                     class="cursor-pointer"
                     color="blue-grey">
               <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
-                <q-time v-model="responseValue" @input="() => $refs.qTimeProxy.hide()" v-bind="fieldProps.slot"/>
+                <q-time v-model="responseValue" @update:modelValue="() => $refs.qTimeProxy.hide()" v-bind="fieldProps.slot"/>
               </q-popup-proxy>
             </q-icon>
           </template>
@@ -122,7 +122,7 @@
           <template v-slot:prepend>
             <q-icon name="fa-light fa-calendar-day" class="cursor-pointer" color="blue-grey">
               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                <q-date v-model="responseValue" @input="() => $refs.qDateProxy.hide()"
+                <q-date v-model="responseValue" @update:modelValue="() => $refs.qDateProxy.hide()"
                         v-bind="fieldProps.slot"/>
               </q-popup-proxy>
             </q-icon>
@@ -131,7 +131,7 @@
             <q-icon name="fa-light fa-clock" class="cursor-pointer" color="blue-grey">
               <q-popup-proxy ref="qTimeProxy" transition-show="scale" transition-hide="scale">
                 <q-time v-model="responseValue" :format24h="fieldProps.field.format24h"
-                        @input="() => $refs.qTimeProxy.hide()"
+                        @update:modelValue="() => $refs.qTimeProxy.hide()"
                         v-bind="fieldProps.slot"/>
               </q-popup-proxy>
             </q-icon>
@@ -139,7 +139,7 @@
         </q-input>
         <!--Select-->
         <q-select v-model="responseValue" :options="formatOptions" :label="fieldLabel" use-input v-bind="fieldProps"
-                  @input="matchTags(field)" v-if="loadField('select')" @filter="filterSelectOptions"
+                  @update:modelValue="matchTags(field)" v-if="loadField('select')" @filter="filterSelectOptions"
                   @clear="val => field.props.multiple ? responseValue = [] : ''"
                   :class="`${field.help ? 'select-dynamic-field' : ''}`">
           <!--No options slot-->
@@ -277,10 +277,10 @@
         </q-field>
         <!--Manage Permission-->
         <manage-permissions v-model="responseValue" class="q-mb-sm" v-if="loadField('permissions')"
-                            @input="watchValue" :allow-inherit="field.allowInherit ? true : false"/>
+                            @update:modelValue="watchValue" :allow-inherit="field.allowInherit ? true : false"/>
         <!--Manage Settings-->
         <manage-settings v-model="responseValue" class="q-mb-sm" :settings="field.settings"
-                         v-if="loadField('settings')" @input="watchValue"/>
+                         v-if="loadField('settings')" @update:modelValue="watchValue"/>
         <!--Schedules form-->
         <div class="round bg-white" v-if="loadField('schedule')">
           <schedules-form v-model="responseValue" @input="watchValue" class="q-mb-sm"
@@ -445,7 +445,7 @@ import JsonEditorVue from 'json-editor-vue'
 import expressionField from 'modules/qsite/_components/master/expressionField/index.vue';
 import localizedPhone from 'modules/qsite/_components/master/localizedPhone/index.vue';
 import multipleDynamicFields from 'modules/qsite/_components/master/multipleDynamicFields/views'
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 //Code mirror
 //[ptc]import {codemirror} from 'vue-codemirror'
 //[ptc]
@@ -465,7 +465,7 @@ export default {
 
   },
   props: {
-    value: {default: null},
+    modelValue: {default: null},
     field: {default: false},
     language: {default: false},
     itemId: {default: ''},
@@ -476,6 +476,7 @@ export default {
     },
     enableCache: {default: false}
   },
+  emits: ['update:modelValue','inputReadOnly','filter'],
   components: {
     managePermissions,
     manageSettings,
@@ -499,7 +500,7 @@ export default {
     multipleDynamicFields,
   },
   watch: {
-    value: {
+    modelValue: {
       deep: true,
       handler: function (newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
@@ -1322,7 +1323,7 @@ export default {
     //init
     async init() {
       if (this.field.type) {
-        this.setDefaultVModel((this.value != undefined) ? this.value : this.field.value)//Set default values by field type
+        this.setDefaultVModel((this.modelValue != undefined) ? this.modelValue : this.field.value)//Set default values by field type
         this.listenEventCrud()//config dynamic component
         this.success = true//sucess
         //Set options if is type select
@@ -1575,7 +1576,7 @@ export default {
     },
     //Check if value change
     watchValue() {
-      let value = this.$clone(this.value)
+      let value = this.$clone(this.modelValue)
       let response = this.$clone(this.responseValue)
 
       if (JSON.stringify(value) !== JSON.stringify(response)) {
@@ -1583,7 +1584,7 @@ export default {
         if (this.field.type == "json" && (typeof response == "string"))
           response = JSON.parse(response)
         //Emit input data
-        this.$emit('input', response)
+        this.$emit('update:modelValue', response)
       }
 
       //Load option for value

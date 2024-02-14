@@ -41,13 +41,14 @@
       rounded: {type: Boolean, default: false},
       width: {default: '180px'},
       height: {default: '180px'},
-      value: {default: null},
+      modelValue: {default: null},
       defaultImage: {default: false},
       hiddePreview: {type: Boolean, default: false}
     },
+    emits: ['update:modelValue'],
     components: {},
     watch: {
-      value() {
+      modelValue() {
         this.loadImage()
       }
     },
@@ -85,7 +86,7 @@
     methods: {
       //load image from value prop if exist
       loadImage() {
-        if (this.value) this.file = this.$clone(this.value)
+        if (this.modelValue) this.file = this.$clone(this.modelValue)
       },
       //Dispath upload file event
       async uploadFile() {
@@ -99,7 +100,7 @@
         this.loading = true
         setTimeout(async () => {
           this.file = await this.getBase64(files[0])
-          this.$emit('input', this.file)
+          this.$emit('update:modelValue', this.file)
           this.loading = false
         }, 500)
       },
@@ -126,7 +127,7 @@
               this.$refs.uploadComponent.reset()
               this.file = ''
               this.loading = false
-              this.$emit('input', this.file)
+              this.$emit('update:modelValue', this.file)
               return resolve(true)
             }, 500)
           } else {

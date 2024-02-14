@@ -17,7 +17,6 @@
 </template>
 <script>
   /*Plugins*/
-  import alert from 'modules/qsite/_plugins/alert'
 
   /*Components*/
   import field from 'modules/qsite/_components/field'
@@ -38,6 +37,7 @@
         default: ''
       },
     },
+    emits: ['getData'],
     components: {
       field
     },

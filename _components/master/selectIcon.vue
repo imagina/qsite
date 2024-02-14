@@ -59,7 +59,7 @@ import iconsFontaweson4 from 'modules/qsite/_resources/icons/fontAweson4'
 
 export default {
   props: {
-    value: {default: null},
+    modelValue: {default: null},
     label: {default: false},
     rules: {
       default: () => {
@@ -68,12 +68,13 @@ export default {
     },
     version: {default: '5'}
   },
+  emits: ['update:modelValue'],
   watch: {
-    value(newValue, oldValue) {
+    modelValue(newValue, oldValue) {
       if (newValue != oldValue) this.selectedIcon = newValue
     },
     selectedIcon(newValue) {
-      this.$emit('input', newValue)
+      this.$emit('update:modelValue', newValue)
     }
   },
   mounted() {
@@ -135,7 +136,7 @@ export default {
   },
   methods: {
     init() {
-      this.selectedIcon = this.$clone(this.value)
+      this.selectedIcon = this.$clone(this.modelValue)
       this.setRootCategoryOptions()
     },
     //Set root options

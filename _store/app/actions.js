@@ -1,12 +1,10 @@
 //Plugins
 import config from 'src/config/plugin'
-import cache from 'modules/qsite/_plugins/cache'
+import { cache, filter, helper } from 'src/plugins/utils'
 import crud from "modules/qcrud/_services/baseService";
 import cloneDeep from 'lodash.clonedeep'
 import axios from "axios";
 import { Quasar, Loading, setCssVar, AddressbarColor } from 'quasar';
-import filter from 'modules/qsite/_plugins/filter'
-import helper from 'modules/qsite/_plugins/helper'
 import configApp from "src/config/app"
 import moment from "moment";
 import momentz from "moment-timezone";

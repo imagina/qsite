@@ -87,13 +87,14 @@
 <script>
 export default {
   props: {
-    value: {default: false},
+    modelValue: {default: false},
     zone: {default: 'main'},
     withShiftTime: {type: Boolean, default: false}
   },
+  emits: ['update:modelValue'],
   components: {},
   watch: {
-    value: {
+    modelValue: {
       handler(newValue, oldValue) {
         if (newValue) {
           if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
@@ -283,7 +284,7 @@ export default {
     },
     //Emit schedule
     emitResponse() {
-      this.$emit('input', this.$clone(this.schedule))
+      this.$emit('update:modelValue', this.$clone(this.schedule))
     }
   }
 }

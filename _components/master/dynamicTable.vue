@@ -459,7 +459,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  emits: ['updated']
+};
 </script>
 
 <style lang="scss">

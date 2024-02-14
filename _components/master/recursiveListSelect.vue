@@ -28,7 +28,7 @@
         tick-strategy="leaf-filtered"
         :filter="search"
         node-key="id"
-        @input.sync="changeSelectedItems()"
+        @update:modelValue.sync="changeSelectedItems()"
       />
     </q-scroll-area>
   </div>
@@ -41,20 +41,21 @@
       items: { default: false },
       title: { default: false },
       icon: { default: false },
-      value: { default: [] },
+      modelValue: { default: [] },
     },
+    emits: ['update:modelValue'],
     watch: {
       itemsSelected () {
         this.changeSelectedItems()
       },
-      value () {
-        this.itemsSelected = this.value
+      modelValue (newValue) {
+        this.itemsSelected = newValue
       }
     },
     mounted () {
       this.$nextTick(function () {
-        if (this.value && this.value.length) {
-          this.itemsSelected = this.value
+        if (this.modelValue && this.modelValue.length) {
+          this.itemsSelected = this.modelValue
         }
       })
     },
@@ -68,7 +69,7 @@
     methods: {
       //Event when change selected items
       changeSelectedItems () {
-        this.$emit('input', this.itemsSelected)
+        this.$emit('update:modelValue', this.itemsSelected)
       }
     }
   }

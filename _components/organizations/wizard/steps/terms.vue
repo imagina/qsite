@@ -34,7 +34,8 @@
 <script>
 import storeWizard from './store/index.ts';
 
-export default {  
+export default {
+  emits: ['updateData'],
   data() {
     return {
       loading: false,
@@ -45,18 +46,18 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async function () {      
+    this.$nextTick(async function () {
       this.getStepInfo();
       this.getData();
     })
   },
   watch: {
     buttonTerms(newValue, oldValue) {
-      storeWizard.nextStepButton = newValue      
+      storeWizard.nextStepButton = newValue
       storeWizard.data.terms.check = newValue
       this.$emit("updateData",  {});
     },
-    buttonEmail(newValue, oldValue) {            
+    buttonEmail(newValue, oldValue) {
       storeWizard.data.terms.email = newValue
       this.$emit("updateData",  {});
     }
@@ -84,11 +85,11 @@ export default {
       })
     },
   },
-  methods: {    
+  methods: {
     async getData() {
       this.buttonTerms = storeWizard.data.terms.check ?? false
       this.buttonEmail = storeWizard.data.terms.email ?? false
-      storeWizard.previousStepButton = true 
+      storeWizard.previousStepButton = true
       storeWizard.nextStepButton = this.buttonTerms
     },
     async getStepInfo() {

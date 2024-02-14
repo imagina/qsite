@@ -70,7 +70,7 @@
             <!--others Fields-->
             <dynamic-field v-for="(field, key) in filter.fields" :key="key" v-model="filterValues[field.name || key]"
                            v-if="['search','pagination'].indexOf(key) == -1" class="q-mb-sm" :field="field" :enableCache="dynamicFieldCache"
-                           @inputReadOnly="data => readOnlyData[field.name || key] = data"/>
+                           @update:modelValueReadOnly="data => readOnlyData[field.name || key] = data"/>
           </div>
         </q-tab-panel>
       </q-tab-panels>
@@ -87,7 +87,7 @@
     </q-dialog>
 </template>
 <script>
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   inject: {

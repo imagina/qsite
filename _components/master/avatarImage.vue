@@ -25,6 +25,7 @@ export default {
     width: {default: '60px'},
     height: {default: '60px'},
   },
+  emits: ['click'],
   components: {},
   watch: {
     src() {

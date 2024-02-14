@@ -21,6 +21,7 @@
       fixed: {type: Boolean, default: true},
       backButton: {type: Boolean, default: false}
     },
+    emits: ['back'],
     mounted() {
       this.$nextTick(function () {
       })

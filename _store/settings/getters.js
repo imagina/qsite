@@ -1,4 +1,4 @@
-import array from 'modules/qsite/_plugins/array'
+import { array } from 'src/plugins/utils'
 import cloneDeep from 'lodash.clonedeep'
 
 export const getState = (state) => (name) => {

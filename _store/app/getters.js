@@ -1,5 +1,4 @@
-import array from 'modules/qsite/_plugins/array'
-import helper from 'modules/qsite/_plugins/helper'
+import { array } from 'src/plugins/utils'
 import cloneDeep from 'lodash.clonedeep'
 
 export const getExtra = (state) => (name) => {

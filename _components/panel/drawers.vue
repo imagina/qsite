@@ -117,7 +117,7 @@ import masterFilter from 'modules/qsite/_components/master/masterFilter'
 import checkin from 'modules/qcheckin/_components/checkin'
 import masterRecommendation from 'modules/qsite/_components/master/masterRecommendations'
 import masterNotifications from 'modules/qnotification/_components/drawerNotifications'
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   beforeDestroy() {

@@ -50,7 +50,7 @@
       text-color="grey-9"
       v-if="languageOptions.length >= 2"
       :options="languageOptions"
-      @input="updateFormTempleate()"
+      @update:modelValue="updateFormTempleate()"
       unelevated
       rounded
       no-caps
@@ -61,24 +61,25 @@
 <script>
   export default {
     props: {
-      value: {
+      modelValue: {
         default: () => {
           return {}
         }
       },
       form: {default: false}
     },
+    emits: ['update:modelValue'],
     components: {},
     watch: {
       //Watch form template from value, to update form by locale
-      'value.formTemplate': {
+      'modelValue.formTemplate': {
         deep: true,
         handler: function (newValue) {
           this.setDataByLocale()//Set data in form by locale
         },
       },
       //Watch form from value, to init
-      'value.form': {
+      'modelValue.form': {
         deep: true,
         handler: function (newValue) {
           this.init()//init all locale data
@@ -134,7 +135,7 @@
       },
       //Merge value and locale data
       interfaceSet() {
-        const data = this.$clone(this.value)
+        const data = this.$clone(this.modelValue)
         const locale = this.$clone(this.locale)
         this.locale = this.$clone(Object.assign(locale, data))
       },
@@ -144,7 +145,7 @@
       },
       //Return clone from value data
       interfaceGetValue() {
-        return this.$clone(this.value)
+        return this.$clone(this.modelValue)
       },
       //Emmit a clone from locale data
       async interfaceEmit() {
@@ -152,7 +153,7 @@
         const lengthFormTemplate = Object.keys(this.locale.formTemplate).length
         this.locale.success = lengthFormTemplate ? true : false
         //Emmit data
-        await this.$emit('input', this.$clone(this.locale))
+        await this.$emit('update:modelValue', this.$clone(this.locale))
       },
       //check if form template is same in value and local
       formTemplateIsSame() {

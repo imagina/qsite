@@ -20,13 +20,13 @@
 import zoneConfigMixing from "modules/qmedia/_mixins/zoneConfigMixins"
 //components
 import fileList from 'modules/qsite/_components/master/fileList'
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   name: 'uploaderComponentMaster',
   mixins: [zoneConfigMixing],
   props: {
-    value: {default: false},
+    modelValue: {default: false},
     accept: {default: false},
     maxFiles: {default: 1},
     title: {default: ''},
@@ -37,9 +37,10 @@ export default {
     maxFileSize: {type: Number, default: 0},
     ratio: {type: String, default: "free"}
   },
+  emits: ['update:modelValue','added'],
   components: {fileList},
   watch: {
-    value: {
+    modelValue: {
       deep: true,
       handler: function (newValue, oldValue) {
         this.setValueToFileData()
@@ -107,8 +108,8 @@ export default {
     },
     //Set value to file data
     setValueToFileData() {
-      if (this.value) {
-        let newFilesData = this.$clone(Array.isArray(this.value) ? this.value : [this.value])
+      if (this.modelValue) {
+        let newFilesData = this.$clone(Array.isArray(this.modelValue) ? this.modelValue : [this.modelValue])
         let filesData = this.$clone(this.filesData)
 
         //Default condition to set new files
@@ -223,7 +224,7 @@ export default {
       //Filter response quantity
       response = this.$clone((this.maxFiles >= 2) ? response : (response[0] || null))
       //Emit response
-      this.$emit('input', response)
+      this.$emit('update:modelValue', response)
     },
     //Reset
     reset() {

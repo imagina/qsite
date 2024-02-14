@@ -45,6 +45,7 @@ export default {
       default: () => [],
     },
   },
+  emits: ['updateData'],
   data() {
     return {
       activeForm: false,
@@ -62,19 +63,19 @@ export default {
   watch: {
     activeForm(newValue, oldValue) {
       storeWizard.data.form.check = newValue
-      if(newValue){        
+      if(newValue){
       } else  {
         storeWizard.data.form.data = false
       }
       this.$emit('updateData', newValue)
-    }, 
+    },
     form(newValue, oldValue){
       storeWizard.data.form.data = newValue
     }
   },
   methods: {
     async getData() {
-      if (storeWizard.data.form?.check) {        
+      if (storeWizard.data.form?.check) {
         this.activeForm = storeWizard.data.form.check;
         this.form = storeWizard.data.form.data;
       }

@@ -10,6 +10,7 @@
 export default {
   name: 'captchaComponent',
   props: {},
+  emits: ['update:modelValue'],
   mounted() {
     this.$nextTick(function () {
       this.init()
@@ -57,7 +58,7 @@ export default {
         } catch (e) {
           console.error(e)
         }
-      } else this.$emit('input', {token: true})
+      } else this.$emit('update:modelValue', {token: true})
     },
     //Listen token catpcha and emit token
     initCaptcha() {
@@ -68,10 +69,10 @@ export default {
             this.widget = grecaptcha.render('g-recaptcha', {
               sitekey: this.captcha.key,
               callback: (token) => {
-                this.$emit('input', {version: 2, token: token})
+                this.$emit('update:modelValue', {version: 2, token: token})
               },
               'expired-callback': () => {
-                this.$emit('input', null)
+                this.$emit('update:modelValue', null)
                 this.reset()
               }
             })
@@ -88,7 +89,7 @@ export default {
     //Emit token of version 3
     vEmitTokenV3() {
       grecaptcha.execute(this.captcha.key, {action: 'homepage'}).then(token => {
-        this.$emit('input', {version: 3, token: token})
+        this.$emit('update:modelValue', {version: 3, token: token})
       })
     },
     //Reset captcha

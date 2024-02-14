@@ -9,39 +9,39 @@
     :content-style="masterModalWidthSize"
   >
     <!--Content-->
-    <div :id="id || 'masterModalContent'"  :style="customPosition ? '' : `min-width: ${width}`"
+    <div :id="id || 'masterModalContent'" :style="customPosition ? '' : `min-width: ${width}`"
          v-if="show" class="master-dialog__content round relative-position" :class="customClass">
       <!--Header-->
       <div :class="`master-dialog__header text-${color} row justify-between items-center`">
         <!--Title-->
         <div class="master-dialog__header-title row items-center">
-          <q-icon v-if="icon" :name="icon" class="q-mr-sm" size="20px"/>
+          <q-icon v-if="icon" :name="icon" class="q-mr-sm" size="20px" />
           <b>{{ title }}</b>
         </div>
         <!--Close Button-->
         <q-btn v-close-popup icon="fa-light fa-xmark" round textColor="blue-grey" unelevated class="btn-medium"
-               v-if="!hideCloseAction"/>
+               v-if="!hideCloseAction" />
       </div>
-      <q-separator inset/>
+      <q-separator inset />
       <!--Slot content-->
       <div class="master-dialog__body">
-        <slot/>
+        <slot />
       </div>
       <!--Actions Content-->
       <div class="master-dialog__actions" v-if="actions && actions.length">
         <div class="row justify-end q-gutter-sm">
-          <q-btn
-            v-for="(btn, keyBtn) in actions"
-            v-if="btn.props?.vIf != undefined ? btn.props?.vIf : true"
-            :key="keyBtn"
-            v-bind="{...actionBtnProps, ...(btn.props || {})}"
-            @click="btn.action ? btn.action() : null"
-            :loading="btn.props.loading != undefined ? btn.props.loading : false"
-          />
+          <template v-for="(btn, keyBtn) in actions" :key="keyBtn">
+            <q-btn
+              v-if="btn.props?.vIf != undefined ? btn.props?.vIf : true"
+              v-bind="{...actionBtnProps, ...(btn.props || {})}"
+              @click="btn.action ? btn.action() : null"
+              :loading="btn.props.loading != undefined ? btn.props.loading : false"
+            />
+          </template>
         </div>
       </div>
       <!--Loading-->
-      <inner-loading :visible="loading"/>
+      <inner-loading :visible="loading" />
     </div>
   </q-dialog>
 </template>
@@ -49,42 +49,39 @@
 <script>
 export default {
   props: {
-    value: {type: Boolean, default: false},
-    loading: {type: Boolean, default: false},
-    persistent: {type: Boolean, default: false},
-    color: {type: String, default: 'blue-grey'},
-    width: {type: String, default: '400px'},
-    title: {type: String},
-    icon: {type: String},
-    actions: {type: Array},
-    id: {type: String},
-    maximized: {type: Boolean, default: false},
-    hideCloseAction: {type: Boolean, default: false},
-    customPosition: {type: Boolean, default: false},
-    modalWidthSize: {type: String, default: '65vw'},
-    customClass: {type: String, default: ''}
+    modelValue: { type: Boolean, default: false },
+    loading: { type: Boolean, default: false },
+    persistent: { type: Boolean, default: false },
+    color: { type: String, default: 'blue-grey' },
+    width: { type: String, default: '400px' },
+    title: { type: String },
+    icon: { type: String },
+    actions: { type: Array },
+    id: { type: String },
+    maximized: { type: Boolean, default: false },
+    hideCloseAction: { type: Boolean, default: false },
+    customPosition: { type: Boolean, default: false },
+    modalWidthSize: { type: String, default: '65vw' },
+    customClass: { type: String, default: '' }
   },
+  emits: ['update:modelValue'],
   components: {},
   watch: {
-    value(newValue, oldValue) {
-      if (newValue != oldValue) {
-        this.show = this.$clone(newValue)
-      }
+    modelValue(newValue, oldValue) {
+      this.show = this.$clone(newValue);
     },
     show(newValue, oldValue) {
-      if (newValue != oldValue) {
-        this.$emit('input', this.$clone(newValue))
-      }
-    },
+      this.$emit('update:modelValue', this.$clone(newValue));
+    }
   },
   mounted() {
-    this.$nextTick(function () {
-    })
+    this.$nextTick(function() {
+    });
   },
   data() {
     return {
       show: false
-    }
+    };
   },
   computed: {
     actionBtnProps() {
@@ -93,16 +90,16 @@ export default {
         unelevated: true,
         noCaps: true,
         class: 'btn-small'
-      }
+      };
     },
     masterModalWidthSize() {
       return {
-        '--modal-width-size': this.modalWidthSize,
+        '--modal-width-size': this.modalWidthSize
       };
-    },
+    }
   },
   methods: {}
-}
+};
 </script>
 
 <style lang="scss">

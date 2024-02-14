@@ -61,12 +61,13 @@
 <script>
 export default {
   props: {
-    value: {default: false},
+    modelValue: {default: false},
     readonly: {type: Boolean, default: false}
   },
+  emits: ['update:modelValue','converted'],
   components: {},
   watch: {
-    value: {
+    modelValue: {
       handler(newValue, oldValue) {
         if (newValue) {
           if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
@@ -235,7 +236,7 @@ export default {
       })
       this.$emit('converted', this.$clone(transformedSchedule))//Emit response
       const scheduleClone = this.mapSchedule(schedule);
-      this.$emit('input', scheduleClone)//Emit response
+      this.$emit('update:modelValue', scheduleClone)//Emit response
     },
     parserDate(date) {
       return this.$moment(date).isValid() ? this.$moment(date) : this.$moment(this.currentDate + ' ' + date);

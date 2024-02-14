@@ -3,7 +3,7 @@
     <!-- search geolocation -->
 <!--    <q-select :options="geolocations" v-model="address" emit-value behavior="menu" input-debounce="700"-->
 <!--              use-input map-options outlined dense bg-color="white" :label="label" clearable class="q-mb-md"-->
-<!--              @filter="filterFn" @input="emitResponseValue" :loading="searchLoading" v-if="!readOnly"-->
+<!--              @filter="filterFn" @update:modelValue="emitResponseValue" :loading="searchLoading" v-if="!readOnly"-->
 <!--              hint="eg. Avenida la francia, calle San Bernando 34..."/>-->
 
 <!--    &lt;!&ndash;Map&ndash;&gt;-->
@@ -28,7 +28,7 @@
 export default {
   //components: {LMap, LTileLayer, LMarker},
   props: {
-    value: {default: false},
+    modelValue: {default: false},
     type: {default: 'positionMarkerMap'},
     height: {default: '400px'},
     label: {default: ''},
@@ -40,8 +40,9 @@ export default {
     },
     emitDefault: {type: Boolean, default: false}
   },
+  emits: ['update:modelValue'],
   watch: {
-    value: {
+    modelValue: {
       deep: true,
       handler: function (newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue)) this.setDefaultValue()
@@ -80,7 +81,7 @@ export default {
         this.marker = latLng(this.address.lat, this.address.lng)//Set default marker value
         this.center = this.$clone(this.marker)//Set default center
         this.mapZoom = 15//Change map zoom
-        this.$emit('input', this.$clone(this.address))
+        this.$emit('update:modelValue', this.$clone(this.address))
       }
     },
     //Return the countries enables for the site
@@ -103,13 +104,13 @@ export default {
       switch (this.type) {
           //Set default value and response value
         case 'positionMarkerMap':
-          if (this.value) {
-            this.address = this.$clone(this.value)//Set default value
+          if (this.modelValue) {
+            this.address = this.$clone(this.modelValue)//Set default value
             if (this.address.lat) {
               this.marker = latLng(this.address.lat, this.address.lng)//Set default marker value
               center = this.$clone(this.marker)//Set default center
             } else {
-              this.address = {title: this.value, lat: center[0], lng: center[1]}
+              this.address = {title: this.modelValue, lat: center[0], lng: center[1]}
             }
             this.mapZoom = 15//Change map zoom
             this.geolocations.push({
@@ -124,7 +125,7 @@ export default {
         this.success = true//Reset map
         if(this.emitDefault){
           this.mapZoom = 8
-          this.$emit('input', this.$clone({lat: this.defaultCenter.lat, lng: this.defaultCenter.lng}))
+          this.$emit('update:modelValue', this.$clone({lat: this.defaultCenter.lat, lng: this.defaultCenter.lng}))
         }
       }, 500)
     },

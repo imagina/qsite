@@ -167,7 +167,7 @@ export default {
     //editFormModal,
   },
   props: {
-    value: {
+    modelValue: {
       default: () => {
         return {};
       }
@@ -208,8 +208,9 @@ export default {
       }
     }
   },
+  emits: ['update:modelValue','obtainedForm','validated','sent','feedBack','submit','newForm'],
   watch: {
-    value: {
+    modelValue: {
       deep: true,
       handler: function(newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue)) this.setLocaleFormData();
@@ -225,7 +226,7 @@ export default {
       deep: true,
       handler: function(newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
-          this.$emit('input', this.$clone(this.locale.form));
+          this.$emit('update:modelValue', this.$clone(this.locale.form));
         }
       }
     },
@@ -681,7 +682,7 @@ export default {
     },
     //set locale form data
     setLocaleFormData() {
-      let formData = this.$clone({ ...this.locale.form, ...this.value });
+      let formData = this.$clone({ ...this.locale.form, ...this.modelValue });
 
       //Clear fields
       /*Object.keys(formData).forEach(fieldName => {

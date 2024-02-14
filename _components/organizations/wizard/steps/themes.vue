@@ -55,6 +55,7 @@
 import storeWizard from './store/index.ts';
 
 export default {
+  emits: ['updateData'],
   data() {
     return {
       loading: false,
@@ -64,7 +65,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async function () {      
+    this.$nextTick(async function () {
       storeWizard.nextStepButton = false;
       this.getThemeSelected();
       this.getThemes();
@@ -80,15 +81,15 @@ export default {
       this.$emit('updateData', item)
     },
     async getThemeSelected() {
-      try {        
+      try {
         if(storeWizard.data.layout) {
           if(storeWizard.data.layout.planId == storeWizard.data.plan.planId) {
             this.selected=storeWizard.data.layout;
             storeWizard.nextStepButton = true;
           }
-        }          
+        }
         this.loading = false;
-        
+
       } catch (error) {
         console.log(error);
       }

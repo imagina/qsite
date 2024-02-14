@@ -5,7 +5,7 @@
         class="row q-col-gutter-lg q-pb-md"
         v-model="items"
         :group="{ name: 'items' }"
-        @input="updateSortOrder"
+        @update:modelValue="updateSortOrder"
         item-key="name"
         :list="items"
       >
@@ -49,7 +49,7 @@
               </q-btn>
 
               <div v-if="verifyKeys(element,childsFieldName)" class="full-width q-px-md">
-                <handle-grid v-model="element[childsFieldName]" v-bind="childProps" @input="updateSortOrder"
+                <handle-grid v-model="element[childsFieldName]" v-bind="childProps" @update:modelValue="updateSortOrder"
                              @create="(val) => addedChildItem(val.index, element.id, val)" ref="refHandleGrid"/>
               </div>
 
@@ -108,37 +108,42 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-#panel-editor-component
+#panel-editor-component {
   margin: 0 auto;
-  padding 10px
+  padding: 10px;
   background-color: white;
   border-radius: 10px;
   //border: 1px solid #ccc;
 
-  .hasChild
-    padding 20px
+  .hasChild {
+    padding: 20px;
     min-height: 120px;
+  }
 
-  .panel-editor-component__component
-    position relative;
+  .panel-editor-component__component {
+    position: relative;
     user-select: none;
     cursor: pointer;
     min-height: 100px;
     display: flex;
-    flex-direction column
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     border: dashed 3px $blue-grey;
 
-    .add-btn
-      position absolute;
+    .add-btn {
+      position: absolute;
       bottom: 0%;
       left: 50%;
       transform: translate(-50%, 50%);
+    }
+  }
 
-  .add-new-item
-    display grid;
-    place-content center;
-    height 100%;
-    cursor pointer;
+  .add-new-item {
+    display: grid;
+    place-content: center;
+    height: 100%;
+    cursor: pointer;
+  }
+}
 </style>

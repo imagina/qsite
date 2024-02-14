@@ -16,6 +16,7 @@
       mapData: {default: false},
       mapType: {default: 'route'}
     },
+    emits: ['update:modelValue'],
     watch: {
       defaultCityId(newValue) {
         if (newValue) this.setMapCenter()
@@ -118,7 +119,7 @@
         let response = {
           markers: this.waypts
         }
-        this.$emit('input', response)
+        this.$emit('update:modelValue', response)
       },
       cities() {
         return this.$store.state.appMaster.cities

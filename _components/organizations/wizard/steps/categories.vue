@@ -3,7 +3,7 @@
 
     <h2 v-if="stepContent" class="step-title">{{stepContent.title}}</h2>
     <div class="tw-px-2 md:tw-px-6 tw-pb-6 tw-mt-4 tw-mb-2">
-      <dynamic-field v-model="name" :field="formFields.category" @input="getCategoriesSearch"/>
+      <dynamic-field v-model="name" :field="formFields.category" @update:modelValue="getCategoriesSearch"/>
       <div class="tw-text-xs tw-mt-2" v-show="selected">
         {{ $tr('isite.cms.message.selectedCategory') }}: <span class="tw-font-bold"> {{selected.title}}</span>
       </div>
@@ -83,6 +83,7 @@ import services from 'modules/qsite/_components/organizations/wizard/steps/servi
 import { LIMIT_PAGE } from './model/constant.js';
 
 export default {
+  emits: ['updateData'],
   data() {
     return {
       loading: false,

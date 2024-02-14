@@ -31,7 +31,7 @@
                         emit-value map-options
                         input-debounce="800" :options="userList" @filter="getUsers"
                         :placeholder="`${$tr('isite.cms.label.find')} ${$tr('isite.cms.label.user')}...`"
-                        @input="impersonate()" style="width: 100%">
+                        @update:modelValue="impersonate()" style="width: 100%">
                 <template v-slot:no-option>
                   <q-item>
                     <q-item-section class="text-grey">
@@ -130,7 +130,7 @@
       </div>
       <!--dynamic field to organizations-->
       <dynamic-field v-model="organizationId" :field="organizationField" v-if="organizationField"
-                     @input="setOrganization"/>
+                     @update:modelValue="setOrganization"/>
       <!--no organizations-->
       <div v-else class="q-px-sm text-grey-7" style="line-height: 1.2">
         {{ $tr('isite.cms.messages.noOrganization') }}...
@@ -157,7 +157,7 @@
 
         <!--Select Language-->
         <q-select :options="options.locales" dense outlined emit-value map-options
-                  filter hide-underline v-if="show.locales" @input="updateLocale"
+                  filter hide-underline v-if="show.locales" @update:modelValue="updateLocale"
                   v-model="locale" class="full-width q-if-focused q-if-focusable"/>
 
         <!--Current language selected-->
@@ -221,7 +221,7 @@
   </div>
 </template>
 <script>
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 export default {
   mounted() {
     this.$nextTick(async function () {

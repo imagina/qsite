@@ -12,10 +12,10 @@
 //Components
 import CKEditor from 'ckeditor4-vue';
 //Custom Plugins
-import pluginCollapsibleItem from 'modules/qsite/_plugins/ckEditorPlugins/collapsibleItem/plugin'
-import pluginGrid from 'modules/qsite/_plugins/ckEditorPlugins/grid/plugin'
-import pluginEmbed from 'modules/qsite/_plugins/ckEditorPlugins/embed/plugin'
-import pluginFa from 'modules/qsite/_plugins/ckEditorPlugins/ckeditorfa-fa6/plugin'
+import pluginCollapsibleItem from 'src/plugins/ckEditorPlugins/collapsibleItem/plugin'
+import pluginGrid from 'src/plugins/ckEditorPlugins/grid/plugin'
+import pluginEmbed from 'src/plugins/ckEditorPlugins/embed/plugin'
+import pluginFa from 'src/plugins/ckEditorPlugins/ckeditorfa-fa6/plugin'
 
 /* range 7px to 36px*/
 let fontSizes =  Array.from({length: 30}, (_, index) => `${7+index * 1}/${7 +index * 1}px;`)
@@ -23,18 +23,19 @@ fontSizes.push('48/48px;72/72px;96/96px;')
 
 export default {
   props: {
-    value: {default: ''},
+    modelValue: {default: ''},
     name: {default: null}
   },
+  emits: ['update:modelValue'],
   components: {ckEditor: CKEditor.component},
   watch: {
-    value(newValue, oldValue) {
+    modelValue(newValue, oldValue) {
       if (JSON.stringify(newValue) != JSON.stringify(oldValue))
         this.responseValue = this.$clone(newValue)
     },
     responseValue(newValue, oldValue) {
       if (JSON.stringify(newValue) != JSON.stringify(oldValue))
-        this.$emit('input', this.$clone(newValue))
+        this.$emit('update:modelValue', this.$clone(newValue))
 
     }
   },
@@ -63,7 +64,7 @@ export default {
   },
   methods: {
     init() {
-      this.responseValue = this.$clone(this.value)
+      this.responseValue = this.$clone(this.modelValue)
     },
     //On name space loaded
     onNamespaceLoaded(CKEDITOR) {
@@ -86,19 +87,19 @@ export default {
   }
 
   #iconToolbarCollapsibleitem {
-    background-image: url("../../_plugins/ckEditorPlugins/collapsibleItem/collapsibleitem.png");
+    background-image: url("src/plugins/ckEditorPlugins/collapsibleItem/collapsibleitem.png");
   }
 
   #iconToolbarGrid {
-    background-image: url("../../_plugins/ckEditorPlugins/grid/grid.png");
+    background-image: url("src/plugins/ckEditorPlugins/grid/grid.png");
   }
 
   #iconToolbarEmbed {
-    background-image: url("../../_plugins/ckEditorPlugins/embed/embed.png");
+    background-image: url("src/plugins/ckEditorPlugins/embed/embed.png");
   }
 
   .cke_button__ckeditorfa_icon {
-    background-image: url("../../_plugins/ckEditorPlugins/ckeditorfa-fa6/icons/ckeditorfa.png") !important;
+    background-image: url("src/plugins/ckEditorPlugins/ckeditorfa-fa6/icons/ckeditorfa.png") !important;
   }
 
   /* ckeditor-fa pluging */

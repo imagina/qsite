@@ -12,7 +12,7 @@
 export default {
   components: {},
   props: {
-    value: {default: null},
+    modelValue: {default: null},
     defaultCenter: {
       default: () => {
         return {lat: 4.642129714308486, lng: -74.11376953125001}
@@ -22,8 +22,9 @@ export default {
       default: false
     }
   },
+  emits: ['update:modelValue'],
   watch: {
-    value: {
+    modelValue: {
       deep: true,
       handler: function (newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue)) this.setMarkerFromValue()
@@ -59,7 +60,7 @@ export default {
         this.initAutocomplete()
         this.setMarkerFromValue()
         if(this.emitDefault) {
-          this.$emit('input', this.$clone({lat: this.defaultCenter.lat, lng: this.defaultCenter.lng}))
+          this.$emit('update:modelValue', this.$clone({lat: this.defaultCenter.lat, lng: this.defaultCenter.lng}))
           setTimeout(() => {
             this.map.setZoom(8)
           }, 50)
@@ -85,7 +86,7 @@ export default {
     //Set marker from value
     setMarkerFromValue() {
       //Get value
-      let position = this.$clone(this.value)
+      let position = this.$clone(this.modelValue)
       //Validate value
       if (position.lat && position.lng) {
         //Instance marker
@@ -133,7 +134,7 @@ export default {
       this.map.setCenter(position)
       this.map.setZoom(15);
       //Emit marker
-      this.$emit('input', this.$clone({lat: position.lat(), lng: position.lng()}))
+      this.$emit('update:modelValue', this.$clone({lat: position.lat(), lng: position.lng()}))
     },
   }
 }
