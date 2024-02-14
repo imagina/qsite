@@ -1,11 +1,11 @@
 <template>
     <q-dialog
         v-model="show"
-        :content-class="`master-super-ctn master-dialog${customPosition ? '-custom' : ''}`"
+        :class="`master-super-ctn master-dialog${customPosition ? '-custom' : ''}`"
         :maximized="maximized"
         :persistent="persistent"
         :position="customPosition ? 'right' : 'standard'"
-        :content-style="masterModalWidthSize"
+        :style="masterModalWidthSize"
     >
     <!--Content-->
     <div

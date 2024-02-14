@@ -1,6 +1,6 @@
 <template>
   <q-dialog id="alertModalComponent" ref="alertModalComponent" persistent
-            transition-show="slide-up" transition-hide="slide-down" :content-style="modalWidth">
+            transition-show="slide-up" transition-hide="slide-down" :style="modalWidth">
     <div id="cardContent" class="box">
       <!--Header-->
       <q-toolbar :class="`bgg-${paramsModal.color} q-px-none`" style="min-height: auto">
