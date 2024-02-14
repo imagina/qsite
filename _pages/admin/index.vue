@@ -67,7 +67,7 @@ export default {
       let quickCardsToShow = []
       for (const card of quickCards){
         if (!card.permission || this.$auth.hasAccess(card.permission)){
-          const qcComponent = await card.component()
+          const qcComponent = await card?.component()
           card.component = markRaw(qcComponent.default)
           quickCardsToShow.push(card)
         }

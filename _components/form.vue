@@ -2,10 +2,11 @@
   <div id="siteForm" class="position-relative">
     <locales v-model="locale" ref="locales" class="q-my-md"
              @validate="$v.$touch()" v-show="hasTranslatables" />
-
-    <div v-for="(setting,index) in module" :key="index" v-if="locale.success">
-      <field :key="index" :setting="setting" v-model="locale.formTemplate[setting.name]" :label="label(setting)"/>
-    </div>
+    <template v-for="(setting, index) in module">
+      <div :key="index" v-if="locale.success">
+        <field :key="index" :setting="setting" v-model="locale.formTemplate[setting.name]" :label="label(setting)"/>
+      </div>
+    </template>
 
     <div class="col-12 text-right">
       <q-btn color="green" :label="$tr('isite.cms.label.save')" icon="fas fa-save" @click="submit" class="q-mt-sm"/>

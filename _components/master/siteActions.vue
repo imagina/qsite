@@ -159,7 +159,7 @@ export default {
               icon: 'fa-light fa-cloud-slash',
               class: `btn-small`
             },
-            action: () => this.$eventBus.$emit('toggleMasterDrawer', 'offline')
+            action: () => eventBus.emit('toggleMasterDrawer', 'offline')
           },
           //Go To Site
           {
