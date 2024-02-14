@@ -5,10 +5,10 @@
       <q-infinite-scroll id="infinitiScrollChat" @load="getMessages" ref="infiniteScroll"
                          :scroll-target="$refs.chatContent" reverse>
         <!--Label date-->
-        <template v-for="(comment, key) in messages">
+        <template v-for="(comment, key) in messages" :key="key">
           <q-chat-message
             v-if="comment.label"
-            :label="comment.label" :key="key"
+            :label="comment.label"
             :class="`text-${colorsChat.name}`"
           />
           <!--Chat message-->
