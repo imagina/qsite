@@ -20,7 +20,7 @@
 import zoneConfigMixing from "modules/qmedia/_mixins/zoneConfigMixins"
 //components
 import fileList from 'modules/qsite/_components/master/fileList'
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   name: 'uploaderComponentMaster',

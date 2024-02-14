@@ -110,7 +110,6 @@
   </div>
 </template>
 <script>
-  import alert from 'modules/qsite/_plugins/alert'
 
   /*Components*/
   import mediaForm from 'modules/qmedia/_components/form'

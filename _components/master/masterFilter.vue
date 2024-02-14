@@ -87,7 +87,7 @@
     </q-dialog>
 </template>
 <script>
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   inject: {

@@ -445,7 +445,7 @@ import JsonEditorVue from 'json-editor-vue'
 import expressionField from 'modules/qsite/_components/master/expressionField/index.vue';
 import localizedPhone from 'modules/qsite/_components/master/localizedPhone/index.vue';
 import multipleDynamicFields from 'modules/qsite/_components/master/multipleDynamicFields/views'
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 //Code mirror
 //[ptc]import {codemirror} from 'vue-codemirror'
 //[ptc]

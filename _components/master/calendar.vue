@@ -138,7 +138,7 @@
 <script>
 //Components
 import QCalendar from '@quasar/quasar-ui-qcalendar'
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   props: {

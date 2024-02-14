@@ -25,7 +25,7 @@
 <script>
 //Components
 import siteActions from 'modules/qsite/_components/master/siteActions'
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   beforeDestroy() {

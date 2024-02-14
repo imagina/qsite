@@ -1,4 +1,4 @@
-import cache from 'modules/qsite/_plugins/cache'
+import { cache } from 'src/plugins/utils'
 import axios from 'axios'
 import crud from 'modules/qcrud/_services/baseService'
 import {colors, AddressbarColor} from 'quasar'

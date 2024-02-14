@@ -31,7 +31,7 @@ import draggable from "vuedraggable";
 import reportList from './reportList.vue';
 import folder from './folderList.vue';
 import foldersStore from './store/foldersStore.js';
-import cache from 'modules/qsite/_plugins/cache';
+import { cache } from 'src/plugins/utils';
 
 export default {
   props: {

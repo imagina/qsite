@@ -36,7 +36,7 @@ import zoneConfigMixing from "modules/qmedia/_mixins/zoneConfigMixins"
 // Local
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   beforeDestroy() {

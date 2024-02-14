@@ -147,7 +147,7 @@
 </template>
 <script>
 import QCharts from 'modules/qsite/_components/master/charts.vue';
-import eventBus from 'modules/qsite/_plugins/eventBus'
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   beforeDestroy() {
