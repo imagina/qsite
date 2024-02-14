@@ -85,7 +85,7 @@
                       class="q-ml-sm "
                       :class="{'showOnHover' : isDesktop}"
                       @click="fileAction(element)"
-                      icon="fa-solid fa-eye"
+                      icon="fa-light fa-eye"
                       :label="$tr('isite.cms.label.quickLook')"
                       size="sm"
                       dense
