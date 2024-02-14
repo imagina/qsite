@@ -69,6 +69,7 @@
             :force-fallback="true"
             class="tw-flex tw-overflow-x-auto tw-overflow-y-hidden tw-mx-2"
             @end="saveStatusOrdering('failed')"
+            item-key="name"
           >
             <template #item="{ status, index }">
               <statuses
