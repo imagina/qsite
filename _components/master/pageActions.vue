@@ -101,7 +101,7 @@ import { eventBus } from 'src/plugins/utils'
 export default {
   beforeDestroy() {
     this.clearInterval();
-    this.$root.$off('page.data.filter.read')
+    eventBus.off('page.data.filter.read')
   },
   props: {
     title: {type: String},
@@ -381,9 +381,9 @@ export default {
     //Emit refresh
     emitRefresh() {
       this.$emit('refresh')
-      this.$root.$emit('page.data.refresh')
-      this.$root.$emit('crud.data.refresh')
-      this.$root.$emit('export.data.refresh')
+      eventBus.emit('page.data.refresh')
+      eventBus.emit('crud.data.refresh')
+      eventBus.emit('export.data.refresh')
     },
     //Emit filter
     emitFilter() {

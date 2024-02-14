@@ -317,7 +317,7 @@ export default {
       //Emit Filter
       if (this.filter && this.filter.callBack) {
         this.filter.callBack(this.filter)//Call back
-        this.$root.$emit('page.data.filtered', this.filter)//Global event
+        eventBus.emit('page.data.filtered', this.filter)//Global event
       }
     },
     // Mutate Current Url

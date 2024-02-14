@@ -5,6 +5,7 @@
   </master-modal>
 </template>
 <script>
+import { eventBus } from 'src/plugins/utils'
 
 export default {
   data() {
@@ -116,7 +117,7 @@ export default {
         //request
         this.$crud.update('apiRoutes.qsite.icruds', this.selectedCrud.id, requestData).then(response => {
           this.$alert.info({message: this.$tr('isite.cms.message.recordUpdated')})
-          this.$root.$emit('crud.data.refresh')
+          eventBus.emit('crud.data.refresh')
           this.modal.props.loading = false
           this.modal.show = false
           resolve(response.data)
