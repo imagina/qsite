@@ -349,7 +349,6 @@ export default {
         const id =  { id: this.filterPlugin.values.statusId } || {};
         parameters.params.filter = {
           [route.filter.name]: this.funnelSelectedComputed, ...id,
-          order: {field:"type", way:"asc"}
         };
         const response = await this.$crud.index(route.apiRoute, parameters);
         return response;
