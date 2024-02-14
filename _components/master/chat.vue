@@ -5,16 +5,27 @@
       <q-infinite-scroll id="infinitiScrollChat" @load="getMessages" ref="infiniteScroll"
                          :scroll-target="$refs.chatContent" reverse>
         <!--Label date-->
-        <q-chat-message v-if="comment.label" v-for="(comment, key) in messages"
-                        :label="comment.label" :key="key" :class="`text-${colorsChat.name}`"/>
-        <!--Chat message-->
-        <q-chat-message v-else :name="comment.sent ? '' : comment.userName" :sent="comment.sent"
-                        :text="comment.message" :stamp="comment.time"
-                        :text-color="comment.textColor" :bg-color="comment.bgColor">
-          <template slot="avatar">
-            <avatar-image size="40px" class="q-mx-xs" :src="comment.userImage"/>
-          </template>
-        </q-chat-message>
+        <template v-for="(comment, key) in messages">
+          <q-chat-message
+            v-if="comment.label"
+            :label="comment.label" :key="key"
+            :class="`text-${colorsChat.name}`"
+          />
+          <!--Chat message-->
+          <q-chat-message
+            v-else
+            :name="comment.sent ? '' : comment.userName"
+            :sent="comment.sent"
+            :text="comment.message"
+            :stamp="comment.time"
+            :text-color="comment.textColor"
+            :bg-color="comment.bgColor"
+          >
+            <template slot="avatar">
+              <avatar-image size="40px" class="q-mx-xs" :src="comment.userImage"/>
+            </template>
+          </q-chat-message>
+        </template>
         <!--Loading scroll-->
         <template v-slot:loading>
           <div class="row justify-center q-my-md">
