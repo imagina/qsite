@@ -1,5 +1,7 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, onUnmounted} from "vue";
 import store from 'modules/qsite/_components/v3/recursiveItem/store'
+import { globalStore, uid } from 'src/plugins/utils'
+const { hasAccess } = globalStore.store
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
@@ -12,7 +14,7 @@ export default function controller(props: any, emit: any) {
   // States
   const state = reactive({
     showMenu: false,
-    listUid: proxy.$uid().toString(),
+    listUid: uid().toString(),
     props: {},
     // Key: Default Value
   })
@@ -25,7 +27,7 @@ export default function controller(props: any, emit: any) {
         item.itemProps = {
           class: methods.getClassItem(item),
           tag: 'div',
-          key: proxy.$uid(),
+          key: uid(),
           vIf: methods.checkItemSingle(item),
           clickable: true
         }
@@ -66,7 +68,7 @@ export default function controller(props: any, emit: any) {
       if (!item.activated) response = false
       if (item.children) response = false
       if (!item.name) response = false
-      if (item.permission && !proxy.$auth.hasAccess(item.permission)) response = false
+      if (item.permission && !hasAccess(item.permission)) response = false
       if(!item.children?.length && item.action) response = true
       return response//Response
     },
@@ -76,7 +78,7 @@ export default function controller(props: any, emit: any) {
       if(item.children && item.children.length && item.action) return true
       if (!item.children) response = false
       if (item.children && !item.children.length) response = false
-      if (item.permission && !proxy.$auth.hasAccess(item.permission)) response = false
+      if (item.permission && !hasAccess(item.permission)) response = false
       return response//Response
     },
     //Validate if should load all multi-item
