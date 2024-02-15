@@ -1,4 +1,4 @@
-import pages from 'src/config/pages'
+import pages from 'src/setup/pages'
 
 //Places
 export default [
