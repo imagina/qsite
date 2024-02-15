@@ -13,6 +13,5 @@ export default [
   },
   pages.qsite.organizationsAll,//organizations
   pages.qsite.organizations,//organizations
-  pages.qsite.index,//setup
   pages.qsite.auditLog,
 ]
