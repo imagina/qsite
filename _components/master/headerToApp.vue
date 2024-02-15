@@ -33,7 +33,7 @@
     methods: {}
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   #backPageComponent {
     height: 50px;
     width: 100%;
