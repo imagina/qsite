@@ -219,7 +219,7 @@
         <q-field v-model="responseValue" v-if="loadField('treeSelect')" :label="fieldLabel"
                  v-bind="fieldProps.fieldComponent" :class="`${field.help ? 'treeselect-dynamic-field' : ''}`">
           <tree-select v-model="responseValue" :options="formatOptions" placeholder="">
-              <template slot="option-label" slot-scope="{node}">
+              <template #option-label="{node}">
                 <label>
                   <!-- Image -->
                   <q-img
@@ -232,7 +232,7 @@
                 </label>
               </template>
             <!--Before options slot-->
-            <template slot="before-list">
+            <template #before-list>
               <slot name="before-options"></slot>
             </template>
           </tree-select>
