@@ -25,15 +25,26 @@
                               :header-class="`q-pr-sm q-pl-md ${moduleSelected == moduleName ? 'q-item--active' : ''}`"
                               group="menuSettings">
               <q-list separator class="q-pl-md">
-                <q-item v-for="(group, groupName) in settingsGroup[moduleName]" :key="groupName" clickable v-ripple
-                        :active="groupSelected == groupName && moduleSelected == moduleName" class="q-pl-sm q-pr-md"
-                        @click.native="openGroupSettings(moduleName, groupName)"
-                        dense v-if="Object.keys(group).length">
-                  <q-item-section>
-                    {{ groupsName[moduleName][groupName].title || groupsName[moduleName][groupName] }}
-                  </q-item-section>
-                  <q-item-section side> {{ Object.keys(group).length }}</q-item-section>
-                </q-item>
+                <template
+                  v-for="(group, groupName) in settingsGroup[moduleName]"
+                  :key="groupName"
+                >
+                  <q-item
+                    clickable
+                    v-ripple
+                    :active="groupSelected == groupName && moduleSelected == moduleName"
+                    class="q-pl-sm q-pr-md"
+                    @click.native="openGroupSettings(moduleName, groupName)"
+                    dense v-if="Object.keys(group).length"
+                  >
+                    <q-item-section>
+                      {{ groupsName[moduleName][groupName].title || groupsName[moduleName][groupName] }}
+                    </q-item-section>
+                    <q-item-section side>
+                      {{ Object.keys(group).length }}
+                    </q-item-section>
+                  </q-item>
+                </template>
               </q-list>
             </q-expansion-item>
           </q-list>

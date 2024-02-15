@@ -38,7 +38,7 @@ export default function useComments(props: any) {
   const route = computed<string>(() => props.apiRoute);
   const mainImage = computed(() => {
     return item => item.userProfile && item.userProfile?.mainImage
-      ? item.userProfile.mainImage : commentModelConst.avatar;
+      ? item?.userProfile?.mainImage : commentModelConst.avatar;
   })
   const tr = ref(proxy.$tr);
   const comments = ref<commentsContract[]>([]);

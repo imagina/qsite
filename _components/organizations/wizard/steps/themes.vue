@@ -15,7 +15,7 @@
                 :class="item.id === selected.id ? 'selectable--selected' : 'selectable'"
                 @click="selectData(item)">
               <q-img contain
-                    :src="item.mediaFiles.mainimage.smallThumb"
+                    :src="item?.mediaFiles?.mainimage.smallThumb"
                     :ratio="1/1"
                     class="tw-border tw-w-full tw-bg-white"/>
               <div class="item-theme-name tw-text-xs text-center text-weight-bold">
@@ -33,7 +33,7 @@
     <div v-if="stepContent" class="step-sidebar">
       <div class="select-card tw-max-w-md tw-w-full text-center" v-if="selected">
         <q-img class="img-themes" contain
-                :src="selected.mediaFiles.mainimage.extraLargeThumb"
+                :src="selected?.mediaFiles?.mainimage.extraLargeThumb"
         />
         <div class="select-name text-center text-weight-bold tw-mt-2 text-primary text-h6">
           {{ selected.name }}
@@ -44,8 +44,8 @@
       </div>
       <div class="select-card tw-max-w-md tw-w-full" v-else>
         <div class="tw-text-base tw-mb-8 text-center" v-html="stepContent.description"></div>
-        <q-img v-if="stepContent.mediaFiles" contain
-                :src="stepContent.mediaFiles.mainimage.extraLargeThumb"
+        <q-img v-if="stepContent?.mediaFiles" contain
+                :src="stepContent?.mediaFiles?.mainimage.extraLargeThumb"
           />
       </div>
     </div>

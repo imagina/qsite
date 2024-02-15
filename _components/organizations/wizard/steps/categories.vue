@@ -67,8 +67,8 @@
     <div v-if="stepContent" class="step-sidebar">
       <div class="categories-text tw-max-w-sm tw-w-full">
         <div class="tw-text-base tw-mb-8 text-center" v-html="stepContent.description"></div>
-        <q-img v-if="stepContent.mediaFiles" contain
-                :src="stepContent.mediaFiles.mainimage.extraLargeThumb"
+        <q-img v-if="stepContent?.mediaFiles" contain
+                :src="stepContent?.mediaFiles?.mainimage.extraLargeThumb"
                 :ratio="1/1"
           />
       </div>

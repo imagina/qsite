@@ -70,14 +70,14 @@ export default function layoutStore() {
         id: item.id,
         filename: item.title,
         createdAt: item.createdAt,
-        path: item.mediaFiles.mainimage.path,
-        isFolder: item.mediaFiles.mainimage.isFolder,
-        isImage: item.mediaFiles.mainimage.isImage,
-        isVideo: item.mediaFiles.mainimage.isVideo,
-        largeThumb: item.mediaFiles.mainimage.largeThumb,
-        mediaType: item.mediaFiles.mainimage.mediaType,
-        mediumThumb: item.mediaFiles.mainimage.mediumThumb,
-        mimeType: item.mediaFiles.mainimage.mimeType,
+        path: item.mediaFiles?.mainimage.path,
+        isFolder: item.mediaFiles?.mainimage.isFolder,
+        isImage: item.mediaFiles?.mainimage.isImage,
+        isVideo: item.mediaFiles?.mainimage.isVideo,
+        largeThumb: item.mediaFiles?.mainimage.largeThumb,
+        mediaType: item.mediaFiles?.mainimage.mediaType,
+        mediumThumb: item.mediaFiles?.mainimage.mediumThumb,
+        mimeType: item.mediaFiles?.mainimage.mimeType,
       }
     });
   }

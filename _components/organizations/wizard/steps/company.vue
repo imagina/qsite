@@ -12,7 +12,7 @@
     <div v-if="stepContent" class="step-sidebar">
       <div class="select-company tw-max-w-md tw-w-full">
         <q-img v-if="stepContent.mediaFiles" contain
-               :src="stepContent.mediaFiles.mainimage.extraLargeThumb"
+               :src="stepContent?.mediaFiles?.mainimage.extraLargeThumb"
                :ratio="1/1"
         />
       </div>
@@ -22,13 +22,13 @@
 <script>
 import storeWizard from './store/index.ts';
 
-export default {  
+export default {
   data() {
     return {
       name: '',
       stepContent: '',
     }
-  },  
+  },
   mounted() {
     this.$nextTick(async function () {
       this.getData();
@@ -38,8 +38,8 @@ export default {
   watch: {
     name(newName, oldName) {
       if(newName){
-        this.checkName();  
-      }      
+        this.checkName();
+      }
     }
   },
   computed: {
@@ -59,7 +59,7 @@ export default {
     },
   },
   methods: {
-    async getData() {      
+    async getData() {
       if (storeWizard.data.organization !== '') {
         this.name = storeWizard.data.organization;
       }
@@ -84,15 +84,15 @@ export default {
             filter: {field: 'title'}
           }
         }
-        //Request        
-        this.$crud.show('apiRoutes.qsite.organizations', name, requestParams).then(response => {        
+        //Request
+        this.$crud.show('apiRoutes.qsite.organizations', name, requestParams).then(response => {
           resolve(response.data)
         }).catch(error => {
-          this.$apiResponse.handleError(error, () => {        
+          this.$apiResponse.handleError(error, () => {
             reject(error)
           })
         })
-      })    
+      })
     }
   }
 }

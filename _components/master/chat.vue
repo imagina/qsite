@@ -126,7 +126,7 @@
               sent: message.user.id == user.id,
               message: [message.comment],
               userName: `<span class='text-${this.colorsChat.name}'>${message.user.firstName}</span>`,
-              userImage: message.user.mainImage,
+              userImage: message?.user?.mainImage,
               date: this.$trd(message.createdAt),
               time: this.$trd(message.createdAt, {type: 'time'}),
               bgColor: (message.user.id == user.id) ? this.colorsChat.bgRight : this.colorsChat.bgLeft,

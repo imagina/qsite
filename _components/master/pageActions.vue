@@ -85,10 +85,21 @@
       </div>
     </div>
     <!-- Export Component -->
-    <master-export v-model="exportParams" ref="exportComponent"/>
+    <master-export 
+      v-if="exportParams" 
+      v-model="exportParams" 
+      ref="exportComponent"
+    />
     <!-- Master Filter Component -->
-    <master-filter :show="drawer.filter" v-if="filter.load"/>
-    <master-synchronizable v-model="syncParams" v-if="$auth.hasAccess('isite.synchronizables.index')" ref="syncComponent" />
+    <master-filter 
+      v-if="filter.load"
+      :show="drawer.filter" 
+    />
+    <master-synchronizable 
+      v-model="syncParams" 
+      v-if="syncParams && $auth.hasAccess('isite.synchronizables.index')" 
+      ref="syncComponent" 
+    />
   </div>
 </template>
 <script>

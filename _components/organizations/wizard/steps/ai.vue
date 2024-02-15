@@ -29,7 +29,7 @@
       <div class="select-ai tw-max-w-md tw-w-full">
         <div class="tw-text-base  tw-text-center tw-mb-10" v-html="stepContent.description"></div>
         <q-img v-if="stepContent.mediaFiles" contain
-               :src="stepContent.mediaFiles.mainimage.extraLargeThumb"
+               :src="stepContent?.mediaFiles?.mainimage.extraLargeThumb"
         />
       </div>
     </div>

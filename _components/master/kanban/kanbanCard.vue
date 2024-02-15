@@ -36,9 +36,9 @@
             padding="5px 5px"
             class="
               kd-without-arrow
-              tw-float-right 
-              tw-cursor-pointer 
-              tw-text-xs 
+              tw-float-right
+              tw-cursor-pointer
+              tw-text-xs
               tw-bg-gray-100
               tw-h-7
             "
@@ -47,9 +47,9 @@
             <q-list
               dense
               class="
-                tw-p-2 
-                kd-list-without-arrow 
-                tw-bg-gray-100 
+                tw-p-2
+                kd-list-without-arrow
+                tw-bg-gray-100
                 tw-text-xs"
             >
               <q-item
@@ -78,16 +78,16 @@
     <div
       v-if="cardData.type"
       class="
-        tw-flex 
-        tw-mt-1 
-        tw-justify-between 
+        tw-flex
+        tw-mt-1
+        tw-justify-between
         tw-items-center
       "
     >
-      <span 
+      <span
         class="
           tw-mt-4
-          tw-text-xs 
+          tw-text-xs
           tw-text-gray-600
         "
       >
@@ -96,9 +96,9 @@
     </div>
     <div
       class="
-        tw-flex 
-        tw-mt-1 
-        tw-justify-between 
+        tw-flex
+        tw-mt-1
+        tw-justify-between
         tw-items-center
       "
       v-for="field in cardData.fields"
@@ -106,8 +106,8 @@
     >
       <span
         class="
-          tw-text-xs 
-          tw-text-gray-600 
+          tw-text-xs
+          tw-text-gray-600
           tw-truncate
         "
         v-if="field.name && typeof field.value !== 'object'"
@@ -117,22 +117,22 @@
       </span>
     </div>
 
-    <div 
+    <div
       class="
-        tw-flex 
-        tw-mt-4 
-        tw-justify-between 
+        tw-flex
+        tw-mt-4
+        tw-justify-between
         tw-items-center
       ">
-      <span 
+      <span
         class="
-          tw-text-xs 
+          tw-text-xs
           tw-text-gray-600
         ">
           <b>{{ $tr('isite.cms.label.date') }} *</b> {{ cardData.createdAt }}
       </span>
     </div>
-    <figure 
+    <figure
       class="
         tw-flex
         tw-mt-4
@@ -140,7 +140,7 @@
       "
       v-if="fullName"
     >
-      <img 
+      <img
         class="
           tw-w-5
           tw-h-5
@@ -152,7 +152,7 @@
         anchor="top left"
         self="bottom left"
         :offset="[10, 10]"
-        :delay="100" 
+        :delay="100"
       >
         <p>
           {{ fullName.firstName + ' ' + fullName.lastName }}
@@ -229,8 +229,8 @@ export default {
       return { firstName, lastName }
     },
     urlAvatar() {
-      return  this.cardData?.responsible?.mediaFiles?.profile?.largeThumb || 
-              this.quserState.userData.mainImage
+      return  this.cardData?.responsible?.mediaFiles?.profile?.largeThumb ||
+              this.quserState?.userData?.mainImage
     },
     actionsAutomations() {
       let response = [
