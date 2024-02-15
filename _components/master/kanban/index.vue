@@ -19,74 +19,81 @@
         :disabled="loading || !dragColumn || kanbanColumns.length === 0"
         class="tw-p-3 tw-h-auto tw-flex tw-space-x-4 tw-overflow-x-auto"
         @change="reorderColumns"
+        :item-key="`columnKanban${uId}`"
       >
-        <div v-if="!loading" v-for="(column, index) in kanbanColumns"
-         :class="{'notMoveBetweenColumns': column.type !== 1}"
-        >
-          <kanbanColumn
-            :key="index"
-            :column-data="column"
-            :columnIndex="index"
-            :totalColumns="kanbanColumns.length"
-            :ref="`kanbanColumn-${column.id}`"
-            class="
+        <template #item="{element, index}">
+          <div v-if="!loading" :class="{'notMoveBetweenColumns': element.type !== 1}">
+            <div>
+              <kanbanColumn
+                :key="index"
+                :column-data="element"
+                :columnIndex="index"
+                :totalColumns="kanbanColumns.length"
+                :ref="`kanbanColumn-${element.id}`"
+                class="
               tw-flex-none tw-space-y-0
               w-h-auto
               tw-bg-gray-100 tw-rounded-lg tw-shadow
             "
-          />
+              />
+            </div>
 
-        </div>
-        <q-skeleton
-          animation="blink"
-          height="700px"
-          width="450px"
-          v-if="loading"
-          v-for="(item, index) in 5"
-          :key="index"
-        />
-        <div class="tw-text-center tw-w-full" v-if="!loading && kanbanColumns.length === 0">
-          <i class="fa-duotone fa-face-pleading tw-text-9xl colorTextPrimary"></i>
-          <p class="tw-text-xl tw-font-semibold tw-py-4">No tiene estados creados en esta categoría</p>
-        </div>
-        <div
-          v-if="!loading && hoverArrow && scrollTotal > 0"
-          class="
-            tw-absolute
-            tw-left-0
-            tw-cursor-pointer
-            tw-bg-white
-            tw-shadow-lg
-            tw-rounded-full
-            tw-p-1
-            tw-z-20
-            tw-border
-            tw-border-gray-200
-            icon-left"
-            style="top: 35%"
-            @click="scrollLeft"
-          >
-            <i class="fa-light fa-arrow-left tw-text-4xl tw-text-gray-300"></i>
-        </div>
-        <div
-          v-if="!loading && hoverArrow && kanbanColumns.length !== 0"
-          class="
-            tw-absolute
-            tw-right-0
-            tw-cursor-pointer
-            tw-bg-white
-            tw-shadow-lg
-            tw-rounded-full
-            tw-p-1
-            tw-z-20
-            tw-border
-            tw-border-gray-200
-            icon-right"
-            style="top: 35%"
-            @click="scrollRight"
-          >
-            <i class="fa-light fa-arrow-right tw-text-4xl tw-text-gray-300"></i>
-        </div>
+          </div>
+        </template>
+        <template #footer>
+          <div>
+            <q-skeleton
+              animation="blink"
+              height="700px"
+              width="450px"
+              v-if="loading"
+              v-for="(item, index) in 5"
+              :key="index"
+            />
+            <div class="tw-text-center tw-w-full" v-if="!loading && kanbanColumns.length === 0">
+              <i class="fa-duotone fa-face-pleading tw-text-9xl colorTextPrimary"></i>
+              <p class="tw-text-xl tw-font-semibold tw-py-4">No tiene estados creados en esta categoría</p>
+            </div>
+            <div
+              v-if="!loading && hoverArrow && scrollTotal > 0"
+              class="
+                tw-absolute
+                tw-left-0
+                tw-cursor-pointer
+                tw-bg-white
+                tw-shadow-lg
+                tw-rounded-full
+                tw-p-1
+                tw-z-20
+                tw-border
+                tw-border-gray-200
+                icon-left"
+              style="top: 35%"
+              @click="scrollLeft"
+            >
+              <i class="fa-light fa-arrow-left tw-text-4xl tw-text-gray-300"></i>
+            </div>
+            <div
+              v-if="!loading && hoverArrow && kanbanColumns.length !== 0"
+              class="
+                tw-absolute
+                tw-right-0
+                tw-cursor-pointer
+                tw-bg-white
+                tw-shadow-lg
+                tw-rounded-full
+                tw-p-1
+                tw-z-20
+                tw-border
+                tw-border-gray-200
+                icon-right"
+              style="top: 35%"
+              @click="scrollRight"
+            >
+              <i class="fa-light fa-arrow-right tw-text-4xl tw-text-gray-300"></i>
+            </div>
+          </div>
+        </template>
       </draggable>
     </div>
     <div v-else>
@@ -103,9 +110,9 @@
       :filterName="routes.column ? routes.column.filter.name : null"
     />
     <formRules
-        ref="formRules"
-        :funnelId="funnelSelectedComputed"
-        :filterName="routes.column ? routes.column.filter.name : null"
+      ref="formRules"
+      :funnelId="funnelSelectedComputed"
+      :filterName="routes.column ? routes.column.filter.name : null"
     />
     <modalStatus />
     <modalAnalytics />
@@ -113,14 +120,14 @@
 </template>
 
 <script>
-import kanbanColumn from "modules/qsite/_components/master/kanban/kanbanColumn.vue";
-import kanbanStore from "modules/qsite/_components/master/kanban/store/kanbanStore.js";
-import automationRules from "./automationRules/index.vue";
-import draggable from "vuedraggable";
+import kanbanColumn from 'modules/qsite/_components/master/kanban/kanbanColumn.vue';
+import kanbanStore from 'modules/qsite/_components/master/kanban/store/kanbanStore.js';
+import automationRules from './automationRules/index.vue';
+import draggable from 'vuedraggable';
 import formComponent from './modals/form.vue';
 import formRules from './modals/formRules';
-import modalStatus from './modals//statusModal/index.vue'
-import modalAnalytics from './modals/analytics/index.vue'
+import modalStatus from './modals//statusModal/index.vue';
+import modalAnalytics from './modals/analytics/index.vue';
 import showaAnalytics from './modals/analytics/actions/show.ts';
 import storeAnalytics from './modals/analytics/store/index.ts';
 
@@ -128,7 +135,7 @@ const modelPayload = {
   id: null,
   title: null,
   color: null,
-  value: 1,
+  value: 1
 };
 const modelColumn = {
   id: null,
@@ -138,38 +145,38 @@ const modelColumn = {
   loading: false,
   page: 1,
   total: 0,
-  new: true,
+  new: true
 };
 export default {
   props: {
     routes: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     heightColumn: {
       type: Number,
-      default: () => 235,
+      default: () => 235
     },
     showFunnel: {
       type: Boolean,
-      default: () => false,
+      default: () => false
     },
     funnelId: {
       type: String,
-      default: () => null,
+      default: () => null
     },
     dragColumn: {
       type: Boolean,
-      default: () => true,
+      default: () => true
     },
     disableCrud: {
       type: Boolean,
-      default: () => false,
+      default: () => false
     },
     automation: {
       type: Boolean,
-      default: () => false,
-    },    
+      default: () => false
+    }
   },
   provide() {
     return {
@@ -192,10 +199,10 @@ export default {
       crudfieldActions: this.crudfieldActions,
       deleteKanbanCard: this.deleteKanbanCard,
       updateCardColumn: this.updateCard,
-      getStatus: this.getStatus,
+      getStatus: this.getStatus
     };
   },
-  inject:['funnelPageAction', 'fieldActions', 'filterPlugin'],
+  inject: ['funnelPageAction', 'fieldActions', 'filterPlugin'],
   components: {
     kanbanColumn,
     draggable,
@@ -203,12 +210,12 @@ export default {
     formComponent,
     formRules,
     modalStatus,
-    modalAnalytics,
+    modalAnalytics
   },
   data() {
     return {
       routeCreate: {
-        name: "qrequestable.main.requestables.create",
+        name: 'qrequestable.main.requestables.create'
       },
       kanbanColumns: [],
       funnelList: [],
@@ -218,18 +225,18 @@ export default {
       uId: this.$uid(),
       search: null,
       hoverArrow: false,
-      scrollTotal: 0,
+      scrollTotal: 0
     };
   },
   mounted() {
-    this.$nextTick(async function () {
+    this.$nextTick(async function() {
       await this.init();
-      if(this.checkIfFunnelExists) {
+      if (this.checkIfFunnelExists) {
         const elementColumnKanban = document.getElementById(`columnKanban${this.uId}`);
         if (elementColumnKanban) {
-          elementColumnKanban.addEventListener("scroll", evt =>
-              this.scrollTotal = evt.target.scrollLeft
-          )
+          elementColumnKanban.addEventListener('scroll', evt =>
+            this.scrollTotal = evt.target.scrollLeft
+          );
         }
       }
     });
@@ -241,42 +248,42 @@ export default {
           vIf: this.$auth.hasAccess('requestable.automationrules.manage'),
           label: this.$tr('requestable.cms.label.analytics'),
           props: {
-            padding: "3px 15px",
+            padding: '3px 15px',
             icon: 'fa-duotone fa-chart-mixed'
           },
-          action: this.openAnalytics,
+          action: this.openAnalytics
         },
         {
           vIf: this.$auth.hasAccess('requestable.automationrules.manage'),
           label: this.$tr('requestable.cms.label.automationRules'),
           props: {
             icon: 'fa-duotone fa-ruler',
-            padding: "3px 15px",
+            padding: '3px 15px'
           },
-          action: this.openAutomationRulesModal,
+          action: this.openAutomationRulesModal
         },
         {
           vIf: this.$auth.hasAccess('requestable.statuses.manage'),
           label: this.$tr('isite.cms.form.status'),
           props: {
             icon: 'fa-duotone fa-swap-arrows',
-            padding: "3px 15px",
+            padding: '3px 15px'
           },
           action: () => {
-            kanbanStore().setModalStatus(true)
-          },
+            kanbanStore().setModalStatus(true);
+          }
         }];
     },
     funnel() {
       return {
         value: null,
-        type: "select",
+        type: 'select',
         props: {
-          label: "Funnel",
+          label: 'Funnel'
         },
         loadOptions: {
-          apiRoute: this.routes.funnel ? this.routes.funnel.apiRoute : null,
-        },
+          apiRoute: this.routes.funnel ? this.routes.funnel.apiRoute : null
+        }
       };
     },
     funnelSelectedComputed: {
@@ -286,14 +293,14 @@ export default {
       set(value) {
         this.setResetPage();
         this.funnelSelected = value;
-      },
+      }
     },
     checkIfFunnelExists() {
       return (this.funnelId || this.funnelPageAction);
     },
     scroll() {
       return document.getElementById(`columnKanban${this.uId}`);
-    },
+    }
   },
   methods: {
     async init(refresh = false, isModal = false) {
@@ -303,7 +310,7 @@ export default {
     },
     async getFunnel() {
       try {
-        if(this.checkIfFunnelExists) {
+        if (this.checkIfFunnelExists) {
           this.funnelSelectedComputed = this.funnelPageAction || this.funnelId;
           return;
         }
@@ -329,7 +336,7 @@ export default {
       }
     },
     async reorderColumns() {
-      this.reorder("kanbanColumns");
+      this.reorder('kanbanColumns');
       await this.saveStatusOrdering();
     },
     reorder(type) {
@@ -338,21 +345,21 @@ export default {
       });
     },
     async getStatus(refresh = false) {
-      if(!this.routes.column) return;
-        const route = this.routes.column;
-        const parameters = { params: {}, refresh };
-        parameters.params.include = route.include;
-        const id =  { id: this.filterPlugin.values.statusId } || {};
-        parameters.params.filter = {
-          [route.filter.name]: this.funnelSelectedComputed, ...id,
-          order: {field:"type", way:"asc"}
-        };
-        const response = await this.$crud.index(route.apiRoute, parameters);
-        return response;
+      if (!this.routes.column) return;
+      const route = this.routes.column;
+      const parameters = { params: {}, refresh };
+      parameters.params.include = route.include;
+      const id = { id: this.filterPlugin.values.statusId } || {};
+      parameters.params.filter = {
+        [route.filter.name]: this.funnelSelectedComputed, ...id,
+        order: { field: 'type', way: 'asc' }
+      };
+      const response = await this.$crud.index(route.apiRoute, parameters);
+      return response;
     },
     async getColumns(refresh = false, isModal = false) {
       try {
-        if(!this.routes.column) return;
+        if (!this.routes.column) return;
         this.loading = true;
         const response = await this.getStatus(isModal ? !refresh : refresh);
         const kanbanColumn = this.getKanbanColumns(response.data, refresh);
@@ -383,7 +390,7 @@ export default {
         };
       });
       kanbanColumn.forEach(async (column) => {
-        const kanbanCard = await this.getKanbanCard(column, 1 ,refresh);
+        const kanbanCard = await this.getKanbanCard(column, 1, refresh);
         column.data = kanbanCard.data;
         column.loading = false;
         column.total = kanbanCard.total;
@@ -392,7 +399,7 @@ export default {
     },
     async addCard(columnId) {
       const column = this.kanbanColumns.find(item => item.id === columnId);
-      if(column) {
+      if (column) {
         const kanbanCard = await this.getKanbanCard(column, 1, true);
         column.data = kanbanCard.data;
         column.loading = false;
@@ -411,7 +418,7 @@ export default {
     async getKanbanCardList(column, page, refresh = false) {
       try {
         const nameRoute = this.automation ? 'automation' : 'card';
-        if(!this.routes[nameRoute]) {
+        if (!this.routes[nameRoute]) {
           return { total: 0, data: [] };
         }
         const route = this.routes[nameRoute];
@@ -422,7 +429,7 @@ export default {
           [route.filter.name]: column.id,
           ...this.filterPlugin.values,
           ...search,
-          order: {way: 'desc'}
+          order: { way: 'desc' }
         };
         parameters.params.page = page;
         parameters.params.take = 10;
@@ -446,9 +453,9 @@ export default {
             fields: card.fields || [],
             category: card.category || [],
             statusId: card.statusId,
-            ...card,
-          }
-        }),
+            ...card
+          };
+        })
       };
     },
     async addKanbanCard(column, page) {
@@ -462,50 +469,50 @@ export default {
         }
       }
     },
-    async deleteKanbanCard(item){
+    async deleteKanbanCard(item) {
       try {
         this.$alert.error({
-        mode: 'modal',
-        title: `ID: ${item.id}`,
-        message: this.$tr('isite.cms.message.deleteRecord'),
-        actions: [
-          {label: this.$tr('isite.cms.label.cancel'), color: 'grey'},
-          {
-            label: this.$tr('isite.cms.label.delete'),
-            color: 'red',
-            handler: async () => {
-              const nameRoute = this.automation ? 'automation' : 'card';
-              if(!this.routes[nameRoute]) {
-                return { total: 0, data: [] };
-              }
-              const route = this.routes[nameRoute];
-              const column = this.kanbanColumns.find(column => column.id === item.statusId);
-              if(column) column.loading = true;
-              await this.$crud.delete(route.apiRoute, item.id);
-              const kanbanCard = await this.getKanbanCard(this.automation ? column : item.status, 1, true);
-              if(column) {
-                column.data = kanbanCard.data || [];
-                setTimeout(() => {
-                  column.loading = false;
-                }, 1000);
-                column.total = kanbanCard.total || 0;
-              }
+          mode: 'modal',
+          title: `ID: ${item.id}`,
+          message: this.$tr('isite.cms.message.deleteRecord'),
+          actions: [
+            { label: this.$tr('isite.cms.label.cancel'), color: 'grey' },
+            {
+              label: this.$tr('isite.cms.label.delete'),
+              color: 'red',
+              handler: async () => {
+                const nameRoute = this.automation ? 'automation' : 'card';
+                if (!this.routes[nameRoute]) {
+                  return { total: 0, data: [] };
+                }
+                const route = this.routes[nameRoute];
+                const column = this.kanbanColumns.find(column => column.id === item.statusId);
+                if (column) column.loading = true;
+                await this.$crud.delete(route.apiRoute, item.id);
+                const kanbanCard = await this.getKanbanCard(this.automation ? column : item.status, 1, true);
+                if (column) {
+                  column.data = kanbanCard.data || [];
+                  setTimeout(() => {
+                    column.loading = false;
+                  }, 1000);
+                  column.total = kanbanCard.total || 0;
+                }
 
+              }
             }
-          }
-        ]
-      })
+          ]
+        });
       } catch (error) {
         console.log(error);
       }
     },
     async saveStatusOrdering() {
       try {
-        if(!this.routes.orderStatus) return;
+        if (!this.routes.orderStatus) return;
         const route = this.routes.orderStatus;
         const statusId = this.kanbanColumns.map((item) => ({ id: item.id }));
         await this.$crud.create(route.apiRoute, {
-          [route.filter.name]: statusId,
+          [route.filter.name]: statusId
         });
       } catch (error) {
         console.log(error);
@@ -513,21 +520,21 @@ export default {
     },
     addColumn(index, data = null) {
       try {
-            const counter = `kanban-${Math.random() + 1}`;
-            console.log(counter);
-            const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-            const column = { ...modelColumn };
-            column.id = counter;
-            column.color = `#${randomColor}`;
-            column.type = data?.type || 0;
-            this.kanbanColumns.splice(index + 1, 0, column);
-        } catch (error) {
-            console.log(error);
-        }
+        const counter = `kanban-${Math.random() + 1}`;
+        console.log(counter);
+        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        const column = { ...modelColumn };
+        column.id = counter;
+        column.color = `#${randomColor}`;
+        column.type = data?.type || 0;
+        this.kanbanColumns.splice(index + 1, 0, column);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async deleteColumn(columnId) {
       try {
-        if(!this.routes.column) return;
+        if (!this.routes.column) return;
         const route = this.routes.column;
         const kanbanColumn = this.kanbanColumns.filter(
           (item) => item.id !== columnId
@@ -542,7 +549,7 @@ export default {
     },
     async saveColumn(data) {
       try {
-        if(!this.routes.column) return;
+        if (!this.routes.column) return;
         const route = this.routes.column;
         const payloadStatus = {};
         payloadStatus.title = data.title;
@@ -557,7 +564,7 @@ export default {
     },
     async updateColumn(data) {
       try {
-        if(!this.routes.column) return;
+        if (!this.routes.column) return;
         const route = this.routes.column;
         const payloadStatus = {};
         payloadStatus.id = data.id;
@@ -576,11 +583,11 @@ export default {
         title: null,
         color: null,
         value: 1,
-        [this.routes.column.filter.name]: null,
+        [this.routes.column.filter.name]: null
       };
     },
     openAutomationRulesModal() {
-      if(this.$refs.automationRules) this.$refs.automationRules.openModal();
+      if (this.$refs.automationRules) this.$refs.automationRules.openModal();
     },
     async openAnalytics() {
       storeAnalytics.showModal = true;
@@ -625,15 +632,15 @@ export default {
     },
     updateCard(columId) {
       this.kanbanColumns.forEach(item => {
-        if(item.id == columId) {
+        if (item.id == columId) {
           item.data.forEach(card => {
             card.status.id = columId;
             card.statusId = columId;
-          })
+          });
         }
-      })
+      });
     }
-  },
+  }
 };
 </script>
 
@@ -641,15 +648,18 @@ export default {
 .kanbanBtnCtn .q-btn {
   border-radius: 10px;
 }
+
 .colorTextPrimary {
   color: $primary;
 }
+
 .icon-right {
   animation-name: slideUpReturn;
   animation-duration: .5s;
   animation-fill-mode: both;
   margin-top: 2px;
 }
+
 .icon-left {
   animation-name: slideLeftReturn;
   animation-duration: .5s;
@@ -667,6 +677,7 @@ export default {
     transform: translateX(0%);
   }
 }
+
 @keyframes slideLeftReturn {
   0% {
     transform-origin: 0 0;

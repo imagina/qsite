@@ -219,35 +219,39 @@
             <kanbanCard
               :key="element.id"
               :cardData="element"
-              :colorColumn="columnData.color"
+              :colorColumn="element.color"
               class="tw-cursor-pointer"
               :id="element.id"
             />
           </template>
-          <div class="tw-text-center tw-h-5 tw-rounded">
-            <q-banner
-              inline-actions
-              rounded
-              class="primary"
-              v-if="
+          <template #footer>
+            <div>
+              <div class="tw-text-center tw-h-5 tw-rounded">
+                <q-banner
+                  inline-actions
+                  rounded
+                  class="primary"
+                  v-if="
                 columnData.total !== 0 &&
                 isTotalNumberOfRecords &&
                 !loading &&
                 !columnData.loading
               "
-            >
-              <div>
-                <i class="far fa-grin-beam-sweat tw-text-base" />
+                >
+                  <div>
+                    <i class="far fa-grin-beam-sweat tw-text-base" />
+                  </div>
+                  <div class="tw-font-semibold">Ya te dimos todo</div>
+                </q-banner>
               </div>
-              <div class="tw-font-semibold">Ya te dimos todo</div>
-            </q-banner>
-          </div>
-          <div
-            :class="`trigger-${this.uId}${columnData.id}`"
-            class="tw-text-center tw-h-5 tw-flex tw-justify-center"
-          >
-            <q-spinner v-if="loading" color="primary" size="1.3em" />
-          </div>
+              <div
+                :class="`trigger-${this.uId}${columnData.id}`"
+                class="tw-text-center tw-h-5 tw-flex tw-justify-center"
+              >
+                <q-spinner v-if="loading" color="primary" size="1.3em" />
+              </div>
+            </div>
+          </template>
         </draggable>
       </div>
     </div>
@@ -321,6 +325,7 @@ export default {
       this.observerCallback,
       observerOptions
     );
+    console.log(target);
     observer.observe(target);
   },
   data() {
