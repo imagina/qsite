@@ -10,7 +10,7 @@
 </template>
 <script>
 //Components
-import CKEditor from 'ckeditor4-vue';
+import CKEditor from '@mayasabha/ckeditor4-vue3';
 //Custom Plugins
 import pluginCollapsibleItem from 'src/plugins/ckEditorPlugins/collapsibleItem/plugin'
 import pluginGrid from 'src/plugins/ckEditorPlugins/grid/plugin'

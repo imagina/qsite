@@ -1,6 +1,6 @@
 import crud from 'modules/qcrud/_services/baseService'
 import http from "axios/index";
-import config from 'src/config/plugin'
+import config from 'src/setup/plugin'
 
 export default {
   crud,

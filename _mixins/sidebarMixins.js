@@ -1,6 +1,6 @@
 //class
-import AutoLoadSidebars from 'src/config/menu'
-import sidebar from 'src/config/sidebar'
+import AutoLoadSidebars from 'src/setup/menu'
+import sidebar from 'src/setup/sidebar'
 
 export default {
   created() {
