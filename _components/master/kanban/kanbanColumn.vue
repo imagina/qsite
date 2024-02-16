@@ -181,7 +181,7 @@
           </div>
         </div>
       </div>
-      <div class="c-plus">
+      <div class="c-plus" v-if="permissionStatuses.create">
         <q-btn 
           flat 
           class="
@@ -213,6 +213,7 @@
           @start="dragColumn = true"
           @end="move"
           @change="countTotalRecords"
+          :disabled="!permissionStatuses.moveRequestables"
         >
           <kanbanCard
             v-for="(item, index) in columnData.data"
@@ -338,14 +339,23 @@ export default {
     allowCreateRequestable() {
       return typeof this.columnData.id == 'string' || !this.$auth.hasAccess('requestable.requestables.create');
     },
+    permissionStatuses() {
+      return {
+        index: this.$auth.hasAccess('requestable.statuses.index'),
+        create: this.$auth.hasAccess('requestable.statuses.create'),
+        edit: this.$auth.hasAccess('requestable.statuses.edit'),
+        delete: this.$auth.hasAccess('requestable.statuses.delete'),
+        moveRequestables: this.$auth.hasAccess('requestable.requestables.move')
+      }
+    },
     allowCreateStatuses() {
-      if(this.$auth.hasAccess('requestable.statuses.create')) {
+      if(this.permissionStatuses.create) {
         return !this.disableCrud && this.hover && this.columnData.type !== 2;
       }
       return false; 
     },
     allowEditStatuses() {
-      if(this.$auth.hasAccess('requestable.statuses.edit')) {
+      if(this.permissionStatuses.edit) {
         return !this.disableCrud && this.arrowKanbanNameHover && !this.columnData.new
       }
       return false; 
