@@ -18,7 +18,7 @@
         draggable=".notMoveBetweenColumns"
         class="tw-p-3 tw-h-auto tw-flex tw-space-x-4 tw-overflow-x-auto"
         @change="reorderColumns"
-        :disabled="!disabledDragStatuses"
+        :disabled="disabledDragStatuses"
       >
         <template v-show="!loading">
           <div  v-for="(column, index) in kanbanColumns" 
@@ -301,10 +301,12 @@ export default {
       return document.getElementById(`columnKanban${this.uId}`);
     },
     disabledDragStatuses() {
-      return this.loading || 
-      !this.dragColumn || 
-      this.kanbanColumns.length === 0 || 
-      !this.$auth.hasAccess('requestable.statuses.move')
+      if(this.$auth.hasAccess('requestable.statuses.move')) {
+        return this.loading || 
+        !this.dragColumn || 
+        this.kanbanColumns.length === 0
+      }
+      return true;
     },
   },
   methods: {
