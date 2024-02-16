@@ -2054,7 +2054,7 @@
           "entityType": "Entity Type",
           "entityId": "Entity Id",
           "zone": "Zone",
-          "bannerInfo": "Los prefijos facilitan la definición del tipo de contenido que contiene cada código QR. Aquí hay ejemplos comunes que puedes usar al ingresar tu contenido:<br><br><li>Dirección web: ingresa \"<b>http://</b>\" o \"<b>https://</b>\" seguido de la direccion web. Ejemplo: \"<b>https://www.imaginacolombia.com\"</b></li><li>Correo electrónico: ingresa \"<b>mailto:</b>\" seguido de la direccion de correo. Ejemplo: \"<b>mailto:support{'@'}imaginacolombia.com</b>\"</li><li>Número de teléfono: Ingresa \"<b>tel:</b>\" seguido del numero telefonico. Ejemplo: <b>tel:555-555-5555</b></li><li>Mensaje de texto (SMS) con mensaje y número predefinidos: Ingresa \"<b>sms:</b>\" Combina número \"<b>:</b>\" mensaje. Ejemplo: <b>sms:555-555-5555:yo soy el mensaje</b></li><li>Ubicacion geográfica: Ingresa \"<b>geo:</b>\". Ejemplo: <b>geo:-78.400364,-85.916993</b></li><li>Tarjeta MeCard: Ingresa \"<b>mecard:</b>\". Ejemplo: <b>MECARD:Simple, Software;Some Address, Somewhere, 20430;TEL:555-555-5555;EMAIL:support{'@'}imaginacolombia.com</b></li>"
+          "bannerInfo": "kknbnjhbhbhb"
         },
         "messages": {
           "sureCreateQr": "Do you want to generate a QR code for this record?"
@@ -3928,7 +3928,6 @@
         "block": "Bloque | Bloques",
         "blockDesign": "Diseño del Bloque",
         "chooseBlock": "Selecciona un bloque",
-        "chooseBlock": "Selecciona un Bloque",
         "layout": "Layout | Layouts",
         "newLayout": "Crea un nuevo Layout",
         "layouts": "Layouts",
@@ -3979,7 +3978,7 @@
           "entityType": "Tipo de entidad",
           "entityId": "Id de endiad ",
           "zone": "Zona",
-          "bannerInfo": "Los prefijos facilitan la definición del tipo de contenido que contiene cada código QR. Aquí hay ejemplos comunes que puedes usar al ingresar tu contenido:<br><br><li>Dirección web: ingresa \"<b>http://</b>\" o \"<b>https://</b>\" seguido de la direccion web. Ejemplo: \"<b>https://www.imaginacolombia.com\"</b></li><li>Correo electrónico: ingresa \"<b>mailto:</b>\" seguido de la direccion de correo. Ejemplo: \"<b>mailto:support{'@'}imaginacolombia.com</b>\"</li><li>Número de teléfono: Ingresa \"<b>tel:</b>\" seguido del numero telefonico. Ejemplo: <b>tel:555-555-5555</b></li><li>Mensaje de texto (SMS) con mensaje y número predefinidos: Ingresa \"<b>sms:</b>\" Combina número \"<b>:</b>\" mensaje. Ejemplo: <b>sms:555-555-5555:yo soy el mensaje</b></li><li>Ubicacion geográfica: Ingresa \"<b>geo:</b>\". Ejemplo: <b>geo:-78.400364,-85.916993</b></li><li>Tarjeta MeCard: Ingresa \"<b>mecard:</b>\". Ejemplo: <b>MECARD:Simple, Software;Some Address, Somewhere, 20430;TEL:555-555-5555;EMAIL:support{'@'}imaginacolombia.com</b></li>"
+          "bannerInfo": "IKsjnjw3nduwh"
         },
         "messages": {
           "sureCreateQr": "¿Quieres generar un código QR para este registro?"
