@@ -16,27 +16,29 @@
         drag-class="dragCard"
         filter=".ignoreItem"
         draggable=".notMoveBetweenColumns"
-        :disabled="loading || !dragColumn || kanbanColumns.length === 0"
         class="tw-p-3 tw-h-auto tw-flex tw-space-x-4 tw-overflow-x-auto"
         @change="reorderColumns"
+        :disabled="disabledDragStatuses"
       >
-        <div v-if="!loading" v-for="(column, index) in kanbanColumns" 
-         :class="{'notMoveBetweenColumns': column.type !== 1}"
-        >
-          <kanbanColumn
-            :key="index"
-            :column-data="column"
-            :columnIndex="index"
-            :totalColumns="kanbanColumns.length"
-            :ref="`kanbanColumn-${column.id}`"
-            class="
-              tw-flex-none tw-space-y-0
-              w-h-auto
-              tw-bg-gray-100 tw-rounded-lg tw-shadow
-            "
-          />
-          
-        </div>
+        <template v-show="!loading">
+          <div  v-for="(column, index) in kanbanColumns" 
+          :class="{'notMoveBetweenColumns': column.type !== 1}"
+          >        
+            <kanbanColumn
+              :key="index"
+              :column-data="column"
+              :columnIndex="index"
+              :totalColumns="kanbanColumns.length"
+              :ref="`kanbanColumn-${column.id}`"
+              class="
+                tw-flex-none tw-space-y-0
+                w-h-auto
+                tw-bg-gray-100 tw-rounded-lg tw-shadow
+              "
+            />
+            
+          </div>
+        </template>
         <q-skeleton
           animation="blink"
           height="700px"
@@ -297,6 +299,14 @@ export default {
     },
     scroll() {
       return document.getElementById(`columnKanban${this.uId}`);
+    },
+    disabledDragStatuses() {
+      if(this.$auth.hasAccess('requestable.statuses.move')) {
+        return this.loading || 
+        !this.dragColumn || 
+        this.kanbanColumns.length === 0
+      }
+      return true;
     },
   },
   methods: {
