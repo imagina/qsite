@@ -1,49 +1,51 @@
 <template>
-  <q-dialog
-    v-model="show"
-    :class="`master-dialog${customPosition ? '-custom' : ''}`"
-    v-on="$attrs"
-    :maximized="maximized"
-    :persistent="persistent"
-    :position="customPosition ? 'right' : 'standard'"
-    :style="masterModalWidthSize"
-  >
-    <!--Content-->
-    <div :id="id || 'masterModalContent'" :style="customPosition ? '' : `min-width: ${width}`"
-         v-if="show" class="master-dialog__content round relative-position" :class="customClass">
-      <!--Header-->
-      <div :class="`master-dialog__header text-${color} row justify-between items-center`">
-        <!--Title-->
-        <div class="master-dialog__header-title row items-center">
-          <q-icon v-if="icon" :name="icon" class="q-mr-sm" size="20px" />
-          <b>{{ title }}</b>
+  <template>
+    <q-dialog
+      v-model="show"
+      :class="`master-dialog${customPosition ? '-custom' : ''}`"
+      v-on="$attrs"
+      :maximized="maximized"
+      :persistent="persistent"
+      :position="customPosition ? 'right' : 'standard'"
+      :style="masterModalWidthSize"
+    >
+      <!--Content-->
+      <div :id="id || 'masterModalContent'" :style="customPosition ? '' : `min-width: ${width}`"
+           v-if="show" class="master-dialog__content round relative-position" :class="customClass">
+        <!--Header-->
+        <div :class="`master-dialog__header text-${color} row justify-between items-center`">
+          <!--Title-->
+          <div class="master-dialog__header-title row items-center">
+            <q-icon v-if="icon" :name="icon" class="q-mr-sm" size="20px" />
+            <b>{{ title }}</b>
+          </div>
+          <!--Close Button-->
+          <q-btn v-close-popup icon="fa-light fa-xmark" round textColor="blue-grey" unelevated class="btn-medium"
+                 v-if="!hideCloseAction" />
         </div>
-        <!--Close Button-->
-        <q-btn v-close-popup icon="fa-light fa-xmark" round textColor="blue-grey" unelevated class="btn-medium"
-               v-if="!hideCloseAction" />
-      </div>
-      <q-separator inset />
-      <!--Slot content-->
-      <div class="master-dialog__body">
-        <slot />
-      </div>
-      <!--Actions Content-->
-      <div class="master-dialog__actions" v-if="actions && actions.length">
-        <div class="row justify-end q-gutter-sm">
-          <template v-for="(btn, keyBtn) in actions" :key="keyBtn">
-            <q-btn
-              v-if="btn.props?.vIf != undefined ? btn.props?.vIf : true"
-              v-bind="{...actionBtnProps, ...(btn.props || {})}"
-              @click="btn.action ? btn.action() : null"
-              :loading="btn.props.loading != undefined ? btn.props.loading : false"
-            />
-          </template>
+        <q-separator inset />
+        <!--Slot content-->
+        <div class="master-dialog__body">
+          <slot />
         </div>
+        <!--Actions Content-->
+        <div class="master-dialog__actions" v-if="actions && actions.length">
+          <div class="row justify-end q-gutter-sm">
+            <template v-for="(btn, keyBtn) in actions" :key="keyBtn">
+              <q-btn
+                v-if="btn.props?.vIf != undefined ? btn.props?.vIf : true"
+                v-bind="{...actionBtnProps, ...(btn.props || {})}"
+                @click="btn.action ? btn.action() : null"
+                :loading="btn.props.loading != undefined ? btn.props.loading : false"
+              />
+            </template>
+          </div>
+        </div>
+        <!--Loading-->
+        <inner-loading :visible="loading" />
       </div>
-      <!--Loading-->
-      <inner-loading :visible="loading" />
-    </div>
-  </q-dialog>
+    </q-dialog>
+  </template>
 </template>
 
 <script>

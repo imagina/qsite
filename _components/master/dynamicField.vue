@@ -156,7 +156,7 @@
           </template>
           <!--Custom Option-->
           <template v-slot:option="scope" v-if="!fieldProps.hideDropdownIcon">
-            <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
+            <q-item v-bind="scope.itemProps">
               <!--Load checkbos if is multiple-->
               <q-item-section avatar v-if="field.props && field.props.multiple">
                 <q-checkbox v-model="responseValue" :val="scope.opt.value"/>
@@ -219,7 +219,7 @@
         <q-field v-model="responseValue" v-if="loadField('treeSelect')" :label="fieldLabel"
                  v-bind="fieldProps.fieldComponent" :class="`${field.help ? 'treeselect-dynamic-field' : ''}`">
           <tree-select v-model="responseValue" :options="formatOptions" placeholder="">
-              <template slot="option-label" slot-scope="{node}">
+              <template #option-label="{node}">
                 <label>
                   <!-- Image -->
                   <q-img
@@ -232,7 +232,7 @@
                 </label>
               </template>
             <!--Before options slot-->
-            <template slot="before-list">
+            <template #before-list>
               <slot name="before-options"></slot>
             </template>
           </tree-select>

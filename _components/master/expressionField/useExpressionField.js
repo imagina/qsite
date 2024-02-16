@@ -13,7 +13,7 @@ export default function useExpressionField(props = {}, emit = null) {
     set(value) {
       selectionStart.value = inputKey.value.$el.control.selectionStart || 0;
       inputData.value = value;
-      emit("input", value);
+      emit("update:modelValue", value);
     },
   });
   function getNativeElement($event) {
@@ -37,7 +37,7 @@ export default function useExpressionField(props = {}, emit = null) {
     }
   }
   async function init() {
-    inputDataComputed.value = props.value;
+    inputDataComputed.value = props.modelValue;
   }
   onMounted(async () => {
     await init();

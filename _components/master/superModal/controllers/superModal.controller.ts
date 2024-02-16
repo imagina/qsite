@@ -1,5 +1,5 @@
-import { 
-    ref, 
+import {
+    ref,
     watch,
     reactive,
     computed,
@@ -9,7 +9,7 @@ export default function useSuperModal(props, emit) {
     const show = ref(false);
     const multiActions: any = computed(() => props.multiActions);
     watch(
-        () => props.value,
+        () => props.modelValue,
         (newValue, oldValue) => {
             if (newValue !== oldValue) {
                 show.value = newValue;
@@ -21,7 +21,7 @@ export default function useSuperModal(props, emit) {
         show,
         (newValue, oldValue) => {
             if (newValue !== oldValue) {
-                emit('input', newValue);
+                emit('update:modelValue', newValue);
             }
         }
     );
@@ -33,8 +33,8 @@ export default function useSuperModal(props, emit) {
         class: 'btn-small',
     });
 
-    const masterModalWidthSize = computed(() => ({ 
-        '--modal-width-size': props.modalWidthSize 
+    const masterModalWidthSize = computed(() => ({
+        '--modal-width-size': props.modalWidthSize
     }));
 
     return {

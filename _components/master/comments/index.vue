@@ -93,9 +93,6 @@
                       </strong>
                       <small v-if="item.updatedAt || item.createdAt">
                         {{ formatDate(item.updatedAt|| item.createdAt) }}
-                        <span v-if="item.updatedAt && item.createdAt !== item.updatedAt">
-                          ({{ tr(`isite.cms.label.edited`) }})</span
-                        >
                       </small>
                     </h4>
                     <CKEditor
@@ -110,7 +107,7 @@
                         <div class="tw-w-11/12">
                           <div
                             v-html="item.comment"
-                            v-if="permisionComments.edit"
+                            v-if="permisionComments.index"
                             @click="!Boolean(item.internal) ? activeEdit(item.id): null"
                           />
                         </div>

@@ -1,7 +1,7 @@
 import { ref, computed, onMounted, watchEffect } from 'vue';
 import getCountries from 'modules/qsite/_components/master/localizedPhone/actions/getCountries';
 export default function useLocalizedPhone(props: any = {}, emit: any = null) {
-  const valuePhone = computed(() => props.value);
+  const valuePhone = computed(() => props.modelValue);
   const countryDefault = {name: 'Colombia', iso3: 'COL', callingCode: 57 };
   const callingCode = ref(0);
   const loading = ref(false);
@@ -21,7 +21,7 @@ export default function useLocalizedPhone(props: any = {}, emit: any = null) {
     set(value) {
       selectionStart.value = inputKey.value.$el.control.selectionStart || 0;
       inputData.value = value;
-      emit("input", `${seletdCountry.value.callingCode}${value}`);
+      emit('update:modelValue', `${seletdCountry.value.callingCode}${value}`);
     },
   });
   const filteredCountries = computed(() => {
@@ -64,7 +64,7 @@ export default function useLocalizedPhone(props: any = {}, emit: any = null) {
   function setSeletdCountry(country) {
     seletdCountry.value = country;
     searchTerm.value = '';
-    emit("input", `${seletdCountry.value.callingCode}${inputDataComputed.value}`);
+    emit('update:modelValue', `${seletdCountry.value.callingCode}${inputDataComputed.value}`);
   }
 
   watchEffect(async () => {
@@ -72,7 +72,7 @@ export default function useLocalizedPhone(props: any = {}, emit: any = null) {
       searchTerm.value = '';
     }
 
-    if(props.value) {
+    if(props.modelValue) {
       await init();
     }
   });

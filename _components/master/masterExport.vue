@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <template>
     <master-modal v-model="showModal" icon="fas fa-file-download" width="380px" :loading="loading"
                   :title="modalTitle" @hide="reset()" @show="init()" custom-position>
       <div class="relative-position" v-if="!loading">
@@ -60,7 +60,7 @@
         </div>
       </div>
     </master-modal>
-  </div>
+  </template>
 </template>
 <script>
 import { eventBus } from 'src/plugins/utils';

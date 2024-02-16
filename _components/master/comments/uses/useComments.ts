@@ -10,6 +10,10 @@ import {
   commentableTypeDefault,
   permissionsCommentsDefault,
 } from "modules/qsite/_components/master/comments/contracts/comments";
+import crud from 'modules/qcrud/_services/baseService'
+import { globalStore, i18n, moment, alert, helper } from 'src/plugins/utils'
+const { hasAccess, store } = globalStore.store
+const { trp, tr } = i18n.trans
 
 /**
  * A Vue Composition API function for managing comments functionality.
@@ -27,7 +31,7 @@ export default function useComments(props: any) {
     value: null,
     type: 'uploader',
     props: {
-      title: proxy.$trp('isite.cms.label.file'),
+      title: trp('isite.cms.label.file'),
       gridColClass: 'col-3 col-md-3 col-lg-4',
       maxFiles: 3,
     }
@@ -40,17 +44,16 @@ export default function useComments(props: any) {
     return item => item.userProfile && item.userProfile?.mainImage
       ? item?.userProfile?.mainImage : commentModelConst.avatar;
   })
-  const tr = ref(proxy.$tr);
   const comments = ref<commentsContract[]>([]);
   const loading = ref<boolean>(false);
   const permisionComments = computed(() => ({
-    create: proxy.$auth.hasAccess(`${props.permisionComments}.create`),
-    edit: proxy.$auth.hasAccess(`${props.permisionComments}.edit`),
-    index: proxy.$auth.hasAccess(`${props.permisionComments}.index`),
-    destroy: proxy.$auth.hasAccess(`${props.permisionComments}.destroy`),
+    create: hasAccess(`${props.permisionComments}.create`),
+    edit: hasAccess(`${props.permisionComments}.edit`),
+    index: hasAccess(`${props.permisionComments}.index`),
+    destroy: hasAccess(`${props.permisionComments}.destroy`),
   }));
   const dataBase = ref<any>({ ...commentModel.value });
-  const textPlaceholder = ref<string>(tr.value(`requestable.cms.message.writeComment`));
+  const textPlaceholder = ref<string>(tr(`requestable.cms.message.writeComment`));
   const editorConfig = ref<EditorConfigContract>({
     height: 100,
   });
@@ -61,7 +64,7 @@ export default function useComments(props: any) {
    * @returns {Date|null} Formatted date or null if input is invalid.
    */
   function formatDate(date: string): Date {
-    return date ? proxy.$moment(date).format("DD MMM YYYY, h:mm a") : null;
+    return date ? moment(date).format("DD MMM YYYY, h:mm a") as any : null;
   };
   /**
     * Activates the comment text input field.
@@ -83,7 +86,7 @@ export default function useComments(props: any) {
       proxy.$q
         .dialog({
           ok: "Si",
-          message: tr.value(`requestable.cms.message.undoComment`),
+          message: tr(`requestable.cms.message.undoComment`),
           cancel: "No",
           persistent: true,
         })
@@ -130,9 +133,9 @@ export default function useComments(props: any) {
     if (comment.comment !== comment.textEdit) {
       proxy.$q
         .dialog({
-          ok: tr.value('isite.cms.label.yes'),
-          message: tr.value(`requestable.cms.message.undoComment`),
-          cancel: tr.value('isite.cms.label.no'),
+          ok: tr('isite.cms.label.yes'),
+          message: tr(`requestable.cms.message.undoComment`),
+          cancel: tr('isite.cms.label.no'),
           persistent: true,
         })
         .onOk(async () => {
@@ -163,7 +166,7 @@ export default function useComments(props: any) {
         is_internal: comment.is_internal,
         options: comment.options,
       };
-      proxy.$crud
+      crud
         .update(route.value, id, { ...params })
         .then((response) => {
           const commentUpdate = response.data;
@@ -171,15 +174,15 @@ export default function useComments(props: any) {
           comment.loading = false;
           comment.active = false;
           comment.edit = false;
-          proxy.$alert.info({
-            message: tr.value(`requestable.cms.message.updateComment`),
+          alert.info({
+            message: tr(`requestable.cms.message.updateComment`),
           });
         })
         .catch((error) => {
           comment.loading = false;
           console.log(error);
-          proxy.$alert.error({
-            message: tr.value(`requestable.cms.message.updateNoComment`),
+          alert.error({
+            message: tr(`requestable.cms.message.updateNoComment`),
           });
         });
       dataComment.value.close = false;
@@ -214,7 +217,7 @@ export default function useComments(props: any) {
   async function addComment(): Promise<void> {
     try {
       if (dataBase.value.text.length === 0) return;
-      const userId = proxy.$store.state.quserAuth.userId;
+      const userId = store.state.quserAuth.userId;
       dataBase.value.loading = true;
       const params = {
         approved: true,
@@ -225,17 +228,17 @@ export default function useComments(props: any) {
         is_internal: false,
         options: null,
       };
-      await proxy.$crud.create(route.value, params);
+      await crud.create(route.value, params);
       await getCommentsList(props.commentableId);
       dataBase.value = { ...commentModel.value };
-      await proxy.$alert.info({
-        message: tr.value(`requestable.cms.message.savedComment`),
+      alert.info({
+        message: tr(`requestable.cms.message.savedComment`),
       });
     } catch (error) {
       console.log(error);
       dataBase.value.loading = false;
-      proxy.$alert.error({
-        message: tr.value(`requestable.cms.message.savedNoComment`),
+      alert.error({
+        message: tr(`requestable.cms.message.savedNoComment`),
       });
     }
   }
@@ -246,26 +249,26 @@ export default function useComments(props: any) {
   async function deleteComment(id: number): Promise<void> {
     proxy.$q
       .dialog({
-        ok: tr.value("isite.cms.label.delete"),
-        message: tr.value("isite.cms.message.deleteRecord"),
+        ok: tr("isite.cms.label.delete"),
+        message: tr("isite.cms.message.deleteRecord"),
         cancel: true,
         persistent: true,
       })
       .onOk(async () => {
-        proxy.$crud
+        crud
           .delete(route.value, id)
           .then((response) => {
             comments.value = comments.value.filter(
               (item) => item.id !== id
             );
-            proxy.$alert.info({
-              message: tr.value("isite.cms.message.recordDeleted"),
+            alert.info({
+              message: tr("isite.cms.message.recordDeleted"),
             });
           })
           .catch((error) => {
             console.log(error);
-            proxy.$alert.error({
-              message: tr.value("isite.cms.message.recordNoDeleted"),
+            alert.error({
+              message: tr("isite.cms.message.recordNoDeleted"),
             });
           });
       })
@@ -286,7 +289,7 @@ export default function useComments(props: any) {
         },
         include: "userProfile",
       };
-      proxy.$crud
+      crud
         .get(route.value, params)
         .then((response) => {
           const data = response.data;
@@ -302,7 +305,7 @@ export default function useComments(props: any) {
         })
         .catch((error) => {
           loading.value = false;
-          proxy.$alert.error({ message: error });
+          alert.error({ message: error });
           console.log(error);
         });
     } catch (error) {
@@ -313,7 +316,7 @@ export default function useComments(props: any) {
    * Retrieves the comment configuration from the server.
    */
   async function configComment() {
-    let routeParams = proxy.$helper.getInfoFromPermission(proxy.$route.meta.permission);
+    let routeParams = helper.getInfoFromPermission(proxy.$route.meta.permission);
     if (!routeParams) return;
     let requestParams = {
       refresh: true,
@@ -324,7 +327,7 @@ export default function useComments(props: any) {
       }
     }
     //Request
-    return await proxy.$crud.index('apiRoutes.qsite.configs', requestParams);
+    return await crud.index('apiRoutes.qsite.configs', requestParams);
   }
   // Initialize the comments list when the component is created
   getCommentsList(props.commentableId);

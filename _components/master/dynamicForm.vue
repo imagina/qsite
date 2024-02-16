@@ -22,12 +22,14 @@
           <locales v-model="locale" ref="localeComponent" :form="$refs.formContent" />
         </div>
         <!--Wrapper blocks-->
-        <component v-model="step" v-bind="structure.wrapperBlocks.props" v-if="structure.wrapperBlocks.directives.vIf">
+        <component v-model="step" v-bind="structure.wrapperBlocks.props" v-if="structure.wrapperBlocks.directives.vIf"
+                   :is="structure.wrapperBlocks.props.is">
           <!--Columns-->
-          <component v-for="(column, keyColumn) in structure.columns()" :key="keyColumn" v-bind="column.props">
+          <component v-for="(column, keyColumn) in structure.columns()" :key="keyColumn" v-bind="column.props"
+                     :is="column.props.is">
             <!--Blocks-->
             <component v-for="(block, keyBlock) in column.blocks" :key="keyBlock" v-bind="block.props"
-                       class="position-relative">
+                       class="position-relative" :is="block.props.is">
               <help-text v-if="block.help" :title="block.help.title" :description="block.help.description"
                          class="position-right" />
               <div :class="block.childClass">
@@ -56,49 +58,51 @@
                 </div>
                 <!--Fields-->
                 <div class="row q-col-gutter-x-md q-mb-sm">
-                  <div
-                    v-for="(field, key) in block.fields" :key="key"
-                    v-if="hidenFields(field)"
-                    :class="field.children ? 'col-12' : (field.colClass || field.columns || defaultColClass)"
-                  >
-                    <!--fake field-->
-                    <div v-if="field.type === 'fileList'">
-                      <fileListComponent v-bind="field.files" @selected="files => selectedFile(files)" />
-                    </div>
-                    <div v-else>
-                      <dynamic-field v-if="field.fakeFieldName" :field="field" :key="$uid()" :language="locale.language"
-                                     v-model="locale.formTemplate[field.fakeFieldName][field.name || key]"
-                                     :item-id="field.fieldItemId" />
-                      <!--Sample field-->
-                      <dynamic-field v-else :field="field" :key="$uid()" :item-id="field.fieldItemId"
-                                     v-model="locale.formTemplate[field.name || key]" :language="locale.language" />
-                      <!--Child fields-->
-                      <div v-if="field.children">
-                        <!--Title-->
-                        <div class="text-blue-grey q-mb-xs">
-                          <b>{{ field.label }} <label v-if="field.isTranslatable">({{ locale.language }})</label></b>
-                        </div>
-                        <!---Child fields-->
-                        <div class="row q-col-gutter-x-md">
-                          <div v-for="(childField, childKey) in getParsedFields(field.children)" :key="childKey"
-                               :class="childField.colClass || childField.columns || defaultColClass"
-                               v-if="childField.type != 'hidden'">
-                            <!--Child field-->
-                            <dynamic-field :field="childField" :key="childKey" :language="locale.language"
-                                           v-model="locale.formTemplate[field.name || key][childField.name || childKey]"
-                                           :item-id="childField.fieldItemId" />
+                  <template v-for="(field, key) in block.fields" :key="key">
+                    <div v-if="hidenFields(field)"
+                         :class="field.children ? 'col-12' : (field.colClass || field.columns || defaultColClass)">
+                      <!--fake field-->
+                      <div v-if="field.type === 'fileList'">
+                        <fileListComponent v-bind="field.files" @selected="files => selectedFile(files)" />
+                      </div>
+                      <div v-else>
+                        <dynamic-field v-if="field.fakeFieldName" :field="field" :key="$uid()"
+                                       :language="locale.language"
+                                       v-model="locale.formTemplate[field.fakeFieldName][field.name || key]"
+                                       :item-id="field.fieldItemId" />
+                        <!--Sample field-->
+                        <dynamic-field v-else :field="field" :key="$uid()" :item-id="field.fieldItemId"
+                                       v-model="locale.formTemplate[field.name || key]" :language="locale.language" />
+                        <!--Child fields-->
+                        <div v-if="field.children">
+                          <!--Title-->
+                          <div class="text-blue-grey q-mb-xs">
+                            <b>{{ field.label }} <label v-if="field.isTranslatable">({{ locale.language }})</label></b>
+                          </div>
+                          <!---Child fields-->
+                          <div class="row q-col-gutter-x-md">
+                            <template v-for="(childField, childKey) in getParsedFields(field.children)" :key="childKey">
+                              <div :class="childField.colClass || childField.columns || defaultColClass"
+                                   v-if="childField.type != 'hidden'">
+                                <!--Child field-->
+                                <dynamic-field :field="childField" :key="childKey" :language="locale.language"
+                                               v-model="locale.formTemplate[field.name || key][childField.name || childKey]"
+                                               :item-id="childField.fieldItemId" />
+                              </div>
+                            </template>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </template>
                 </div>
                 <!--Actions-->
                 <div :class="`tw-space-x-1 actions__content row justify-${step == 0 ? 'end' : 'between'}`"
                      v-if="(formType == 'stepper') && !noActions">
-                  <q-btn v-for="(action, keyAction) in formActions" :key="keyAction" v-bind="action"
-                         unelevated rounded no-caps @click="action.action(keyBlock)" type="button"
-                         v-if="action?.vIf != undefined ? action?.vIf : true" />
+                  <template v-for="(action, keyAction) in formActions" :key="keyAction">
+                    <q-btn v-bind="action" unelevated rounded no-caps @click="action.action(keyBlock)" type="button"
+                           v-if="action?.vIf != undefined ? action?.vIf : true" />
+                  </template>
                 </div>
               </div>
             </component>
@@ -106,9 +110,11 @@
         </component>
         <!--Actions-->
         <div class="box box-auto-height row justify-end" v-if="(formType == 'grid') && !noActions">
-          <q-btn v-for="(action, keyAction) in formActions" :key="keyAction" v-bind="action"
-                 unelevated rounded no-caps @click="action.action('next')" type="button"
-                 v-if="action?.vIf != undefined ? action?.vIf : true" />
+          <template v-for="(action, keyAction) in formActions" :key="keyAction">
+            <q-btn v-bind="action"
+                   unelevated rounded no-caps @click="action.action('next')" type="button"
+                   v-if="action?.vIf != undefined ? action?.vIf : true" />
+          </template>
         </div>
       </q-form>
 
@@ -208,7 +214,7 @@ export default {
       }
     }
   },
-  emits: ['update:modelValue','obtainedForm','validated','sent','feedBack','submit','newForm'],
+  emits: ['update:modelValue', 'obtainedForm', 'validated', 'sent', 'feedBack', 'submit', 'newForm'],
   watch: {
     modelValue: {
       deep: true,

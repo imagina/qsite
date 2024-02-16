@@ -2,10 +2,10 @@
   <div id="pageActionscomponent" class="row q-col-gutter-y-sm full-width items-center justify-between">
     <!--Title-->
     <div :class="`row text-primary text-weight-bold ellipsis title-content items-center`">
-      <q-icon v-if="icon" :name="icon" size="22px" class="q-mr-sm"/>
+      <q-icon v-if="icon" :name="icon" size="22px" class="q-mr-sm" />
       <label id="titleCrudTable" v-if="title">{{ title }}</label>
       <!--Help Text: Page documentation-->
-      <help-text v-if="pageDocumentation && title" v-bind="pageDocumentation"/>
+      <help-text v-if="pageDocumentation && title" v-bind="pageDocumentation" />
     </div>
     <!--Actions-->
     <div :class="`actions-content row q-gutter-${gutter} items-center justify-end items-start`">
@@ -15,7 +15,7 @@
                v-if="extraActions && extraActions.includes('search') && searchAction"
                @update:modelValue="$emit('search', $clone(search))">
         <template v-slot:prepend>
-          <q-icon color="tertiary" size="xs" name="fa-light fa-magnifying-glass"/>
+          <q-icon color="tertiary" size="xs" name="fa-light fa-magnifying-glass" />
         </template>
       </q-input>
       <!--Button Actions-->
@@ -26,7 +26,7 @@
         >
           <template v-slot:label>
             <div class="row items-center no-wrap" @click="refreshByTime(timeRefresh)">
-              <q-icon left :name="btn.props.icon"/>
+              <q-icon left :name="btn.props.icon" />
               <div class="text-center" v-if="multipleRefresh">
                 {{ titleRefresh }}
               </div>
@@ -36,7 +36,7 @@
             <q-item v-for="(item, index) in btn.items" :key="index" clickable v-close-popup
                     @click="item.action != undefined ? item.action() : null" class="tw-px-4">
               <q-item-section avatar v-if="item.icon">
-                <q-avatar :icon="item.icon"/>
+                <q-avatar :icon="item.icon" />
               </q-item-section>
               <q-item-section>
                 <q-item-label>{{ item.label }}</q-item-label>
@@ -64,15 +64,13 @@
     <div class="col-12 tw-mt-3" v-if="filter.hasValues || Object.keys(quickFilters).length">
       <!--<q-separator class="q-mb-sm"/>-->
       <div class="text-blue-grey ellipsis text-caption items-center row">
-        <q-icon name="fa-light fa-filter" class="q-mr-xs" color="amber" size="18px"/>
+        <q-icon name="fa-light fa-filter" class="q-mr-xs" color="amber" size="18px" />
         <b>{{ $trp('isite.cms.label.filter') }}:</b>
-        <label
-            v-for="(item, itemKey) in filter.readValues"
-            :key="itemKey"
-            v-if="item?.value && item.label !== ''"
-            class="q-ml-xs text-grey-7">
-          {{ item.label }} {{ item.value }},
-        </label>
+        <template v-for="(item, itemKey) in filter.readValues" :key="itemKey">
+          <label v-if="item?.value && item.label !== ''" class="q-ml-xs text-grey-7">
+            {{ item.label }} {{ item.value }},
+          </label>
+        </template>
       </div>
       <!-- Quick Filters-->
       <div v-if="Object.keys(quickFilters).length" class="row q-col-gutter-md q-pt-sm">
@@ -85,56 +83,56 @@
       </div>
     </div>
     <!-- Export Component -->
-    <master-export 
-      v-if="exportParams" 
-      v-model="exportParams" 
+    <master-export
+      v-model="exportParams"
       ref="exportComponent"
     />
     <!-- Master Filter Component -->
-    <master-filter 
+    <master-filter
       v-if="filter.load"
-      :show="drawer.filter" 
+      :show="drawer.filter"
     />
-    <master-synchronizable 
-      v-model="syncParams" 
-      v-if="syncParams && $auth.hasAccess('isite.synchronizables.index')" 
-      ref="syncComponent" 
+    <master-synchronizable
+      v-model="syncParams"
+      v-if="$auth.hasAccess('isite.synchronizables.index')"
+      ref="syncComponent"
     />
   </div>
 </template>
 <script>
 //Components
-import masterExport from "modules/qsite/_components/master/masterExport"
-import masterSynchronizable from "modules/qsite/_components/master/masterSynchronizable"
-import masterFilter from "modules/qsite/_components/master/masterFilter"
-import { eventBus } from 'src/plugins/utils'
+import masterExport from 'modules/qsite/_components/master/masterExport';
+import masterSynchronizable from 'modules/qsite/_components/master/masterSynchronizable';
+import masterFilter from 'modules/qsite/_components/master/masterFilter';
+import { eventBus } from 'src/plugins/utils';
 
 export default {
   beforeDestroy() {
     this.clearInterval();
-    eventBus.off('page.data.filter.read')
+    eventBus.off('page.data.filter.read');
   },
   props: {
-    title: {type: String},
-    description: {type: String},
-    icon: {type: String},
-    gutter: {type: String, default: 'sm'},
-    size: {type: String, default: 'small'},
-    extraActions: {type: Array},
-    excludeActions: {default: false},
-    searchAction: {default: true},
+    title: { type: String },
+    description: { type: String },
+    icon: { type: String },
+    gutter: { type: String, default: 'sm' },
+    size: { type: String, default: 'small' },
+    extraActions: { type: Array },
+    excludeActions: { default: false },
+    searchAction: { default: true },
     multipleRefresh: {
       type: Boolean,
-      default: () => false,
+      default: () => false
     },
-    tourName: {default: null},
+    tourName: { default: null },
     help: {
       required: false,
       type: Object,
-      default: () => {}
-    },
+      default: () => {
+      }
+    }
   },
-  emits: ['search','new','refresh'],
+  emits: ['search', 'new', 'refresh'],
   inject: {
     filterPlugin: {
       from: 'filterPlugin',
@@ -146,15 +144,15 @@ export default {
         pagination: {},
         load: false,
         hasValues: false,
-        storeFilter: false,
+        storeFilter: false
       }
     }
   },
-  components: {masterExport, masterSynchronizable, masterFilter},
+  components: { masterExport, masterSynchronizable, masterFilter },
   mounted() {
-    this.$nextTick(function () {
-      this.init()
-    })
+    this.$nextTick(function() {
+      this.init();
+    });
   },
   data() {
     return {
@@ -167,8 +165,8 @@ export default {
       timeRefresh: 0,
       drawer: {
         filter: false
-      },
-    }
+      }
+    };
   },
   computed: {
     isAppOffline() {
@@ -176,14 +174,14 @@ export default {
     },
     //Return filter data
     filter() {
-      this.filterData = this.$clone(this.filterPlugin.values)
-      return this.filterPlugin
+      this.filterData = this.$clone(this.filterPlugin.values);
+      return this.filterPlugin;
       //this.filterData = this.$clone(this.$filter.values)
       //return this.$filter
     },
     //Return params of subHeader
     params() {
-      return this.$clone(this.$route.meta.subHeader || {})
+      return this.$clone(this.$route.meta.subHeader || {});
     },
     //Button default props
     buttonProps() {
@@ -192,16 +190,16 @@ export default {
         rounded: true,
         dense: true,
         unelevated: true,
-        textColor: "primary",
-        style: "border: 1px solid rgba(0, 13, 71, 0.15)",
+        textColor: 'primary',
+        style: 'border: 1px solid rgba(0, 13, 71, 0.15)',
         class: `btn-${this.size}`,
-        noCaps: true,
-      }
+        noCaps: true
+      };
     },
     //Page Actions
     actions() {
       //Instance excludeActions prop
-      let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
+      let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : []);
 
       let response = [
         //Export Icommerce
@@ -225,7 +223,7 @@ export default {
         //Tour
         {
           label: 'Tour',
-          vIf: (this.tourName && !config("app.disableTours")),
+          vIf: (this.tourName && !config('app.disableTours')),
           props: {
             icon: 'fa-light fa-shoe-prints',
             id: 'actionStartTour'
@@ -248,7 +246,7 @@ export default {
           vIf: (this.filter.load && !excludeActions.includes('filter') && !this.isAppOffline),
           props: {
             icon: 'fa-light fa-filter',
-            id: 'filter-button-crud',
+            id: 'filter-button-crud'
           },
           action: () => this.toggleMasterFilter(true)
         },
@@ -267,30 +265,30 @@ export default {
               action: () => this.refreshByTime(0)
             },
             {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 1}),
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 1 }),
               action: () => this.refreshByTime(1)
             },
             {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 5}),
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 5 }),
               action: () => this.refreshByTime(5)
             },
             {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 10}),
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 10 }),
               action: () => this.refreshByTime(10)
             },
             {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', {min: 15}),
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 15 }),
               action: () => this.refreshByTime(5)
             }
           ],
-          action: this.emitRefresh,
+          action: this.emitRefresh
         }
-      ]
+      ];
 
       //Validate extra actions
       if (this.extraActions) {
         //Prepend actions
-        response = [...this.extraActions.filter(action => typeof action != 'string'), ...response]
+        response = [...this.extraActions.filter(action => typeof action != 'string'), ...response];
         //New button action
         if (this.extraActions.includes('new'))
           response.unshift({
@@ -298,88 +296,88 @@ export default {
             props: {
               label: this.$tr(`isite.cms.label.new`),
               icon: 'fa-light fa-plus',
-              textColor: "primary",
+              textColor: 'primary',
               round: false,
               rounded: true,
               padding: '3px 15px',
               id: 'new-button-crud'
             },
             action: () => this.$emit('new')
-          })
+          });
       }
 
       //force styles
-      response = response.map(item => ({...item, props : {...item.props, color : 'white', outline: false}}))
+      response = response.map(item => ({ ...item, props: { ...item.props, color: 'white', outline: false } }));
 
       //Response
-      return response.filter(item => item.vIf !== undefined ? item.vIf : true)
+      return response.filter(item => item.vIf !== undefined ? item.vIf : true);
     },
     //Quick filters
     quickFilters() {
-      var response = {}
+      var response = {};
       //Get quick filters
       if (this.$q.platform.is.desktop) {
-        if(this.filter.fields) {
+        if (this.filter.fields) {
           Object.keys(this.filter.fields).forEach(fieldName => {
-            var fieldfilter = this.filter.fields[fieldName]
+            var fieldfilter = this.filter.fields[fieldName];
             if (fieldfilter.quickFilter) {
               response[fieldName] = {
                 ...fieldfilter,
-                colClass: "col-12 col-md-4 col-xl-3"
-              }
-              if (!this.filterData[fieldName]) this.filterData[fieldName] = (fieldfilter.value || null)
+                colClass: 'col-12 col-md-4 col-xl-3'
+              };
+              if (!this.filterData[fieldName]) this.filterData[fieldName] = (fieldfilter.value || null);
             }
-          })
+          });
         }
       }
       //Response
-      return response
+      return response;
     },
     //Page Documentation
-    pageDocumentation(){
+    pageDocumentation() {
       //crud's help
-      if(this.help?.title && this.help?.description){
-        return  {
+      if (this.help?.title && this.help?.description) {
+        return {
           title: this.help.title,
           description: this.help.description,
           icon: this.help?.icon || this.$route.meta.icon,
           class: this.help?.class || 'q-ml-sm'
-        }
+        };
       }
 
-      let response = null
+      let response = null;
       //Get params from page permission
-      let params = this.$helper.getInfoFromPermission(this.$route.meta.permission)
+      let params = this.$helper.getInfoFromPermission(this.$route.meta.permission);
       if (params) {
         //instance the config name
-        let configName = `${params.module}.documentation.${params.entity}`
+        let configName = `${params.module}.documentation.${params.entity}`;
         //Search the config
-        response = this.$store.getters['qsiteApp/getConfigApp'](configName)
+        response = this.$store.getters['qsiteApp/getConfigApp'](configName);
       }
 
-      if (response){
+      if (response) {
         return {
           title: this.title,
           description: response,
           icon: this.$route.meta.icon,
           class: 'q-ml-sm'
-        }
+        };
       }
-      return false
+      return false;
     }
   },
   methods: {
     init() {
-      this.handlerEvent()
+      this.handlerEvent();
     },
     handlerEvent() {
-      eventBus.on('toggleMasterDrawer', () => this.toggleMasterFilter(false))
+      eventBus.on('toggleMasterDrawer', () => this.toggleMasterFilter(false));
     },
     refreshByTime(time) {
       this.timeRefresh = time;
       this.titleRefresh = time === 0
-          ? this.$tr('isite.cms.label.refreshAtOnce')
-          : this.$tr('isite.cms.label.refreshEveryMinutes', {min: time});
+        ? this.$tr('isite.cms.label.refreshAtOnce')
+        : this.$tr('isite.cms.label.refreshEveryMinutes', { min: time });
       this.clearInterval();
       const interval = 1000 * 60 * time;
       this.emitRefresh();
@@ -391,14 +389,14 @@ export default {
     },
     //Emit refresh
     emitRefresh() {
-      this.$emit('refresh')
-      eventBus.emit('page.data.refresh')
-      eventBus.emit('crud.data.refresh')
-      eventBus.emit('export.data.refresh')
+      this.$emit('refresh');
+      eventBus.emit('page.data.refresh');
+      eventBus.emit('crud.data.refresh');
+      eventBus.emit('export.data.refresh');
     },
     //Emit filter
     emitFilter() {
-      this.filterPlugin.addValues(this.filterData)
+      this.filterPlugin.addValues(this.filterData);
       if (this.filterPlugin && this.filterPlugin.callBack) this.filterPlugin.callBack();
     },
     clearInterval() {
@@ -417,16 +415,16 @@ export default {
             title: this.$tr('igamification.cms.activities.repeatAction'),
             content: this.$tr('igamification.cms.activities.repeatActionDescription'),
             element: '#actionStartTour',
-            position: 'top',
+            position: 'top'
           }
         ]
-      })
+      });
     },
-    toggleMasterFilter(value){
+    toggleMasterFilter(value) {
       this.drawer.filter = value;
     }
   }
-}
+};
 </script>
 <style lang="scss">
 #pageActionscomponent {
@@ -449,9 +447,11 @@ export default {
     .q-field {
       padding-bottom: 0 !important;
     }
+
     .q-field__append .q-icon {
       color: $tertiary;
     }
+
     @media screen and (max-width: $breakpoint-md) {
       width: 100%;
     }
@@ -472,6 +472,7 @@ export default {
       //min-height: 34px;
       //max-height: 34px;
     }
+
     .q-field__control, .q-field__prepend, .q-field__append {
       height: 34px;
     }

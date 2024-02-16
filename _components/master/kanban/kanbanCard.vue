@@ -44,6 +44,8 @@
             "
             icon="fa-solid fa-ellipsis"
           >
+            {{
+              actionsAutomations}}
             <q-list
               dense
               class="
@@ -52,24 +54,27 @@
                 tw-bg-gray-100
                 tw-text-xs"
             >
+              <template
+                v-for="(action, keyAction) in actionsAutomations"
+                :key="keyAction"
+              >
               <q-item
                 clickable
                 v-close-popup
-                v-for="(action, keyAction) in actionsAutomations"
-                :key="keyAction"
-                v-bind="action.props"
                 v-if="action?.vIf != undefined ? action?.vIf : true"
+                v-bind="action.props"
                 @click.native="runAction(action)"
               >
-                <q-item-section avatar>
-                  <q-icon :name="action.icon" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>
-                    {{ action.label || action.tooltip }}
-                  </q-item-label>
-                </q-item-section>
+                  <q-item-section avatar>
+                    <q-icon :name="action.icon" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>
+                      {{ action.label || action.tooltip }}
+                    </q-item-label>
+                  </q-item-section>
               </q-item>
+              </template>
             </q-list>
           </q-btn-dropdown>
         </div>

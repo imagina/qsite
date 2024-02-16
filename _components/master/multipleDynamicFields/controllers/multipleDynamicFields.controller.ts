@@ -3,7 +3,7 @@ import reateEmptyObjectFromFields from 'modules/qsite/_components/master/multipl
 import _ from 'lodash'
 
 export default function multipleDynamicFieldsController(props: any, emit: any) {
-    const valueMultiple = computed(() => props.value || []);
+    const valueMultiple = computed(() => props.modelValue || []);
     const fieldProps: any = computed(() => props.fieldProps);
     const defaultField = computed(() => props.fieldProps.fields);
     const fields: any = ref([]);
@@ -48,7 +48,7 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
     });
     watch(fields, (newField, oldField): void => {
         if(newField) {
-            emit("input", _.cloneDeep(newField));
+            emit('update:modelValue', _.cloneDeep(newField));
         }
     }, { deep: true });
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <template>
     <master-modal v-model="showModal" icon="fa-light fa-folder-tree" width="380px" :loading="loading"
                   :title="modalTitle" @show="init()" custom-position>
       <!--Content of Modal-->
@@ -166,7 +166,7 @@
         </div>
       </div>
     </master-modal>
-  </div>
+  </template>
 </template>
 <script>
 export default {
