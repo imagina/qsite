@@ -1,10 +1,12 @@
 <template>
   <div id="myOrganizationsPage">
-    <component v-bind="componentConfig"/>
+    <component :is="componentConfig.is" v-bind="componentConfig" />
   </div>
 </template>
 <script>
 import { eventBus } from 'src/plugins/utils'
+import Crud from 'modules/qcrud/_components/crud'
+import Form from 'modules/qsite/_pages/admin/organizations/form'
 
 export default {
   beforeDestroy() {
@@ -14,6 +16,10 @@ export default {
     this.$nextTick(function () {
       this.init()
     })
+  },
+  components: {
+    Crud,
+    Form
   },
   data() {
     return {
@@ -27,13 +33,13 @@ export default {
       const loadDirectForm = organizations.length == 1 ? true : false
       //Instance component to crud
       const componentCrud = {
-        is: () => import('modules/qcrud/_components/crud'),
+        is: 'Crud',
         crudData: import('modules/qsite/_crud/organizations'),
         title: this.$route.meta.title
       }
       //Instance component to organization form
       const componentForm = {
-        is: () => import('modules/qsite/_pages/admin/organizations/form'),
+        is: 'Form',
         organizationId: organizations.length ? organizations[0].id : null
       }
       return loadDirectForm ? componentForm : componentCrud
