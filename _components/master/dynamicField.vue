@@ -156,7 +156,7 @@
           </template>
           <!--Custom Option-->
           <template v-slot:option="scope" v-if="!fieldProps.hideDropdownIcon">
-            <q-item v-bind="scope.itemProps" v-on="scope.itemEvents || {}">
+            <q-item v-bind="scope.itemProps">
               <!--Load checkbos if is multiple-->
               <q-item-section avatar v-if="field.props && field.props.multiple">
                 <q-checkbox v-model="responseValue" :val="scope.opt.value"/>
