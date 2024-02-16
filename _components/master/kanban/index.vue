@@ -5,7 +5,6 @@
       v-if="checkIfFunnelExists"
       @mouseover="hoverArrow = true"
       @mouseleave="hoverArrow = false"
-
     >
       <draggable
         :id="`columnKanban${uId}`"
@@ -22,34 +21,32 @@
         :item-key="`columnKanban${uId}`"
       >
         <template #item="{element, index}">
-          <div v-if="!loading" :class="{'notMoveBetweenColumns': element.type !== 1}">
-            <div>
+            <div v-if="!loading" :class="{'notMoveBetweenColumns': element.type !== 1}">
               <kanbanColumn
-                :key="index"
                 :column-data="element"
                 :columnIndex="index"
                 :totalColumns="kanbanColumns.length"
                 :ref="`kanbanColumn-${element.id}`"
                 class="
-              tw-flex-none tw-space-y-0
-              w-h-auto
-              tw-bg-gray-100 tw-rounded-lg tw-shadow
-            "
+                  tw-flex-none tw-space-y-0
+                  w-h-auto
+                  tw-bg-gray-100 tw-rounded-lg tw-shadow
+                "
               />
             </div>
-
-          </div>
         </template>
         <template #footer>
           <div>
-            <q-skeleton
-              animation="blink"
-              height="700px"
-              width="450px"
-              v-if="loading"
-              v-for="(item, index) in 5"
-              :key="index"
-            />
+            <template  v-if="loading">
+              <q-skeleton
+                animation="blink"
+                height="700px"
+                width="450px"
+                v-for="(item, index) in 5"
+                :key="index"
+              />
+            </template>
+            
             <div class="tw-text-center tw-w-full" v-if="!loading && kanbanColumns.length === 0">
               <i class="fa-duotone fa-face-pleading tw-text-9xl colorTextPrimary"></i>
               <p class="tw-text-xl tw-font-semibold tw-py-4">No tiene estados creados en esta categoría</p>
@@ -390,6 +387,7 @@ export default {
         };
       });
       kanbanColumn.forEach(async (column) => {
+        column.loading = true;
         const kanbanCard = await this.getKanbanCard(column, 1, refresh);
         column.data = kanbanCard.data;
         column.loading = false;
@@ -408,7 +406,6 @@ export default {
     },
     async getKanbanCard(column, page = 1, refresh = false) {
       try {
-        column.loading = true;
         return await this.getKanbanCardList(column, page, refresh);
       } catch (error) {
         column.loading = false;

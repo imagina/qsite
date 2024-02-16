@@ -44,8 +44,6 @@
             "
             icon="fa-solid fa-ellipsis"
           >
-            {{
-              actionsAutomations}}
             <q-list
               dense
               class="
