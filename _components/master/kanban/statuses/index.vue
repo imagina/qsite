@@ -106,7 +106,9 @@
 </template>
 
 <script lang="ts">
-import Vue, { defineComponent, computed, ref, getCurrentInstance } from "vue";
+import { defineComponent, computed, ref } from "vue";
+import { useQuasar } from 'quasar';
+import { i18n } from 'src/plugins/utils'
 
 export default defineComponent({
   props: {
@@ -128,7 +130,7 @@ export default defineComponent({
     }
   },
   setup(props, {emit}) {
-    const proxy = getCurrentInstance()!.appContext.config.globalProperties
+    const $q = useQuasar()
     const hover = ref(false);
     const isEdit = ref(props.status.edit);
     const status = computed(() => props.status);
@@ -147,9 +149,9 @@ export default defineComponent({
         emit('add');
     }
     function deleteStatus() {
-        proxy.$q.dialog({
-          ok: proxy.$tr('isite.cms.label.delete'),
-          message: proxy.$tr('isite.cms.message.deleteRecord'),
+        $q.dialog({
+          ok: i18n.tr('isite.cms.label.delete'),
+          message: i18n.tr('isite.cms.message.deleteRecord'),
           cancel: true,
           persistent: true
         }).onOk(async() => {
