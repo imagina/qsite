@@ -213,7 +213,7 @@
           @start="dragColumn = true"
           @end="move"
           @change="countTotalRecords"
-          :disabled="!permissionStatuses.moveRequestables"
+          :disabled="!permissionStatuses.edit"
         >
           <kanbanCard
             v-for="(item, index) in columnData.data"
