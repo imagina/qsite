@@ -73,7 +73,7 @@ export default {
   computed: {
     //Return token to map
     token() {
-      return this.$store.getters['qsiteApp/getSettingValueByName']('isite::api-open-street-maps')
+      return this.$getSetting('isite::api-open-street-maps')
     },
     //Emit response value
     emitResponseValue() {
@@ -86,7 +86,7 @@ export default {
     },
     //Return the countries enables for the site
     countries() {
-      const value = this.$store.getters['qsiteApp/getSettingValueByName']('ilocations::availableCountries')|| ["co"]
+      const value = this.$getSetting('ilocations::availableCountries')|| ["co"]
       return value.map(val => val.toLowerCase())
     }
   },

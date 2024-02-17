@@ -242,7 +242,7 @@ export default {
     extraPageActions() {
       return [
         {
-          vIf: this.$auth.hasAccess('requestable.automationrules.manage'),
+          vIf: this.$hasAccess('requestable.automationrules.manage'),
           label: this.$tr('requestable.cms.label.analytics'),
           props: {
             padding: '3px 15px',
@@ -251,7 +251,7 @@ export default {
           action: this.openAnalytics
         },
         {
-          vIf: this.$auth.hasAccess('requestable.automationrules.manage'),
+          vIf: this.$hasAccess('requestable.automationrules.manage'),
           label: this.$tr('requestable.cms.label.automationRules'),
           props: {
             icon: 'fa-duotone fa-ruler',
@@ -260,7 +260,7 @@ export default {
           action: this.openAutomationRulesModal
         },
         {
-          vIf: this.$auth.hasAccess('requestable.statuses.manage'),
+          vIf: this.$hasAccess('requestable.statuses.manage'),
           label: this.$tr('isite.cms.form.status'),
           props: {
             icon: 'fa-duotone fa-swap-arrows',

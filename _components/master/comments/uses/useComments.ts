@@ -11,7 +11,7 @@ import {
   permissionsCommentsDefault,
 } from "modules/qsite/_components/master/comments/contracts/comments";
 import crud from 'modules/qcrud/_services/baseService'
-import { globalStore, i18n, moment, alert, helper } from 'src/plugins/utils'
+import { store, i18n, moment, alert, helper } from 'src/plugins/utils'
 import { useQuasar } from 'quasar';
 
 /**
@@ -20,7 +20,7 @@ import { useQuasar } from 'quasar';
  * @returns {object} An object containing methods and data related to comments.
  */
 export default function useComments(props: any) {
-  const { hasAccess, store } = globalStore
+  const { hasAccess } = store
   const $q = useQuasar()
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
   const dataComment: any = ref({

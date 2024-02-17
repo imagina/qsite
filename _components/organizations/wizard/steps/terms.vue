@@ -65,9 +65,9 @@ export default {
   computed: {
     termsAndConditions() {
       let settings = {
-        politics: this.$store.getters['qsiteApp/getSettingValueByName']('iprofile::registerUserWithPoliticsOfPrivacy') ??
+        politics: this.$getSetting('iprofile::registerUserWithPoliticsOfPrivacy') ??
             `${this.urlBase}/politica-de-privacidad`,
-        terms: this.$store.getters['qsiteApp/getSettingValueByName']('iprofile::registerUserWithTermsAndConditions') ??
+        terms: this.$getSetting('iprofile::registerUserWithTermsAndConditions') ??
             `${this.urlBase}/terminos-y-condiciones`,
       }
 
@@ -81,7 +81,7 @@ export default {
       //Response
       return this.$tr('iprofile.cms.message.privacyData', {
         concatData: concatData,
-        siteName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name')
+        siteName: this.$getSetting('core::site-name')
       })
     },
   },

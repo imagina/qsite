@@ -126,14 +126,14 @@ export default {
     },
     //Current Theme
     theme() {
-      return parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::iadminTheme'))
+      return parseInt(this.$getSetting('isite::iadminTheme'))
     },
     //Return params of subHeader
     params() {
       return this.$clone(this.$route.meta.subHeader || {})
     },
     showGoToSiteButton() {
-      return this.$store.getters['qsiteApp/getSettingValueByName']('isite::showGoToSiteButton') || false;
+      return this.$getSetting('isite::showGoToSiteButton') || false;
     },
     //Site Actions
     actions() {
@@ -149,7 +149,7 @@ export default {
         buttons: [
           //Offline
           {
-            vIf: this.$store.getters['qsiteApp/getSettingValueByName']('isite::offline'),
+            vIf: this.$getSetting('isite::offline'),
             name: 'offline',
             label: this.$tr('isite.cms.label.offline'),
             badgeColor: 'orange',
@@ -181,7 +181,7 @@ export default {
           //checking
           {
             name: 'checking',
-            vIf: (config('app.mode') == 'ipanel') && this.$auth.hasAccess('icheckin.shifts.create'),
+            vIf: (config('app.mode') == 'ipanel') && this.$hasAccess('icheckin.shifts.create'),
             label: this.$tr('icheckin.cms.sidebar.checkin'),
             props: {
               ...this.defaultButtonProps,
@@ -194,7 +194,7 @@ export default {
           {
             name: 'chat',
             label: 'Chat',
-            vIf: (config('app.mode') == 'iadmin') && this.$auth.hasAccess('ichat.conversations.index'),
+            vIf: (config('app.mode') == 'iadmin') && this.$hasAccess('ichat.conversations.index'),
             props: {
               ...this.defaultButtonProps,
               icon: 'fa-light fa-message-lines',
@@ -206,7 +206,7 @@ export default {
           {
             name: 'notifications',
             label: this.$trp('isite.cms.label.notification'),
-            vIf: this.$auth.hasAccess('notification.notifications.manage'),
+            vIf: this.$hasAccess('notification.notifications.manage'),
             props: {
               ...this.defaultButtonProps,
               icon: 'fa-light fa-bell',
@@ -218,7 +218,7 @@ export default {
           {
             name: 'helpCenter',
             label: this.$trp('isite.cms.label.helpCenter'),
-            vIf: parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::hcStatus') || '0'),
+            vIf: parseInt(this.$getSetting('isite::hcStatus') || '0'),
             props: {
               id: 'siteActionHelpCenter',
               ...this.defaultButtonProps,

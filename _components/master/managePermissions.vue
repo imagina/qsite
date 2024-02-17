@@ -1,6 +1,6 @@
 <template>
   <q-card id="componentSelectPermissions" class="no-shadow col-12"
-          v-if="$auth.hasAccess('profile.permissions.manage')">
+          v-if="$hasAccess('profile.permissions.manage')">
     <!--===== Title =====-->
     <div id="barTitle" class="q-px-sm q-py-sm">
       <div class="row justify-between items-center">

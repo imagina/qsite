@@ -94,7 +94,7 @@
     />
     <master-synchronizable
       v-model="syncParams"
-      v-if="$auth.hasAccess('isite.synchronizables.index')"
+      v-if="$hasAccess('isite.synchronizables.index')"
       ref="syncComponent"
     />
   </div>

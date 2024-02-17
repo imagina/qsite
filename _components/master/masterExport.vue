@@ -128,7 +128,7 @@ export default {
     },
     //Page title
     pageTitle() {
-      const useLegacyStructure = parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::legacyStructureCMS') || 0);
+      const useLegacyStructure = parseInt(this.$getSetting('isite::legacyStructureCMS') || 0);
       return useLegacyStructure ? this.$tr(this.$route.meta.title) : this.$route.meta.title;
     },
     //Modal export title
