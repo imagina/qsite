@@ -301,7 +301,7 @@ export default {
       return document.getElementById(`columnKanban${this.uId}`);
     },
     disabledDragStatuses() {
-      if(this.$auth.hasAccess('requestable.statuses.move')) {
+      if(this.$auth.hasAccess('requestable.statuses.edit')) {
         return this.loading || 
         !this.dragColumn || 
         this.kanbanColumns.length === 0
