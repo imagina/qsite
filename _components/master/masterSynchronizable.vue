@@ -190,7 +190,7 @@ export default {
     //Modal export title
     modalTitle() {
       //Get Title of the page
-      const useLegacyStructure = parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::legacyStructureCMS') || 0);
+      const useLegacyStructure = parseInt(this.$getSetting('isite::legacyStructureCMS') || 0);
       const title = useLegacyStructure ? this.$tr(this.$route.meta.title) : this.$route.meta.title;
       //Default response
       return `${this.$tr('isite.cms.label.massiveSynchronization')} - ${title}`;

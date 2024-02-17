@@ -643,7 +643,7 @@ export default {
     },
     // Validate if the dynamicForm is a backendForm and can edit it
     canEditForm() {
-      return this.formId && this.$auth.hasAccess('iforms.forms.edit');
+      return this.formId && this.$hasAccess('iforms.forms.edit');
     }
   },
   methods: {
@@ -792,7 +792,7 @@ export default {
         let fieldName = (field.name || fieldKey);//instance field name
 
         //Validate field permission
-        if (field.permission && !this.$auth.hasAccess(field.permission)) return;
+        if (field.permission && !this.$hasAccess(field.permission)) return;
 
         //parse child fields
         if (field.children) {

@@ -20,10 +20,10 @@ export default {
           columns: [
             {name: 'id', label: this.$tr('isite.cms.form.id'), field: 'id'},
             {name: 'title', label: this.$tr('isite.cms.form.title'), field: 'title', align: 'left'},
-            ...(!this.$auth.hasAccess('isite.organizations.edit-status') ? [] : [
+            ...(!this.$hasAccess('isite.organizations.edit-status') ? [] : [
               {name: 'status', label: this.$tr('isite.cms.form.status'), field: 'status'}
             ]),
-            ...(!this.$auth.hasAccess('isite.organizations.edit-featured') ? [] : [
+            ...(!this.$hasAccess('isite.organizations.edit-featured') ? [] : [
               {name: 'featured', label: this.$tr('isite.cms.form.featured'), field: 'featured', asStatus: true}
             ]),
             {

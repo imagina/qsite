@@ -93,7 +93,7 @@ export default {
     },
     settings() {
       return {
-        allowedImageTypes: this.$store.getters['qsiteApp/getSettingValueByName']('media::allowedImageTypes'),
+        allowedImageTypes: this.$getSetting('media::allowedImageTypes'),
       }
     }
   },

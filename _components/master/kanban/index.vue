@@ -21,23 +21,23 @@
         :item-key="`columnKanban${uId}`"
       >
         <template #item="{element, index}">
-            <div v-if="!loading" :class="{'notMoveBetweenColumns': element.type !== 1}">
-              <kanbanColumn
-                :column-data="element"
-                :columnIndex="index"
-                :totalColumns="kanbanColumns.length"
-                :ref="`kanbanColumn-${element.id}`"
-                class="
+          <div v-if="!loading" :class="{'notMoveBetweenColumns': element.type !== 1}">
+            <kanbanColumn
+              :column-data="element"
+              :columnIndex="index"
+              :totalColumns="kanbanColumns.length"
+              :ref="`kanbanColumn-${element.id}`"
+              class="
                   tw-flex-none tw-space-y-0
                   w-h-auto
                   tw-bg-gray-100 tw-rounded-lg tw-shadow
                 "
-              />
-            </div>
+            />
+          </div>
         </template>
         <template #footer>
           <div>
-            <template  v-if="loading">
+            <template v-if="loading">
               <q-skeleton
                 animation="blink"
                 height="700px"
@@ -46,7 +46,7 @@
                 :key="index"
               />
             </template>
-            
+
             <div class="tw-text-center tw-w-full" v-if="!loading && kanbanColumns.length === 0">
               <i class="fa-duotone fa-face-pleading tw-text-9xl colorTextPrimary"></i>
               <p class="tw-text-xl tw-font-semibold tw-py-4">No tiene estados creados en esta categoría</p>
@@ -242,7 +242,7 @@ export default {
     extraPageActions() {
       return [
         {
-          vIf: this.$auth.hasAccess('requestable.automationrules.manage'),
+          vIf: this.$hasAccess('requestable.automationrules.manage'),
           label: this.$tr('requestable.cms.label.analytics'),
           props: {
             padding: '3px 15px',
@@ -251,7 +251,7 @@ export default {
           action: this.openAnalytics
         },
         {
-          vIf: this.$auth.hasAccess('requestable.automationrules.manage'),
+          vIf: this.$hasAccess('requestable.automationrules.manage'),
           label: this.$tr('requestable.cms.label.automationRules'),
           props: {
             icon: 'fa-duotone fa-ruler',
@@ -260,7 +260,7 @@ export default {
           action: this.openAutomationRulesModal
         },
         {
-          vIf: this.$auth.hasAccess('requestable.statuses.manage'),
+          vIf: this.$hasAccess('requestable.statuses.manage'),
           label: this.$tr('isite.cms.form.status'),
           props: {
             icon: 'fa-duotone fa-swap-arrows',
@@ -320,18 +320,6 @@ export default {
         item.page = 1;
       });
     },
-    addColumn() {
-      try {
-        const counter = `kanban-${state.kanbanColumn.length + 1}`;
-        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-        const column = { ...modelColumn };
-        column.id = counter;
-        column.color = `#${randomColor}`;
-        state.kanbanColumn.splice(index + 1, 0, column);
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async reorderColumns() {
       this.reorder('kanbanColumns');
       await this.saveStatusOrdering();
@@ -359,8 +347,22 @@ export default {
         if (!this.routes.column) return;
         this.loading = true;
         const response = await this.getStatus(isModal ? !refresh : refresh);
-        const kanbanColumn = this.getKanbanColumns(response.data, refresh);
-        this.kanbanColumns = kanbanColumn;
+        //Set the initial data for kanbanColumns
+        this.kanbanColumns = response.data.map((item, index) => {
+          return {
+            id: item.id,
+            title: item.title,
+            color: item.color,
+            data: [],
+            page: 1,
+            total: 0,
+            loading: true,
+            new: false,
+            position: index,
+            type: item.type
+          };
+        });
+        await this.getKanbanColumns(response.data, refresh);
         setTimeout(() => {
           this.loading = false;
         }, 100);
@@ -371,29 +373,16 @@ export default {
         console.log(error);
       }
     },
-    getKanbanColumns(data, refresh = false) {
-      const kanbanColumn = data.map((item, index) => {
-        return {
-          id: item.id,
-          title: item.title,
-          color: item.color,
-          data: [],
-          page: 1,
-          total: 0,
-          loading: false,
-          new: false,
-          position: index,
-          type: item.type
-        };
-      });
-      kanbanColumn.forEach(async (column) => {
-        column.loading = true;
-        const kanbanCard = await this.getKanbanCard(column, 1, refresh);
-        column.data = kanbanCard.data;
-        column.loading = false;
-        column.total = kanbanCard.total;
-      });
-      return kanbanColumn;
+    async getKanbanColumns(data, refresh = false) {
+      Promise.all(this.kanbanColumns.map(column => {
+        return new Promise(resolve => {
+          this.getKanbanCard(column, 1, refresh).then(response => {
+            column.data = response.data;
+            column.total = response.total;
+            column.loading = false;
+          });
+        });
+      }));
     },
     async addCard(columnId) {
       const column = this.kanbanColumns.find(item => item.id === columnId);
@@ -518,7 +507,6 @@ export default {
     addColumn(index, data = null) {
       try {
         const counter = `kanban-${Math.random() + 1}`;
-        console.log(counter);
         const randomColor = Math.floor(Math.random() * 16777215).toString(16);
         const column = { ...modelColumn };
         column.id = counter;

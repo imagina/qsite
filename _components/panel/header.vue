@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
+      projectName: this.$getSetting('core::site-name'),
       logo: this.$store.state.qsiteApp.logo,
       appConfig: config('app'),
       badge: {
@@ -75,7 +75,7 @@ export default {
 
       //Format all routes to breadcrum
       pages.forEach(page => {
-        if (page && page.activated && this.$auth.hasAccess(page.permission))
+        if (page && page.activated && this.$hasAccess(page.permission))
           response.push({
             label: this.$tr(page.headerTitle || page.title),
             icon: page.icon,

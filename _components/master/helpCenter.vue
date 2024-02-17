@@ -33,7 +33,7 @@ export default {
     handleHelpCenter(params) {
       switch (params.sectionName) {
         case 'faq':
-          const hcFaqUrl = this.$store.getters['qsiteApp/getSettingValueByName']('isite::hcFaqUrl')
+          const hcFaqUrl = this.$getSetting('isite::hcFaqUrl')
           this.$helper.openExternalURL(hcFaqUrl)
           break
       }

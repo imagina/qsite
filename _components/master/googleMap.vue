@@ -49,7 +49,7 @@
           polylineOptions: {
             strokeWeight: 6,
             strokeOpacity: 1,
-            strokeColor: this.$store.getters['qsiteApp/getSettingValueByName']('isite::brandWarning')
+            strokeColor: this.$getSetting('isite::brandWarning')
           },
           preserveViewport: true,
           suppressMarkers: true,
@@ -128,7 +128,7 @@
     methods: {
       async init() {
         //Load CDN google maps
-        this.$helper.loadGoogleMaps(this.$store.getters['qsiteApp/getSettingValueByName']('isite::api-maps'))
+        this.$helper.loadGoogleMaps(this.$getSetting('isite::api-maps'))
         setTimeout(() => {
           if (this.mapData) this.initMapLoadRoute()
           else this.initMap()
@@ -207,7 +207,7 @@
           var flightPath = new google.maps.Polyline({
             path: markers,
             geodesic: true,
-            strokeColor: this.$store.getters['qsiteApp/getSettingValueByName']('isite::brandPrimary'),
+            strokeColor: this.$getSetting('isite::brandPrimary'),
             strokeOpacity: 1.0,
             strokeWeight: 6
           });
@@ -278,7 +278,7 @@
         var flightPath = new google.maps.Polyline({
           path: this.waypts,
           geodesic: true,
-          strokeColor: this.$store.getters['qsiteApp/getSettingValueByName']('isite::brandPrimary'),
+          strokeColor: this.$getSetting('isite::brandPrimary'),
           strokeOpacity: 1.0,
           strokeWeight: 6
         });

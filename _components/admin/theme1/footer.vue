@@ -71,7 +71,7 @@
               <q-item-section class="ellipsis">{{ $tr('isite.cms.label.offlineRequests') }}</q-item-section>
             </q-item>
             <!--Chat action-->
-            <q-item clickable v-ripple v-if="$auth.hasAccess('ichat.conversations.index')"
+            <q-item clickable v-ripple v-if="$hasAccess('ichat.conversations.index')"
                     @click.native="eventBus.emit('toggleMasterDrawer','chat')">
               <q-item-section avatar>
                 <q-icon color="primary" name="far fa-comment-alt"/>
@@ -80,7 +80,7 @@
             </q-item>
             <!--Checking action-->
             <q-item clickable v-ripple @click.native="eventBus.emit('toggleMasterDrawer','checkin')"
-                    v-if="$auth.hasAccess('icheckin.shifts.create')">
+                    v-if="$hasAccess('icheckin.shifts.create')">
               <q-item-section avatar>
                 <q-icon color="primary" name="fas fa-stopwatch"/>
               </q-item-section>
@@ -96,7 +96,7 @@
             </q-item>
             <!--Notification action-->
             <q-item clickable v-ripple @click.native="eventBus.emit('toggleMasterDrawer','notification')"
-                    v-if="$auth.hasAccess('notification.notifications.manage')">
+                    v-if="$hasAccess('notification.notifications.manage')">
               <q-item-section avatar>
                 <q-icon color="primary" name="fa-light fa-bell"/>
               </q-item-section>

@@ -1,14 +1,14 @@
-import Vue, {
+import {
     computed,
     inject,
     ref,
-    onBeforeUnmount,
-    getCurrentInstance
+    onBeforeUnmount
 } from "vue";
 import kanbanStore from "../../../store/kanbanStore.js";
+import crud from 'src/modules/qcrud/_services/baseService'
+import { alert, i18n } from 'src/plugins/utils'
 
 export default function useModalAnalytics() {
-    const proxy = getCurrentInstance()!.appContext.config.globalProperties
     const statusList: any = ref({
         inProgress: [],
         success: [],
@@ -80,11 +80,12 @@ export default function useModalAnalytics() {
     async function deleteStatus(id, type) {
         try {
             if (!isNaN(id)) {
-                await proxy.$crud.delete(routes.column.apiRoute, id).then(res => {
+                // @ts-ignore
+              await crud.delete(routes.column.apiRoute, id).then(res => {
                     statusList.value[type] = statusList.value[type].filter(
                         (item) => item.id !== id
                     );
-                    proxy.$alert.info({ message: proxy.$tr('isite.cms.message.recordDeleted') });
+                    alert.info({ message: i18n.tr('isite.cms.message.recordDeleted') });
                 })
                 .catch(err => {
 
@@ -94,7 +95,7 @@ export default function useModalAnalytics() {
                 statusList.value[type] = statusList.value[type].filter(
                     (item) => item.id !== id
                 );
-                proxy.$alert.info({ message: proxy.$tr('isite.cms.message.recordDeleted') });
+                alert.info({ message: i18n.tr('isite.cms.message.recordDeleted') });
             }
         } catch (error) {
             console.log(error);
@@ -119,7 +120,7 @@ export default function useModalAnalytics() {
             const statusId = statusList.value[type].map((item) => ({
                 id: item.id,
             }));
-            proxy.$crud.create(route.apiRoute, {
+            await crud.create(route.apiRoute, {
                 [route.filter.name]: statusId,
             });
         } catch (error) {

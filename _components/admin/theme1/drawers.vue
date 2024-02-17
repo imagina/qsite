@@ -26,7 +26,7 @@
 
     <!-- Chat -->
     <q-drawer bordered id="chatMaster" overlay v-model="drawer.chat" side="right"
-              v-if="$auth.hasAccess('ichat.conversations.index')">
+              v-if="$hasAccess('ichat.conversations.index')">
       <chat-list/>
     </q-drawer>
 
@@ -40,13 +40,13 @@
 
     <!--Notification-->
     <q-drawer bordered id="dawerNotificatiosMaster" v-model="drawer.notification" side="right" overlay
-              v-if="$auth.hasAccess('notification.notifications.manage')">
+              v-if="$hasAccess('notification.notifications.manage')">
       <master-notifications/>
     </q-drawer>
 
     <!--Offline-->
     <q-drawer bordered id="drawerOfflineMaster" v-model="drawer.offline" side="right" overlay
-              v-if="$store.getters['qsiteApp/getSettingValueByName']('isite::offline')">
+              v-if="$getSetting('isite::offline')">
       <offline/>
     </q-drawer>
   </div>
@@ -89,7 +89,7 @@ export default {
     return {
       windowHeight: window.innerHeight,
       windowWith: window.innerWidth,
-      projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
+      projectName: this.$getSetting('core::site-name'),
       miniState: this.windowSize == 'mobile' ? false : true,
       drawer: {
         menu: this.$q.platform.is.mobile ? false : true,

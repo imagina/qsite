@@ -343,19 +343,19 @@ export default {
   },
   computed: {
     allowCreateRequestable() {
-      return typeof this.columnData.id == 'string' || !this.$auth.hasAccess('requestable.requestables.create');
+      return typeof this.columnData.id == 'string' || !this.$hasAccess('requestable.requestables.create');
     },
     allowCreateStatuses() {
-      if(this.$auth.hasAccess('requestable.statuses.create')) {
+      if(this.$hasAccess('requestable.statuses.create')) {
         return !this.disableCrud && this.hover && this.columnData.type !== 2;
       }
-      return false; 
+      return false;
     },
     allowEditStatuses() {
-      if(this.$auth.hasAccess('requestable.statuses.edit')) {
+      if(this.$hasAccess('requestable.statuses.edit')) {
         return !this.disableCrud && this.arrowKanbanNameHover && !this.columnData.new
       }
-      return false; 
+      return false;
     },
     inputDynamicField() {
       return {

@@ -1307,7 +1307,7 @@ export default {
     //Settings
     settings() {
       return {
-        mapType: this.$store.getters['qsiteApp/getSettingValueByName']('isite::mapInShow')
+        mapType: this.$getSetting('isite::mapInShow')
       }
     },
     badgeColor() {
@@ -1472,7 +1472,7 @@ export default {
           let fieldSelect = {label: 'title', id: 'id'}
 
           //enable cache by isite setting
-          let enableCache = this.$store.getters['qsiteApp/getSettingValueByName']('isite::enableDynamicFieldsCache')
+          let enableCache = this.$getSetting('isite::enableDynamicFieldsCache')
           //enable cache by params
           if(this.enableCache) enableCache = 1
 
@@ -1599,7 +1599,7 @@ export default {
       //Validate type field
       if (field.type !== name) response = false
       //Validate permission
-      if (field.permission && !this.$auth.hasAccess(field.permission)) response = false
+      if (field.permission && !this.$hasAccess(field.permission)) response = false
       //Validate vIf prop
       if (response && field.props && (field.props?.vIf != undefined)) response = field.props?.vIf
       //Response

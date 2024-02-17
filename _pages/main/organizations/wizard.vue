@@ -114,7 +114,7 @@ export default {
   beforeDestroy() {},
   computed: {
     siteName() {
-      return this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name')
+      return this.$getSetting('core::site-name')
     },
     showStepperNavigation(){
       return  this.currentStep != STEP_WELCOME
@@ -267,7 +267,7 @@ export default {
       //Instance the url
       let url = null
       //Get setting to know the wizard type
-      const wizardType = this.$store.getters['qsiteApp/getSettingValueByName']('isite::wizardTenantType')
+      const wizardType = this.$getSetting('isite::wizardTenantType')
       //Instance the needed params
       const params = {
         billingcycle: storeWizard.data.plan.optionValue.toLowerCase(),

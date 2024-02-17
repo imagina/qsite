@@ -89,7 +89,7 @@
 
     <!--checking-->
     <q-drawer id="drawerCheckinMaster" v-model="drawer.checkin" side="right" bordered
-              v-if="(appConfig.mode == 'ipanel') && $auth.hasAccess('icheckin.shifts.create')">
+              v-if="(appConfig.mode == 'ipanel') && $hasAccess('icheckin.shifts.create')">
       <checkin/>
     </q-drawer>
 
@@ -101,7 +101,7 @@
 
     <!--Notification-->
     <q-drawer id="dawerNotificatiosMaster" v-model="drawer.notification" side="right"
-              v-if="$auth.hasAccess('notification.notifications.manage')" bordered>
+              v-if="$hasAccess('notification.notifications.manage')" bordered>
       <master-notifications/>
     </q-drawer>
   </div>
@@ -136,7 +136,7 @@ export default {
     return {
       windowHeight: window.innerHeight,
       windowWith: window.innerWidth,
-      projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
+      projectName: this.$getSetting('core::site-name'),
       logo: this.$store.state.qsiteApp.logo,
       miniState: this.windowSize == 'mobile' ? false : true,
       drawer: {

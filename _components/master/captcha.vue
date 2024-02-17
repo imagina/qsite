@@ -25,9 +25,9 @@ export default {
     //Return settings data
     settings() {
       return {
-        captchV2: this.$store.getters['qsiteApp/getSettingValueByName']('isite::reCaptchaV2Site'),
-        captchV3: this.$store.getters['qsiteApp/getSettingValueByName']('isite::reCaptchaV3Site'),
-        activeCaptcha: this.$store.getters['qsiteApp/getSettingValueByName']('isite::activateCaptcha')
+        captchV2: this.$getSetting('isite::reCaptchaV2Site'),
+        captchV3: this.$getSetting('isite::reCaptchaV3Site'),
+        activeCaptcha: this.$getSetting('isite::activateCaptcha')
       }
     },
     //Return config captcha

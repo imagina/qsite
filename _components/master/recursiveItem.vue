@@ -105,7 +105,7 @@ export default {
       if (!item.activated) response = false
       if (item.children) response = false
       if (!item.name) response = false
-      if (item.permission && !this.$auth.hasAccess(item.permission)) response = false
+      if (item.permission && !this.$hasAccess(item.permission)) response = false
       return response//Response
     },
     //Validate if should load multi-item
@@ -113,7 +113,7 @@ export default {
       let response = true
       if (!item.children) response = false
       if (item.children && !item.children.length) response = false
-      if (item.permission && !this.$auth.hasAccess(item.permission)) response = false
+      if (item.permission && !this.$hasAccess(item.permission)) response = false
       return response//Response
     },
     //Validate if should load all multi-item

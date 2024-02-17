@@ -13,7 +13,7 @@
         </div>
         <!--Btn to create-->
         <q-btn icon="fas fa-plus" round unelevated size="10px" color="green" @click="$refs.recommendations.create()"
-               v-if="($auth.hasAccess('isite.recommendations.create') && (appConfig.mode != 'ipanel'))">
+               v-if="($hasAccess('isite.recommendations.create') && (appConfig.mode != 'ipanel'))">
           <q-tooltip>{{ $tr('isite.cms.label.add') }}</q-tooltip>
         </q-btn>
       </div>
@@ -35,7 +35,7 @@
             <!--Button action-->
             <q-btn class="file-card__bottom_actions absolute-right" icon="fas fa-ellipsis-v" unelevated round size="sm"
                    color="blue-grey" flat padding="sm"
-                   v-if="($auth.hasAccess('isite.recommendations.manage') && (appConfig.mode != 'ipanel'))">
+                   v-if="($hasAccess('isite.recommendations.manage') && (appConfig.mode != 'ipanel'))">
               <!---Menu actions-->
               <q-menu anchor="bottom left" self="bottom end">
                 <q-list style="min-width: 100px">

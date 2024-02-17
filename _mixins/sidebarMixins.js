@@ -19,7 +19,7 @@ export default {
   computed: {
     menuSelect() {
       // switch between new menuList or old menuList
-      const useLegacyStructure = parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::legacyStructureCMS') || 0)
+      const useLegacyStructure = parseInt(this.$getSetting('isite::legacyStructureCMS') || 0)
       this.menuTranslatable = useLegacyStructure ? true : false
       return this.menuTranslatable ? this.menuLocal : this.menu
     },

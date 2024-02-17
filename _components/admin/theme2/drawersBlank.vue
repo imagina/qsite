@@ -30,7 +30,7 @@
       return {
         windowHeight: window.innerHeight,
         windowWith: window.innerWidth,
-        projectName: this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name'),
+        projectName: this.$getSetting('core::site-name'),
         logo: this.$store.state.qsiteApp.logo,
         miniState: this.windowSize == 'mobile' ? false : true,
         drawer: {
@@ -45,10 +45,10 @@
         return this.windowWith >= '992' ? 'desktop' : 'mobile'
       },
       primaryContrast() {
-        return  this.$store.getters['qsiteApp/getSettingValueByName']('isite::primaryContrast')
+        return  this.$getSetting('isite::primaryContrast')
       },
       secondaryContrast() {
-        return  this.$store.getters['qsiteApp/getSettingValueByName']('isite::secondaryContrast')
+        return  this.$getSetting('isite::secondaryContrast')
       },
       minilogo() {
         return this.$store.getters['qsiteApp/getSettingMediaByName']('isite::logoIadminSM')['path']

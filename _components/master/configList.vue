@@ -16,7 +16,7 @@
 
     <!--Impersonate-->
     <q-no-ssr>
-      <div v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating">
+      <div v-if="$hasAccess('profile.user.impersonate') || quserState.impersonating">
         <!--Title-->
         <div class="title-block q-mb-sm">
           {{ $tr('isite.cms.label.impersonate') }}
@@ -73,7 +73,7 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md" v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating"/>
+    <q-separator class="q-my-md" v-if="$hasAccess('profile.user.impersonate') || quserState.impersonating"/>
 
     <!--user Data-->
     <q-no-ssr>
@@ -120,7 +120,7 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md" v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating"/>
+    <q-separator class="q-my-md" v-if="$hasAccess('profile.user.impersonate') || quserState.impersonating"/>
 
     <!--Organization-->
     <q-no-ssr v-if="organizationField">
