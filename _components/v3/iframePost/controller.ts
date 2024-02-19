@@ -1,18 +1,16 @@
-import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
+import {reactive,  onMounted, toRefs, nextTick} from "vue";
+import { clone } from 'src/plugins/utils'
 
+interface StateProps {
+  loading: Boolean,
+  count: number,
+  actionUrl: any,
+  inputsForm: HTMLInputElement[]
+}
 export default function controller(props: any, emit: any) {
-  const proxy = getCurrentInstance()!.appContext.config.globalProperties
-
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
-  }
-
-  interface StateProps {
-    loading: Boolean,
-    count: number,
-    actionUrl: any,
-    inputsForm: HTMLInputElement[]
   }
 
   // States
@@ -31,7 +29,7 @@ export default function controller(props: any, emit: any) {
   const methods = {
     loadIframe(actionUrl, attributes) {
       state.loading = true
-      state.actionUrl = proxy.$clone(actionUrl)
+      state.actionUrl = clone(actionUrl)
       let newInputsForm: HTMLInputElement[] = []
       Object.keys(attributes).forEach(field => {
         const input = document.createElement("input");
@@ -42,7 +40,7 @@ export default function controller(props: any, emit: any) {
       });
       state.inputsForm = newInputsForm
       //Submit the form
-      proxy.$nextTick(() => {
+      nextTick(() => {
         const submitFormFunction = Object.getPrototypeOf(document.forms["formPostIframe"]).submit;
         submitFormFunction.call(document.forms["formPostIframe"]);
       })
