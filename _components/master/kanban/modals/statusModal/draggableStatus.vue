@@ -21,14 +21,14 @@
         @end="saveStatusOrdering('inProgress')"
         item-key="name"
       >
-        <template #item="{ status, index }">
+        <template #item="{ element, index }">
           <statuses
-            :key="status.id"
-            :status="status"
+            :key="element.id"
+            :status="element"
             class="tw-mb-3"
             :total="statusList.inProgress.length"
             @add="addStatus(index, 'inProgress')"
-            @delete="deleteStatus(status.id, 'inProgress')"
+            @delete="deleteStatus(element.id, 'inProgress')"
           />
         </template>
       </draggable>

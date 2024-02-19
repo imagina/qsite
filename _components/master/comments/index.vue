@@ -21,7 +21,7 @@
                   class="tw-py-2 tw-cursor-pointer text-grey-6"
                   v-html="textPlaceholder"
                   @click="activeText()"
-                  :title="tr(`isite.cms.label.edit`)"
+                  :title="i18n.tr(`isite.cms.label.edit`)"
                 />
               </q-card>
             </q-item-section>
@@ -45,7 +45,7 @@
                       @click="addComment()"
                       rounded
                       size="md"
-                      :label="tr(`isite.cms.label.save`)"
+                      :label="i18n.tr(`isite.cms.label.save`)"
                       color="primary"
                       no-caps
                     />
@@ -121,7 +121,7 @@
                             @click="deleteComment(item.id)"
                           >
                             <q-tooltip>{{
-                                tr(`isite.cms.label.delete`)
+                                i18n.tr(`isite.cms.label.delete`)
                               }}</q-tooltip>
                           </q-btn>
                         </div>
@@ -137,7 +137,7 @@
                           @click="updateComment('edit', item.id)"
                           rounded
                           size="md"
-                          :label="tr(`isite.cms.label.update`)"
+                          :label="i18n.tr(`isite.cms.label.update`)"
                           color="primary"
                           no-caps
                         />
@@ -150,7 +150,7 @@
                           color="primary"
                         >
                           <q-tooltip>{{
-                            tr(`isite.cms.label.cancel`)
+                            i18n.tr(`isite.cms.label.cancel`)
                           }}</q-tooltip>
                         </q-btn>
                       </div>

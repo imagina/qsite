@@ -4,7 +4,7 @@
     :persistent="true"
     customPosition
     maximized
-    @hide="hideModal"
+    :hide="hideModal"
     modalWidthSize="98%"
     title="Administrador de estados"
     :loading="loading"
@@ -33,14 +33,14 @@
             @end="saveStatusOrdering('inProgress')"
             item-key="name"
           >
-            <template #item="{ status, index }">
+            <template #item="{ element, index }">
               <statuses
-                :key="status.id"
-                :status="status"
+                :key="element.id"
+                :status="element"
                 class="tw-mb-3"
                 :total="statusList.inProgress.length"
                 @add="addStatus(index, 'inProgress')"
-                @delete="deleteStatus(status.id, 'inProgress')"
+                @delete="deleteStatus(element.id, 'inProgress')"
                 @saveColumn="saveColumn"
                 @updateColumn="updateColumn"
               />
@@ -71,14 +71,14 @@
             @end="saveStatusOrdering('failed')"
             item-key="name"
           >
-            <template #item="{ status, index }">
+            <template #item="{ element, index }">
               <statuses
-                :key="status.id"
-                :status="status"
+                :key="element.id"
+                :status="element"
                 class="tw-mb-3"
                 :total="statusList.failed.length"
                 @add="addStatus(index, 'failed')"
-                @delete="deleteStatus(status.id, 'failed')"
+                @delete="deleteStatus(element.id, 'failed')"
                 @saveColumn="saveColumn"
                 @updateColumn="updateColumn"
               />

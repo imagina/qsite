@@ -344,7 +344,6 @@ export default function useComments(props: any) {
   })
   return {
     permisionComments,
-    tr,
     dataBase,
     activeText,
     cancelText,
@@ -363,5 +362,6 @@ export default function useComments(props: any) {
     mainImage,
     loadingComment,
     files,
+    i18n
   };
 }

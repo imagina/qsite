@@ -8,7 +8,7 @@
       custom-position
       modalWidthSize="98%"
       :loading="loading"
-      @hide="hidden"
+      :hide="hidden"
     >
         <dynamic-field
           :field="field.date"

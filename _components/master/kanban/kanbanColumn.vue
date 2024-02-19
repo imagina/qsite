@@ -325,7 +325,6 @@ export default {
       this.observerCallback,
       observerOptions
     );
-    console.log(target);
     observer.observe(target);
   },
   data() {

@@ -1,24 +1,11 @@
-//[ptc]
-// import { Line, mixins } from 'vue-chartjs'
-// const { reactiveProp } = mixins
+import { Line } from 'vue-chartjs'
 
-// export default {
-//   extends: Line,
-//   mixins: [reactiveProp],
-//   props: ['options'],
-//   mounted () {
-//     // this.chartData is created in the mixin.
-//     // If you want to pass options please create a local options object
-//     this.renderChart(this.chartData, this.options)
-//   }
-// }
 export default {
-  extends: {},
-  mixins: [],
-  props: ['options'],
-  mounted () {
-    // this.chartData is created in the mixin.
-    // If you want to pass options please create a local options object
-    this.renderChart(this.chartData, this.options)
-  }
+   extends: Line,
+   props: ['options'],
+   mounted () {
+     // this.chartData is created in the mixin.
+     // If you want to pass options please create a local options object
+     this.renderChart(this.chartData, this.options)
+   }
 }
