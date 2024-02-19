@@ -12,7 +12,7 @@
         <q-input v-model="search" outlined dense debounce="800"
                  :placeholder="`${$tr('isite.cms.label.search',{capitalize : true})}...`">
           <template v-slot:append>
-            <q-icon name="search"/>
+            <q-icon name="fas fa-search"/>
           </template>
         </q-input>
       </div>

@@ -5,7 +5,7 @@
       <q-input outlined dense v-model="filter.search" :placeholder="labelText" debounce="800"
                class="input-search" ref="inputSearch" @update:modelValue="emitFilter()">
         <template v-slot:append>
-          <q-icon name="search" class="q-mr-sm"/>
+          <q-icon name="fas fa-search" class="q-mr-sm"/>
           <!--Button filter-->
           <q-btn color="primary" unelevated text-color="white" icon="fas fa-filter" class="q-px-xs" size="sm"
                  @click="showModal = true" v-if="Object.keys(fields).length"/>
