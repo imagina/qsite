@@ -1,6 +1,6 @@
-import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, onUnmounted} from "vue";
-import store from 'modules/qsite/_components/v3/recursiveItem/store'
-import { store as pluginStore, uid } from 'src/plugins/utils'
+import {computed, reactive, onMounted, toRefs, watch, getCurrentInstance, onUnmounted, nextTick} from "vue";
+import store from 'src/modules/qsite/_components/v3/recursiveItem/store'
+import { store as pluginStore, uid, clone, router } from 'src/plugins/utils'
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
@@ -50,7 +50,7 @@ export default function controller(props: any, emit: any) {
   // Methods
   const methods = {
     init() {
-      state.props = proxy.$clone(props)
+      state.props = clone(props)
       setTimeout(() => {
         methods.checkCollapsibles()
         state.showMenu = true
@@ -95,7 +95,7 @@ export default function controller(props: any, emit: any) {
       if (item.linkType && (item.linkType == 'external')) {
         window.open(`https://${item.url}`, item.target)
       } else if (item.name) {
-        proxy.$router.push({name: item.name, params: item.params || {}})
+        router.push({name: item.name, params: item.params || {}})
       }
     },
     //Validate if children of multi-item is selected
@@ -104,7 +104,7 @@ export default function controller(props: any, emit: any) {
 
       //Validate if current route name is like children
       let validateRouteName = (children) => {
-        let routeName = proxy.$route.name//Route name
+        let routeName = router.route.name//Route name
         let response = false// Default response
 
         if (children)
@@ -133,8 +133,8 @@ export default function controller(props: any, emit: any) {
 
       if(store.itemSelected?.id && item.id === store.itemSelected.id) response += ' item-is-active'
 
-      if (proxy.$route.name == item.name) {
-        if (JSON.stringify(proxy.$route.params) == JSON.stringify(item.params || {})) {
+      if (router.route.name == item.name) {
+        if (JSON.stringify(router.route.params) == JSON.stringify(item.params || {})) {
           response += ' item-is-active'
         }
       }
@@ -155,7 +155,7 @@ export default function controller(props: any, emit: any) {
 
   // Mounted
   onMounted(() => {
-    proxy.$nextTick(function () {
+    nextTick(function () {
       methods.init()
     })
   })

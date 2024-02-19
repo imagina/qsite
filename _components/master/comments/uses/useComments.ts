@@ -1,5 +1,5 @@
 import
-{ computed, ref, getCurrentInstance, onBeforeUnmount }
+{ computed, ref, onBeforeUnmount }
   from "vue";
 import {
   CommentModelContract,
@@ -11,7 +11,7 @@ import {
   permissionsCommentsDefault,
 } from "modules/qsite/_components/master/comments/contracts/comments";
 import crud from 'modules/qcrud/_services/baseService'
-import { store, i18n, moment, alert, helper } from 'src/plugins/utils'
+import { store, i18n, moment, alert, helper, router } from 'src/plugins/utils'
 import { useQuasar } from 'quasar';
 
 /**
@@ -22,7 +22,6 @@ import { useQuasar } from 'quasar';
 export default function useComments(props: any) {
   const { hasAccess } = store
   const $q = useQuasar()
-  const proxy = getCurrentInstance()!.appContext.config.globalProperties
   const dataComment: any = ref({
     edit: false,
     id: null,
@@ -317,7 +316,7 @@ export default function useComments(props: any) {
    * Retrieves the comment configuration from the server.
    */
   async function configComment() {
-    let routeParams = helper.getInfoFromPermission(proxy.$route.meta.permission);
+    let routeParams = helper.getInfoFromPermission(router.route.meta.permission);
     if (!routeParams) return;
     let requestParams = {
       refresh: true,
