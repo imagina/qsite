@@ -169,8 +169,8 @@
               <q-item-section avatar v-if="field.props.imageField">
                 <q-avatar>
                   <img
-                    :src="getImageField(scope.opt.id)"
-                    :style="'height: 24px; width: 24px; border-radius: 50%;'"
+                      :src="getImageField(scope.opt.id)"
+                      :style="'height: 24px; width: 24px; border-radius: 50%;'"
                   >
                 </q-avatar>
               </q-item-section>
@@ -220,18 +220,18 @@
                  v-bind="fieldProps.fieldComponent" :class="`${field.help ? 'treeselect-dynamic-field' : ''}`">
           <tree-select v-model="responseValue" :options="formatOptions" placeholder="" v-bind="fieldProps.field"
                        @select="(node, instanceId) => $emit('select', {node, instanceId})">
-              <template slot="option-label" slot-scope="{node}">
-                <label>
-                  <!-- Image -->
-                  <q-img
+            <template slot="option-label" slot-scope="{node}">
+              <label>
+                <!-- Image -->
+                <q-img
                     class="q-mr-xs"
                     v-if="field.props.imageField"
                     :src="getImageField(node.id)"
                     :style="'height: 24px; width: 24px; border-radius: 50%;'"
-                  />
-                  {{ node.label }}
-                </label>
-              </template>
+                />
+                {{ node.label }}
+              </label>
+            </template>
             <!--Before options slot-->
             <template slot="before-list">
               <slot name="before-options"></slot>
@@ -385,10 +385,10 @@
             :fieldProps="fieldProps"
         />
 
-        <multipleDynamicFields 
-          v-if="loadField('multiplier')"
-          v-model="responseValue"
-          :fieldProps="fieldProps"
+        <multipleDynamicFields
+            v-if="loadField('multiplier')"
+            v-model="responseValue"
+            :fieldProps="fieldProps"
         />
         <!--Code Editor-->
         <q-field v-model="responseValue" v-if="loadField('code')"
@@ -571,7 +571,7 @@ export default {
   computed: {
     selectImg() {
       const data = this.rootOptions.find(item => item.id == this.responseValue) || {};
-      
+
       return data.img || null;
     },
     //Return label to field
@@ -1472,7 +1472,7 @@ export default {
           //enable cache by isite setting
           let enableCache = this.$store.getters['qsiteApp/getSettingValueByName']('isite::enableDynamicFieldsCache')
           //enable cache by params
-          if(this.enableCache) enableCache = 1
+          if (this.enableCache) enableCache = 1
 
           let params = {//Params to request
             refresh: enableCache == '1' ? false : true,
@@ -1505,7 +1505,7 @@ export default {
             this.rootOptionsData = this.$clone(response.data)
 
             //Emit the loadedOptions
-            if(loadOptions.loadedOptions) loadOptions.loadedOptions(response.data)
+            if (loadOptions.loadedOptions) loadOptions.loadedOptions(response.data)
 
             this.rootOptionsData.forEach(item => {
               this.addImageField(item)
@@ -1514,9 +1514,12 @@ export default {
             let formatedOptions = []
             //Format response
             response.data = response.data.map((item, index) => ({...item, id: item.id >= 0 ? item.id : (index + 1)}))
-            formatedOptions = ['select', 'expression'].includes(this.field.type) ?
-                this.$array.select(response.data, loadOptions.select || fieldSelect) :
-                this.$array.tree(response.data, loadOptions.select || fieldSelect)
+
+            if (loadOptions.format) formatedOptions = loadOptions.format(response.data)
+            else if (['select', 'expression'].includes(this.field.type))
+              this.$array.select(response.data, loadOptions.select || fieldSelect)
+            else
+              this.$array.tree(response.data, loadOptions.select || fieldSelect)
 
             //Assign options
             this.rootOptions = this.$clone(defaultOptions.concat(formatedOptions))
@@ -1575,9 +1578,9 @@ export default {
     watchValue() {
       let value = this.$clone(this.value)
       let response = this.$clone(this.responseValue)
-      
+
       if (JSON.stringify(value) !== JSON.stringify(response)) {
-                //decode when is json
+        //decode when is json
         if (this.field.type == "json" && (typeof response == "string"))
           response = JSON.parse(response)
         //Emit input data
@@ -1694,7 +1697,7 @@ export default {
                 ...this.$array.select(response.data, fieldSelect),
               ]
               //Emit the loadedOptions
-              if(loadOptions.loadedOptions) loadOptions.loadedOptions(response.data)
+              if (loadOptions.loadedOptions) loadOptions.loadedOptions(response.data)
             }).catch(error => {
               this.$apiResponse.handleError(error, () => {
               })
@@ -1703,14 +1706,14 @@ export default {
         }
       }
     },
-    addImageField(item){
-      if(this.field.props.imageField) {
+    addImageField(item) {
+      if (this.field.props.imageField) {
         const src = _.get(item, this.field.props.imageField, '')
         this.imageFields.push({id: item.id, src: src})
       }
     },
-    getImageField(id){
-      const item = this.imageFields.find((e) => e.id == id )
+    getImageField(id) {
+      const item = this.imageFields.find((e) => e.id == id)
       return item.src
     },
   }
