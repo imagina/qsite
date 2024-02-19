@@ -175,11 +175,11 @@ export default {
       background: $custom-accent-color;
     }
   }
+  aside {
+    background: $primary;
+    background-color: $custom-accent-color !important;
+  }
   #menuMaster {
-    aside {
-      background: $primary;
-      background-color: $custom-accent-color !important;
-    }
     #logoSite {
       padding: 20px 25px 26px 25px;
       height: 120px;
