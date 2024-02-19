@@ -31,9 +31,9 @@
         ref="refDraggable"
         item-key="name"
       >
-        <template #item="{ field, keyField }">
+        <template #item="{ element, index }">
           <div
-            :key="keyField"
+            :key="index"
             class="
               row
               q-col-gutter-xs
@@ -62,12 +62,12 @@
               />
             </div>
             <div
-              v-for="key in Object.keys(field)"
+              v-for="key in Object.keys(element)"
               :key="key"
               :class="defaultField[key] && defaultField[key].colClass"
             >
               <dynamic-field
-                v-model="fields[keyField][key]"
+                v-model="fields[index][key]"
                 :field="defaultField[key]"
               />
             </div>
@@ -79,7 +79,7 @@
                 flat
                 round
                 :disabled="isMinQuantity"
-                @click="deleteItem(keyField)"
+                @click="deleteItem(index)"
               >
                 <q-tooltip>
                   {{ $tr('isite.cms.label.delete') }}
