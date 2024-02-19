@@ -6,7 +6,7 @@
       <!--Actions-->
       <div id="btnActions">
         <!--Clear-->
-        <q-btn icon="delete" size="sm" flat round color="blue-grey" @click="clear()" :disable="readonly"/>
+        <q-btn icon="fa-light fa-trash-can" size="sm" flat round color="blue-grey" @click="clear()" :disable="readonly"/>
         <!--Undo-->
         <q-btn icon="undo" size="sm" flat round color="blue-grey" @click="undo()" :disable="readonly"/>
         <!--fullscreen-->

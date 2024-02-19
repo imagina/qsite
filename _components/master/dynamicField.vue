@@ -61,7 +61,7 @@
             <q-input v-bind="fieldProps" v-model="responseValue" class="bg-white col-8"></q-input>
           </div>
           <div>
-            <q-btn class="" size="md" flat round color="primary" icon="add" @click="field.value = ++responseValue"
+            <q-btn class="" size="md" flat round color="primary" icon="fa-light fa-plus" @click="field.value = ++responseValue"
                    :disable="fieldProps.readonly"/>
           </div>
         </div>
