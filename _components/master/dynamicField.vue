@@ -499,17 +499,34 @@ export default {
     multipleDynamicFields,
   },
   watch: {
+    /*    
     modelValue: {
       deep: true,
       handler: function (newValue, oldValue) {
+        console.log(oldValue)
+        console.log(newValue)
         if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
           this.setDefaultVModel(newValue)//Order Value
         }
       }
     },
+    */    
+   /*
     responseValue(newValue, oldValue) {
-      this.watchValue(newValue)
+      this.watchValue(newValue)      
     },
+    */
+    responseValue: {
+      deep: true,
+      handler: function (newValue, oldValue) {
+        console.log('oldvalue : '+ oldValue)
+        console.log('newvalue : '+newValue)
+        if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
+          this.watchValue(newValue)      
+        }
+      }
+    },
+    
     rootOptions(newValue) {
       this.options = this.rootOptions
       //Select by default
@@ -619,10 +636,9 @@ export default {
 
           //Add rule to validate field
           if (this.field.validateField && this.field.validateField.apiRoute) {
-            if (!props.debounce) props.debounce = '800' //Add debounce
             props.rules = [...(props.rules || []), this.validateField]//Add rule to validate field
           }
-
+          props.debounce = '500' //Add debounce
           //Extra logic to input type password
           if (this.isFieldPassword) props.type = this.showPassword ? 'text' : 'password'
 
@@ -635,11 +651,11 @@ export default {
             ...props
           }
 
-          //Add rule to validate field
+          //Add rule to validate field                    
           if (this.field.validateField && this.field.validateField.apiRoute) {
-            if (!props.debounce) props.debounce = '800' //Add debounce
             props.rules = [...(props.rules || []), this.validateField]//Add rule to validate field
           }
+          props.debounce = '500' //Add debounce
 
           //Extra logic to input type password
           if (this.isFieldPassword) props.type = this.showPassword ? 'text' : 'password'
@@ -1331,6 +1347,7 @@ export default {
     },
     //Set default values by type
     setDefaultVModel(value) {
+      console.count('setDefaultVModel')
       let propValue = this.$clone(value)
       switch (this.field.type) {
         case 'crud':
@@ -1364,6 +1381,7 @@ export default {
           this.responseValue = propValue || ''
           break
         case 'treeSelect':
+          console.warn('treeselect', propValue)
           this.orderOptions(propValue)
           break
         case 'select':
@@ -1419,11 +1437,14 @@ export default {
           break
         default :
           this.responseValue = propValue || null
-          break
+          break         
       }
+      console.warn('update:modelValue, who:',this.field.type)        
+      this.$emit('update:modelValue', this.responseValue)
     },
     //Order options
     orderOptions(propValue) {
+      console.count('orderOptions') 
       if (propValue !== undefined) {
         if (Array.isArray(propValue)) {
           this.responseValue = []
@@ -1583,7 +1604,8 @@ export default {
         if (this.field.type == "json" && (typeof response == "string"))
           response = JSON.parse(response)
         //Emit input data
-        this.$emit('update:modelValue', response)
+        
+        this.setDefaultVModel(response)
       }
 
       //Load option for value
