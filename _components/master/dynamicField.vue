@@ -499,7 +499,7 @@ export default {
     multipleDynamicFields,
   },
   watch: {
-    /*    
+  /*        
     modelValue: {
       deep: true,
       handler: function (newValue, oldValue) {
@@ -510,7 +510,8 @@ export default {
         }
       }
     },
-    */    
+    */
+    
    /*
     responseValue(newValue, oldValue) {
       this.watchValue(newValue)      
@@ -768,7 +769,7 @@ export default {
           break;
         case'select':
           props = {
-            emitValue: true,
+            emitValue: false,            
             mapOptions: true,
             outlined: true,
             dense: true,
@@ -1382,12 +1383,15 @@ export default {
           this.responseValue = propValue || ''
           break
         case 'treeSelect':
+        case 'treeSelect':
+          console.warn('treeselect', propValue)
+        case 'treeSelect':          
           console.warn('treeselect', propValue)
           this.orderOptions(propValue)
-          break
-        case 'select':
+          break          
+        case 'select':        
           this.orderOptions(propValue)
-          break
+          break          
         case 'multiSelect':
           this.responseValue = propValue || []
           break
@@ -1445,7 +1449,7 @@ export default {
     },
     //Order options
     orderOptions(propValue) {
-      console.count('orderOptions') 
+      console.warn('propValue', propValue) 
       if (propValue !== undefined) {
         if (Array.isArray(propValue)) {
           this.responseValue = []
