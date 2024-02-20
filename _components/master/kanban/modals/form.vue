@@ -35,7 +35,8 @@
   </superModal>
 </template>
 <script>
-import superModal from 'modules/qsite/_components/master/superModal/view';
+import superModal from 'modules/qrequestable/_components/modals/information/components/superModal.vue';
+
 export default {
   props: {
     funnelId: {

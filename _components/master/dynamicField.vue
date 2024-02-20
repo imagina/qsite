@@ -61,7 +61,7 @@
             <q-input v-bind="fieldProps" v-model="responseValue" class="bg-white col-8"></q-input>
           </div>
           <div>
-            <q-btn class="" size="md" flat round color="primary" icon="add" @click="field.value = ++responseValue"
+            <q-btn class="" size="md" flat round color="primary" icon="fa-light fa-plus" @click="field.value = ++responseValue"
                    :disable="fieldProps.readonly"/>
           </div>
         </div>
@@ -757,9 +757,10 @@ export default {
             outlined: true,
             dense: true,
             bgColor: 'white',
+            dropdownIcon: 'fa-solid fa-caret-down',
             //style: 'width: 100%',
             behavior: "menu",
-            class: "q-pb-md",
+            class: "q-pb-md custom-btn",
             ...props
           }
           props.loading = props.loading || this.loading
@@ -1720,6 +1721,9 @@ export default {
 </script>
 <style lang="scss">
 #dynamicFieldComponent {
+  .custom-btn .q-field__control div:last-child {
+     font-size: 16px;
+  }
   .q-field--outlined .q-field__control {
     padding-left: 12px;
   }

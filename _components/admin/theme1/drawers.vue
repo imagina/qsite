@@ -5,7 +5,7 @@
               @click.capture="miniState ? eventBus.emit('toggleMasterDrawer','menu') : null">
       <!--Logo-->
       <div id="logoSite" class="relative-position">
-        <q-img contain :src="logo" style="height: 80px; min-height: 80px"/>
+        <q-img fit="contain" :src="logo" style="height: 80px; min-height: 80px"/>
         <!--Version-->
         <div id="versionContent" class="absolute absolute-bottom-right text-white">
           <q-icon name="fas fa-code-branch" class="q-mr-xs"/>
@@ -167,80 +167,68 @@ export default {
 <style lang="scss">
 #masterDrawers1 {
   background-color: $custom-accent-color !important;
-
   #drawerRecomendationMaster {
     .q-drawer {
       max-height: max-content;
     }
-
     .q-drawer__content {
       background: $custom-accent-color;
     }
   }
-
+  aside {
+    background: $primary;
+    background-color: $custom-accent-color !important;
+  }
   #menuMaster {
-    aside {
-      background: $primary;
+    #logoSite {
+      padding: 20px 25px 26px 25px;
+      height: 120px;
+      background-color: $primary;
+    }
+    #versionContent {
+      padding: 3px 15px;
+      font-size: 13px;
+    }
+    .q-expansion-item {
       background-color: $custom-accent-color !important;
-
-      #logoSite {
-        padding: 20px 25px 26px 25px;
-        height: 120px;
-        background-color: $primary;
+    }
+    .q-expansion-item__container {
+      .q-expansion-item__content {
+        padding: 0 0 0 2px;
+        border-left: 15px solid $custom-accent-color;
       }
-
-      #versionContent {
-        padding: 3px 15px;
-        font-size: 13px;
-      }
-
-      .q-expansion-item {
-        background-color: $custom-accent-color !important;
-
-        .q-expansion-item__container {
-          .q-expansion-item__content {
-            padding: 0 0 0 2px;
-            border-left: 15px solid $custom-accent-color;
-          }
+    }
+    .q-item {
+      padding-left: 0;
+      min-height: 40px;
+      color: $blue-grey;
+      .q-item__section--avatar {
+        padding: 0 18px !important;
+        .q-icon {
+          font-size: 20px;
+          color: $blue-grey;
         }
       }
-
-      .q-item {
-        padding-left: 0;
-        min-height: 40px;
-        color: $blue-grey;
-
-        .q-item__section--avatar {
-          padding: 0 18px !important;
-
-          .q-icon {
-            font-size: 20px;
-            color: $blue-grey;
-          }
-        }
-
-        &:hover {
-          background-color: $grey-4;
+      &:hover {
+        background-color: $grey-4;
+        color: $primary;
+        .q-icon {
           color: $primary;
-
-          .q-icon {
-            color: $primary;
-            font-size: 22px;
-          }
-        }
-
-        &.item-is-active {
-          background-color: $custom-accent-color;
-
-          .q-item__section, .q-icon {
-            color: $primary;
-          }
+          font-size: 22px;
         }
       }
+      &.item-is-active {
+        background-color: $custom-accent-color;
 
-      .expansion-selected {
-        background-color: $primary;
+        .q-item__section,
+        .q-icon {
+          color: $primary;
+        }
+
       }
+    }
+    .expansion-selected {
+      background-color: $primary;
     }
   }
 }

@@ -36,14 +36,18 @@
           </div>
         </template>
         <template #footer>
-          <div>
+          <div class="tw-flex tw-space-x-4">
             <template v-if="loading">
-              <q-skeleton
-                animation="blink"
-                height="700px"
-                width="450px"
-                v-for="(item, index) in 5"
-                :key="index"
+              <div 
+                 v-for="(item, index) in 10"
+                 :key="index"
+                 class="
+                  tw-bg-gray-200 
+                  tw-animate-pulse 
+                  tw-w-[250px] 
+                  tw-h-[700px]
+                  tw-shadow-md
+                  tw-rounded-md"
               />
             </template>
 
@@ -387,6 +391,7 @@ export default {
     async addCard(columnId) {
       const column = this.kanbanColumns.find(item => item.id === columnId);
       if (column) {
+        column.loading = true;
         const kanbanCard = await this.getKanbanCard(column, 1, true);
         column.data = kanbanCard.data;
         column.loading = false;

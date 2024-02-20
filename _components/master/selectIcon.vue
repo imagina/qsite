@@ -23,7 +23,7 @@
           <q-input v-model="searchIcon" bg-color="white" outlined dense clearable :label="$tr('isite.cms.label.search')"
                    class="q-mb-md">
             <template v-slot:append>
-              <q-icon name="search"/>
+              <q-icon name="fas fa-search"/>
             </template>
           </q-input>
           <!--Icon categories-->

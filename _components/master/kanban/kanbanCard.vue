@@ -302,7 +302,7 @@ export default {
   @apply tw-hidden !important;
 }
 .kd-list-without-arrow .q-item__section--avatar {
-  @apply tw-mx-1 tw-pr-1 !important tw-min-w-0 !important;
+  @apply tw-mx-1 tw-pr-1 tw-min-w-0;
 }
 
 </style>

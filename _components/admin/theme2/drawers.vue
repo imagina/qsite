@@ -5,10 +5,10 @@
               :mini="miniState" @click.capture="miniState ? eventBus.emit('toggleMasterDrawer','menu') : null">
       <!--Logo-->
       <div v-show="!miniState" id="logoSite2" class="relative-position">
-        <q-img contain :src="logo" style="height: 80px; min-height: 80px"/>
+        <q-img fit="contain" :src="logo" style="height: 80px; min-height: 80px"/>
       </div>
       <div v-if="miniState" id="miniLogoSite">
-        <q-img contain :src="minilogo"/>
+        <q-img fit="contain" :src="minilogo"/>
       </div>
       <!--List iadmin-->
       <q-scroll-area id="adminMenu" class="bg-primary" :style="`height: calc(100vh - 146px`">
@@ -196,56 +196,49 @@ export default {
 <style lang="scss">
 #masterDrawers2 {
   background-color: $primary;
-
+  aside {
+    background: $primary;
+    z-index: 3000;
+  }
   #menuMaster2 {
-    aside {
-      background: $primary;
-      z-index: 3000;
-    }
-
     #logoSite2 {
       padding: 20px 25px 26px 25px;
       height: 120px;
-      background-color: #FFFFFF;
+      background-color: #fff;
     }
-
     #miniLogoSite {
       padding: 30px 7px;
       height: 120px;
-      background-color: #FFFFFF;
+      background-color: #fff;
     }
-
     #versionContent {
       padding: 3px 15px;
       font-size: 13px;
     }
-
     .q-item {
       padding-left: 0;
       background-color: $primary;
       min-height: 50px;
       color: var(--q-color-contrast);
-
       .q-focus-helper {
         opacity: 0;
       }
-
       .q-item__section--avatar {
         padding: 0 18px !important;
       }
-
+      .q-item__section {
+        font-weight: 600;
+      }
       .q-item__section,
       .q-icon {
         color: var(--q-color-contrast);
       }
     }
-
     .content-item {
-      > .q-item {
+      & > .q-item {
         .q-item__section--main {
           font-size: 16px;
         }
-
         .q-icon {
           font-size: 20px;
         }
@@ -257,72 +250,69 @@ export default {
           font-weight: 900;
         }
       }
-
-      > .q-expansion-item {
+      & > .q-expansion-item {
         background-color: $primary;
-
-        .q-expansion-item__container > .q-item {
-          .q-item__label {
-            font-size: 15px;
-          }
-
-          .q-icon {
-            font-size: 20px;
-          }
-
-          &:hover,
-          &.item-is-active {
-            border-radius: 0 15px 15px 0;
-            background-color: $secondary;
-            font-weight: 900;
-          }
-        }
-
-        .q-expansion-item__container > .q-expansion-item__content {
-          padding: 0 0 0 3px;
-          border-left: 18px solid $primary;
-
-          #listMenu {
-            .content-item {
-              border-left: 3px solid $secondary;
+        .q-expansion-item__container {
+          & > .q-item {
+            .q-item__label {
+              font-size: 15px;
             }
-          }
-
-          .q-item {
-            min-height: 40px;
-            margin-left: -1px;
-
-            .q-item__section,
             .q-icon {
-              color: var(--q-color-contrast);
-              font-size: 14px;
-              font-weight: 600;
-            }
-
-            .q-icon {
-              display: none;
+              font-size: 20px;
             }
 
             &:hover,
             &.item-is-active {
               background-color: $secondary;
-
+              border-radius: 0 15px 15px 0;
+              font-weight: 900;
+            }
+          }
+          & > .q-expansion-item__content {
+            padding: 0 0 0 3px;
+            border-left: 18px solid $primary;
+            #listMenu {
+              .content-item {
+                border-left: 3px solid $secondary;
+              }
+            }
+            .q-item {
+              min-height: 40px;
+              margin-left: -1px;
+              .q-icon {
+                display: none;
+              }
               .q-item__section,
               .q-icon {
                 color: var(--q-color-contrast);
+                font-size: 14px;
+                font-weight: 600;
               }
+
+              &:hover,
+              &.item-is-active {
+                background-color: $secondary;
+              }
+
+              &:hover .q-item__section,
+              &.item-is-active .q-item__section,
+              &:hover .q-icon,
+              &.item-is-active .q-icon {
+                color: var(--q-color-contrast);
+              }
+
             }
           }
         }
       }
     }
-
     .expansion-selected {
       background-color: $primary;
     }
-
-    .q-drawer--mini .q-item {
-      border-radius: 0 !important;
+    .q-drawer--mini {
+      .q-item {
+        border-radius: 0 !important;
+      }
     }
   }
 }

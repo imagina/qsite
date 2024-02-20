@@ -5,7 +5,7 @@ import {
     onBeforeUnmount
 } from "vue";
 import kanbanStore from "../../../store/kanbanStore.js";
-import crud from 'src/modules/qcrud/_services/baseService'
+import crud from 'src/modules/qcrud/_services/baseService.js'
 import { alert, i18n } from 'src/plugins/utils'
 
 export default function useModalAnalytics() {

@@ -142,28 +142,32 @@ export default {
   }
 }
 
-.master-dialog-custom .q-dialog__inner {
-  padding: 15px 0 0 0;
-  width: var(--modal-width-size);
+.master-dialog-custom{
+  .q-dialog__inner {
+    padding: 15px 0 0 0;
+    width: var(--modal-width-size);
 
-  @media screen and (max-width: $breakpoint-md) {
-    width: 90vw;
+    @media screen and (max-width: $breakpoint-md) {
+      width: 90vw;
+    }
+
+    @media screen and (max-width: $breakpoint-xs) {
+      width: 100vw;
+    }
   }
 
-  @media screen and (max-width: $breakpoint-xs) {
-    width: 100vw;
+  .master-dialog {
+    &__content {
+      height: 100%;
+      max-height: 100%;
+      width: 100%;
+      max-width: 100%;
+      border-radius: $custom-radius 0 0 0 !important;
+    }
+
+    &__body {
+      height: calc(100vh - 173px);
+    }
   }
-}
-
-.master-dialog .master-dialog__content {
-  height: 100%;
-  max-height: 100%;
-  width: 100%;
-  max-width: 100%;
-  border-radius: $custom-radius 0 0 0 !important;
-}
-
-.master-dialog .master-dialog__body {
-  height: calc(100vh - 173px);
 }
 </style>

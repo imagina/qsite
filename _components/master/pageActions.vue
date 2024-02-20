@@ -299,7 +299,7 @@ export default {
               textColor: 'primary',
               round: false,
               rounded: true,
-              padding: '3px 15px',
+              padding: '5px 15px',
               id: 'new-button-crud'
             },
             action: () => this.$emit('new')
@@ -444,6 +444,10 @@ export default {
   }
 
   .actions-content {
+    .q-btn--dense > .q-btn__content:not(:has(.block)) {
+      padding: 0.285rem;
+    }
+
     .q-field {
       padding-bottom: 0 !important;
     }

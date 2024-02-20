@@ -178,7 +178,7 @@ export default {
 .step-categories  .activeClass .item-category-name {
   background-color: var(--q-color-primary);
 }
-.step-categories .activeClass .tw-border {
+.step-categories .activeClass {
   @apply tw-shadow-lg;
 }
 .step-categories .item-category:after {
