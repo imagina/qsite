@@ -1517,9 +1517,9 @@ export default {
 
             if (loadOptions.format) formatedOptions = loadOptions.format(response.data)
             else if (['select', 'expression'].includes(this.field.type))
-              this.$array.select(response.data, loadOptions.select || fieldSelect)
+              formatedOptions = this.$array.select(response.data, loadOptions.select || fieldSelect)
             else
-              this.$array.tree(response.data, loadOptions.select || fieldSelect)
+              formatedOptions = this.$array.tree(response.data, loadOptions.select || fieldSelect)
 
             //Assign options
             this.rootOptions = this.$clone(defaultOptions.concat(formatedOptions))
