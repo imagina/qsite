@@ -124,8 +124,7 @@ export default {
           permission: 'profile.user.index',
           props: {
             crudType: "select",
-            //[ptc]
-            //crudData: import("modules/quser/_crud/users"),
+            crudData: import("modules/quser/_crud/users"),
             crudProps: {
               label: this.$tr('isite.cms.form.requestedBy'),
               rules: [

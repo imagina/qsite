@@ -155,22 +155,19 @@
       </div>
     </div>
     <!-- Edit form Modal-->
-    <!--[ptc]-->
-    <!-- <edit-form-modal ref="editFormModal" @hide="init"/>-->
+    <edit-form-modal ref="editFormModal" @hide="init"/>
   </div>
 </template>
 
 <script>
 import fileListComponent from 'modules/qsite/_components/master/fileList';
 import layoutStore from 'modules/qsite/_store/layoutStore.js';
-//[ptc]
-//import editFormModal from 'modules/qform/_components/editFormModal/index.vue'
+import editFormModal from 'modules/qform/_components/editFormModal/index.vue'
 
 export default {
   components: {
-    fileListComponent
-    //[ptc]
-    //editFormModal,
+    fileListComponent,
+    editFormModal,
   },
   props: {
     modelValue: {

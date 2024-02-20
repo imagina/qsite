@@ -46,16 +46,17 @@ export default function useLocalizedPhone(props: any = {}, emit: any = null) {
     listCountries.value = await getCountries();
   }
   async function init() {
-    const country: any = listCountries.value.find(item => {
+    const country: any = listCountries.value?.find(item => {
       const country: any = item;
-      return valuePhone.value ? valuePhone.value.startsWith(`${country.callingCode}`) : country.callingCode === 57;
+      return valuePhone.value ? valuePhone.value.startsWith(`${country?.callingCode}`) : country?.callingCode === 57;
     });
-    callingCode.value = country.callingCode;
+    callingCode.value = country?.callingCode;
     if(callingCode.value !== 0) {
-      seletdCountry.value = listCountries.value
-      .find(item => (item as any).callingCode == callingCode.value) || countryDefault;
+      seletdCountry.value = listCountries.value?.find(
+        item => (item as any)?.callingCode == callingCode.value
+      ) || countryDefault;
     }
-    inputDataComputed.value = valuePhone.value ? valuePhone.value.substring(String(country.callingCode).length) : null;
+    inputDataComputed.value = valuePhone.value ? valuePhone.value?.substring(String(country?.callingCode)?.length) : null;
   }
   onMounted(async () => {
     await setCountries();
@@ -64,7 +65,7 @@ export default function useLocalizedPhone(props: any = {}, emit: any = null) {
   function setSeletdCountry(country) {
     seletdCountry.value = country;
     searchTerm.value = '';
-    emit('update:modelValue', `${seletdCountry.value.callingCode}${inputDataComputed.value}`);
+    emit('update:modelValue', `${seletdCountry.value?.callingCode}${inputDataComputed.value}`);
   }
 
   watchEffect(async () => {
