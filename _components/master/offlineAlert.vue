@@ -1,14 +1,21 @@
 <template>
     <div id="offline-alert">
-        <div class="bg-blue-grey-10 offline-alert" @click="$eventBus.$emit('toggleMasterDrawer', 'offline')">
+        <div class="bg-blue-grey-10 offline-alert" @click="eventBus.emit('toggleMasterDrawer', 'offline')">
             <q-icon size="16px" name="fa-regular fa-wifi-slash" class="q-mr-sm" /> {{ $tr('isite.cms.message.appOffline') }}
         </div>
     </div>
 </template>
 
 <script>
+import { eventBus } from 'src/plugins/utils'
+
 export default {
-    name: "offlineAlert"
+    name: "offlineAlert",
+    data: () => {
+      return {
+        eventBus
+      }
+    }
 }
 </script>
 

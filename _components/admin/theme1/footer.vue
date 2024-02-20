@@ -64,7 +64,7 @@
               <q-item-section class="ellipsis">{{ $tr('isite.cms.label.setting') }}</q-item-section>
             </q-item>
             <!--Offline-->
-            <q-item clickable v-ripple @click.native="$eventBus.$emit('toggleMasterDrawer','offline')">
+            <q-item clickable v-ripple @click.native="eventBus.emit('toggleMasterDrawer','offline')">
               <q-item-section avatar>
                 <q-icon color="primary" name="fa-regular fa-wifi-slash"/>
               </q-item-section>
