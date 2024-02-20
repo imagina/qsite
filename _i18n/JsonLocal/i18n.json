@@ -837,7 +837,7 @@
           "finished": "Finalizado",
           "mapHelp": "Search for the address or locate the warehouse on the map.",
           "productWarehouse": "Warehouses",
-          "productWarehouseContent" : "Select the different warehouses where your product is located.",
+          "productWarehouseContent": "Select the different warehouses where your product is located.",
           "generalWarehouse": "General warehouse",
           "generalWarehouseHelp": "You can efficiently manage detailed information for each product, segmented according to the different warehouses. This way, you can organize and centrally manage specific data for your products at each location, simplifying inventory management and optimizing your operational control.",
           "warehouseByOptions": "Warehouse by options",
@@ -1954,7 +1954,9 @@
         "selectedRows": "{num} selected rows",
         "reportQueue": "You already have a report in progress, you requested it on <b>{date}</b>. As soon as it is finished we will enable the 'create' function for you... We do this to make the app work much better!",
         "sessionFound": "There is an active session",
-        "alreadyInUse": "Oops! It looks like the name you've chosen is already in use. Could you please try selecting a different name? We want to make sure your unique identity shines bright!"
+        "alreadyInUse": "Oops! It looks like the name you've chosen is already in use. Could you please try selecting a different name? We want to make sure your unique identity shines bright!",
+        "usersToNotify": "Users To notify",
+        "emailsToNotify": "Emails To Notify"
       }
     },
     "setupagione": {
@@ -2882,7 +2884,7 @@
           "finished": "Finalizado",
           "mapHelp": "Busca la dirección o localíza la bodega en el mapa.",
           "productWarehouse": "Bodegas",
-          "productWarehouseContent" : "Selecciona las diferentes bodegas donde se encuentra ubicado tu producto.",
+          "productWarehouseContent": "Selecciona las diferentes bodegas donde se encuentra ubicado tu producto.",
           "generalWarehouse": "Bodega general",
           "generalWarehouseHelp": "Puedes gestionar de manera eficiente la información detallada de cada producto, segmentada de acuerdo a las distintas bodegas. Así, puedes organizar y administrar de forma centralizada los datos específicos de tus productos en cada ubicación, simplificando la gestión de inventario y optimizando tu control operativo.",
           "warehouseByOptions": "Bodega por Opcion",
@@ -3643,7 +3645,6 @@
           "insert": "Insertar",
           "phoneNumber": "Número de teléfono",
           "quickLook": "Vistazo rápido"
-
         },
         "message": {
           "showDemo": "Ver Demo",
@@ -3868,7 +3869,9 @@
         "selectedRows": "{num} Filas seleccionadas",
         "reportQueue": "Ya tienes un reporte en progreso, lo solicitaste en <b>{date}</b>. Tan pronto este termine habilitaremos la función de 'crear' para ti... Esto lo hacemos para que la aplicación funcione mucho mejor!",
         "sessionFound": "Hay una sesión activa",
-        "alreadyInUse": "¡Ups! Parece que el nombre que has elegido ya está en uso. ¿Podrías intentar seleccionar otro nombre? ¡Queremos asegurarnos de que tu identidad única brille con fuerza!"
+        "alreadyInUse": "¡Ups! Parece que el nombre que has elegido ya está en uso. ¿Podrías intentar seleccionar otro nombre? ¡Queremos asegurarnos de que tu identidad única brille con fuerza!",
+        "usersToNotify": "Usuarios a Notificar",
+        "emailsToNotify": "Emails a Notificiar"
       }
     },
     "setupagione": {
