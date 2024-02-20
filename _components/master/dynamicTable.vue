@@ -130,91 +130,94 @@
                 ></div>
                 <!--Fields-->
                 <q-list dense>
-                  <q-item
-                    v-for="col in props.cols"
-                    :key="col.name"
-                    style="padding: 3px 0"
-                    v-if="col.name != 'actions'"
+                  <template
+                      v-for="col in props.cols"
+                      :key="col.name"
                   >
-                    <q-item-section>
-                      <!--Field name-->
-                      <q-item-label class="ellipsis">
-                        <div
-                          v-if="col.name != 'actions'"
-                          class="row justify-between items-center"
-                        >
-                          <!--Label-->
-                          <div>
-                            {{ col.label }}
-                            {{ col.name == "id" ? col.value : "" }}
+                    <q-item
+                      style="padding: 3px 0"
+                      v-if="col.name != 'actions'"
+                    >
+                      <q-item-section>
+                        <!--Field name-->
+                        <q-item-label class="ellipsis">
+                          <div
+                            v-if="col.name != 'actions'"
+                            class="row justify-between items-center"
+                          >
+                            <!--Label-->
+                            <div>
+                              {{ col.label }}
+                              {{ col.name == "id" ? col.value : "" }}
+                            </div>
+                            <!--Actions-->
+                            <btn-menu
+                              v-if="col.name == 'id'"
+                              :actions="fieldActions(props)"
+                              :action-data="props.row"
+                            />
                           </div>
-                          <!--Actions-->
-                          <btn-menu
-                            v-if="col.name == 'id'"
-                            :actions="fieldActions(props)"
-                            :action-data="props.row"
+                          <q-separator
+                            v-if="['id'].indexOf(col.name) != -1"
+                            class="q-mt-sm"
                           />
-                        </div>
-                        <q-separator
-                          v-if="['id'].indexOf(col.name) != -1"
-                          class="q-mt-sm"
-                        />
-                      </q-item-label>
-                      <!--Field value-->
-                      <q-item-label
-                        v-if="col.name != 'id'"
-                        class="ellipsis text-grey-6"
-                      >
-                        <!-- status columns -->
-                        <div
-                          v-if="
+                        </q-item-label>
+                        <!--Field value-->
+                        <q-item-label
+                          v-if="col.name != 'id'"
+                          class="ellipsis text-grey-6"
+                        >
+                          <!-- status columns -->
+                          <div
+                            v-if="
                             ['status', 'active'].includes(col.name) ||
                             col.asStatus
                           "
-                          class="text-left"
-                        >
-                          <q-btn-dropdown
-                            :color="col.value ? 'green' : 'red'"
-                            flat
-                            padding="sm none"
-                            :label="
+                            class="text-left"
+                          >
+                            <q-btn-dropdown
+                              :color="col.value ? 'green' : 'red'"
+                              flat
+                              padding="sm none"
+                              :label="
                               col.value
                                 ? $tr('isite.cms.label.enabled')
                                 : $tr('isite.cms.label.disabled')
                             "
-                            class="text-caption"
-                            no-caps
-                          >
-                            <!--Message change to-->
-                            <q-item
-                              class="q-pa-sm cursor-pointer"
-                              v-close-popup
-                              @click.native="
+                              class="text-caption"
+                              no-caps
+                            >
+                              <!--Message change to-->
+                              <q-item
+                                class="q-pa-sm cursor-pointer"
+                                v-close-popup
+                                @click.native="
                                 updateStatus({ ...props, col: col })
                               "
-                            >
-                              <div class="row items-center">
-                                <q-icon
-                                  name="fas fa-pen"
-                                  class="q-mr-sm"
-                                  :color="!col.value ? 'green' : 'red'"
-                                />
-                                {{
-                                  $tr("isite.cms.message.changeTo", {
-                                    text: col.value
-                                      ? $tr("isite.cms.label.disabled")
-                                      : $tr("isite.cms.label.enabled"),
-                                  })
-                                }}
-                              </div>
-                            </q-item>
-                          </q-btn-dropdown>
-                        </div>
-                        <!--Default columns-->
-                        <div v-else>{{ col.value }}</div>
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
+                              >
+                                <div class="row items-center">
+                                  <q-icon
+                                    name="fas fa-pen"
+                                    class="q-mr-sm"
+                                    :color="!col.value ? 'green' : 'red'"
+                                  />
+                                  {{
+                                    $tr("isite.cms.message.changeTo", {
+                                      text: col.value
+                                        ? $tr("isite.cms.label.disabled")
+                                        : $tr("isite.cms.label.enabled"),
+                                    })
+                                  }}
+                                </div>
+                              </q-item>
+                            </q-btn-dropdown>
+                          </div>
+                          <!--Default columns-->
+                          <div v-else>{{ col.value }}</div>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </template>
                 </q-list>
               </q-card>
             </div>
@@ -359,91 +362,94 @@
                 ></div>
                 <!--Fields-->
                 <q-list dense>
-                  <q-item
+                  <template
                     v-for="col in props.cols"
                     :key="col.name"
-                    style="padding: 3px 0"
-                    v-if="col.name != 'actions'"
                   >
-                    <q-item-section>
-                      <!--Field name-->
-                      <q-item-label class="ellipsis">
-                        <div
-                          v-if="col.name != 'actions'"
-                          class="row justify-between items-center"
-                        >
-                          <!--Label-->
-                          <div>
-                            {{ col.label }}
-                            {{ col.name == "id" ? col.value : "" }}
+                    <q-item
+                      style="padding: 3px 0"
+                      v-if="col.name != 'actions'"
+                    >
+                      <q-item-section>
+                        <!--Field name-->
+                        <q-item-label class="ellipsis">
+                          <div
+                            v-if="col.name != 'actions'"
+                            class="row justify-between items-center"
+                          >
+                            <!--Label-->
+                            <div>
+                              {{ col.label }}
+                              {{ col.name == "id" ? col.value : "" }}
+                            </div>
+                            <!--Actions-->
+                            <btn-menu
+                              v-if="col.name == 'id'"
+                              :actions="fieldActions(props)"
+                              :action-data="props.row"
+                            />
                           </div>
-                          <!--Actions-->
-                          <btn-menu
-                            v-if="col.name == 'id'"
-                            :actions="fieldActions(props)"
-                            :action-data="props.row"
+                          <q-separator
+                            v-if="['id'].indexOf(col.name) != -1"
+                            class="q-mt-sm"
                           />
-                        </div>
-                        <q-separator
-                          v-if="['id'].indexOf(col.name) != -1"
-                          class="q-mt-sm"
-                        />
-                      </q-item-label>
-                      <!--Field value-->
-                      <q-item-label
-                        v-if="col.name != 'id'"
-                        class="ellipsis text-grey-6"
-                      >
-                        <!-- status columns -->
-                        <div
-                          v-if="
+                        </q-item-label>
+                        <!--Field value-->
+                        <q-item-label
+                          v-if="col.name != 'id'"
+                          class="ellipsis text-grey-6"
+                        >
+                          <!-- status columns -->
+                          <div
+                            v-if="
                             ['status', 'active'].includes(col.name) ||
                             col.asStatus
                           "
-                          class="text-left"
-                        >
-                          <q-btn-dropdown
-                            :color="col.value ? 'green' : 'red'"
-                            flat
-                            padding="sm none"
-                            :label="
+                            class="text-left"
+                          >
+                            <q-btn-dropdown
+                              :color="col.value ? 'green' : 'red'"
+                              flat
+                              padding="sm none"
+                              :label="
                               col.value
                                 ? $tr('isite.cms.label.enabled')
                                 : $tr('isite.cms.label.disabled')
                             "
-                            class="text-caption"
-                            no-caps
-                          >
-                            <!--Message change to-->
-                            <q-item
-                              class="q-pa-sm cursor-pointer"
-                              v-close-popup
-                              @click.native="
+                              class="text-caption"
+                              no-caps
+                            >
+                              <!--Message change to-->
+                              <q-item
+                                class="q-pa-sm cursor-pointer"
+                                v-close-popup
+                                @click.native="
                                 updateStatus({ ...props, col: col })
                               "
-                            >
-                              <div class="row items-center">
-                                <q-icon
-                                  name="fas fa-pen"
-                                  class="q-mr-sm"
-                                  :color="!col.value ? 'green' : 'red'"
-                                />
-                                {{
-                                  $tr("isite.cms.message.changeTo", {
-                                    text: col.value
-                                      ? $tr("isite.cms.label.disabled")
-                                      : $tr("isite.cms.label.enabled"),
-                                  })
-                                }}
-                              </div>
-                            </q-item>
-                          </q-btn-dropdown>
-                        </div>
-                        <!--Default columns-->
-                        <div v-else>{{ col.value }}</div>
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
+                              >
+                                <div class="row items-center">
+                                  <q-icon
+                                    name="fas fa-pen"
+                                    class="q-mr-sm"
+                                    :color="!col.value ? 'green' : 'red'"
+                                  />
+                                  {{
+                                    $tr("isite.cms.message.changeTo", {
+                                      text: col.value
+                                        ? $tr("isite.cms.label.disabled")
+                                        : $tr("isite.cms.label.enabled"),
+                                    })
+                                  }}
+                                </div>
+                              </q-item>
+                            </q-btn-dropdown>
+                          </div>
+                          <!--Default columns-->
+                          <div v-else>{{ col.value }}</div>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </template>
                 </q-list>
               </q-card>
             </div>

@@ -18,63 +18,66 @@
       <q-item
         clickable
         class="
-          tw-py-3 
-          tw-border-b 
-          tw-bg-white 
+          tw-py-3
+          tw-border-b
+          tw-bg-white
           folder-item
         "
         v-for="(report, index) in uniqBy(folder.reportList)"
         :key="report.id"
       >
-        <q-item-section 
-          avatar 
+        <q-item-section
+          avatar
           class="f-cursor-grab"
         >
-          <q-icon 
-            name="drag_handle" 
-            class="drag_handle" 
+          <q-icon
+            name="drag_handle"
+            class="drag_handle"
           />
         </q-item-section>
         <q-item-section>
-          <q-item-label 
-            class="tw-font-bold folder-title" 
+          <q-item-label
+            class="tw-font-bold folder-title"
             lines="1"
           >
             {{ report.title || report.id }}
           </q-item-label>
           <q-item-label caption lines="1">
-            {{ report.name || report.description }} 
+            {{ report.name || report.description }}
           </q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-btn 
-            flat 
-            round 
-            color="tw-gray-300" 
+          <q-btn
+            flat
+            round
+            color="tw-gray-300"
             size="sm"
             icon="more_vert"
           >
             <q-menu>
               <q-list class="list-report-menu" separator>
-                <q-item 
-                  clickable
-                  v-close-popup
-                  v-for="(item, index) in fieldRelationActions" 
-                  :key="index"  
-                  @click.native="item.action(report)"
-                  v-if="item.vIf !== undefined ? item.vIf : true"
+                <template
+                  v-for="(item, index) in fieldRelationActions"
+                  :key="index"
                 >
-                  <q-item-section avatar>
-                    <q-icon 
-                      :class="item.icon" 
-                      color="primary" 
-                      size="xs" 
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    {{  item.label  }}
-                  </q-item-section>
-                </q-item>
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click.native="item.action(report)"
+                    v-if="item.vIf !== undefined ? item.vIf : true"
+                  >
+                    <q-item-section avatar>
+                      <q-icon
+                        :class="item.icon"
+                        color="primary"
+                        size="xs"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      {{  item.label  }}
+                    </q-item-section>
+                  </q-item>
+                </template>
                 <q-separator />
               </q-list>
             </q-menu>
@@ -85,8 +88,8 @@
     <div
       v-if="!dragReports && folder.reportList.length === 0"
       class="
-        tw-py-8 
-        tw-text-center 
+        tw-py-8
+        tw-text-center
         tw-text-5xl"
       >
         <div class="fa-light fa-folder-xmark" />

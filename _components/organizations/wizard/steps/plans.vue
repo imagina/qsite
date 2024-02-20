@@ -19,39 +19,42 @@
         </q-tabs>
         <q-tab-panels v-model="tabActive" animated>
           <q-tab-panel :name="element.optionValue" v-for="(element, i) in tab" :key="i">
-            <q-list
+            <template
+              v-for="(item, index) in plans"
+              :key="index"
+            >
+              <q-list
                 bordered
                 separator
                 class="tw-mb-4 cursor-pointer tw-rounded-md item-plan tw-mx-2 md:tw-mx-6"
-                v-for="(item, index) in plans" :key="index"
                 v-if="item.optionValue == element.optionValue"
                 :class="{ activePlan : item.id === selected.id &&  item.planId === selected.planId}"
-                @click="selectPlan(item)">
-
-              <q-expansion-item
-                expand-icon-toggle
-                group="plans"
-                v-model="item.active"
+                @click="selectPlan(item)"
               >
-                <template v-slot:header>
-                  <q-item-section>
-                    <div class="tw-text-lg tw-font-semibold"> {{ item.planName }}</div>
-                    <div class="tw-text-xs">{{ item.planName }}</div>
-                  </q-item-section>
+                <q-expansion-item
+                  expand-icon-toggle
+                  group="plans"
+                  v-model="item.active"
+                >
+                  <template v-slot:header>
+                    <q-item-section>
+                      <div class="tw-text-lg tw-font-semibold"> {{ item.planName }}</div>
+                      <div class="tw-text-xs">{{ item.planName }}</div>
+                    </q-item-section>
 
-                  <q-item-section side>
-                    <div class="row items-center ">
-                      <span class="tw-font-bold">{{ item.price }}</span> / {{ item.optionValue }}
-                    </div>
-                  </q-item-section>
-                </template>
-                <q-card>
-                  <q-separator/>
-                  <q-card-section v-html="item.planDescription"></q-card-section>
-                </q-card>
-              </q-expansion-item>
-            </q-list>
-
+                    <q-item-section side>
+                      <div class="row items-center ">
+                        <span class="tw-font-bold">{{ item.price }}</span> / {{ item.optionValue }}
+                      </div>
+                    </q-item-section>
+                  </template>
+                  <q-card>
+                    <q-separator/>
+                    <q-card-section v-html="item.planDescription"></q-card-section>
+                  </q-card>
+                </q-expansion-item>
+              </q-list>
+            </template>
           </q-tab-panel>
         </q-tab-panels>
       </div>

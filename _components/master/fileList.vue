@@ -183,12 +183,27 @@
                 </div>
 
                 <!--Quantity files-->
-                <div v-if="!readonly && quantity && (gridType == 'card')" :class="`${gridColClass} q-pa-xs`"
-                     v-for="itemNum in emptyQuantityFiles" :key="`item${itemNum}`">
-                  <div class="file-item-quantity row items-center justify-center" @click="$emit('emptyFileAction')">
-                    <q-icon name="fas fa-photo-video" size="45px" />
+                <template
+                  v-for="itemNum in emptyQuantityFiles"
+                  :key="`item${itemNum}`"
+                >
+                  <div
+                    v-if="!readonly && quantity && (gridType == 'card')"
+                    :class="`${gridColClass} q-pa-xs`"
+                  >
+                    <div
+                      class="
+                        file-item-quantity
+                        row
+                        items-center
+                        justify-center
+                      "
+                      @click="$emit('emptyFileAction')"
+                    >
+                      <q-icon name="fas fa-photo-video" size="45px" />
+                    </div>
                   </div>
-                </div>
+                </template>
               </div>
             </template>
           </draggable>
@@ -227,12 +242,27 @@
     </q-table>
     <!---No data-->
     <div v-if="!readonly && !tableData.length" class="row q-px-sm q-pb-sm">
-      <div v-if="quantity && (gridType == 'card')" :class="`${gridColClass} q-pa-xs`"
-           v-for="itemNum in emptyQuantityFiles" :key="`item${itemNum}`">
-        <div class="file-item-quantity row items-center justify-center" @click="$emit('emptyFileAction')">
-          <q-icon name="fas fa-photo-video" size="45px" />
+      <template
+        v-for="itemNum in emptyQuantityFiles"
+        :key="`item${itemNum}`"
+      >
+        <div
+          v-if="quantity && (gridType == 'card')"
+          :class="`${gridColClass} q-pa-xs`"
+        >
+          <div
+            class="
+              file-item-quantity
+              row
+              items-center
+              justify-center
+            "
+            @click="$emit('emptyFileAction')"
+          >
+            <q-icon name="fas fa-photo-video" size="45px" />
+          </div>
         </div>
-      </div>
+      </template>
     </div>
     <!--Image preview-->
     <avatar-image ref="avatarImage" no-preview />

@@ -98,7 +98,7 @@
           @click="addStatus(-1, 'success')"
         />
         <div class="tw-flex tw-space-x-5 tw-m-2">
-          <div v-for="status, index in statusList.success" :key="status.id">
+          <div v-for="(status, index) in statusList.success" :key="status.id">
             <statuses
               :status="status"
               class="tw-w-56"

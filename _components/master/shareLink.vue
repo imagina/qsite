@@ -38,24 +38,28 @@
         <!--Available buttons to share-->
         <div v-else class="q-gutter-y-lg q-pt-xs">
           <div class="row q-gutter-x-md justify-center">
-            <div v-for="(button, key) in availableButtons"
+            <template
+              v-for="(button, key) in availableButtons"
               :key="key"
-              v-if="button.icon"
-              class="text-center platform"
-              style="max-width: 70px;"
             >
-              <q-btn
-                :icon="button.icon"
-                unelevated
-                :color="button.color"
-                align="center"
-                @click="shareLink(key)"
-                round
-              />
-              <div>
-                {{ button.label }}
+              <div
+                v-if="button.icon"
+                class="text-center platform"
+                style="max-width: 70px;"
+              >
+                <q-btn
+                  :icon="button.icon"
+                  unelevated
+                  :color="button.color"
+                  align="center"
+                  @click="shareLink(key)"
+                  round
+                />
+                <div>
+                  {{ button.label }}
+                </div>
               </div>
-            </div>
+            </template>
           </div>
           <div class="row">
             <dynamic-field class="col-12" :field="dinamycConfig"/>
