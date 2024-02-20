@@ -27,15 +27,22 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
 } from 'chart.js';
 import Exporter from 'vue-chartjs-exporter';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  PointElement,
+  LineElement,
+  ArcElement
 );
 export default {
   components: {
@@ -45,7 +52,10 @@ export default {
     Doughnut,
   },
   props: {
-    chartsData: {},
+    chartsData: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {
@@ -70,8 +80,8 @@ export default {
     //reder chart
     data() {
       return {
-        labels: this.chartsData.dataLabels.map((item) => item.name || item),
-        datasets: this.chartsData.dataSets,
+        labels: this.chartsData?.dataLabels?.map((item) => item.name || item),
+        datasets: this.chartsData?.dataSets,
       };
     },
   },

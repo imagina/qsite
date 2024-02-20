@@ -56,51 +56,62 @@ export default {
 }
 </script>
 <style lang="scss">
-#listMenu
-  .q-expansion-item__container
-    .q-expansion-item__content
-      padding 0 0 0 15px
+#listMenu {
+  .q-expansion-item__container .q-expansion-item__content {
+    padding: 0 0 0 15px;
+  }
 
-  .q-item
-    cursor pointer
-    color $grey-9
+  .q-item {
+    cursor: pointer;
+    color: $grey-9;
 
-    .q-item__section--avatar
-      min-width 20px
-      padding-right 10px
+    .q-item__section--avatar {
+      min-width: 20px;
+      padding-right: 10px;
 
-    .q-icon
-      font-size 16px
+      .q-icon {
+        font-size: 16px;
+      }
+    }
+  }
 
-  .select-items
-    .q-expansion-item__container
-      .q-expansion-item__content
-        .q-item
-          cursor pointer
-          color $grey-9
+  .select-items {
+    .q-expansion-item__container .q-expansion-item__content .q-item {
+      cursor: pointer;
+      color: $grey-9;
 
-          .q-item__section--avatar
-            min-width 20px
-            padding-right 10px
+      .q-item__section--avatar {
+        min-width: 20px;
+        padding-right: 10px;
 
-            .q-icon
-              font-size 16px
-              color $blue-grey
+        .q-icon {
+          font-size: 16px;
+          color: $blue-grey;
+        }
+      }
 
-          &:hover
-            background-color $grey-4
-            color $primary
+      &:hover {
+        background-color: $grey-4;
+        color: $primary;
 
-            .q-icon
-              color $primary
-              font-size 22px
+        .q-icon {
+          color: $primary;
+          font-size: 22px;
+        }
+      }
 
-          &.item-is-active
-            background-color $custom-accent-color
+      &.item-is-active {
+        background-color: $custom-accent-color;
 
-            .q-item__section, .q-icon
-              color $primary
+        .q-item__section, .q-icon {
+          color: $primary;
+        }
+      }
 
-          .expansion-selected
-            background-color $primary
+      .expansion-selected {
+        background-color: $primary;
+      }
+    }
+  }
+}
 </style>
