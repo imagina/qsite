@@ -9,9 +9,13 @@
       <!--Separator-->
       <q-separator class="q-my-md"/>
       <!--Content-->
-      <div id="contentQuickCard" class="relative-position">
+      <div id="contentQuickCard" class="relative-position"> 
         <!--Items-->
-        <div id="itemsContent" class="q-mb-md">
+        <div  
+          v-if="!loading"
+          id="itemsContent" 
+          class="q-mb-md"
+        >
           <!--List-v-->
           <div id="itemsListV" v-if="cardParams.type == 'list-v'">
             <q-scroll-area style="height: 260px; width: 100%">
@@ -94,6 +98,16 @@
         <!-- chart -->
         <div v-if="cardParams.type === 'chart'">
           <QCharts :chartsData="items" v-if="!loading && typeof items === 'object'" />
+          <section v-if="loading">
+            <q-skeleton type="QChip" class="tw-mb-4 tw-mx-auto" />
+            <div class="tw-flex tw-items-end tw-justify-center tw-gap-6">
+              <q-skeleton animated type="rect" height="220px" width="75px" />
+              <q-skeleton animated type="rect" height="280px" width="75px" />
+              <q-skeleton animated type="rect" height="250px" width="75px" />
+              <q-skeleton animated type="rect" height="310px" width="75px" />
+              <q-skeleton animated type="rect" height="350px" width="75px" />
+            </div>
+          </section>
         </div>
         <!-- percentage -->
         <div v-if="cardParams.type === 'percentage'">
@@ -140,7 +154,13 @@
         </div>
 
         <!--Inner Loading-->
-        <inner-loading :visible="loading"/>
+        <q-skeleton 
+          v-if="loading && cardParams.type !== 'chart'" 
+          type="rect"
+          height="350px"
+          width="100%"
+          class="tw-mt-4" 
+        />
       </div>
     </div>
   </div>

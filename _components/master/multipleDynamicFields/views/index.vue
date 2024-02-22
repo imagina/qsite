@@ -29,7 +29,7 @@
         class="tw-h-500"
         :class="{'tw-overflow-y-scroll': fields.length > 0}"
         ref="refDraggable"
-        item-key="name"
+        item-key="id"
       >
         <template #item="{ element, index }">
           <div
