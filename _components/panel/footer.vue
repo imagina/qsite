@@ -64,7 +64,7 @@
             <q-item clickable v-ripple v-if="$hasAccess('ichat.conversations.index')"
                     @click.native="eventBus.emit('toggleMasterDrawer','chat')">
               <q-item-section avatar>
-                <q-icon color="primary" name="far fa-comment-alt"/>
+                <q-icon color="primary" name="fa-light fa-message"/>
               </q-item-section>
               <q-item-section class="ellipsis">Chat</q-item-section>
             </q-item>

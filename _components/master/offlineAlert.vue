@@ -1,7 +1,7 @@
 <template>
     <div id="offline-alert">
         <div class="bg-blue-grey-10 offline-alert" @click="eventBus.emit('toggleMasterDrawer', 'offline')">
-            <q-icon size="16px" name="fa-regular fa-wifi-slash" class="q-mr-sm" /> {{ $tr('isite.cms.message.appOffline') }}
+            <q-icon size="16px" name="fa-light fa-wifi-slash" class="q-mr-sm" /> {{ $tr('isite.cms.message.appOffline') }}
         </div>
     </div>
 </template>
