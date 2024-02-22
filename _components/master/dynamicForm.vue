@@ -66,12 +66,12 @@
                         <fileListComponent v-bind="field.files" @selected="files => selectedFile(files)" />
                       </div>
                       <div v-else>
-                        <dynamic-field v-if="field.fakeFieldName" :field="field" :key="$uid()"
+                        <dynamic-field v-if="field.fakeFieldName" :field="field"
                                        :language="locale.language"
                                        v-model="locale.formTemplate[field.fakeFieldName][field.name || key]"
                                        :item-id="field.fieldItemId" />
                         <!--Sample field-->
-                        <dynamic-field v-else :field="field" :key="$uid()" :item-id="field.fieldItemId"
+                        <dynamic-field v-else :field="field" :item-id="field.fieldItemId"
                                        v-model="locale.formTemplate[field.name || key]" :language="locale.language" />
                         <!--Child fields-->
                         <div v-if="field.children">

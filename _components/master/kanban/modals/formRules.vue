@@ -37,6 +37,7 @@
         </div>
         <!--Run fields-->
         <dynamic-form 
+            v-if="!this.loading && formFields.run" 
             v-model="form.run" 
             :blocks="formFields.run" 
             no-actions no-reset-with-blocks-update
@@ -47,7 +48,7 @@
             v-model="form.categoryFields" 
             :blocks="formFields.categoryFields" 
             no-actions
-            v-if="formFields.categoryFields" 
+            v-if="!this.loading && formFields.categoryFields" 
             :title="this.$tr('isite.cms.label.setting')"
         />
     </q-form>
@@ -78,7 +79,7 @@ export default {
         return {
             show: false,
             modalTitle: "",
-            loading: false,
+            loading: true,
             statusId: null,
             categories: [],
             automationId: null,
@@ -143,75 +144,6 @@ export default {
             }
             return this.isSendEmailToExternalData ?  { ...email } : { ...phoneNumber }
         },
-        whatLoadOptions() {
-            const INTERNAL_COMMUNICATION_ID = 7;
-
-            const loadOptionsUsers = {
-                apiRoute: "apiRoutes.quser.users",
-                filterByQuery: true,
-                select: {
-                    label: "fullName",
-                    id: "id"
-                },
-            };
-            const loadOptionsCategories = {
-                delayed: () => {
-                  return new Promise(resolve => {
-                      this.$crud.get(
-                        "apiRoutes.qrequestable.categoriesFormFields", 
-                        {
-                          filter: {
-                              type: this.categorySelected?.options?.filterFormFieldType
-                          }
-                        }, 
-                        { categoryId: this.funnelId }
-                      ).then(response => 
-                      resolve(response.data)).catch(error => resolve([])
-                    );
-                  });
-                },
-                filterByQuery: true,
-                select: {
-                    label: "name",
-                    id: "id"
-                }
-            };
-
-            return this.categorySelected?.parentId === INTERNAL_COMMUNICATION_ID
-                ? loadOptionsUsers
-                : loadOptionsCategories;
-        },
-        typeDynamicField() {
-            const selectField = {
-                value: null,
-                type: "select",
-                vIf: this.isSelectField,
-                props: {
-                    multiple: true,
-                    useChips: true,
-                    clearable: true,
-                    label: `${this.$tr("isite.cms.label.recipient")} *`,
-                },
-                loadOptions: {
-                    ...this.whatLoadOptions
-                }
-            }
-            const multiDynamicField = {
-                value: [],
-                type : 'multiplier',
-                vIf: this.isMultiDynamicfield,
-                props : {
-                    label : 'Destinatarios',
-                    isDraggable: true, // Default true
-                    minQuantity: 1,
-                    maxQuantity: 7, // Default 5
-                    fields : {
-                        ...this.whatTypeField
-                    }
-                }
-            }
-            return this.isSelectField ? { ...selectField  } : { ...multiDynamicField }
-        },
         modalActions() {
             return [
                 {
@@ -243,7 +175,7 @@ export default {
                 },
                 to: {
                     value: [],
-                    ...this.typeDynamicField
+                    ...this.typeDynamicField()
                 },
                 run: [{
                         name: "runForm",
@@ -424,7 +356,76 @@ export default {
                 categoryFields: {},
                 to: null
             };
-        }
+        },
+        whatLoadOptions() {
+            const INTERNAL_COMMUNICATION_ID = 7;
+
+            const loadOptionsUsers = {
+                apiRoute: "apiRoutes.quser.users",
+                filterByQuery: true,
+                select: {
+                    label: "fullName",
+                    id: "id"
+                },
+            };
+            const loadOptionsCategories = {
+                delayed: () => {
+                  return new Promise(resolve => {
+                      this.$crud.get(
+                        "apiRoutes.qrequestable.categoriesFormFields", 
+                        {
+                          filter: {
+                              type: this.categorySelected?.options?.filterFormFieldType
+                          }
+                        }, 
+                        { categoryId: this.funnelId }
+                      ).then(response => 
+                      resolve(response.data)).catch(error => resolve([])
+                    );
+                  });
+                },
+                filterByQuery: true,
+                select: {
+                    label: "name",
+                    id: "id"
+                }
+            };
+
+            return this.categorySelected?.parentId === INTERNAL_COMMUNICATION_ID
+                ? loadOptionsUsers
+                : loadOptionsCategories;
+        },
+        typeDynamicField() {
+            const selectField = {
+                value: null,
+                type: "select",
+                vIf: this.isSelectField,
+                props: {
+                    multiple: true,
+                    useChips: true,
+                    clearable: true,
+                    label: `${this.$tr("isite.cms.label.recipient")} *`,
+                },
+                loadOptions: {
+                    ...this.whatLoadOptions()
+                }
+            }
+            const multiDynamicField = {
+                value: [],
+                type : 'multiplier',
+                vIf: this.isMultiDynamicfield,
+                props : {
+                    label : 'Destinatarios',
+                    isDraggable: true, // Default true
+                    minQuantity: 1,
+                    maxQuantity: 7, // Default 5
+                    fields : {
+                        ...this.whatTypeField
+                    }
+                }
+            }
+            return this.isSelectField ? { ...selectField  } : { ...multiDynamicField }
+        },
     },
 };
 </script>
