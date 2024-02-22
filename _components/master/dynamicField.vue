@@ -146,7 +146,7 @@
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
             <slot name="before-options"/>
             <q-item>
-              <q-item-section class="text-grey" v-if="field.loadOptions.filterByQuery">
+              <q-item-section class="text-grey" v-if="field?.loadOptions?.filterByQuery">
                 {{ fieldProps.hint }}
               </q-item-section>
               <q-item-section class="text-grey" v-else>
@@ -528,7 +528,7 @@ export default {
     'field.loadOptions': {
       deep: true,
       handler: function (newValue, oldValue) {
-        if (JSON.stringify(newValue) != JSON.stringify(oldValue))
+        if (JSON.stringify(newValue) != JSON.stringify(oldValue))        
           this.getOptions()
       }
     }
