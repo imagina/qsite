@@ -214,7 +214,7 @@ export default {
         color: $primary;
         .q-icon {
           color: $primary;
-          font-size: 22px;
+          font-size: 16px;
         }
       }
       &.item-is-active {

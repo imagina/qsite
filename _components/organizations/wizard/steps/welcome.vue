@@ -7,7 +7,7 @@
           <div class="tw-text-xs md:tw-text-xl lg:tw-px-8 tw-text-center tw-pb-4 md:tw-pb-6"
               v-html="stepContent.description">
           </div>
-          <q-img v-if="stepContent?.mediaFiles" contain
+          <q-img v-if="stepContent?.mediaFiles" fit="contain"
                 :src="stepContent?.mediaFiles?.mainimage.extraLargeThumb"
                 :ratio="1/1" class="tw-h-44"
           />

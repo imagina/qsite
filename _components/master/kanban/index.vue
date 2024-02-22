@@ -163,7 +163,7 @@ export default {
       default: () => false
     },
     funnelId: {
-      type: String,
+      type: Number,
       default: () => null
     },
     dragColumn: {
@@ -293,7 +293,7 @@ export default {
       },
       set(value) {
         this.setResetPage();
-        this.funnelSelected = value;
+        this.funnelSelected = Number(value);
       }
     },
     checkIfFunnelExists() {

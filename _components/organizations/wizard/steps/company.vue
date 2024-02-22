@@ -11,7 +11,7 @@
 
     <div v-if="stepContent" class="step-sidebar">
       <div class="select-company tw-max-w-md tw-w-full">
-        <q-img v-if="stepContent.mediaFiles" contain
+        <q-img v-if="stepContent.mediaFiles" fit="contain"
                :src="stepContent?.mediaFiles?.mainimage.extraLargeThumb"
                :ratio="1/1"
         />

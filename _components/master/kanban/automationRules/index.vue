@@ -23,7 +23,7 @@ import { TYPE_STORE_AUTOMATION_RULES } from '../constants/constants.js';
 export default {
   props: {
     funnelId: {
-      type: String,
+      type: Number,
       default:() => null,
     },
   },

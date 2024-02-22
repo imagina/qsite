@@ -1,8 +1,8 @@
 <template>
   <div id="fileListComponent">
     <!--Table-->
-    <q-table :rows="tableData" :columns="tableColumns" :pagination.sync="table.pagination" :grid="table.grid"
-             :hide-pagination="!allowPagination" :rows-per-page-options="table.rowsPerPageOptions"
+    <q-table :rows="tableData" :columns="tableColumns" v-model:pagination="table.pagination" :grid="table.grid"
+             :hide-pagination="!allowPagination" :rows-per-page-options="table.rowsPerPageOptions" dropdown-icon="fa"
              @request="getDataTable" :loading="loading" hide-no-data :hide-header="hideHeader">
       <!---Top content-->
       <template v-slot:top v-if="!hideHeader">
@@ -56,11 +56,12 @@
             v-model="table.data"
             :group="{ name: 'bocksBlocks' }"
             :disabled="!draggable"
+            class="row"
             item-key="id"
             handle=".drag-handle">
             <!-- Files -->
             <template #item="{element}">
-              <div>
+              <div :class="`${gridColClass} q-pa-xs`">
 
                 <!---Card-->
                 <div v-if="gridType == 'card'"
@@ -775,30 +776,34 @@ export default {
         top: 0;
       }
     }
+  }
 
-    .file-item-quantity {
-      cursor: pointer;
-      height: 188px;
-      border: 2px dotted $grey-5;
-      border-radius: 5px;
-      color: $grey-5;
-    }
+  .file-item-quantity {
+    cursor: pointer;
+    height: 188px;
+    border: 2px dotted $grey-5;
+    border-radius: 5px;
+    color: $grey-5;
+  }
 
-    th:last-child, td:last-child {
-      background-color: white;
-      position: sticky;
-      right: 0;
-      z-index: 1;
-    }
+  .q-field__control div:last-child {
+    font-size: 18px;
+  }
 
-    .drag-handle {
-      cursor: move;
-    }
+  th:last-child, td:last-child {
+    background-color: white;
+    position: sticky;
+    right: 0;
+    z-index: 1;
+  }
 
-    .scale-down {
-      transition: all 0.2s ease-in-out;
-      transform: scale(0.9) !important;
-    }
+  .drag-handle {
+    cursor: move;
+  }
+
+  .scale-down {
+    transition: all 0.2s ease-in-out;
+    transform: scale(0.9) !important;
   }
 }
 </style>

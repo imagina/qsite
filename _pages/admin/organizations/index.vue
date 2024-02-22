@@ -6,7 +6,7 @@
 <script>
 import { eventBus } from 'src/plugins/utils'
 import crud from 'modules/qcrud/_components/crud'
-import form from 'modules/qsite/_pages/admin/organizations/form'
+import customForm from 'modules/qsite/_pages/admin/organizations/form'
 
 export default {
   beforeDestroy() {
@@ -19,7 +19,7 @@ export default {
   },
   components: {
     crud,
-    form
+    customForm
   },
   data() {
     return {
@@ -39,7 +39,7 @@ export default {
       }
       //Instance component to organization form
       const componentForm = {
-        is: 'form',
+        is: 'customForm',
         organizationId: organizations.length ? organizations[0].id : null
       }
       return loadDirectForm ? componentForm : componentCrud

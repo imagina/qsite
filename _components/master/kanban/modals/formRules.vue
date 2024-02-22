@@ -57,7 +57,7 @@
 
 export default {
     props: {
-        funnelId: { type: String, default: () => null }
+        funnelId: { type: Number, default: () => null }
     },
     inject: {
         addCard: {

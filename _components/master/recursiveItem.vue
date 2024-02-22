@@ -187,7 +187,7 @@ export default {
     }
 
     .q-icon {
-      font-size: 16px;
+      font-size: 12px;
     }
   }
 }

@@ -78,7 +78,7 @@
 
       <div v-else-if="stepContent" class="select-card tw-max-w-md  tw-w-full">
         <div class="tw-text-base tw-mb-8 text-center" v-html="stepContent.description"></div>
-        <q-img v-if="stepContent?.mediaFiles" contain
+        <q-img v-if="stepContent?.mediaFiles" fit="contain"
                :src="stepContent?.mediaFiles?.mainimage.extraLargeThumb"
         />
       </div>

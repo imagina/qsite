@@ -51,7 +51,7 @@
 
             </div>
             <div class="col-12 col-md-5">
-              <q-img class="img-themes tw-h-44" contain
+              <q-img class="img-themes tw-h-44" fit="contain"
                       :src="selected.layout?.mediaFiles?.mainimage.extraLargeThumb"
               />
             </div>
