@@ -31,11 +31,10 @@
             :force-fallback="true"
             class="tw-flex tw-overflow-x-auto tw-overflow-y-hidden tw-mx-2"
             @end="saveStatusOrdering('inProgress')"
-            item-key="name"
+            item-key="id"
           >
             <template #item="{ element, index }">
               <statuses
-                :key="element.id"
                 :status="element"
                 class="tw-mb-3"
                 :total="statusList.inProgress.length"
@@ -69,11 +68,10 @@
             :force-fallback="true"
             class="tw-flex tw-overflow-x-auto tw-overflow-y-hidden tw-mx-2"
             @end="saveStatusOrdering('failed')"
-            item-key="name"
+            item-key="id"
           >
             <template #item="{ element, index }">
               <statuses
-                :key="element.id"
                 :status="element"
                 class="tw-mb-3"
                 :total="statusList.failed.length"

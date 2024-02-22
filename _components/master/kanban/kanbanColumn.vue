@@ -213,11 +213,10 @@
           @start="dragColumn = true"
           @end="move"
           @change="countTotalRecords"
-          item-key="name"
+          item-key="id"
         >
           <template #item="{ element }">
             <kanbanCard
-              :key="element.id"
               :cardData="element"
               :colorColumn="element.color"
               class="tw-cursor-pointer"

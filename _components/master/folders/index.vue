@@ -15,12 +15,12 @@
         ghostClass="ghost"
         handle=".folder-title-drag"
         @change="saveOrderFolders"
-        item-key="name"
+        item-key="id"
       >
-        <template #item="{ folder }">
+        <template #item="{ element }">
           <folder
-            :key="folder.id"
-            :folder="folder"
+            :key="element.id"
+            :folder="element"
           />
         </template>
       </draggable>
