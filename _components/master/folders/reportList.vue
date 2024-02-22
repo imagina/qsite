@@ -31,7 +31,7 @@
             class="f-cursor-grab"
           >
             <q-icon
-              name="drag_handle"
+              name="fa-solid fa-bars"
               class="drag_handle"
             />
           </q-item-section>
@@ -52,7 +52,7 @@
               round
               color="tw-gray-300"
               size="sm"
-              icon="more_vert"
+              icon="fa-light fa-ellipsis-vertical"
             >
               <q-menu>
                 <q-list class="list-report-menu" separator>

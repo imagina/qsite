@@ -164,7 +164,7 @@
                        :style="`background-image: url('${getImage(element)}')`">
                   </div>
                   <!--Icon-->
-                  <q-icon v-else :name="`fas fa-${element.isFolder ? 'folder' : 'file'}`" class="file-chip__icon"
+                  <q-icon v-else :name="`fas fa-${element.isFolder ? 'fa-solid fa-folder' : 'fa-light fa-file'}`" class="file-chip__icon"
                           @click="fileAction(element)" />
                   <!--Title-->
                   <div class="file-chip__title ellipsis" @click="fileAction(element)">
@@ -216,7 +216,7 @@
         <q-td v-if="props.col.name == 'filename'" :props="props" class="td-filename">
           <div @click="fileAction(props.row)" class="item-file row items-center cursor-pointer">
             <!--Icon-->
-            <q-icon v-if="!props.row.isImage" :name="`fas fa-${props.row.isFolder ? 'folder' : 'file'}`" />
+            <q-icon v-if="!props.row.isImage" :name="`fas fa-${props.row.isFolder ? 'fa-solid fa-folder' : 'fa-light fa-file'}`" />
             <!--Image-->
             <div class="file-image" v-else :style="`background-image: url('${getImage(props.row)}')`"></div>
             <!--Filename-->
