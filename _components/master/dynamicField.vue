@@ -499,13 +499,16 @@ export default {
     multipleDynamicFields,
   },
   watch: {
-    responseValue: {
+    modelValue: {
       deep: true,
       handler: function (newValue, oldValue) {
         if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
-          this.watchValue(newValue)
+          this.setDefaultVModel(newValue)
         }
       }
+    },
+    responseValue(newValue, oldValue) {
+      this.watchValue()
     },
     rootOptions(newValue) {
       this.options = this.rootOptions
@@ -1418,7 +1421,6 @@ export default {
           this.responseValue = propValue || null
           break
       }
-      this.$emit('update:modelValue', this.responseValue)
     },
     //Order options
     orderOptions(propValue) {
@@ -1581,7 +1583,7 @@ export default {
         if (this.field.type == "json" && (typeof response == "string"))
           response = JSON.parse(response)
         //Emit input data
-        this.setDefaultVModel(response)
+        this.$emit('update:modelValue', response)
       }
 
       //Load option for value
