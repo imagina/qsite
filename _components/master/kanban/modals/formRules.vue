@@ -3,7 +3,7 @@
     v-model="show" 
     :persistent="true" 
     customPosition 
-    @hide="resetForm"
+    :hide="resetForm"
     :loading="loading" 
     :title="modalTitle" 
     :actions="modalActions"
