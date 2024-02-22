@@ -40,7 +40,7 @@ import superModal from 'modules/qrequestable/_components/modals/information/comp
 export default {
   props: {
     funnelId: {
-      type: String,
+      type: Number,
       default: () => null,
     },
     filterName: {
