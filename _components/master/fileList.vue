@@ -76,7 +76,7 @@
                                 :class="`${table.selected.includes(element.filename) ? '' : (isDesktop ? 'showOnHover' : '') }`"
                                 color="primary"
                                 keep-color
-                                checked-icon="fa-sharp fa-solid fa-circle-check"
+                                checked-icon="fa-solid fa-circle-check"
                                 unchecked-icon="fa-light fa-circle"
                                 size="lg"
                     />
@@ -114,7 +114,7 @@
                     v-if="element.isImage"
                     class="file-card_img img-as-bg"
                     :style="`background-image: url('${getImage(element)}')`"
-                    @click="markAsSelected($event, ielement.filename)"
+                    @click="markAsSelected($event, element.filename)"
                   >
                     <!--Tooltip-->
                     <q-tooltip anchor="center middle" self="center middle" :delay="500">
