@@ -218,7 +218,13 @@
         <!--tree select-->
         <q-field v-model="responseValue" v-if="loadField('treeSelect')" :label="fieldLabel"
                  v-bind="fieldProps.fieldComponent" :class="`${field.help ? 'treeselect-dynamic-field' : ''}`">
-          <tree-select v-model="responseValue" :options="formatOptions" placeholder="">
+          <tree-select
+            v-model="responseValue"
+            :options="formatOptions"
+            placeholder=""
+            v-bind="fieldProps.field"
+            @select="(node, instanceId) => $emit('select', {node, instanceId})"
+          >
               <template #option-label="{node}">
                 <label>
                   <!-- Image -->
@@ -475,7 +481,7 @@ export default {
     },
     enableCache: {default: false}
   },
-  emits: ['update:modelValue','inputReadOnly','filter'],
+  emits: ['update:modelValue','inputReadOnly','filter', 'select', 'enter'],
   components: {
     managePermissions,
     manageSettings,
@@ -780,9 +786,9 @@ export default {
           props = {
             'emit-value': true,
             field: {
-              appendToBody: true,
-              sortValueBy: 'INDEX',
-              ...props
+              clearable: props?.clearable || false,
+              multiple: props?.multiple || false,
+              sortValueBy: props?.sortValueBy || 'INDEX',
             },
             fieldComponent: {
               outlined: true,
