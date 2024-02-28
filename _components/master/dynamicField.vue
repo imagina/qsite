@@ -1112,8 +1112,10 @@ export default {
         //sort by label
         if (this.sortOptions) {
           items.sort((a, b) => {
-            if (a.label.toLowerCase() > b.label.toLowerCase()) return 1
-            if (a.label.toLowerCase() < b.label.toLowerCase()) return -1
+            if( a?.label && b?.label){
+              if (a.label.toLowerCase() > b.label.toLowerCase()) return 1
+              if (a.label.toLowerCase() < b.label.toLowerCase()) return -1
+            }
             return 0;
           })
         }
