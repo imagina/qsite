@@ -753,7 +753,7 @@ export default {
           break;
         case'select':
           props = {
-            'emit-value': props?.emitValue || true,
+            'emit-value': props?.emitValue ?? true,
             'map-options': true,
             'outlined': true,
             'dense': true,
