@@ -1,7 +1,7 @@
 <template>
   <div id="googleMapComponent">
     <!--Auto complete input-->
-    <div id="address">
+    <div id="address" v-if="false">
       <q-input v-bind="autocompleteFieldProps"/>
     </div>
     <!--Map-->

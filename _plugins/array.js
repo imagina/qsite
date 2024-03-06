@@ -24,7 +24,11 @@ class Array {
     let orderItems = (items) => {
       let responseOrder = []
       items.forEach(item => {
-        let itemData = {id: item[fields.id], label: item[fields.label], value: item[fields.id]}
+        let itemData = {
+          id: item[fields.id],
+          label: typeof fields.label == 'function' ? fields.label(item) : item[fields.label],
+          value: item[fields.id]
+        }
         if (item.children) itemData.children = orderItems(item.children)
         responseOrder.push({...item, ...itemData})
       })
@@ -35,7 +39,7 @@ class Array {
     trees.forEach((tree, index) => {
       this.builTree(elements, tree, fields).forEach(element => {
         let itemOrder = {
-          label: element[fields.label],
+          label: typeof fields.label == 'function' ? fields.label(element) : element[fields.label],
           id: element[fields.id],
           value: element[fields.id]
         }

@@ -41,7 +41,7 @@
           hover:tw-ease-in 
           hover:tw--translate-y-1 icon-plus
         "
-        v-if="!disableCrud && hover && columnData.type !== 2"
+        v-if="allowCreateStatuses"
         @click="addColumnKanban"
       >
         <i 
@@ -93,7 +93,7 @@
             />
           </div>
           <div
-            v-if="!disableCrud && arrowKanbanNameHover && !columnData.new"
+            v-if="allowEditStatuses"
             class="
               tw-w-1/12 
               tw-text-xs 
@@ -181,7 +181,7 @@
           </div>
         </div>
       </div>
-      <div class="c-plus">
+      <div class="c-plus" v-if="permissionStatuses.create">
         <q-btn 
           flat 
           class="
@@ -189,7 +189,7 @@
             hover:tw-text-white 
             hover:tw-bg-gray-200"
           @click="openFormComponentModal(columnData.id, columnData.title)"
-          :disabled="typeof columnData.id == 'string'"
+          :disabled="allowCreateRequestable"
           >
           <i class="fa-solid fa-plus"></i> 
         </q-btn>
@@ -213,6 +213,7 @@
           @start="dragColumn = true"
           @end="move"
           @change="countTotalRecords"
+          :disabled="!permissionStatuses.edit"
         >
           <kanbanCard
             v-for="(item, index) in columnData.data"
@@ -335,6 +336,30 @@ export default {
     kanbanCard,
   },
   computed: {
+    allowCreateRequestable() {
+      return typeof this.columnData.id == 'string' || !this.$auth.hasAccess('requestable.requestables.create');
+    },
+    permissionStatuses() {
+      return {
+        index: this.$auth.hasAccess('requestable.statuses.index'),
+        create: this.$auth.hasAccess('requestable.statuses.create'),
+        edit: this.$auth.hasAccess('requestable.statuses.edit'),
+        delete: this.$auth.hasAccess('requestable.statuses.delete'),
+        moveRequestables: this.$auth.hasAccess('requestable.requestables.move')
+      }
+    },
+    allowCreateStatuses() {
+      if(this.permissionStatuses.create) {
+        return !this.disableCrud && this.hover && this.columnData.type !== 2;
+      }
+      return false; 
+    },
+    allowEditStatuses() {
+      if(this.permissionStatuses.edit) {
+        return !this.disableCrud && this.arrowKanbanNameHover && !this.columnData.new
+      }
+      return false; 
+    },
     inputDynamicField() {
       return {
         value: null,
