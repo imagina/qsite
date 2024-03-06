@@ -86,8 +86,7 @@ export default {
   computed: {
     //Page title
     pageTitle() {
-      const useLegacyStructure = parseInt(this.$getSetting('isite::legacyStructureCMS') || 0);
-      return useLegacyStructure ? this.$tr(this.$route.meta.title) : this.$route.meta.title;
+      return this.$tr(this.$route.meta.title)
     },
     //Return setting assigned settings
     assignedSettings() {
