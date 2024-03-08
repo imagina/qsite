@@ -1,8 +1,8 @@
 <template>
   <div id="wizardOrganization"
-      class="tw-h-screen 'overflow-auto"
-      :class="{'page-full' : currentStep == welcome || currentStep == summary,  'overflow-hidden': currentStep == themes }"
-      >
+       class="tw-h-screen 'overflow-auto"
+       :class="{'page-full' : currentStep == welcome || currentStep == summary,  'overflow-hidden': currentStep == themes }"
+  >
     <div class="page-header
                 tw-border-b-2 tw-border-white tw-border-opacity-50
                 tw-fixed
@@ -15,29 +15,29 @@
     ">
       <a :href="urlBase"> <img :src="logo" class="tw-h-20 tw-w-auto"/> </a>
       <q-linear-progress
-        style="background-color: #ffff"
-        size="md"
-        track-color="white"
-        :value="progress"
-        class="linear-progress-header"
+          style="background-color: #ffff"
+          size="md"
+          track-color="white"
+          :value="progress"
+          class="linear-progress-header"
       />
     </div>
     <div class="step-loading" v-show="loading">
       <div></div>
       <div></div>
-    </div>    
+    </div>
     <!-- keep-alive -->
     <div class="page-wizard tw-w-full tw-relative">
-      <q-stepper 
-        v-model="currentStep"
-        ref="stepper"
+      <q-stepper
+          v-model="currentStep"
+          ref="stepper"
       >
         <template v-slot:navigation>
           <q-stepper-navigation v-show="showStepperNavigation">
-              <div class="tw-pt-3 md:tw-pt-4 tw-pb-1">
-                <div class="row justify-between">
-                  <div class="col-4">
-                    <q-btn 
+            <div class="tw-pt-3 md:tw-pt-4 tw-pb-1">
+              <div class="row justify-between">
+                <div class="col-4">
+                  <q-btn
                       rounded
                       no-caps
                       :disabled="!activatePreviousButton"
@@ -46,48 +46,48 @@
                       icon="fas fa-arrow-left tw-mr-0 sm:tw-mr-2"
                       @click="previousStep()"
                       v-show="!buttonLoading"
-                    >
-                      <div class="tw-hidden sm:tw-inline-block">
-                        {{ $tr('isite.cms.label.previous') }}
-                      </div>
-                    </q-btn>
-                  </div>
-                  <div class="col-4 text-right">
-                    <q-btn
-                     rounded
-                     no-caps
-                     :disabled="!activateNextButton"
-                     icon-right="fas fa-arrow-right tw-ml-0 sm:tw-ml-2"
-                     @click="nextStep()"
-                     unelevated
-                     color="green"
-                     :loading="buttonLoading"
-                     >
-                      <div class="tw-hidden sm:tw-inline-block">
-                        {{ currentStep === summary ? $tr('isite.cms.label.finalize') : $tr('isite.cms.label.continue') }}
-                      </div>
-                    </q-btn>
-                  </div>
+                  >
+                    <div class="tw-hidden sm:tw-inline-block">
+                      {{ $tr('isite.cms.label.previous') }}
+                    </div>
+                  </q-btn>
+                </div>
+                <div class="col-4 text-right">
+                  <q-btn
+                      rounded
+                      no-caps
+                      :disabled="!activateNextButton"
+                      icon-right="fas fa-arrow-right tw-ml-0 sm:tw-ml-2"
+                      @click="nextStep()"
+                      unelevated
+                      color="green"
+                      :loading="buttonLoading"
+                  >
+                    <div class="tw-hidden sm:tw-inline-block">
+                      {{ currentStep === summary ? $tr('isite.cms.label.finalize') : $tr('isite.cms.label.continue') }}
+                    </div>
+                  </q-btn>
                 </div>
               </div>
+            </div>
           </q-stepper-navigation>
         </template>
 
         <q-step
-          v-for="step in steps"
-          :key="step.id"
-          :name="step.id"
-          :prefix="step.prefix"
-          :title="step.title"
-          :done="step.done"
-          class="q-pb-xl"
-          :style="(step.id == themes) ? 'max-height: calc(100vh - 180px);' : ''"
-        >        
+            v-for="step in steps"
+            :key="step.id"
+            :name="step.id"
+            :prefix="step.prefix"
+            :title="step.title"
+            :done="step.done"
+            class="q-pb-xl"
+            :style="(step.id == themes) ? 'max-height: calc(100vh - 180px);' : ''"
+        >
           <component ref="stepComponent"
-            :is="step.component" 
-            @updateData="updateData(data)"
-            @nextStep="nextStep()"
-            v-if="!loading"
+                     :is="step.component"
+                     @updateData="updateData(data)"
+                     @nextStep="nextStep()"
+                     v-if="!loading"
           />
         </q-step>
       </q-stepper>
@@ -98,12 +98,12 @@
 <script>
 import modelSteps from '@imagina/qsite/_components/organizations/wizard/steps/model/steps.js';
 import storeWizard from '@imagina/qsite/_components/organizations/wizard/steps/store/index.ts';
-import services  from '@imagina/qsite/_components/organizations/wizard/steps/services/services.ts';
+import services from '@imagina/qsite/_components/organizations/wizard/steps/services/services.ts';
 
 import {
   STEP_WELCOME,
   STEP_TERMS,
-  STEP_COMPANY,  
+  STEP_COMPANY,
   STEP_THEMES,
   STEP_SUMMARY,
   STEP_AI,
@@ -111,24 +111,34 @@ import {
 } from '@imagina/qsite/_components/organizations/wizard/steps/model/constant';
 
 export default {
-  beforeDestroy() {},
+  beforeDestroy() {
+  },
   props: {},
   components: {},
   watch: {},
   computed: {
+    steps() {
+      //Get setting to validate if show the IA step
+      const contentGenerationWithAI = !!parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::contentGenerationWithAI'))
+      //Filter the steps
+      return modelSteps.filter(step => {
+        if(step.id == STEP_AI && !contentGenerationWithAI) return false
+        return step
+      })
+    },
     siteName() {
       return this.$store.getters['qsiteApp/getSettingValueByName']('core::site-name')
     },
-    showStepperNavigation(){
-      return  this.currentStep != STEP_WELCOME
-    }, 
-    activatePreviousButton(){
+    showStepperNavigation() {
+      return this.currentStep != STEP_WELCOME
+    },
+    activatePreviousButton() {
       return storeWizard.previousStepButton;
     },
-    activateNextButton(){
+    activateNextButton() {
       return storeWizard.nextStepButton;
-    }, 
-    getStep(){
+    },
+    getStep() {
       return storeWizard.step
     }
   },
@@ -139,9 +149,8 @@ export default {
       logo: this.$store.state.qsiteApp.logo,
       currentStep: 0,
       progress: 0,
-      steps: modelSteps,
-      progressPercent: 0,      
-      urlBase: this.$store.state.qsiteApp.baseUrl,      
+      progressPercent: 0,
+      urlBase: this.$store.state.qsiteApp.baseUrl,
       dataUrl: { // datos que vienen de la url
         planId: '',
         billingCycle: '',
@@ -151,20 +160,20 @@ export default {
       summary: STEP_SUMMARY,
       themes: STEP_THEMES,
       terms: STEP_TERMS,
-      buttonLoading: false,     
+      buttonLoading: false,
     }
-  },  
+  },
   mounted() {
     this.$nextTick(async function () {
       this.init();
     })
-  },  
+  },
   methods: {
     async init() {
       await this.getInfo();
       await this.configProgress();
     },
-    
+
     async getInfo() {
       this.loading = true
       try {
@@ -173,55 +182,55 @@ export default {
         console.log(error);
       }
 
-      
+
       /* check and get info */
       storeWizard.infoWizard = await services().getInfoWizard()
 
       /* check and get categories */
-      let categories = await this.$cache.get.item('org-wizard-categories');      
-      if( !categories?.length>0){
+      let categories = await this.$cache.get.item('org-wizard-categories');
+      if (!categories?.length > 0) {
         categories = await services().getCategories()
         this.$cache.set('org-wizard-categories', categories)
       }
-      storeWizard.categories = categories      
+      storeWizard.categories = categories
 
       /* check and get plans */
-      let plans = await this.$cache.get.item('org-wizard-plans');      
-      if( !plans?.length>0){
+      let plans = await this.$cache.get.item('org-wizard-plans');
+      if (!plans?.length > 0) {
         plans = await services().getPlans(PLAN_BASE_ID)
         this.$cache.set('org-wizard-plans', plans)
       }
       storeWizard.plans = plans
 
       /* check and set step */
-      storeWizard.step = await this.$cache.get.item('org-wizard-step')      
-      storeWizard.step = storeWizard.step ?? STEP_WELCOME      
-      
+      storeWizard.step = await this.$cache.get.item('org-wizard-step')
+      storeWizard.step = storeWizard.step ?? STEP_WELCOME
+
       /* check and get user data */
-      const data = await this.$cache.get.item('org-wizard-data')      
+      const data = await this.$cache.get.item('org-wizard-data')
       storeWizard.data.user = storeWizard.data.user ?? data?.user
-      storeWizard.data.terms = data?.terms ? data.terms : storeWizard.data.terms      
+      storeWizard.data.terms = data?.terms ? data.terms : storeWizard.data.terms
       storeWizard.data.organization = data?.organization ?? ''
       storeWizard.data.category = data?.category ?? false
       storeWizard.data.plan = data?.plan ?? false
-      storeWizard.data.layout= data?.layout ?? false
+      storeWizard.data.layout = data?.layout ?? false
       this.updateData()
       this.loading = false
     },
 
     async configProgress() {
-      this.progressPercent = 1 / (this.steps.length - 1);      
+      this.progressPercent = 1 / (this.steps.length - 1);
       this.currentStep = storeWizard.step
       this.progress = this.progressPercent * this.currentStep;
     },
 
-    async nextStep(){      
+    async nextStep() {
       // check organization name
-      if(this.currentStep == STEP_COMPANY){
+      if (this.currentStep == STEP_COMPANY) {
         this.buttonLoading = true;
         const companyExist = await this.$refs.stepComponent[0].checkOrganizationName(storeWizard.data.organization)
-        this.buttonLoading = false;        
-        if(companyExist && companyExist?.title){
+        this.buttonLoading = false;
+        if (companyExist && companyExist?.title) {
           this.$alert.info({
             mode: 'modal',
             title: this.siteName,
@@ -233,36 +242,36 @@ export default {
       }
 
       /* validate Ai form */
-      if(this.currentStep == STEP_AI){
-        if(storeWizard.data.form.check){          
+      if (this.currentStep == STEP_AI) {
+        if (storeWizard.data.form.check) {
           let validate = await this.$refs.stepComponent[0].verifyForm();
-          if(!validate){
-            return false;          
+          if (!validate) {
+            return false;
           }
         }
       }
 
       /* submit wizard */
-      if(this.currentStep == STEP_SUMMARY){
+      if (this.currentStep == STEP_SUMMARY) {
         this.redirectAfterWizard()
-        return false 
+        return false
       }
-      
-      this.currentStep+= 1;
+
+      this.currentStep += 1;
       storeWizard.step = this.currentStep;
-      this.updateData()      
+      this.updateData()
       this.configProgress()
       this.$refs.stepper.next();
-      
+
     },
     previousStep() {
-      this.currentStep-=1;      
+      this.currentStep -= 1;
       storeWizard.step = this.currentStep;
       this.updateData()
       this.configProgress()
       this.$refs.stepper.previous();
     },
-    updateData(data){
+    updateData(data) {
       this.$cache.set('org-wizard-step', storeWizard.step)
       this.$cache.set('org-wizard-data', storeWizard.data)
     },
@@ -281,7 +290,7 @@ export default {
         planId: storeWizard.data.plan.product.entity.id, //Keep this to works with local type
         formIA: storeWizard.data.form.data //Keep this to works with local type
       }
-      
+
       //Validate and get the url to redirect
       switch (wizardType) {
         case 'weygo':
@@ -290,8 +299,8 @@ export default {
           //Add parameters to the url
           Object.keys(params).forEach(paramName => url += `&${paramName}=${params[paramName]}`)
           break
-        default://Local          
-          
+        default://Local
+
           this.$alert.info({
             mode: 'modal',
             title: this.siteName,
@@ -300,9 +309,9 @@ export default {
             actions: []
           })
           //Request
-          const response = await this.$crud.create('apiRoutes.qplan.buy', params).catch(error => {          
+          const response = await this.$crud.create('apiRoutes.qplan.buy', params).catch(error => {
             this.$alert.error({message: `${this.$tr('isite.cms.message.recordNoCreated')}`})
-          })          
+          })
           if (response.data && response.data.redirectTo) url = response.data.redirectTo
           break
       }
@@ -316,7 +325,7 @@ export default {
         this.$helper.openExternalURL(url, false)
       }
     },
-    
+
   }
 }
 </script>
@@ -351,7 +360,8 @@ export default {
   @apply tw-w-2/4 tw-z-50 tw-left-0  tw-fixed tw-bg-white tw-border-b-2;
   @apply tw-border-gray-300 tw-border-opacity-50 tw-pb-3 md:tw-pb-4;
   transition: transform .4s ease-out, width .4s ease-out;
-  margin-top: -95px; top: 180px;
+  margin-top: -95px;
+  top: 180px;
 }
 
 #wizardOrganization .page-wizard .q-stepper__nav .q-btn .q-icon {
@@ -441,7 +451,7 @@ export default {
 }
 
 #wizardOrganization .selected-box {
-  @apply  tw-rounded tw-px-3 tw-py-1 tw-relative tw-mb-3 tw-text-xs md:tw-text-sm;
+  @apply tw-rounded tw-px-3 tw-py-1 tw-relative tw-mb-3 tw-text-xs md:tw-text-sm;
   border: 2px dashed var(--q-color-primary);
 }
 
@@ -520,14 +530,16 @@ export default {
     opacity: 0;
   }
 }
+
 #wizardOrganization .step-plan,
 #wizardOrganization .step-categories,
 #wizardOrganization .step-themes,
 #wizardOrganization .step-ai {
   margin-top: 25px;
 }
+
 #wizardOrganization a:-webkit-any-link:focus-visible {
-    outline-offset: 0 !important;
-    outline: 0 !important;
+  outline-offset: 0 !important;
+  outline: 0 !important;
 }
 </style>
