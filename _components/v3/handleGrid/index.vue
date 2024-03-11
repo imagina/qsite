@@ -2,7 +2,7 @@
   <div class="row">
     <section id="panel-editor-component" class="full-width">
       <draggable :list="elements" class="row q-col-gutter-lg q-pb-md" :group="{ name: 'items' }">
-        <div :class="element[gridPosField]" v-for="(element, keyElement) in elements" :key="keyElement">
+        <div :class="element[gridPosField]" v-for="(element, keyElement) in elements" :key="element.id">
           <div :class="`panel-editor-component__component ${verifyKeys(element,childsFieldName) ? 'hasChild' : ''}`">
             <div class="row wrap justify-between full-width q-px-sm">
               <p class="ellipsis">{{ element[titleField] }}</p>
