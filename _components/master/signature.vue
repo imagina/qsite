@@ -54,7 +54,6 @@ export default {
   emits: ['update:modelValue'],
   watch: {
     modelValue() {
-      console.log('watch -> modelValue', this.modelValue)
       this.init()
     },
   },
@@ -72,7 +71,6 @@ export default {
   },
   methods: {
     init() {
-      console.log('modelValue', this.modelValue)
       this.model = this.modelValue;
       if(this.$refs.signature) {
         this.$refs.signature.fromDataURL(this.modelValue);
