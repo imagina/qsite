@@ -144,7 +144,7 @@ class Middleware {
             } else if (fromVueRoute && !["auth.logout", "auth.login", "auth.register"].includes(fromVueRoute)) {
               // Filter params
               const redirectParams = Object.fromEntries(
-                Object.entries(from.query || to.query).filter(([key]) => key !== 'fromVueRoute')
+                Object.entries(from.query).filter(([key]) => key !== 'fromVueRoute')
               );
 
               //Redirect last
