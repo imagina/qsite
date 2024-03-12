@@ -1,28 +1,31 @@
 <template>
   <div id="mapLeafletcomponent" class="full-width">
     <!-- search geolocation -->
-    address {{ address }}
       <div id="leaflet-search-box">
         <q-select
+          v-if="!readOnly"
           v-model="address"
           :options="geolocations"
-          emit-value 
+          :loading="searchLoading"          
+          :label="label"          
           behavior="menu"
           input-debounce="500"
-          use-input
-          map-options
-          @filter="filterFn"
-          @update:modelValue="emitResponseValue()"
-          :loading="searchLoading"
-          v-if="!readOnly"
-          class="leaflet-search-input"          
-          :label="label"
           bg-color="white"
-          style="width: 250px; padding-top: 32px; border-radius: 0px;"
+          style="width: 100%;"
           item-aligned
           hide-dropdown-icon
-        >
-        </q-select>
+          fill-input
+          clearable
+          use-input
+          emit-value
+          map-options 
+          dense
+          outlined
+          class="q-pb-md custom-btn"
+          @clear="geolocations = []"
+          @filter="filterFn"
+          @update:modelValue="emitResponseValue()"
+        />
       </div>    
     <!--map--->         
     <div :id="mapId" :style="`width: 100%; height : ${height}`"></div>
@@ -61,10 +64,11 @@ export default defineComponent({
   top: 0;
   z-index: 1000;  
   width: 100%;
-  height: 48px;
+  height: 64px;
   display: grid;
   justify-content: start;
-  padding: px
+  padding-top: 10px;
+  padding-left: 14px;
 }
 
 </style>
