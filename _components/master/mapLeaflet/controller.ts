@@ -103,13 +103,12 @@ export default function controller(props: any, emit: any) {
       })
     },
     setMap: () => {
-      const id = 'map'
       const layer = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
       const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       const accessToken = store.getSetting('isite::api-open-street-maps')      
 
       state.searchProvider =  new OpenStreetMapProvider({params: {countrycodes: methods.getCountries()}})
-      state.map = L.map(id, {
+      state.map = L.map(props.mapId, {
         zoomControl: false
       }).setView([props.defaultCenter.lat, props.defaultCenter.lng], state.mapZoom);
 

@@ -25,7 +25,7 @@
         </q-select>
       </div>    
     <!--map--->         
-    <div id="map" :style="`width: 100%; height : ${height}`"></div>
+    <div :id="mapId" :style="`width: 100%; height : ${height}`"></div>
   </div>
 </template>
 
@@ -38,6 +38,7 @@ export default defineComponent({
   props: {
     modelValue: {default: false},
     type: {default: 'positionMarkerMap'},
+    mapId: { default: 'map'},
     height: {default: '400px'},
     label: {default: ''},
     readOnly: {type: Boolean, default: false},
