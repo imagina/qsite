@@ -336,6 +336,39 @@ export default {
             }
           },
           {
+            "title": this.$tr("isite.cms.crudMySite.meta.title"),
+            "help": {
+              title: this.$tr("isite.cms.crudMySite.meta.title"),
+              description: this.$tr("isite.cms.crudMySite.meta.description")
+            },
+            "name": "meta",
+            "fields": {
+              tags: {
+                value: [],
+                type: 'select',
+                colClass: 'col-12',
+                props: {
+                  label: this.$trp('isite.cms.form.tag'),
+                  useInput: true,
+                  useChips: true,
+                  multiple: true,
+                  hideDropdownIcon: true,
+                  inputDebounce: "0",
+                  newValueMode: "add-unique"
+                }
+              },
+            }
+          },
+          {
+            ...layoutList,
+            name: "layouts",
+            title: this.$tr("isite.cms.crudMySite.layouts.title"),
+            help: {
+              title: this.$tr("isite.cms.crudMySite.layouts.title"),
+              description: this.$tr("isite.cms.crudMySite.layouts.description")
+            }
+          },
+          {
             "title": this.$tr("isite.cms.crudMySite.location.title"),
             "help": {
               title: this.$tr("isite.cms.crudMySite.location.title"),
@@ -409,15 +442,6 @@ export default {
                 }
               }
             }
-          },
-          {
-            ...layoutList,
-            name: "layouts",
-            title: this.$tr("isite.cms.crudMySite.layouts.title"),
-            help: {
-              title: this.$tr("isite.cms.crudMySite.layouts.title"),
-              description: this.$tr("isite.cms.crudMySite.layouts.description")
-            }
           }
         ]
       }
@@ -456,7 +480,7 @@ export default {
         let requestParams = {
           refresh: refresh,
           params: {
-            include: 'fields,schedule.workTimes',
+            include: 'fields,schedule.workTimes,tags',
             filter: {allTranslations: true}
           }
         }

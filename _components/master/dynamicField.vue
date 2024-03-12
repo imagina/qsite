@@ -1669,7 +1669,7 @@ export default {
       if (this.loadField('select')) {
         let loadOptions = this.field.loadOptions
         if (loadOptions && loadOptions.apiRoute) {
-          //Valudate if the response values is not in the root options
+          //Validate if the response values is not in the root options
           let responseValueTmp = (this.responseValue || [])
           responseValueTmp = Array.isArray(responseValueTmp) ? responseValueTmp : [responseValueTmp]
           const includeAll = responseValueTmp.every(val =>
@@ -1692,12 +1692,24 @@ export default {
 
             //Request
             this.$crud.index(loadOptions.apiRoute, requestParams).then(response => {
-              this.rootOptions = [
-                ...this.rootOptions,
-                ...this.$array.select(response.data, fieldSelect),
-              ]
-              //Emit the loadedOptions
-              if (loadOptions.loadedOptions) loadOptions.loadedOptions(response.data)
+                const responseData = response.data
+                if(responseData.length){
+                  if (Array.isArray(this.value)) {
+                    //Remove value if isn't on response.data
+                    const results = this.value.filter((value) => responseData.find((data) => data.id == value)) || null
+                    this.setDefaultVModel(results)
+                  }
+
+                  this.rootOptions = [
+                    ...this.rootOptions,
+                    ...this.$array.select(responseData, fieldSelect),
+                  ]
+                  //Emit the loadedOptions
+                  if (loadOptions.loadedOptions) loadOptions.loadedOptions(responseData)
+                } else {
+                  //Remove value if isn't on response.data
+                  this.setDefaultVModel(null)
+                }
             }).catch(error => {
               this.$apiResponse.handleError(error, () => {
               })

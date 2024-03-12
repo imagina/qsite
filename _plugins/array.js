@@ -276,6 +276,10 @@ class Array {
   }
 
   hasCommonElement(arr1, arr2) {
+    // Map Arrays as string
+    arr1 = arr1.map(item => item.toString())
+    arr2 = arr2.map(item => item.toString())
+
     for (let i = 0; i < arr1.length; i++) {
       if (arr2.includes(arr1[i])) {
         return true;  // Found a common element
