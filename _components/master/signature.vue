@@ -23,7 +23,7 @@
         <!--Component-->
         <VueSignaturePad v-if="!readonly" class="bg-grey-2" ref="signature" :options="options" :width="width" :height="height"/>
         <div v-else class="bg-grey-2">
-          <img  v-if="value" :src="value" alt="" srcset="" :width="width" :height="height"></img>
+          <img  v-if="value" :src="value" alt="" srcset="" :width="width" :height="height" />
         </div>
       </div>
       <!---Close fullscreen-->
@@ -54,6 +54,7 @@ export default {
   emits: ['update:modelValue'],
   watch: {
     modelValue() {
+      console.log('watch -> modelValue', this.modelValue)
       this.init()
     },
   },
@@ -71,6 +72,7 @@ export default {
   },
   methods: {
     init() {
+      console.log('modelValue', this.modelValue)
       this.model = this.modelValue;
       if(this.$refs.signature) {
         this.$refs.signature.fromDataURL(this.modelValue);
