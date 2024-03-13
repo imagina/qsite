@@ -1,6 +1,7 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
 import L from "leaflet";
 import {OpenStreetMapProvider} from 'leaflet-geosearch'
+
 import { store } from 'src/plugins/utils.ts'
 
 
@@ -103,6 +104,7 @@ export default function controller(props: any, emit: any) {
       })
     },
     setMap: () => {
+      const controlsPosition = 'bottomright' //default: topleft
       const layer = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
       const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       const accessToken = store.getSetting('isite::api-open-street-maps')      
@@ -123,8 +125,17 @@ export default function controller(props: any, emit: any) {
       }
       
       L.control.zoom({
-        position: 'bottomright'
+        position: controlsPosition
       }).addTo(state.map);
+
+      state.map.addControl(new L.Control.Fullscreen({
+        position: controlsPosition,
+        title: {
+          'false': 'pantalla completa',
+          'true': 'salir pantalla'
+        }
+      }));
+
 
       if(methods.isPositionMarkerMap()){
         state.marker = L.marker([props.defaultCenter.lat, props.defaultCenter.lng]).addTo(state.map)       
@@ -140,6 +151,7 @@ export default function controller(props: any, emit: any) {
           await methods.getMarkerInfo(lat, lng)
         }
       })
+      
     },
     //force to load maker images
     setIconSettings(){

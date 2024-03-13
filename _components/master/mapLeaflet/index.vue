@@ -18,8 +18,7 @@
           clearable
           use-input
           emit-value
-          map-options 
-          dense
+          map-options           
           outlined
           class="q-pb-md custom-btn"
           @clear="geolocations = []"
@@ -36,6 +35,8 @@
 import {defineComponent} from 'vue'
 import controller from './controller'
 import "leaflet/dist/leaflet.css";
+import "./plugins/fullscreen/Leaflet.fullscreen.js"
+import "./plugins/fullscreen/Leaflet.fullscreen.css"
 
 export default defineComponent({
   props: {
@@ -70,5 +71,4 @@ export default defineComponent({
   padding-top: 10px;
   padding-left: 14px;
 }
-
 </style>
