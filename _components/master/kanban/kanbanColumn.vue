@@ -181,7 +181,7 @@
           </div>
         </div>
       </div>
-      <div class="c-plus" v-if="permissionStatuses.create">
+      <div class="c-plus" v-if="permissionRequestable.create">
         <q-btn 
           flat 
           class="
@@ -337,7 +337,15 @@ export default {
   },
   computed: {
     allowCreateRequestable() {
-      return typeof this.columnData.id == 'string' || !this.$auth.hasAccess('requestable.requestables.create');
+      return typeof this.columnData.id == 'string' || !this.permissionRequestable.create;
+    },
+    permissionRequestable() {
+      return {
+        index: this.$auth.hasAccess('requestable.requestables.index'),
+        create: this.$auth.hasAccess('requestable.requestables.create'),
+        edit: this.$auth.hasAccess('requestable.requestables.edit'),
+        delete: this.$auth.hasAccess('requestable.requestables.delete')
+      }
     },
     permissionStatuses() {
       return {
