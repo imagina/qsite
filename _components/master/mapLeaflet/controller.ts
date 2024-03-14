@@ -1,9 +1,7 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
 import L from "leaflet";
 import {OpenStreetMapProvider} from 'leaflet-geosearch'
-
 import { store } from 'src/plugins/utils.ts'
-
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
@@ -17,14 +15,16 @@ export default function controller(props: any, emit: any) {
   const state = reactive({
     // Key: Default Value
     countries: Object,
-    map: L.Map,            
-    marker: L.Marker,
+    map: Object,            
+    marker: Object,
     responseValue: false,      
     mapZoom: 8,      
     searchLoading: false,
     searchProvider: {}, 
     address: null,
     geolocations: [],
+    results: null,
+    addMarker: true
   })
 
   // Computed
@@ -35,19 +35,22 @@ export default function controller(props: any, emit: any) {
   // Methods
   const methods = {
     // methodKey: () => {}
-    isPositionMarkerMap: () =>  props.type == 'positionMarkerMap',
+    isPositionMarkerMap: () =>  {
+      return props.type == 'positionMarkerMap'
+    }, 
     init: () => {
       methods.setMap()
       methods.setDefaultValue()
     },    
     //Set default values
-    async setDefaultValue() {      
+    async setDefaultValue() {
       //Validate map types
       if(methods.isPositionMarkerMap()){        
         //Set default value and response value        
         let center = props.modelValue//Set default value
         if (center?.lat && center?.lng) {
-          methods.moveMarker(center.lat, center.lng, 15)          
+          state.map.setZoom(15)
+          methods.moveMarker(center.lat, center.lng)          
           await methods.getMarkerInfo(center.lat, center.lng) || {}
         } else {              
           center = {lat: props.defaultCenter.lat, lng: props.defaultCenter.lng}
@@ -65,15 +68,16 @@ export default function controller(props: any, emit: any) {
       await state.searchProvider.search({query}).then((results) => {              
         if(results.length){
           const item = results[0]
-          info.label = item['display_name'] || item?.label || ''          
-          state.marker.bindPopup(info.label).openPopup();          
+          info.label = item.label != '' ? item.label : item?.raw.display_name
+          if(info.label){
+            state.marker.bindPopup(info.label).openPopup();
+          }
         }
       })
       emit('update:modelValue', info)
       return info
     },
-    async emitResponseValue() {     
-      console.log('emitResponseValue') 
+    async emitResponseValue() {
       if (state.address) {
         methods.moveMarker(state.address.lat, state.address.lng)      
         await this.getMarkerInfo(state.address.lat, state.address.lng)        
@@ -104,13 +108,14 @@ export default function controller(props: any, emit: any) {
       })
     },
     setMap: () => {
-      const controlsPosition = 'bottomright' //default: topleft
+      const controlsPosition = 'bottomright' //'bottomright' //default: topleft
       const layer = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
       const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       const accessToken = store.getSetting('isite::api-open-street-maps')      
 
       state.searchProvider =  new OpenStreetMapProvider({params: {countrycodes: methods.getCountries()}})
       state.map = L.map(props.mapId, {
+        editable: true,
         zoomControl: false
       }).setView([props.defaultCenter.lat, props.defaultCenter.lng], state.mapZoom);
 
@@ -135,23 +140,32 @@ export default function controller(props: any, emit: any) {
           'true': 'salir pantalla'
         }
       }));
-
-
+      
       if(methods.isPositionMarkerMap()){
         state.marker = L.marker([props.defaultCenter.lat, props.defaultCenter.lng]).addTo(state.map)       
-      }
+      } 
 
-      state.map.on('click', async (event) => {
+      // disable zoon on doubleclick
+      state.map.doubleClickZoom.disable();       
+     
+      /* prevent map propagation by user inputs */      
+      const div = L.DomUtil.get('leaflet_search_input');
+      L.DomEvent.disableClickPropagation(div);
+
+      state.map.on('dblclick', async (event) => {
         const lat = event.latlng.lat
-        const lng = event.latlng.lng
+        const lng = event.latlng.lng        
         if (methods.isPositionMarkerMap() && !props.readOnly){
-          state.geolocations = []
-          state.address = null
-          methods.moveMarker(lat, lng)
-          await methods.getMarkerInfo(lat, lng)
+            if(state.addMarker){
+            state.geolocations = []
+            state.address = null
+            methods.moveMarker(lat, lng)
+            await methods.getMarkerInfo(lat, lng)
+          }
         }
-      })
+      })      
       
+      methods.addEditableControls()
     },
     //force to load maker images
     setIconSettings(){
@@ -167,13 +181,79 @@ export default function controller(props: any, emit: any) {
         }
       );
     }, 
-    moveMarker(lat, lng, zoom = 8){
-      state.map.setView([lat, lng], zoom || state.map.getZoom())
+    moveMarker(lat, lng){
+      state.map.setView([lat, lng], state.map.getZoom())
       state.marker.setLatLng([lat, lng])
     }, 
     getCountries(){
       const value = store.getSetting('ilocations::availableCountries') || ["co"]
       return value.map(val => val.toLowerCase())
+    },
+    flipAddMarker(){
+      state.addMarker = !state.addMarker
+    },
+    /*
+      editable controls     
+    */
+    addEditableControls(){
+      //adds control layer
+      L.EditControl = L.Control.extend({
+        options: {
+            position: 'topleft',
+            callback: null,
+            kind: '',
+            html: ''
+        },
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+            link = L.DomUtil.create('a', '', container);
+            link.href = '#';
+            link.title = 'Create a new ' + this.options.kind;
+            link.innerHTML = this.options.html;
+            L.DomEvent.on(link, 'click', L.DomEvent.stop)
+                      .on(link, 'click', function () {
+                        window.LAYER = this.options.callback.call(map.editTools);
+                      }, this);
+
+            return container;
+        }
+      });
+      //Polygon control
+      L.NewPolygonControl = L.EditControl.extend({
+        options: {
+          position: 'topleft',
+          callback: state.map.editTools.startPolygon,
+          kind: 'polygon',
+          html: '▰'
+        }
+      });
+      //Rectangle control
+      L.NewRectangleControl = L.EditControl.extend({
+        options: {
+          position: 'topleft',
+          callback: state.map.editTools.startRectangle,
+          kind: 'rectangle',
+          html: '⬛'
+        }
+      });
+    
+      state.map.addControl(new L.NewPolygonControl());
+      state.map.addControl(new L.NewRectangleControl());
+
+      //get cords
+      /* poligon */
+      state.map.on('editable:drawing:end', async (event) => {
+        const parts = JSON.parse(JSON.stringify(event.layer?._parts)) || {}
+        console.warn('editable:drawing:end => ', parts )
+        //state.results = event
+      })
+
+      state.map.on('editable:vertex:dragend', async (event) => {
+        const parts = JSON.parse(JSON.stringify(event.layer?._parts)) || {}
+        console.warn('editable:vertex:dragend => ',  parts)
+        
+        //state.results = event
+      })
     }
   }
 
