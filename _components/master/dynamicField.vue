@@ -1413,12 +1413,10 @@ export default {
               return resolve(false)
             }
           }
-          const parametersUrl = loadOptions.parametersUrl || {};
-          const crud = Object.keys(parametersUrl).length > 0 
-            ? this.$crud.get(loadOptions.apiRoute, params, parametersUrl) 
-            : this.$crud.index(loadOptions.apiRoute, params);
+          const parametersUrl = Object.keys(loadOptions?.parametersUrl ?? {}).length ? loadOptions.parametersUrl : false ;
+          const crud = parametersUrl ? this.$crud.get : this.$crud.index;
           //Request
-          crud.then(response => {
+          crud(loadOptions.apiRoute, params, parametersUrl).then(response => {
             if (this.keyField !== '') {
               const keyData = {[this.keyField]: response.data}
               this.$helper.setDynamicSelectList(keyData);
