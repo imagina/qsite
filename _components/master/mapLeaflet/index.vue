@@ -1,7 +1,6 @@
 <template>
   <div id="mapLeafletcomponent" class="full-width">
     <!--map--->
-    results: {{ results }}
     <div :id="mapId" :style="`width: 100%; height : ${height}`">
       <!-- search geolocation -->          
       <div id="leaflet-search-box">       
@@ -27,11 +26,6 @@
         />
       </div>    
     </div>
-    <p>
-      address {{ address }}      
-      <br>
-      modelValue {{ modelValue }}  
-    </p>
   </div>
 </template>
 

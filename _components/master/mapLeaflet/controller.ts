@@ -23,8 +23,8 @@ export default function controller(props: any, emit: any) {
     searchProvider: {}, 
     address: null,
     geolocations: [],
-    results: null,
-    addMarker: true
+    coordinates: [],
+    polygon: Object
   })
 
   // Computed
@@ -79,8 +79,8 @@ export default function controller(props: any, emit: any) {
     },
     async emitResponseValue() {
       if (state.address) {
-        methods.moveMarker(state.address.lat, state.address.lng)      
-        await this.getMarkerInfo(state.address.lat, state.address.lng)        
+        methods.moveMarker(state.address.lat, state.address.lng)
+        await methods.getMarkerInfo(state.address.lat, state.address.lng)
       }
     },
     filterFn(val, update, abort) {
@@ -156,12 +156,10 @@ export default function controller(props: any, emit: any) {
         const lat = event.latlng.lat
         const lng = event.latlng.lng        
         if (methods.isPositionMarkerMap() && !props.readOnly){
-            if(state.addMarker){
-            state.geolocations = []
-            state.address = null
-            methods.moveMarker(lat, lng)
-            await methods.getMarkerInfo(lat, lng)
-          }
+          state.geolocations = []
+          state.address = null
+          methods.moveMarker(lat, lng)
+          await methods.getMarkerInfo(lat, lng)
         }
       })      
       
@@ -188,34 +186,40 @@ export default function controller(props: any, emit: any) {
     getCountries(){
       const value = store.getSetting('ilocations::availableCountries') || ["co"]
       return value.map(val => val.toLowerCase())
-    },
-    flipAddMarker(){
-      state.addMarker = !state.addMarker
-    },
-    /*
-      editable controls     
-    */
+    },    
+    //
+    // Polygon - editable controls     
+    //
     addEditableControls(){
-      //adds control layer
+      // Adds control layer
       L.EditControl = L.Control.extend({
         options: {
-            position: 'topleft',
-            callback: null,
-            kind: '',
-            html: ''
+          position: 'topleft',
+          callback: null,
+          kind: '',
+          html: ''
         },
-        onAdd: function (map) {
-            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
-            link = L.DomUtil.create('a', '', container);
-            link.href = '#';
-            link.title = 'Create a new ' + this.options.kind;
-            link.innerHTML = this.options.html;
-            L.DomEvent.on(link, 'click', L.DomEvent.stop)
-                      .on(link, 'click', function () {
-                        window.LAYER = this.options.callback.call(map.editTools);
-                      }, this);
-
-            return container;
+      onAdd: function (map) {
+          var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+          link = L.DomUtil.create('a', '', container);
+          link.href = '#';
+          link.title = this.options.title;
+          link.innerHTML = this.options.html;
+          L.DomEvent.on(link, 'click', L.DomEvent.stop)
+                    .on(link, 'click', function () {
+                      methods.deletePolygons()
+                      window.LAYER = this.options.callback.call(map.editTools);
+                    }, this);
+          return container;
+        }
+      });
+      //Line control
+      L.NewLineControl = L.EditControl.extend({
+        options: {
+            position: 'topleft',
+            callback: state.map.editTools.startPolyline,
+            title: 'Draw a Line',
+            html: '<i class="fa-light fa-pen-line fa-xl"></i>'
         }
       });
       //Polygon control
@@ -223,8 +227,8 @@ export default function controller(props: any, emit: any) {
         options: {
           position: 'topleft',
           callback: state.map.editTools.startPolygon,
-          kind: 'polygon',
-          html: '▰'
+          title: 'Draw a Polygon',
+          html: '<i class="fa-light fa-draw-polygon fa-xl"></i>'
         }
       });
       //Rectangle control
@@ -232,29 +236,68 @@ export default function controller(props: any, emit: any) {
         options: {
           position: 'topleft',
           callback: state.map.editTools.startRectangle,
-          kind: 'rectangle',
-          html: '⬛'
+          title: 'Draw a Rectangle',
+          html: '<i class="fa-light fa-draw-square fa-xl"></i>'
         }
       });
-    
-      state.map.addControl(new L.NewPolygonControl());
+      //Circle control
+      L.NewCircleControl = L.EditControl.extend({
+        options: {
+            position: 'topleft',
+            callback: state.map.editTools.startCircle,
+            title: 'Draw a Rectangle',
+            html: '<i class="fa-light fa-draw-circle fa-xl"></i>'
+        }
+      });
+      //clear control
+      L.NewDeleteControl = L.EditControl.extend({
+        options: {
+            position: 'topleft',
+            callback: () => methods.deletePolygons(),
+            title: 'Delete the shape',
+            html: '<i class="fa-light fa-trash fa-xl"></i>'
+        }
+      });
+
+      // Add controls    
+      state.map.addControl(new L.NewLineControl());
+      state.map.addControl(new L.NewPolygonControl()); //
       state.map.addControl(new L.NewRectangleControl());
+      //state.map.addControl(new L.NewCircleControl());
+      
+      //custom delete control
+      state.map.addControl(new L.NewDeleteControl());
 
-      //get cords
-      /* poligon */
-      state.map.on('editable:drawing:end', async (event) => {
-        const parts = JSON.parse(JSON.stringify(event.layer?._parts)) || {}
-        console.warn('editable:drawing:end => ', parts )
-        //state.results = event
-      })
-
-      state.map.on('editable:vertex:dragend', async (event) => {
-        const parts = JSON.parse(JSON.stringify(event.layer?._parts)) || {}
-        console.warn('editable:vertex:dragend => ',  parts)
-        
-        //state.results = event
+      // Getcoordinates and type       
+      state.map.on('editable:drawing:commit', async (event) => {
+        state.polygon = event.layer        
+        methods.getGeometry(event)
+      });
+      
+      // 
+      state.map.on('layeradd', async (e) => {
+          const layer = e.layer
+          if (e.layer instanceof L.Path) e.layer.on('click', L.DomEvent.stop).on('click', (e) => {            //layer.toggleEdit
+            if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) ) layer.editor.deleteShapeAt(e.latlng);
+          }, e.layer);          
+      });
+    }, 
+    // emits geometry: {type: String, coordinates: Array }
+    getGeometry(event){
+      const geometry = event.layer.toGeoJSON().geometry
+      state.coordinates = geometry
+      emit('update:modelValue', {...props.modelValue, ...geometry})
+    }, 
+    // Delete all Polygon
+    deletePolygons(){
+      state.map.eachLayer(layer => {
+        if (typeof layer._latlngs !== 'undefined' && layer._latlngs.length > 0) {
+          layer.remove()
+        }
       })
     }
+
+    
   }
 
   // Mounted
