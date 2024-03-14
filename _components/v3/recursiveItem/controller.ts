@@ -1,9 +1,8 @@
-import {computed, reactive, onMounted, toRefs, watch, getCurrentInstance, onUnmounted, nextTick} from "vue";
+import {computed, reactive, onMounted, toRefs, watch, onUnmounted, nextTick} from "vue";
 import store from 'src/modules/qsite/_components/v3/recursiveItem/store'
 import { store as pluginStore, uid, clone, router } from 'src/plugins/utils'
 
 export default function controller(props: any, emit: any) {
-  const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
   // Refs
   const refs = {
@@ -82,7 +81,7 @@ export default function controller(props: any, emit: any) {
     },
     //Validate if should load all multi-item
     checkCollapsibles() {
-      let collapsibles = proxy.$el.getElementsByClassName('q-expansion-item')
+      let collapsibles = document.getElementsByClassName('q-expansion-item')
 
       //@ts-ignore
       for (let group of collapsibles) {

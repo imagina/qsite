@@ -15,7 +15,7 @@
 </template>
 <script>
 import {defineComponent} from 'vue'
-import controller from 'modules/qsite/_components/v3/iframePost/controller'
+import controller from 'src/modules/qsite/_components/v3/iframePost/controller'
 
 export default defineComponent({
   props: {
@@ -31,12 +31,14 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-#iframePostcomponent
-  height 100%
-  width 100%
+#iframePostcomponent {
+  height: 100%;
+  width: 100%;
 
-  iframe
-    min-height 500px
-    height 100%
-    width 100%
+  iframe {
+    min-height: 500px;
+    height: 100%;
+    width: 100%;
+  }
+}
 </style>
