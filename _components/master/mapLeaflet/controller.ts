@@ -151,7 +151,10 @@ export default function controller(props: any, emit: any) {
       /* prevent map propagation by user inputs */      
       const div = L.DomUtil.get('leaflet_search_input');
       L.DomEvent.disableClickPropagation(div);
-
+      methods.setMapEvents();
+      methods.addEditableControls();
+    },
+    setMapEvents(){
       state.map.on('dblclick', async (event) => {
         const lat = event.latlng.lat
         const lng = event.latlng.lng        
@@ -161,9 +164,26 @@ export default function controller(props: any, emit: any) {
           methods.moveMarker(lat, lng)
           await methods.getMarkerInfo(lat, lng)
         }
-      })      
+      })
       
-      methods.addEditableControls()
+      // Getcoordinates and type       
+      state.map.on('editable:drawing:commit', async (event) => {
+        state.polygon = event.layer        
+        methods.getGeometry(event)
+      });
+
+      state.map.on('editable:vertex:dragend', async (event) => {
+        state.polygon = event.layer        
+        methods.getGeometry(event)
+      });
+
+      // 
+      state.map.on('layeradd', async (e) => {
+          const layer = e.layer
+          if (e.layer instanceof L.Path) e.layer.on('click', L.DomEvent.stop).on('click', (e) => {            //layer.toggleEdit
+            if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) ) layer.editor.deleteShapeAt(e.latlng);
+          }, e.layer);          
+      });
     },
     //force to load maker images
     setIconSettings(){
@@ -266,21 +286,7 @@ export default function controller(props: any, emit: any) {
       //state.map.addControl(new L.NewCircleControl());
       
       //custom delete control
-      state.map.addControl(new L.NewDeleteControl());
-
-      // Getcoordinates and type       
-      state.map.on('editable:drawing:commit', async (event) => {
-        state.polygon = event.layer        
-        methods.getGeometry(event)
-      });
-      
-      // 
-      state.map.on('layeradd', async (e) => {
-          const layer = e.layer
-          if (e.layer instanceof L.Path) e.layer.on('click', L.DomEvent.stop).on('click', (e) => {            //layer.toggleEdit
-            if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) ) layer.editor.deleteShapeAt(e.latlng);
-          }, e.layer);          
-      });
+      state.map.addControl(new L.NewDeleteControl());     
     }, 
     // emits geometry: {type: String, coordinates: Array }
     getGeometry(event){
