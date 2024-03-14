@@ -71,6 +71,7 @@ export default function controller(props: any, emit: any) {
           info.label = item.label != '' ? item.label : item?.raw.display_name
           if(info.label){
             state.marker.bindPopup(info.label).openPopup();
+            //state.marker.bindTooltip(info.label).openTooltip();
           }
         }
       })
@@ -152,7 +153,11 @@ export default function controller(props: any, emit: any) {
       const div = L.DomUtil.get('leaflet_search_input');
       L.DomEvent.disableClickPropagation(div);
       methods.setMapEvents();
-      methods.addEditableControls();
+
+      if(props.polygonControls){
+        methods.addEditableControls();
+      }
+      
     },
     setMapEvents(){
       state.map.on('dblclick', async (event) => {
@@ -166,24 +171,27 @@ export default function controller(props: any, emit: any) {
         }
       })
       
+      // Polygons
       // Getcoordinates and type       
-      state.map.on('editable:drawing:commit', async (event) => {
-        state.polygon = event.layer        
-        methods.getGeometry(event)
-      });
+      if(props.polygonControls){
+        state.map.on('editable:drawing:commit', async (event) => {
+          state.polygon = event.layer        
+          methods.getGeometry(event)
+        });
 
-      state.map.on('editable:vertex:dragend', async (event) => {
-        state.polygon = event.layer        
-        methods.getGeometry(event)
-      });
+        state.map.on('editable:vertex:dragend', async (event) => {
+          state.polygon = event.layer        
+          methods.getGeometry(event)
+        });
 
-      // 
-      state.map.on('layeradd', async (e) => {
-          const layer = e.layer
-          if (e.layer instanceof L.Path) e.layer.on('click', L.DomEvent.stop).on('click', (e) => {            //layer.toggleEdit
-            if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) ) layer.editor.deleteShapeAt(e.latlng);
-          }, e.layer);          
-      });
+        // 
+        state.map.on('layeradd', async (e) => {
+            const layer = e.layer
+            if (e.layer instanceof L.Path) e.layer.on('click', L.DomEvent.stop).on('click', (e) => {            //layer.toggleEdit
+              if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) ) layer.editor.deleteShapeAt(e.latlng);
+            }, e.layer);          
+        });
+      }
     },
     //force to load maker images
     setIconSettings(){
@@ -216,7 +224,7 @@ export default function controller(props: any, emit: any) {
         options: {
           position: 'topleft',
           callback: null,
-          kind: '',
+          title: '',
           html: ''
         },
       onAdd: function (map) {
@@ -280,10 +288,10 @@ export default function controller(props: any, emit: any) {
       });
 
       // Add controls    
-      state.map.addControl(new L.NewLineControl());
+      // state.map.addControl(new L.NewLineControl());
       state.map.addControl(new L.NewPolygonControl()); //
       state.map.addControl(new L.NewRectangleControl());
-      //state.map.addControl(new L.NewCircleControl());
+      // state.map.addControl(new L.NewCircleControl());
       
       //custom delete control
       state.map.addControl(new L.NewDeleteControl());     

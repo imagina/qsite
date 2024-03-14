@@ -8,10 +8,11 @@
           v-if="!readOnly"
           v-model="address"
           class="leaflet-search-box-input"
+          input-class="q-pa-md"
+          popup-content-class="leaflet-search-box-input"
           for="leaflet_search_input"
           :options="geolocations"
-          :loading="searchLoading"          
-          :label="label"          
+          :loading="searchLoading"
           behavior="menu"
           input-debounce="500"
           bg-color="white"
@@ -20,12 +21,26 @@
           use-input
           emit-value
           map-options
+          square
+          dense
           @clear="geolocations = []"
           @filter="filterFn"
           @update:modelValue="emitResponseValue()"
-        />
+        >
+        <template v-slot:append v-if="address == null  || address == ''">
+          <div class="q-pa-xs">
+            <i class="fa-light fa-magnifying-glass fa-md"></i>
+          </div>
+        </template>
+        </q-select>
       </div>    
     </div>
+    <p>
+      coordinates: {{ coordinates }} <br>
+      address {{ address }}      
+      <br>
+      modelValue {{ modelValue }}  
+    </p>
   </div>
 </template>
 
@@ -52,6 +67,7 @@ export default defineComponent({
       }
     },
     emitDefault: {type: Boolean, default: false},
+    polygonControls: { type: Boolean, default: false}
   },
   components: {},
   setup(props, {emit}) {
