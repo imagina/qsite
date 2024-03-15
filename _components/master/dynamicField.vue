@@ -1661,7 +1661,11 @@ export default {
 
     &.text-t-light
       .q-icon, .q-field__label, input
-        color white
+        color white 
+  .q-field__suffix {
+    position relative
+    top -6px
+  }
 
   #bannerField
     .content
