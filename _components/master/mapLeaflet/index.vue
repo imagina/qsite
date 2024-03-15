@@ -1,8 +1,9 @@
 <template>
   <div id="mapLeafletcomponent" class="full-width">
     <!--map--->
+    points {{ points }}
     <div :id="mapId" :style="`width: 100%; height : ${height}`">
-      <!-- search geolocation -->          
+      <!-- search geolocation -->                
       <div id="leaflet-search-box">       
         <q-select
           v-if="!readOnly"
@@ -35,12 +36,6 @@
         </q-select>
       </div>    
     </div>
-    <p>
-      coordinates: {{ coordinates }} <br>
-      address {{ address }}      
-      <br>
-      modelValue {{ modelValue }}  
-    </p>
   </div>
 </template>
 
@@ -67,8 +62,10 @@ export default defineComponent({
       }
     },
     emitDefault: {type: Boolean, default: false},
-    polygonControls: { type: Boolean, default: false}
+    polygonControls: { type: Boolean, default: false}, 
+    points: { type: Array, default: []}
   },
+  //emits: ["update:modelValue", "update:points"],
   components: {},
   setup(props, {emit}) {
     return controller(props, emit)

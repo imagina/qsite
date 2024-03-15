@@ -1,5 +1,5 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
-import L from "leaflet";
+import L, { point } from "leaflet";
 import {OpenStreetMapProvider} from 'leaflet-geosearch'
 import { store } from 'src/plugins/utils.ts'
 
@@ -18,13 +18,12 @@ export default function controller(props: any, emit: any) {
     map: Object,            
     marker: Object,
     responseValue: false,      
-    mapZoom: 8,      
+    mapZoom: 6,
     searchLoading: false,
     searchProvider: {}, 
     address: null,
     geolocations: [],
-    coordinates: [],
-    polygon: Object
+    coordinates: [],    
   })
 
   // Computed
@@ -41,6 +40,7 @@ export default function controller(props: any, emit: any) {
     init: () => {
       methods.setMap()
       methods.setDefaultValue()
+      methods.setPolygon()
     },    
     //Set default values
     async setDefaultValue() {
@@ -75,7 +75,9 @@ export default function controller(props: any, emit: any) {
           }
         }
       })
-      emit('update:modelValue', info)
+      if(!props.polygonControls){ // emits only points
+        emit('update:modelValue', info)
+      }
       return info
     },
     async emitResponseValue() {
@@ -175,12 +177,10 @@ export default function controller(props: any, emit: any) {
       // Getcoordinates and type       
       if(props.polygonControls){
         state.map.on('editable:drawing:commit', async (event) => {
-          state.polygon = event.layer        
           methods.getGeometry(event)
         });
 
         state.map.on('editable:vertex:dragend', async (event) => {
-          state.polygon = event.layer        
           methods.getGeometry(event)
         });
 
@@ -299,8 +299,13 @@ export default function controller(props: any, emit: any) {
     // emits geometry: {type: String, coordinates: Array }
     getGeometry(event){
       const geometry = event.layer.toGeoJSON().geometry
-      state.coordinates = geometry
-      emit('update:modelValue', {...props.modelValue, ...geometry})
+      let points = geometry.coordinates[0]      
+      points = points.map((x) => {
+        return {
+          lat: x[1], lng: x[0]
+        }
+      });
+      emit('update:modelValue', points)
     }, 
     // Delete all Polygon
     deletePolygons(){
@@ -309,6 +314,24 @@ export default function controller(props: any, emit: any) {
           layer.remove()
         }
       })
+      emit('update:modelValue', [])
+    }, 
+    setPolygon(){
+      let polygon = null
+      if(props.points.length){
+        let points = props.points
+        points = points.map((x) => [x.lat, x.lng]);
+
+        //rectangle
+        if(points.length == 4){
+          polygon = L.rectangle(points).addTo(state.map)
+        } else {
+          polygon = L.polygon(points).addTo(state.map)
+        }
+        state.map.fitBounds(polygon.getBounds());
+        //state.map.setView(center, 8)
+        ///state.map.setZoom(8)
+      }
     }
 
     
