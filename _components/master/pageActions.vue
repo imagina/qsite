@@ -53,6 +53,11 @@
         </q-btn>
       </div>
     </div>
+    <!--ExpiresIn-->
+    <div v-if="!!expiresIn" class="full-width row justify-end">
+      <q-chip removable v-model="showExpires" color="orange" outline text-color="white" icon="fa-light fa-rotate-right"
+              :label="$tr('isite.cms.dateCache', { date: getDiffCacheTime() })" />
+    </div>
     <!--Description-->
     <span
       v-if="description"
@@ -105,6 +110,7 @@ import masterExport from 'modules/qsite/_components/master/masterExport';
 import masterSynchronizable from 'modules/qsite/_components/master/masterSynchronizable';
 import masterFilter from 'modules/qsite/_components/master/masterFilter';
 import { eventBus } from 'src/plugins/utils';
+import appConfig from 'src/setup/app'
 
 export default {
   beforeDestroy() {
@@ -130,7 +136,8 @@ export default {
       type: Object,
       default: () => {
       }
-    }
+    },
+    expiresIn: {type: Number},
   },
   emits: ['search', 'new', 'refresh'],
   inject: {
@@ -165,7 +172,8 @@ export default {
       timeRefresh: 0,
       drawer: {
         filter: false
-      }
+      },
+      showExpires: true
     };
   },
   computed: {
@@ -422,6 +430,18 @@ export default {
     },
     toggleMasterFilter(value) {
       this.drawer.filter = value;
+    },
+    getDiffCacheTime() {
+      const diffCache = this.expiresIn - appConfig.cacheTime
+      const cacheDate = new Date(diffCache * 1000);
+      const hours = cacheDate.getHours() > 12 ? cacheDate.getHours() - 12 : cacheDate.getHours();
+      const minutes = cacheDate.getMinutes();
+      const ampm = cacheDate.getHours() >= 12 ? 'pm' : 'am';
+      // Formatear la fecha en formato dd/mm/yyyy
+      const day = cacheDate.getDate();
+      const month = cacheDate.getMonth() + 1;
+      const year = cacheDate.getFullYear();
+      return `${hours}:${minutes}${ampm} el ${day}/${month}/${year}`
     }
   }
 };
