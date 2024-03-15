@@ -51,16 +51,16 @@
           </template>
         </q-input>
         <!-- Input quantity -->
-        <div v-if="loadField('quantity')" class="tw-flex tw-w-full">
+        <div v-if="loadField('quantity')" class="tw-flex tw-w-full tw-items-center">
           <div>
-            <q-btn class="" size="md" flat round color="primary" icon="remove"
+            <q-btn class="" size="sm" flat round color="primary" icon="fa-solid fa-minus"
                    @click="field.value = responseValue > 0  ? --responseValue: 0" :disable="fieldProps.readonly"/>
           </div>
           <div class="tw-w-11/12">
             <q-input v-model="responseValue" v-bind="fieldProps" class="bg-white col-8"></q-input>
           </div>
           <div>
-            <q-btn class="" size="md" flat round color="primary" icon="fa-light fa-plus" @click="field.value = ++responseValue"
+            <q-btn class="" size="sm" flat round color="primary" icon="fa-solid fa-plus" @click="field.value = ++responseValue"
                    :disable="fieldProps.readonly"/>
           </div>
         </div>
@@ -530,7 +530,7 @@ export default {
     'field.loadOptions': {
       deep: true,
       handler: function (newValue, oldValue) {
-        if (JSON.stringify(newValue) != JSON.stringify(oldValue))        
+        if (JSON.stringify(newValue) != JSON.stringify(oldValue))
           this.getOptions()
       }
     }

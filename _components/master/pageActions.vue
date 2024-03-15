@@ -315,7 +315,7 @@ export default {
       }
 
       //force styles
-      response = response.map(item => ({ ...item, props: { ...item.props, color: 'white', outline: false } }));
+      response = response.map(item => ({ ...item, props: { ...(item.props.label ? { padding: '5px 15px' } : {}), ...item.props, color: 'white', outline: false } }));
 
       //Response
       return response.filter(item => item.vIf !== undefined ? item.vIf : true);
@@ -464,7 +464,7 @@ export default {
   }
 
   .actions-content {
-    .q-btn--dense > .q-btn__content:not(:has(.block)) {
+    .q-btn--dense > .q-btn__content:not(:has(.block)):not(:has(.text-center)) {
       padding: 0.285rem;
     }
 
