@@ -305,10 +305,7 @@
         <!--position Marker (MAP)-->
         <q-field v-model="responseValue" v-bind="fieldProps.fieldComponent" v-if="loadField('positionMarkerMap')" label=""
                  class="field-no-padding no-border">
-          <!--Google map-->
-          <google-map-marker v-model="responseValue" v-bind="fieldProps.field" v-if="false"/>
-          <!--open street map-->
-          <map-leaflet v-model="responseValue" type="positionMarkerMap" v-bind="fieldProps.field" v-else/>
+          <map-leaflet v-model="responseValue" type="positionMarkerMap" v-bind="fieldProps.field"/>
         </q-field>
         <!--Signature-->
         <q-field v-model="responseValue" v-if="loadField('signature')"
