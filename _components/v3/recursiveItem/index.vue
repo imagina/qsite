@@ -65,13 +65,13 @@ export default {
     cursor: pointer;
     color: $grey-9;
 
+    .q-icon {
+      font-size: 12px;
+    }
+
     .q-item__section--avatar {
       min-width: 20px;
       padding-right: 10px;
-
-      .q-icon {
-        font-size: 16px;
-      }
     }
   }
 
@@ -85,7 +85,7 @@ export default {
         padding-right: 10px;
 
         .q-icon {
-          font-size: 16px;
+          font-size: 14px;
           color: $blue-grey;
         }
       }
@@ -96,7 +96,7 @@ export default {
 
         .q-icon {
           color: $primary;
-          font-size: 22px;
+          font-size: 18px;
         }
       }
 
