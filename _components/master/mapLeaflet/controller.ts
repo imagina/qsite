@@ -1,5 +1,5 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
-import L, { point } from "leaflet";
+import L from "leaflet";
 import {OpenStreetMapProvider} from 'leaflet-geosearch'
 import { store } from 'src/plugins/utils.ts'
 
@@ -368,7 +368,6 @@ export default function controller(props: any, emit: any) {
     const model = newField.modelValue
     if(model?.lat && model?.lng){
       methods.moveMarker(model.lat, model.lng)
-      methods.getMarkerInfo(model.lat, model.lng)
     }
     if(model?.points){
       if(model.points.length) methods.setPolygon()
