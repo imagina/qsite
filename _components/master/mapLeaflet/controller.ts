@@ -322,7 +322,7 @@ export default function controller(props: any, emit: any) {
           lat: x[1], lng: x[0]
         }
       });
-      emit('update:modelValue', points)
+      emit('update:modelValue', {...props.modelValue, points})
     }, 
     // Delete all Polygon
     deletePolygons(){
@@ -331,13 +331,13 @@ export default function controller(props: any, emit: any) {
           layer.remove()
         }
       })
-      emit('update:modelValue', [])
+      emit('update:modelValue', {...props.modelValue, points: []})
     }, 
     setPolygon(){
-      let polygon = null
-      let points = props.modelValue
-      if (points && Array.isArray(points)) {
-        if(points.length){
+      let polygon = null      
+      if (props.modelValue?.points) {
+        let points = props.modelValue.points
+        if(points.length){          
           points = points.map((x) => [x.lat, x.lng]);
           //rectangle
           if(points.length == 4){
@@ -349,9 +349,7 @@ export default function controller(props: any, emit: any) {
             polygon.enableEdit()
           }
 
-          state.map.fitBounds(polygon.getBounds());
-          //state.map.setView(center, 8)
-          ///state.map.setZoom(8)
+          state.map.fitBounds(polygon.getBounds());          
         }
       }
     }

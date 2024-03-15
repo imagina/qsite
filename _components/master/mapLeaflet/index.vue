@@ -65,7 +65,7 @@ export default defineComponent({
     polygonControls: { type: Boolean, default: false}, 
     points: { type: Array, default: []}, 
   },
-  //emits: ["update:modelValue", "update:points"],
+  emit: ["update:modelValue"],
   components: {},
   setup(props, {emit}) {
     return controller(props, emit)
