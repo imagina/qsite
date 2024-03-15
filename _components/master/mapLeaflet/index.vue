@@ -2,8 +2,8 @@
   <div id="mapLeafletcomponent" class="full-width">
     <!--map--->
     <div :id="mapId" :style="`width: 100%; height : ${height}`">
-      <!-- search geolocation -->                
-      <div id="leaflet-search-box">       
+      <!-- search geolocation -->
+      <div id="leaflet-search-box">
         <q-select
           v-if="!readOnly"
           v-show="showSearch"

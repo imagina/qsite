@@ -364,9 +364,17 @@ export default function controller(props: any, emit: any) {
   })
 
   // Watch
-  // watch(key, (newField, oldField): void => {
-  //
-  // }, {deep: true})
+  watch(props, (newField, oldField): void => {
+    const model = newField.modelValue
+    if(model?.lat && model?.lng){
+      methods.moveMarker(model.lat, model.lng)
+      methods.getMarkerInfo(model.lat, model.lng)
+    }
+    if(model?.points){
+      if(model.points.length) methods.setPolygon()
+    }
+    
+  }, {deep: true})
 
   return {...refs, ...(toRefs(state)), ...computeds, ...methods}
 }
