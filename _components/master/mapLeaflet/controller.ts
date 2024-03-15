@@ -341,6 +341,10 @@ export default function controller(props: any, emit: any) {
           } else {
             polygon = L.polygon(points).addTo(state.map)
           }
+          if(!props.readOnly){
+            polygon.enableEdit()
+          }
+
           state.map.fitBounds(polygon.getBounds());
           //state.map.setView(center, 8)
           ///state.map.setZoom(8)
