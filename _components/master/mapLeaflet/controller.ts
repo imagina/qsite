@@ -179,7 +179,6 @@ export default function controller(props: any, emit: any) {
       // Polygons
       // Getcoordinates and type       
       if(props.polygonControls){
-
         state.map.on('editable:drawing:start', async (event) => {
           state.showSearch = false
         });
@@ -193,7 +192,12 @@ export default function controller(props: any, emit: any) {
           state.showSearch = true
         });
 
+        state.map.on('editable:vertex:dragstart', async (event) => {
+          state.showSearch = false
+        });
+
         state.map.on('editable:vertex:dragend', async (event) => {
+          state.showSearch = true
           methods.getGeometry(event)
         });
 
