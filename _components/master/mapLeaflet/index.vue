@@ -1,12 +1,12 @@
 <template>
   <div id="mapLeafletcomponent" class="full-width">
     <!--map--->
-    points {{ points }}
     <div :id="mapId" :style="`width: 100%; height : ${height}`">
       <!-- search geolocation -->                
       <div id="leaflet-search-box">       
         <q-select
           v-if="!readOnly"
+          v-show="showSearch"
           v-model="address"
           class="leaflet-search-box-input"
           input-class="q-pa-md"
@@ -22,7 +22,7 @@
           use-input
           emit-value
           map-options
-          square
+          square          
           dense
           @clear="geolocations = []"
           @filter="filterFn"
@@ -63,7 +63,7 @@ export default defineComponent({
     },
     emitDefault: {type: Boolean, default: false},
     polygonControls: { type: Boolean, default: false}, 
-    points: { type: Array, default: []}
+    points: { type: Array, default: []}, 
   },
   //emits: ["update:modelValue", "update:points"],
   components: {},

@@ -23,7 +23,8 @@ export default function controller(props: any, emit: any) {
     searchProvider: {}, 
     address: null,
     geolocations: [],
-    coordinates: [],    
+    coordinates: [],
+    showSearch: true
   })
 
   // Computed
@@ -70,6 +71,7 @@ export default function controller(props: any, emit: any) {
           const item = results[0]
           info.label = item.label != '' ? item.label : item?.raw.display_name
           if(info.label){
+            // state.geolocations = []
             state.marker.bindPopup(info.label).openPopup();
             //state.marker.bindTooltip(info.label).openTooltip();
           }
@@ -99,7 +101,6 @@ export default function controller(props: any, emit: any) {
           return {
             label: item.label,
             value: {
-              title: item.label,
               lat: item.y,
               lng: item.x,
             }
@@ -145,19 +146,21 @@ export default function controller(props: any, emit: any) {
       }));
       
       if(methods.isPositionMarkerMap()){
-        state.marker = L.marker([props.defaultCenter.lat, props.defaultCenter.lng]).addTo(state.map)       
+        state.marker = L.marker([props.defaultCenter.lat, props.defaultCenter.lng]).addTo(state.map)
       } 
 
       // disable zoon on doubleclick
       state.map.doubleClickZoom.disable();       
      
-      /* prevent map propagation by user inputs */      
-      const div = L.DomUtil.get('leaflet_search_input');
-      L.DomEvent.disableClickPropagation(div);
-      methods.setMapEvents();
+      if(!props.readOnly){
+        /* prevent map propagation by user inputs */
+        const div = L.DomUtil.get('leaflet_search_input');
+        L.DomEvent.disableClickPropagation(div);
+        methods.setMapEvents();
 
-      if(props.polygonControls){
-        methods.addEditableControls();
+        if(props.polygonControls){
+          methods.addEditableControls();
+        }
       }
       
     },
@@ -176,8 +179,18 @@ export default function controller(props: any, emit: any) {
       // Polygons
       // Getcoordinates and type       
       if(props.polygonControls){
+
+        state.map.on('editable:drawing:start', async (event) => {
+          state.showSearch = false
+        });
+
+        state.map.on('editable:drawing:end', async (event) => {
+          state.showSearch = true
+        });
+
         state.map.on('editable:drawing:commit', async (event) => {
           methods.getGeometry(event)
+          state.showSearch = true
         });
 
         state.map.on('editable:vertex:dragend', async (event) => {
@@ -318,19 +331,20 @@ export default function controller(props: any, emit: any) {
     }, 
     setPolygon(){
       let polygon = null
-      if(props.points.length){
-        let points = props.points
-        points = points.map((x) => [x.lat, x.lng]);
-
-        //rectangle
-        if(points.length == 4){
-          polygon = L.rectangle(points).addTo(state.map)
-        } else {
-          polygon = L.polygon(points).addTo(state.map)
+      let points = props.modelValue
+      if (points && Array.isArray(points)) {
+        if(points.length){
+          points = points.map((x) => [x.lat, x.lng]);
+          //rectangle
+          if(points.length == 4){
+            polygon = L.rectangle(points).addTo(state.map)
+          } else {
+            polygon = L.polygon(points).addTo(state.map)
+          }
+          state.map.fitBounds(polygon.getBounds());
+          //state.map.setView(center, 8)
+          ///state.map.setZoom(8)
         }
-        state.map.fitBounds(polygon.getBounds());
-        //state.map.setView(center, 8)
-        ///state.map.setZoom(8)
       }
     }
 

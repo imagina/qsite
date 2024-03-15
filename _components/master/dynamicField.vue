@@ -306,7 +306,7 @@
         <q-field v-model="responseValue" v-bind="fieldProps.fieldComponent" v-if="loadField('positionMarkerMap')" label=""
                  class="field-no-padding no-border">
           <!--Google map-->
-          <google-map-marker v-model="responseValue" v-bind="fieldProps.field" v-if="settings.mapType == 'googleMaps'"/>
+          <google-map-marker v-model="responseValue" v-bind="fieldProps.field" v-if="false"/>
           <!--open street map-->
           <map-leaflet v-model="responseValue" type="positionMarkerMap" v-bind="fieldProps.field" v-else/>
         </q-field>
