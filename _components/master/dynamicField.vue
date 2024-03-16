@@ -857,6 +857,7 @@ export default {
             fieldComponent: {
               borderless: true,
               dense: true,
+              tag: 'div',
               ...props
             }
           }
@@ -930,6 +931,7 @@ export default {
             fieldComponent: {
               borderless: true,
               dense: true,
+              tag: 'div',
               ...props
             }
           }
