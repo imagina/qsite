@@ -5,13 +5,18 @@
     <q-page-container>
       <router-view/>
     </q-page-container>
+
+    <!---Cropper-->
+    <cropper-component ref="cropperComponent"/>
   </q-layout>
 </template>
 
 <script>
   import drawersBlank from '@imagina/qsite/_components/admin/theme2/drawersBlank.vue'
+  import cropperComponent from "@imagina/qsite/_components/master/cropper.vue";
   export default {
     components: {
+      cropperComponent,
       drawersBlank
     },
     meta () {
