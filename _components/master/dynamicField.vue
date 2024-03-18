@@ -336,15 +336,14 @@
           <schedulable v-model="responseValue" v-bind="fieldProps" @input="watchValue" class="q-mb-sm" />
         </div>
         <!--Json Editor-->
-        <q-field v-model="responseValue" v-if="loadField('json')" v-bind="fieldProps.fieldComponent"
-                 class="field-no-padding no-border code-dinamyc-field" label="">
+        <div v-if="loadField('json')" class="field-no-padding no-border code-dinamyc-field" label="">
           <div class="full-width">
             <div class="text-grey-8 q-mb-xs" v-if="fieldProps.field.label">
               {{ fieldProps.field.label }}
             </div>
             <json-editor-vue class="jsoneditor-vue" v-model="responseValue" mode="tree"/>
           </div>
-        </q-field>
+        </div>
         <!--Text Info-->
         <div id="bannerField" v-if="loadField('banner')" class="q-mb-md">
           <div class="content q-py-sm q-px-md" :style="`border-color: ${fieldProps.colorValue}`">
