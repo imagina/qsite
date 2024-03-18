@@ -21,7 +21,7 @@
       <!--Signature component-->
       <div id="vueSiganture" class="full-width">
         <!--Component-->
-        <VueSignaturePad v-if="!readonly" class="bg-grey-2" ref="signature" :options="options" :width="width" :height="height"/>
+        <VueSignaturePad v-if="!readonly" class="bg-grey-2" ref="signaturePad" :options="options" :width="width" :height="height"/>
         <div v-else class="bg-grey-2">
           <img  v-if="value" :src="value" alt="" srcset="" :width="width" :height="height" />
         </div>
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { VueSignaturePad } from 'vue-signature-pad';
+
 export default {
   name: 'signature',
   props: {
@@ -51,6 +53,7 @@ export default {
       default: () => false,
     }
   },
+  components: { VueSignaturePad },
   emits: ['update:modelValue'],
   watch: {
     modelValue() {
@@ -61,7 +64,10 @@ export default {
     return {
       model: null,
       isFullscreen: false,
-      options: {onBegin: this.onBegin, onEnd: this.onEnd, penColor: '#000000', images: []}
+      options: {
+        onEnd: this.onEnd, 
+        penColor: '#000000', 
+      }
     }
   },
   mounted() {
@@ -72,26 +78,21 @@ export default {
   methods: {
     init() {
       this.model = this.modelValue;
-      if(this.$refs.signature) {
-        this.$refs.signature.fromDataURL(this.modelValue);
+      if(this.$refs.signaturePad) {
+        this.$refs.signaturePad.fromDataURL(this.modelValue);
       }
-      this.options.images = [{src: this.model, x: 0, y: 0}]
-    },
-    onBegin() {
-      this.$refs.signature.resizeCanvas()
-      this.onEnd()
     },
     onEnd() {
-      const {isEmpty, data} = this.$refs.signature.saveSignature();
+      const {isEmpty, data} = this.$refs.signaturePad.saveSignature();
       this.model = data || null
       this.$emit('update:modelValue', this.model)
     },
     undo() {
-      this.$refs.signature.undoSignature()
+      this.$refs.signaturePad.undoSignature()
       this.onEnd()
     },
     clear() {
-      this.$refs.signature.clearSignature()
+      this.$refs.signaturePad.clearSignature()
       this.onEnd()
     },
     toggleFullscreen() {
