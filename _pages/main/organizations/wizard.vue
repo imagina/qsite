@@ -113,6 +113,15 @@ import {
 export default {
   beforeDestroy() {},
   computed: {
+    steps() {
+      //Get setting to validate if show the IA step
+      const contentGenerationWithAI = !!parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::contentGenerationWithAI'))
+      //Filter the steps
+      return modelSteps.filter(step => {
+        if(step.id == STEP_AI && !contentGenerationWithAI) return false
+        return step
+      })
+    },
     siteName() {
       return this.$getSetting('core::site-name')
     },
@@ -136,7 +145,6 @@ export default {
       logo: this.$store.state.qsiteApp.logo,
       currentStep: 0,
       progress: 0,
-      steps: modelSteps,
       progressPercent: 0,
       urlBase: this.$store.state.qsiteApp.baseUrl,
       dataUrl: { // datos que vienen de la url

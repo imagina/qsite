@@ -34,6 +34,7 @@ export default function layoutStore() {
     return new Promise(resolve => {
       const requestParams = {
         refresh: true,
+        params: {include:'files'}
       }
       //Request
       baseService.index('apiRoutes.qsite.layouts', requestParams).then(response => {

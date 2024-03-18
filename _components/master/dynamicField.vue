@@ -51,16 +51,16 @@
           </template>
         </q-input>
         <!-- Input quantity -->
-        <div v-if="loadField('quantity')" class="tw-flex tw-w-full">
+        <div v-if="loadField('quantity')" class="tw-flex tw-w-full tw-items-center">
           <div>
-            <q-btn class="" size="md" flat round color="primary" icon="remove"
+            <q-btn class="" size="sm" flat round color="primary" icon="fa-solid fa-minus"
                    @click="field.value = responseValue > 0  ? --responseValue: 0" :disable="fieldProps.readonly"/>
           </div>
           <div class="tw-w-11/12">
             <q-input v-model="responseValue" v-bind="fieldProps" class="bg-white col-8"></q-input>
           </div>
           <div>
-            <q-btn class="" size="md" flat round color="primary" icon="fa-light fa-plus" @click="field.value = ++responseValue"
+            <q-btn class="" size="sm" flat round color="primary" icon="fa-solid fa-plus" @click="field.value = ++responseValue"
                    :disable="fieldProps.readonly"/>
           </div>
         </div>
@@ -305,10 +305,7 @@
         <!--position Marker (MAP)-->
         <q-field v-model="responseValue" v-bind="fieldProps.fieldComponent" v-if="loadField('positionMarkerMap')" label=""
                  class="field-no-padding no-border">
-          <!--Google map-->
-          <google-map-marker v-model="responseValue" v-bind="fieldProps.field" v-if="settings.mapType == 'googleMaps'"/>
-          <!--open street map-->
-          <map-leaflet v-model="responseValue" type="positionMarkerMap" v-bind="fieldProps.field" v-else/>
+          <map-leaflet v-model="responseValue" type="positionMarkerMap" v-bind="fieldProps.field"/>
         </q-field>
         <!--Signature-->
         <q-field v-model="responseValue" v-if="loadField('signature')"
@@ -530,7 +527,7 @@ export default {
     'field.loadOptions': {
       deep: true,
       handler: function (newValue, oldValue) {
-        if (JSON.stringify(newValue) != JSON.stringify(oldValue))        
+        if (JSON.stringify(newValue) != JSON.stringify(oldValue))
           this.getOptions()
       }
     }
@@ -857,6 +854,7 @@ export default {
             fieldComponent: {
               borderless: true,
               dense: true,
+              tag: 'div',
               ...props
             }
           }
@@ -930,6 +928,7 @@ export default {
             fieldComponent: {
               borderless: true,
               dense: true,
+              tag: 'div',
               ...props
             }
           }
@@ -1520,9 +1519,11 @@ export default {
             let formatedOptions = []
             //Format response
             response.data = response.data.map((item, index) => ({...item, id: item.id >= 0 ? item.id : (index + 1)}))
-            formatedOptions = ['select', 'expression'].includes(this.field.type) ?
-                this.$array.select(response.data, loadOptions.select || fieldSelect) :
-                this.$array.tree(response.data, loadOptions.select || fieldSelect)
+            if (loadOptions.format) formatedOptions = loadOptions.format(response.data)
+            else if (['select', 'expression'].includes(this.field.type))
+              formatedOptions = this.$array.select(response.data, loadOptions.select || fieldSelect)
+            else
+              formatedOptions = this.$array.tree(response.data, loadOptions.select || fieldSelect)
 
             //Assign options
             this.rootOptions = this.$clone(defaultOptions.concat(formatedOptions))
@@ -1695,12 +1696,23 @@ export default {
 
             //Request
             this.$crud.index(loadOptions.apiRoute, requestParams).then(response => {
-              this.rootOptions = [
-                ...this.rootOptions,
-                ...this.$array.select(response.data, fieldSelect),
-              ]
-              //Emit the loadedOptions
-              if(loadOptions.loadedOptions) loadOptions.loadedOptions(response.data)
+              const responseData = response.data
+              if(responseData.length){
+                if (Array.isArray(this.modelValue)) {
+                  //Remove value if isn't on response.data
+                  const results = this.modelValue.filter((value) => responseData.find((data) => data.id == value)) || null
+                  this.setDefaultVModel(results)
+                }
+                this.rootOptions = [
+                  ...this.rootOptions,
+                  ...this.$array.select(responseData, fieldSelect),
+                ]
+                //Emit the loadedOptions
+                if (loadOptions.loadedOptions) loadOptions.loadedOptions(responseData)
+              } else {
+                //Remove value if isn't on response.data
+                this.setDefaultVModel(null)
+              }
             }).catch(error => {
               this.$apiResponse.handleError(error, () => {
               })

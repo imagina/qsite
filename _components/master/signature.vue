@@ -6,9 +6,9 @@
       <!--Actions-->
       <div id="btnActions">
         <!--Clear-->
-        <q-btn icon="fa-light fa-trash-can" size="sm" flat round color="blue-grey" @click="clear()" :disable="readonly"/>
+        <q-btn icon="fa-solid fa-trash" size="sm" flat round color="blue-grey" @click="clear()" :disable="readonly"/>
         <!--Undo-->
-        <q-btn icon="undo" size="sm" flat round color="blue-grey" @click="undo()" :disable="readonly"/>
+        <q-btn icon="fa-solid fa-reply" size="sm" flat round color="blue-grey" @click="undo()" :disable="readonly"/>
         <!--fullscreen-->
         <q-btn :icon="isFullscreen ? 'fas fa-compress' : 'fas fa-expand'"
                size="sm"
