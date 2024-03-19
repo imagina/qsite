@@ -474,7 +474,7 @@ export default {
     },
     enableCache: {default: false}
   },
-  emits: ['update:modelValue','inputReadOnly','filter', 'select', 'enter'],
+  emits: ['update:modelValue','inputReadOnly','filter', 'select', 'enter', 'converted'],
   components: {
     managePermissions,
     manageSettings,
