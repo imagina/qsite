@@ -35,25 +35,27 @@
           <!--Last Report information-->
           <div id="lastReportContent" v-if="fileExport.length" class="q-mb-md col-12">
             <div v-for="(file, keyFile) in fileExport" :key="keyFile">
-              <q-separator class="q-my-md" />
-              <!--Title-->
-              <div class="text-blue-grey q-mb-sm">
-                <b>{{ $tr('isite.cms.messages.lastReport') }}{{ file.fileFormat ? ` (${file.fileFormat})` : '' }}</b>
-              </div>
-              <!--Date-->
-              <div class="text-caption">
-                <label class="text-blue-grey">{{ $tr('isite.cms.label.date') }}:</label>
-                {{ $trd(file.lastModified, { type: 'long' }) }}
-              </div>
-              <!--Size-->
-              <div class="text-caption">
-                <label class="text-blue-grey">{{ $tr('isite.cms.label.size') }}:</label>
-                {{ $helper.formatBytes(file.size) }}
-              </div>
-              <!--Action-->
-              <div class="text-right q-mt-md">
-                <q-btn :label="$tr('isite.cms.label.download')" color="green" rounded unelevated size="13px"
-                       padding="xs sm" @click="$helper.downloadFromURL(file.path)" />
+              <div v-if="file.path">
+                <q-separator class="q-my-md"/>
+                <!--Title-->
+                <div class="text-blue-grey q-mb-sm">
+                  <b>{{ $tr('isite.cms.messages.lastReport') }}{{ file.fileFormat ? ` (${file.fileFormat})` : '' }}</b>
+                </div>
+                <!--Date-->
+                <div class="text-caption">
+                  <label class="text-blue-grey">{{ $tr('isite.cms.label.date') }}:</label>
+                  {{ $trd(file.lastModified, {type: 'long'}) }}
+                </div>
+                <!--Size-->
+                <div class="text-caption">
+                  <label class="text-blue-grey">{{ $tr('isite.cms.label.size') }}:</label>
+                  {{ $helper.formatBytes(file.size) }}
+                </div>
+                <!--Action-->
+                <div class="text-right q-mt-md">
+                  <q-btn :label="$tr('isite.cms.label.download')" color="green" rounded unelevated size="13px"
+                         padding="xs sm" @click="$helper.downloadFromURL(file.path)"/>
+                </div>
               </div>
             </div>
           </div>
