@@ -34,7 +34,7 @@
           </div>
           <!--Last Report information-->
           <div id="lastReportContent" v-if="fileExport.length" class="q-mb-md col-12">
-            <div v-for="(file, keyFile) in fileExport" :key="keyFile">
+            <template v-for="(file, keyFile) in fileExport" :key="keyFile">
               <div v-if="file.path">
                 <q-separator class="q-my-md"/>
                 <!--Title-->
@@ -57,7 +57,7 @@
                          padding="xs sm" @click="$helper.downloadFromURL(file.path)"/>
                 </div>
               </div>
-            </div>
+            </template>
           </div>
         </div>
       </div>
