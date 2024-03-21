@@ -39,7 +39,7 @@
           <q-tab-panels v-model="tabName" animated keep-alive>
             <!--Tab form-->
             <q-tab-panel name="tabForm" class="q-pa-none q-px-xs">
-              <div id="filtersContent" class="q-px-sm">
+              <div id="filtersContent" class="q-px-sm" style="height: calc(100vh - 300px)">
                 <!--Search-->
                 <div v-if="filter.fields && filter.fields.search" class="q-mb-sm">
                   <!--Label-->
