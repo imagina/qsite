@@ -69,24 +69,30 @@
                    padding="xs sm" class="full-width" @click="generateFile"/>
           </div>
         </div>
+        <!--Sync Data-->
         <div id="exportImportFileContent" v-if="!allowCreation && !hasNewUpdates" class="q-mb-md col-12">
+          <!--Header title-->
           <div class="row text-blue-grey q-mb-sm q-px-md justify-between">
             <b>{{ $tr('isite.cms.modal.syncNow') }}</b>
 
+            <!--Refresh info-->
             <q-btn rounded dense unelevated size="md" class="btn-small btn-outlined-custom"
                    icon="fa-light fa-rotate-right" @click="getData">
               <q-tooltip>{{ $tr('isite.cms.label.refresh') }}</q-tooltip>
             </q-btn>
           </div>
 
+          <!--Actions to Sync-->
           <div class="text-left col-12 q-mb-sm q-px-md">
             <q-list bordered class="rounded-borders">
+              <!--Get document-->
               <q-item>
                 <q-item-section avatar>
                   <q-icon name="fa-light fa-file-lines"/>
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{ $tr('isite.cms.modal.syncStepOne') }}</q-item-label>
+                  <!--Redirect to sheet-->
                   <q-item-label caption>
                     {{ $tr('isite.cms.modal.syncBodyStepOne') }} <a class="text-primary" :href="linkToFile"
                                                                     target="_blank">{{
@@ -95,8 +101,9 @@
                   </q-item-label>
                 </q-item-section>
               </q-item>
-              <q-separator v-if="allowImport.moreInfoProducts" spaced/>
-              <q-item v-if="allowImport.moreInfoProducts">
+              <!--Export dependencies-->
+              <q-separator v-if="supportedActions.dependencies" spaced/>
+              <q-item v-if="supportedActions.dependencies">
                 <q-item-section avatar>
                   <q-icon name="fa-light fa-folder-arrow-up"/>
                 </q-item-section>
@@ -104,6 +111,7 @@
                   <q-item-label>{{ $tr('isite.cms.modal.syncStepTwo') }}</q-item-label>
                   <q-item-label caption>
                     <p>{{ $tr('isite.cms.modal.syncBodyStepTwo') }}</p>
+                    <!--Action to export dependencies-->
                     <q-btn class="q-mt-sm" color="green" @click="synchronizableFile('export', true)" rounded
                            unelevated size="13px" padding="xs 18px" :disable="!canSyncData">
                       <div v-if="canSyncData || params.isRunning !== 'dependencies'" class="row items-center no-wrap">
@@ -118,6 +126,7 @@
                 </q-item-section>
               </q-item>
               <q-separator spaced/>
+              <!--Important Note-->
               <q-item>
                 <q-item-section avatar>
                   <q-icon name="fa-light fa-circle-exclamation"/>
@@ -130,10 +139,12 @@
             </q-list>
           </div>
 
-          <div class="text-left col-12 q-mt-lg q-mb-sm q-px-md">
+          <!--Export Entity-->
+          <div class="text-left col-12 q-mt-lg q-mb-sm q-px-md" v-if="supportedActions.export">
             <b class="text-blue-grey">{{ $tr('isite.cms.modal.exportDataTitle') }}</b>
             <p class="q-my-sm">{{ $tr('isite.cms.modal.exportDataBody') }}</p>
 
+            <!--Action to export entity-->
             <q-btn color="green" @click="synchronizableFile('export')" rounded unelevated size="13px"
                    padding="xs 18px" :disable="!canSyncData">
               <div v-if="canSyncData || params.isRunning !== 'export'" class="row items-center no-wrap">
@@ -147,10 +158,12 @@
 
           </div>
 
-          <div v-if="allowImport.exclude" class="text-left col-12 q-mt-lg q-mb-sm q-px-md">
+          <!--Import Entity-->
+          <div v-if="supportedActions.import" class="text-left col-12 q-mt-lg q-mb-sm q-px-md">
             <b class="text-blue-grey">{{ $tr('isite.cms.modal.importDataTitle') }}</b>
             <p class="q-my-sm">{{ $tr('isite.cms.modal.importDataBody') }}</p>
 
+            <!--Action to import entity-->
             <q-btn  color="green" @click="synchronizableFile('import')" rounded unelevated size="13px" padding="xs 18px"
                     :disable="!canSyncData">
               <div v-if="canSyncData || params.isRunning !== 'import'" class="row items-center no-wrap">
@@ -219,11 +232,23 @@ export default {
       }
     },
     //Allows to know who can have the import button and who will have additional information
-    allowImport() {
+    supportedActions() {
       const entity = this.routeParams?.entity
+
+      const configs = this.getConfigs();
+
+      //Get name of {module}_syn{entity}
+      const name = this.getName()
+
+      // Get Config of specifyc sync
+      const syncConfig = configs?.synchronizable?.entities[name];
+      //Get supported actions of sync
+      const actions = syncConfig.supportedActions;
+
       return {
-        exclude: !['categories'].includes(entity),
-        moreInfoProducts: ['products'].includes(entity)
+        import: !!actions.includes('import'),
+        export: !!actions.includes('export'),
+        dependencies: !!syncConfig.dependencies
       }
     },
     //Know if the process is running
@@ -241,7 +266,7 @@ export default {
       }
     },
     hasNewUpdates() {
-      return this.params.templateId === null
+      return this.params.baseTemplateId === null
     },
   },
   methods: {
@@ -310,14 +335,17 @@ export default {
         this.$crud.post('apiRoutes.qsite.generateFile', requestParams).then(response => {
           this.$alert.success({message: this.$tr('isite.cms.modal.generateSuccess')})
           this.getData()
-        }).catch(error => this.$alert.error({message: error}))
+        }).catch(error => {
+          this.$alert.error({message: error})
+          this.loading = false
+        })
       }
     },
     //Sync file to export/import
     synchronizableFile(type, exportDependencies = false) {
       this.loading = true
       // Get name of file to Export
-      let nameFile = `${this.routeParams.module}_sync${this.routeParams.entity[0].toUpperCase()}${this.routeParams.entity.slice(1)}`;
+      let nameFile = this.getName();
 
       // Make request to Sync data
       const requestParams = {
@@ -345,6 +373,17 @@ export default {
     show() {
       this.showModal = true
     },
+    //Get all configs of module
+    getConfigs() {
+      const moduleParam = this.routeParams?.module
+      const module = moduleParam[0].toUpperCase() + moduleParam.slice(1)
+
+      return this.$store.state?.qsiteApp?.configs[module];
+    },
+    //Get current name for search in DB
+    getName() {
+       return `${this.routeParams.module}_sync${this.routeParams.entity[0].toUpperCase()}${this.routeParams.entity.slice(1)}`
+    }
   }
 }
 </script>
