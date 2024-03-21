@@ -387,17 +387,6 @@
           v-model="responseValue"
           :fieldProps="fieldProps"
         />
-        <!--Code Editor-->
-        <q-field v-model="responseValue" v-if="loadField('code')"
-                 v-bind="fieldProps.fieldComponent"
-                 class="field-no-padding no-border code-dinamyc-field" label="">
-          <div class="full-width">
-            <div class="text-grey-8 q-mb-xs" v-if="fieldProps.field.label">
-              {{ fieldProps.field.label }} [{{ fieldProps.field.options.mode }}]
-            </div>
-<!--            <codemirror v-model="responseValue" :options="fieldProps.field.options"/>-->
-          </div>
-        </q-field>
 
         <!--copy-->
         <q-input v-model="responseValue" v-if="loadField('copy')" v-bind="fieldProps"
@@ -443,17 +432,6 @@ import expressionField from 'modules/qsite/_components/master/expressionField/in
 import localizedPhone from 'modules/qsite/_components/master/localizedPhone/index.vue';
 import multipleDynamicFields from 'modules/qsite/_components/master/multipleDynamicFields/views'
 import { eventBus } from 'src/plugins/utils'
-//Code mirror
-//[ptc]import {codemirror} from 'vue-codemirror'
-//[ptc]
-// import 'codemirror/lib/codemirror.css'
-// import 'codemirror/mode/css/css.js'
-// import 'codemirror/mode/sass/sass.js'
-// import 'codemirror/mode/javascript/javascript.js'
-// import 'codemirror/mode/htmlembedded/htmlembedded.js'
-// import 'codemirror/mode/php/php.js'
-// import 'codemirror/theme/base16-dark.css'
-// import 'codemirror/addon/selection/active-line.js'
 
 export default {
   name: 'dynamicField',
@@ -492,7 +470,6 @@ export default {
     googleMapMarker,
     JsonEditorVue,
     expressionField,
-    //codemirror,
     localizedPhone,
     multipleDynamicFields,
   },
@@ -1036,28 +1013,6 @@ export default {
             colorValue: getPaletteColor(color)
           }
           break;
-        case'code':
-          props = {
-            field: {
-              ...props,
-              options: {
-                tabSize: 4,
-                mode: 'text/javascript',
-                lineNumbers: true,
-                ...(props.options || {}),
-                theme: 'base16-dark',
-                styleActiveLine: true,
-                line: true,
-              }
-            },
-            fieldComponent: {
-              outlined: false,
-              borderless: true,
-              dense: true,
-              ...props
-            }
-          }
-          break;
         case'copy':
           props = {
             bgColor: 'white',
@@ -1413,9 +1368,6 @@ export default {
           break
         case 'json':
           this.responseValue = (propValue !== undefined) ? propValue : {}
-          break
-        case 'code':
-          this.responseValue = typeof propValue != "string" ? JSON.stringify(propValue) : propValue
           break
         case 'multiplier':
           this.responseValue = (Array.isArray(propValue)) ? propValue : []
