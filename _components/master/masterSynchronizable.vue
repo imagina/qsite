@@ -4,8 +4,9 @@
     <!--Content of Modal-->
     <div class="relative-position" v-if="!loading">
       <div class="row q-col-gutter-md">
+        <dynamic-field v-if="hasNewUpdates" :field="bannerConfig"/>
         <!--Generate File to Export-->
-        <div id="createFileToExportContent" class="col-12" v-if="allowCreation">
+        <div id="createFileToExportContent" class="col-12" v-if="allowCreation || hasNewUpdates">
           <!--Subtitle-->
           <div class="text-blue-grey q-mb-sm q-px-md">
             <b>{{ $tr('isite.cms.modal.welcomeMassiveSync') }}</b>
@@ -68,7 +69,7 @@
                    padding="xs sm" class="full-width" @click="generateFile"/>
           </div>
         </div>
-        <div id="exportImportFileContent" v-if="!allowCreation" class="q-mb-md col-12">
+        <div id="exportImportFileContent" v-if="!allowCreation && !hasNewUpdates" class="q-mb-md col-12">
           <div class="row text-blue-grey q-mb-sm q-px-md justify-between">
             <b>{{ $tr('isite.cms.modal.syncNow') }}</b>
 
@@ -103,11 +104,14 @@
                   <q-item-label>{{ $tr('isite.cms.modal.syncStepTwo') }}</q-item-label>
                   <q-item-label caption>
                     <p>{{ $tr('isite.cms.modal.syncBodyStepTwo') }}</p>
-                    <q-btn class="q-mt-sm" color="green" @click="synchronizableFile('export', 'Categories')" rounded
+                    <q-btn class="q-mt-sm" color="green" @click="synchronizableFile('export', true)" rounded
                            unelevated size="13px" padding="xs 18px" :disable="!canSyncData">
-                      <div class="row items-center no-wrap">
-                        <p>{{ $tr('isite.cms.label.export') }} {{ $tr('isite.cms.modal.categories') }}</p>
+                      <div v-if="canSyncData || params.isRunning !== 'dependencies'" class="row items-center no-wrap">
+                        <p>{{ $tr('isite.cms.label.export') }} {{ $tr('isite.cms.modal.dependencies') }}</p>
                         <q-icon class="q-ml-sm" size="15px" name="fa-light fa-arrow-down-to-line"/>
+                      </div>
+                      <div v-if="params.isRunning === 'dependencies'" class="row items-center no-wrap">
+                        <p>{{ $tr('isite.cms.modal.inProgress') }}</p><q-spinner size="15px" class="q-ml-sm" />
                       </div>
                     </q-btn>
                   </q-item-label>
@@ -148,7 +152,7 @@
             <p class="q-my-sm">{{ $tr('isite.cms.modal.importDataBody') }}</p>
 
             <q-btn  color="green" @click="synchronizableFile('import')" rounded unelevated size="13px" padding="xs 18px"
-                   :disable="!canSyncData">
+                    :disable="!canSyncData">
               <div v-if="canSyncData || params.isRunning !== 'import'" class="row items-center no-wrap">
                 <p>{{ $tr('isite.cms.modal.import') }}</p>
                 <q-icon class="q-ml-sm" size="15px" name="fa-light fa-arrow-up-to-line"/>
@@ -196,7 +200,7 @@ export default {
     },
     //Let's you know if the file exists or no
     allowCreation() {
-      return !this.params.sheetId
+      return !this.params.spreadsheetId
     },
     //Configuration for the dynamic field
     emailsConfig() {
@@ -225,7 +229,20 @@ export default {
     //Know if the process is running
     canSyncData() {
       return !this.params.isRunning || this.params.isRunning == 0
-    }
+    },
+    bannerConfig() {
+      return {
+        type: 'banner',
+        props: {
+          color: 'info',
+          icon: 'fas fa-exclamation-triangle',
+          message: this.$tr('isite.cms.modal.updateNewVersion')
+        }
+      }
+    },
+    hasNewUpdates() {
+      return this.params.templateId === null
+    },
   },
   methods: {
     init() {
@@ -257,7 +274,7 @@ export default {
         this.$crud.show('apiRoutes.qsite.synchronizables', nameFile, requestParams).then(response => {
           this.params = this.$clone(response.data)
           //Configure the link to access the file
-          this.linkToFile = `https://docs.google.com/spreadsheets/d/${this.params.sheetId}`
+          this.linkToFile = `https://docs.google.com/spreadsheets/d/${this.params.spreadsheetId}`
           this.$emit('input', this.$clone(response.data))
           this.loading = false
           resolve(response.data)
@@ -282,7 +299,8 @@ export default {
         const requestParams = {
           attributes: {
             module: this.routeParams.module,
-            enabled_emails: this.enabledEmails
+            enabled_emails: this.enabledEmails,
+            entity: this.routeParams.entity
           }
         }
 
@@ -296,19 +314,16 @@ export default {
       }
     },
     //Sync file to export/import
-    synchronizableFile(type, customEntity = '') {
+    synchronizableFile(type, exportDependencies = false) {
       this.loading = true
       // Get name of file to Export
       let nameFile = `${this.routeParams.module}_sync${this.routeParams.entity[0].toUpperCase()}${this.routeParams.entity.slice(1)}`;
-      // If a customEntity exists, modify the request to the custom
-      if (customEntity.length) {
-        nameFile = `${this.routeParams.module}_sync${customEntity}`
-      }
 
       // Make request to Sync data
       const requestParams = {
         attributes: {
           name: nameFile,
+          exportDependencies,
           type: type,
           requestParams: {
             "filter": {},
