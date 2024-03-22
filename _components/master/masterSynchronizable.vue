@@ -319,6 +319,7 @@ export default {
 
       if (!this.enabledEmails.length || !isCorrectEmail) {
         this.$alert.error({message: this.$tr('isite.cms.modal.registerEmails'), pos: 'bottom'})
+        this.loading = false
       } else {
         //Create request
         const requestParams = {
