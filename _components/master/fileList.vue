@@ -236,6 +236,7 @@
     <!---Audio preview-->
     <master-modal v-model="modalAudio.show" :title="`Audio | ${modalAudio.fileName}`">
       <audio controls style="width: 100%">
+        <source :src="modalAudio.src" type="audio/ogg">
         <source :src="modalAudio.src" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
@@ -410,6 +411,7 @@ export default {
       //Icons by extensions
       let iconByExtension = {
         mp3: 'fas fa-file-audio',
+        ogg: 'fas fa-file-audio',
         mp4: 'fas fa-file-video',
         pdf: 'fas fa-file-pdf',
         xlsx: 'fas fa-file-excel',
@@ -539,7 +541,7 @@ export default {
         }
       }
       //Action if is mp3
-      if (file.extension == 'mp3') {
+      if (['mp3','ogg'].includes(file.extension)) {
         this.modalAudio = {
           show: true,
           src: file.url,
