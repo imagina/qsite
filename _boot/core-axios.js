@@ -111,11 +111,11 @@ export default function ({app, router, store, Vue, ssrContext}) {
 
     //Check if the version is updated
     if (response.headers['x-app-version'] > config('app.version') && !isUpdate) {
+      isUpdate = true
 
-      if (document.getElementById('cardContent')) return
-      if (timeoutId) clearTimeout(timeoutId)
+      store.dispatch('qsiteApp/REFRESH_PAGE');
 
-      timeoutId = setTimeout(() => {
+      setTimeout(() => {
         alert.showModal({
           title: 'New update', 
           message: 'We are creating new features, please hit the Update button to get the last version!',
@@ -125,13 +125,11 @@ export default function ({app, router, store, Vue, ssrContext}) {
             label: 'Update',
             color: 'tertiary',
             handler: () => {
-              isUpdate = true
-              store.dispatch('qsiteApp/REFRESH_PAGE');
               window.location.reload();
             }
           }]
         })
-      }, 1000)
+      }, 5000)
     }
 
     //Response
