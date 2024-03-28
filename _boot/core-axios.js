@@ -13,6 +13,10 @@ export default function ({app, router, store, Vue, ssrContext}) {
   //Get base url
   let rootHost = baseUrl || (ssrContext ? ssrContext.req.get('host') : window.location.host)
   let host = rootHost
+
+  let isUpdate = false
+  let timeoutId = null;
+
   //Parse host if not exist in .env
   if (!baseUrl) {
     tagsToParceHost.forEach(tagToReplace => host = host.replace(tagToReplace, ''))
@@ -104,6 +108,30 @@ export default function ({app, router, store, Vue, ssrContext}) {
   axios.interceptors.response.use((response) => {
     //Show messages
     if (response.data && response.data.messages) showMessages(response.data.messages)
+
+    //Check if the version is updated
+    if (response.headers['x-app-version'] > config('app.version') && !isUpdate) {
+      isUpdate = true
+
+      store.dispatch('qsiteApp/REFRESH_PAGE');
+
+      setTimeout(() => {
+        alert.showModal({
+          title: 'New update', 
+          message: 'We are creating new features, please hit the Update button to get the last version!',
+          icon: 'fa-solid fa-arrows-rotate',
+          color: 'tertiary',
+          actions: [{
+            label: 'Update',
+            color: 'tertiary',
+            handler: () => {
+              window.location.reload();
+            }
+          }]
+        })
+      }, 5000)
+    }
+
     //Response
     return response;
   }, (error) => {
