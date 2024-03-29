@@ -203,7 +203,7 @@ export default {
             clearable: true,
             options: (date) => {
               let fromDate = filterDate.from ? this.$moment(filterDate.from).format('YYYY/MM/DD') : false
-              return fromDate ? (date > this.$moment(fromDate).format('YYYY/MM/DD')) : true
+              return fromDate ? (date >= this.$moment(fromDate).format('YYYY/MM/DD')) : true
             },
           }
         }

@@ -1205,7 +1205,7 @@
           "costCenters": "Cost Centers",
           "gates": "Parking Spots",
           "areas": "Areas",
-          "passengerCarrierStations": "Passenger Carrier Stations",
+          "passengerCarrierStations": "Passenger flights rules",
           "contracts": "Contracts"
         },
         "message": {}
@@ -1925,7 +1925,7 @@
         "newContractRule": "New contract rule",
         "updateContractRule": "Update contract rule",
         "sidebar": {
-          "contractRules": "Contract rules"
+          "contractRules": "Ramp contract rules"
         }
       }
     },
@@ -3743,7 +3743,7 @@
         "newContractRule": "Nueva regla de contrato",
         "updateContractRule": "Actualizar regla de contrato",
         "sidebar": {
-          "contractRules": "Reglas de contrato"
+          "contractRules": "Reglas del contrato de rampa"
         }
       }
     },
