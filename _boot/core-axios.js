@@ -14,8 +14,6 @@ export default function ({app, router, store, Vue, ssrContext}) {
   let rootHost = baseUrl || (ssrContext ? ssrContext.req.get('host') : window.location.host)
   let host = rootHost
 
-  let isUpdate = false
-  let timeoutId = null;
 
   //Parse host if not exist in .env
   if (!baseUrl) {
@@ -105,31 +103,20 @@ export default function ({app, router, store, Vue, ssrContext}) {
     return Promise.reject(error);
   });
   //========== Response interceptor
-  axios.interceptors.response.use((response) => {
+  axios.interceptors.response.use(async (response) => {
     //Show messages
     if (response.data && response.data.messages) showMessages(response.data.messages)
 
     //Check if the version is updated
-    if (response.headers['x-app-version'] > config('app.version') && !isUpdate) {
-      isUpdate = true
+    if (response.headers['x-app-version'] > config('app.version')) {
+      const isRefresh = await cache.get.item('isRefresh')
 
-      store.dispatch('qsiteApp/REFRESH_PAGE');
+      if (!isRefresh) {
+        cache.set('isRefresh', true)
+        window.location.reload()
+      }
 
-      setTimeout(() => {
-        alert.showModal({
-          title: 'New update', 
-          message: 'We are creating new features, please hit the Update button to get the last version!',
-          icon: 'fa-solid fa-arrows-rotate',
-          color: 'tertiary',
-          actions: [{
-            label: 'Update',
-            color: 'tertiary',
-            handler: () => {
-              window.location.reload();
-            }
-          }]
-        })
-      }, 5000)
+      router.push({ name: 'app.update.app' })
     }
 
     //Response

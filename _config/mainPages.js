@@ -53,4 +53,15 @@ export default {
     icon: 'fas fa-flask',
     authenticated: true,
   },
+  updateApp: {
+    permission: null,
+    activated: true,
+    path: '/update-app',
+    name: 'app.update.app',
+    layout: () => import('@imagina/qsite/_layouts/blank.vue'),
+    page: () => import('@imagina/qsite/_pages/master/updateApp.vue'),
+    title: 'sidebar.updateApp',
+    icon: 'fas fa-flask',
+    authenticated: true,
+  },
 }
