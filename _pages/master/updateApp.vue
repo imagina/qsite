@@ -37,7 +37,7 @@
                     tw-font-bold tw-mb-5
                 "
             >
-                Update available
+                {{ $tr('isite.cms.messages.updateAvailable') }}
             </h2>
             <p 
                 class="
@@ -45,8 +45,7 @@
                     tw-font-medium
                 "
             >
-                We are creating new features, please hit the Update 
-                button to get the last version!
+                {{ $tr('isite.cms.messages.refreshAppVersion') }}
             </p>
             <div class="tw-flex tw-justify-center tw-w-full">
                 <q-btn
@@ -55,7 +54,7 @@
                     color="primary"
                 >
                     <q-icon name="fa-regular fa-rocket-launch" size="16px"/>
-                    <span class="tw-ml-1.5">Update now</span>
+                    <span class="tw-ml-1.5">{{ $tr('isite.cms.messages.updateNow') }}</span>
                 </q-btn>
             </div>
         </div>

@@ -1330,7 +1330,10 @@
           "newExportHelpText": "Export <b class=\"text-blue-grey\">{pageTitle}</b> with current filters (without pagination)",
           "newExportItemHelpText": "Export <b class=\"text-blue-grey\">Record ID: {id}</b>",
           "exportReady": "Your <b>{fileName}</b> report is Ready!",
-          "noOrganization": "You do not belong to an organization"
+          "noOrganization": "You do not belong to an organization",
+          "refreshAppVersion": "We are creating new features, please hit the Update button to get the last version.",
+          "updateAvailable": "Update available",
+          "updateNow": "Update now"
         },
         "startTime": "Start time",
         "endTime": "End time",
@@ -3151,7 +3154,10 @@
           "newExportHelpText": "Exportar <b class=\"text-blue-grey\">{pageTitle}</b> con los filtros actuales (sin paginación)",
           "newExportItemHelpText": "Exportar <b class=\"text-blue-grey\">Registro ID: {id}</b>",
           "exportReady": "Tu report <b>{fileName}</b> está listo!",
-          "noOrganization": "Todavía no perteneces a una organización"
+          "noOrganization": "Todavía no perteneces a una organización",
+          "refreshAppVersion": "Estamos creando nuevas funciones. Presione el botón Actualizar para obtener la última versión.",
+          "updateAvailable": "Actualización disponible",
+          "updateNow": "Actualizar ahora"
         },
         "startTime": "Hora de inicio",
         "endTime": "Hora de finalización",
