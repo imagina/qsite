@@ -1205,7 +1205,7 @@
           "costCenters": "Cost Centers",
           "gates": "Parking Spots",
           "areas": "Areas",
-          "passengerCarrierStations": "Passenger flights rules",
+          "passengerCarrierStations": "Passenger flight rules",
           "contracts": "Contracts"
         },
         "message": {}
