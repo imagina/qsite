@@ -1,9 +1,6 @@
 import {openURL, uid} from "quasar";
-//import Vue from 'vue';
 import {AxiosInstance} from "axios";
 
-//[ptc]
-//declare module 'vue/types/vue' {
   export interface TmpVue {
     $alert: any,
     $array: any[],
@@ -25,4 +22,3 @@ import {AxiosInstance} from "axios";
     $axios: AxiosInstance,
     $auth: any
   }
-//}

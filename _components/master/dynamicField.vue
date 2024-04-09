@@ -336,15 +336,14 @@
           <schedulable v-model="responseValue" v-bind="fieldProps" @input="watchValue" class="q-mb-sm" />
         </div>
         <!--Json Editor-->
-        <q-field v-model="responseValue" v-if="loadField('json')" v-bind="fieldProps.fieldComponent"
-                 class="field-no-padding no-border code-dinamyc-field" label="">
+        <div v-if="loadField('json')" class="field-no-padding no-border code-dinamyc-field" label="">
           <div class="full-width">
             <div class="text-grey-8 q-mb-xs" v-if="fieldProps.field.label">
               {{ fieldProps.field.label }}
             </div>
             <json-editor-vue class="jsoneditor-vue" v-model="responseValue" mode="tree"/>
           </div>
-        </q-field>
+        </div>
         <!--Text Info-->
         <div id="bannerField" v-if="loadField('banner')" class="q-mb-md">
           <div class="content q-py-sm q-px-md" :style="`border-color: ${fieldProps.colorValue}`">
@@ -388,17 +387,6 @@
           v-model="responseValue"
           :fieldProps="fieldProps"
         />
-        <!--Code Editor-->
-        <q-field v-model="responseValue" v-if="loadField('code')"
-                 v-bind="fieldProps.fieldComponent"
-                 class="field-no-padding no-border code-dinamyc-field" label="">
-          <div class="full-width">
-            <div class="text-grey-8 q-mb-xs" v-if="fieldProps.field.label">
-              {{ fieldProps.field.label }} [{{ fieldProps.field.options.mode }}]
-            </div>
-<!--            <codemirror v-model="responseValue" :options="fieldProps.field.options"/>-->
-          </div>
-        </q-field>
 
         <!--copy-->
         <q-input v-model="responseValue" v-if="loadField('copy')" v-bind="fieldProps"
@@ -444,17 +432,6 @@ import expressionField from 'modules/qsite/_components/master/expressionField/in
 import localizedPhone from 'modules/qsite/_components/master/localizedPhone/index.vue';
 import multipleDynamicFields from 'modules/qsite/_components/master/multipleDynamicFields/views'
 import { eventBus } from 'src/plugins/utils'
-//Code mirror
-//[ptc]import {codemirror} from 'vue-codemirror'
-//[ptc]
-// import 'codemirror/lib/codemirror.css'
-// import 'codemirror/mode/css/css.js'
-// import 'codemirror/mode/sass/sass.js'
-// import 'codemirror/mode/javascript/javascript.js'
-// import 'codemirror/mode/htmlembedded/htmlembedded.js'
-// import 'codemirror/mode/php/php.js'
-// import 'codemirror/theme/base16-dark.css'
-// import 'codemirror/addon/selection/active-line.js'
 
 export default {
   name: 'dynamicField',
@@ -474,7 +451,7 @@ export default {
     },
     enableCache: {default: false}
   },
-  emits: ['update:modelValue','inputReadOnly','filter', 'select', 'enter'],
+  emits: ['update:modelValue','inputReadOnly','filter', 'select', 'enter', 'converted'],
   components: {
     managePermissions,
     manageSettings,
@@ -493,7 +470,6 @@ export default {
     googleMapMarker,
     JsonEditorVue,
     expressionField,
-    //codemirror,
     localizedPhone,
     multipleDynamicFields,
   },
@@ -1037,28 +1013,6 @@ export default {
             colorValue: getPaletteColor(color)
           }
           break;
-        case'code':
-          props = {
-            field: {
-              ...props,
-              options: {
-                tabSize: 4,
-                mode: 'text/javascript',
-                lineNumbers: true,
-                ...(props.options || {}),
-                theme: 'base16-dark',
-                styleActiveLine: true,
-                line: true,
-              }
-            },
-            fieldComponent: {
-              outlined: false,
-              borderless: true,
-              dense: true,
-              ...props
-            }
-          }
-          break;
         case'copy':
           props = {
             bgColor: 'white',
@@ -1103,6 +1057,7 @@ export default {
           //Convert value and id to string
           if (item.value || item.value >= 0) item.value = item.value.toString()
           if (item.id || item.id >= 0) item.id = item.id.toString()
+          if (item.label) item.label = item.label.toString()
           //convert children
           if (item.children) item.children = toString(item.children)
           this.addImageField(item)
@@ -1414,9 +1369,6 @@ export default {
         case 'json':
           this.responseValue = (propValue !== undefined) ? propValue : {}
           break
-        case 'code':
-          this.responseValue = typeof propValue != "string" ? JSON.stringify(propValue) : propValue
-          break
         case 'multiplier':
           this.responseValue = (Array.isArray(propValue)) ? propValue : []
           break
@@ -1677,7 +1629,7 @@ export default {
           let responseValueTmp = (this.responseValue || [])
           responseValueTmp = Array.isArray(responseValueTmp) ? responseValueTmp : [responseValueTmp]
           const includeAll = responseValueTmp.every(val =>
-              this.rootOptions.map(val => (val.value || val.id).toString()).includes(val.toString())
+              this.rootOptions.map(val => (val.value || val.id || '' ).toString()).includes(val.toString())
           )
           //Validate if there is the option for the value
           if (loadOptions.filterByQuery && !includeAll) {

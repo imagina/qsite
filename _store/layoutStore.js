@@ -1,7 +1,6 @@
-import Vue, {reactive, getCurrentInstance} from "vue";
+import { reactive } from "vue";
 import baseService from 'modules/qcrud/_services/baseService.js';
 
-//[ptc]const proxy = getCurrentInstance().appContext.config.globalProperties
 const data = {
   title: "Layouts",
   description: null,
@@ -26,9 +25,6 @@ const state = reactive({
 });
 
 export default function layoutStore() {
-  function getPrototype() {
-    //[ptc]return proxy;
-  }
 
   function getLayouts() {
     return new Promise(resolve => {

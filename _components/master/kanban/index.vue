@@ -177,6 +177,10 @@ export default {
     automation: {
       type: Boolean,
       default: () => false
+    }, 
+    filter: {
+      type: Object,
+      default: () => ({})
     }
   },
   provide() {
@@ -203,7 +207,7 @@ export default {
       getStatus: this.getStatus
     };
   },
-  inject: ['funnelPageAction', 'fieldActions', 'filterPlugin'],
+  inject: ['funnelPageAction', 'fieldActions'],
   components: {
     kanbanColumn,
     draggable,
@@ -338,7 +342,7 @@ export default {
       const route = this.routes.column;
       const parameters = { params: {}, refresh };
       parameters.params.include = route.include;
-      const id = { id: this.filterPlugin.values.statusId } || {};
+      const id = { id: this.filter.statusId } || {};      
       parameters.params.filter = {
         [route.filter.name]: this.funnelSelectedComputed, ...id,
         order: { field: 'type', way: 'asc' }
@@ -418,7 +422,7 @@ export default {
         parameters.params.include = route.include;
         parameters.params.filter = {
           [route.filter.name]: column.id,
-          ...this.filterPlugin.values,
+          ...this.filter,
           ...search,
           order: { way: 'desc' }
         };

@@ -181,9 +181,9 @@
           </div>
         </div>
       </div>
-      <div class="c-plus">
-        <q-btn
-          flat
+      <div class="c-plus" v-if="permissionRequestable.create">
+        <q-btn 
+          flat 
           class="
             tw-w-full
             hover:tw-text-white
@@ -214,6 +214,7 @@
           @end="move"
           @change="countTotalRecords"
           item-key="id"
+          :disabled="!permissionStatuses.edit"
         >
           <template #item="{ element }">
             <kanbanCard
@@ -341,16 +342,33 @@ export default {
   },
   computed: {
     allowCreateRequestable() {
-      return typeof this.columnData.id == 'string' || !this.$hasAccess('requestable.requestables.create');
+      return typeof this.columnData.id == 'string' || !this.permissionRequestable.create;
+    },
+    permissionRequestable() {
+      return {
+        index: this.$hasAccess('requestable.requestables.index'),
+        create: this.$hasAccess('requestable.requestables.create'),
+        edit: this.$hasAccess('requestable.requestables.edit'),
+        delete: this.$hasAccess('requestable.requestables.delete')
+      }
+    },
+    permissionStatuses() {
+      return {
+        index: this.$hasAccess('requestable.statuses.index'),
+        create: this.$hasAccess('requestable.statuses.create'),
+        edit: this.$hasAccess('requestable.statuses.edit'),
+        delete: this.$hasAccess('requestable.statuses.delete'),
+        moveRequestables: this.$hasAccess('requestable.requestables.move')
+      }
     },
     allowCreateStatuses() {
-      if(this.$hasAccess('requestable.statuses.create')) {
+      if(this.permissionStatuses.create) {
         return !this.disableCrud && this.hover && this.columnData.type !== 2;
       }
       return false;
     },
     allowEditStatuses() {
-      if(this.$hasAccess('requestable.statuses.edit')) {
+      if(this.permissionStatuses.edit) {
         return !this.disableCrud && this.arrowKanbanNameHover && !this.columnData.new
       }
       return false;

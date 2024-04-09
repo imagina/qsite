@@ -115,7 +115,7 @@ export default {
   computed: {
     steps() {
       //Get setting to validate if show the IA step
-      const contentGenerationWithAI = !!parseInt(this.$store.getters['qsiteApp/getSettingValueByName']('isite::contentGenerationWithAI'))
+      const contentGenerationWithAI = !!parseInt(this.$getSetting('isite::contentGenerationWithAI'))
       //Filter the steps
       return modelSteps.filter(step => {
         if(step.id == STEP_AI && !contentGenerationWithAI) return false

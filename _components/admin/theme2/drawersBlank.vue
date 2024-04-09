@@ -2,7 +2,7 @@
     <div id="blackDrawers2">
       <!--Master filter-->
       <q-drawer bordered id="drawerFilterMaster" v-model="drawer.filter" side="right" v-if="filter.load" :overlay="false">
-        <master-filter/>
+        
       </q-drawer>
     </div>
   </template>
@@ -10,7 +10,7 @@
   //mixins
   import sidebarMixins from 'modules/qsite/_mixins/sidebarMixins'
   //Components
-  import masterFilter from 'modules/qsite/_components/master/masterFilter'
+  
   import { eventBus } from 'src/plugins/utils'
 
   export default {
@@ -20,7 +20,7 @@
     },
     mixins:[sidebarMixins],
     props: {},
-    components: {masterFilter},
+    components: {},
     mounted() {
       this.$nextTick(function () {
         this.init()
@@ -51,7 +51,7 @@
         return  this.$getSetting('isite::secondaryContrast')
       },
       minilogo() {
-        return this.$store.getters['qsiteApp/getSettingMediaByName']('isite::logoIadminSM')['path']
+        return this.$getMediaSetting('isite::logoIadminSM')['path']
       },
       routeSubHeader() {
         this.drawer.recommendation = false

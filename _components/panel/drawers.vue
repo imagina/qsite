@@ -82,11 +82,6 @@
       </q-no-ssr>
     </q-drawer>
 
-    <!--Master filter-->
-    <q-drawer id="drawerFilterMaster" v-model="drawer.filter" bordered side="right" v-if="filter.load">
-      <master-filter/>
-    </q-drawer>
-
     <!--checking-->
     <q-drawer id="drawerCheckinMaster" v-model="drawer.checkin" side="right" bordered
               v-if="(appConfig.mode == 'ipanel') && $hasAccess('icheckin.shifts.create')">
@@ -113,7 +108,6 @@ import sidebarMixins from 'modules/qsite/_mixins/sidebarMixins'
 import configList from 'modules/qsite/_components/master/configList'
 import chatList from 'modules/qchat/_components/drawerChatList'
 import menuList from 'modules/qsite/_components/master/recursiveItem'
-import masterFilter from 'modules/qsite/_components/master/masterFilter'
 import checkin from 'modules/qcheckin/_components/checkin'
 import masterRecommendation from 'modules/qsite/_components/master/masterRecommendations'
 import masterNotifications from 'modules/qnotification/_components/drawerNotifications'
@@ -126,7 +120,7 @@ export default {
   },
   mixins: [sidebarMixins],
   props: {},
-  components: {menuList, configList, chatList, masterFilter, checkin, masterRecommendation, masterNotifications},
+  components: {menuList, configList, chatList, checkin, masterRecommendation, masterNotifications},
   mounted() {
     this.$nextTick(function () {
       this.init()

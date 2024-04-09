@@ -65,38 +65,17 @@
     >
       {{ description }}
     </span>
-    <!--Filter data-->
-    <div class="col-12 tw-mt-3" v-if="filter.hasValues || Object.keys(quickFilters).length">
-      <!--<q-separator class="q-mb-sm"/>-->
-      <div class="text-blue-grey ellipsis text-caption items-center row">
-        <q-icon name="fa-light fa-filter" class="q-mr-xs" color="amber" size="18px" />
-        <b>{{ $trp('isite.cms.label.filter') }}:</b>
-        <template v-for="(item, itemKey) in filter.readValues" :key="itemKey">
-          <label v-if="item?.value && item.label !== ''" class="q-ml-xs text-grey-7">
-            {{ item.label }} {{ item.value }},
-          </label>
-        </template>
-      </div>
-      <!-- Quick Filters-->
-      <div v-if="Object.keys(quickFilters).length" class="row q-col-gutter-md q-pt-sm">
-        <dynamic-field v-for="(field, keyField) in quickFilters" :key="keyField" :field="field"
-                       v-model="filterData[keyField]"
-                       :class="field.colClass"
-                       @update:modelValue="emitFilter"
-                       :keyField="keyField"
-        />
-      </div>
-    </div>
     <!-- Export Component -->
     <master-export
       v-model="exportParams"
       ref="exportComponent"
+      :dynamicFilterValues="dynamicFilterValues"
     />
     <!-- Master Filter Component -->
-    <master-filter
+    <!--<master-filter
       v-if="filter.load"
       :show="drawer.filter"
-    />
+    />-->
     <master-synchronizable
       v-model="syncParams"
       v-if="$hasAccess('isite.synchronizables.index')"
@@ -108,7 +87,7 @@
 //Components
 import masterExport from 'modules/qsite/_components/master/masterExport';
 import masterSynchronizable from 'modules/qsite/_components/master/masterSynchronizable';
-import masterFilter from 'modules/qsite/_components/master/masterFilter';
+//import masterFilter from 'modules/qsite/_components/master/masterFilter';
 import { eventBus } from 'src/plugins/utils';
 import appConfig from 'src/setup/app'
 
@@ -138,8 +117,23 @@ export default {
       }
     },
     expiresIn: {type: Number},
+    dynamicFilter: { 
+      required: false,
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }, 
+    dynamicFilterValues: {
+      required: false,
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
-  emits: ['search', 'new', 'refresh'],
+  emits: ['search', 'new', 'refresh', 'toggleDynamicFilterModal'],
+  /*
   inject: {
     filterPlugin: {
       from: 'filterPlugin',
@@ -155,7 +149,8 @@ export default {
       }
     }
   },
-  components: { masterExport, masterSynchronizable, masterFilter },
+  */
+  components: { masterExport, masterSynchronizable },
   mounted() {
     this.$nextTick(function() {
       this.init();
@@ -251,13 +246,14 @@ export default {
         //Filter
         {
           label: this.$tr('isite.cms.label.filter'),
-          vIf: (this.filter.load && !excludeActions.includes('filter') && !this.isAppOffline),
+          vIf: ( Object.keys(this.dynamicFilter).length && !excludeActions.includes('filter') && !this.isAppOffline),
           props: {
             icon: 'fa-light fa-filter',
             id: 'filter-button-crud'
-          },
-          action: () => this.toggleMasterFilter(true)
+          },          
+          action: () => this.$emit('toggleDynamicFilterModal')
         },
+
         //Refresh
         {
           label: this.$trp('isite.cms.label.refresh'),
@@ -376,11 +372,13 @@ export default {
   },
   methods: {
     init() {
-      this.handlerEvent();
+      //this.handlerEvent();
     },
+    /*
     handlerEvent() {
       eventBus.on('toggleMasterDrawer', () => this.toggleMasterFilter(false));
     },
+    */
     refreshByTime(time) {
       this.timeRefresh = time;
       this.titleRefresh = time === 0

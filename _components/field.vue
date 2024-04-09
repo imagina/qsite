@@ -66,7 +66,6 @@
     <tree-select
       v-if="['select', 'select-multi'].indexOf(setting.type) >= 0"
       :multiple="setting.type === 'select-multi'"
-      :append-to-body="true"
       :options="options"
       :value-consists-of="setting.valueCconsistsOf ? setting.valueCconsistsOf : 'LEAF_PRIORITY'"
       @update:modelValue="emitValue()"

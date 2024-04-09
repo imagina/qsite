@@ -34,28 +34,30 @@
           </div>
           <!--Last Report information-->
           <div id="lastReportContent" v-if="fileExport.length" class="q-mb-md col-12">
-            <div v-for="(file, keyFile) in fileExport" :key="keyFile">
-              <q-separator class="q-my-md" />
-              <!--Title-->
-              <div class="text-blue-grey q-mb-sm">
-                <b>{{ $tr('isite.cms.messages.lastReport') }}{{ file.fileFormat ? ` (${file.fileFormat})` : '' }}</b>
+            <template v-for="(file, keyFile) in fileExport" :key="keyFile">
+              <div v-if="file.path">
+                <q-separator class="q-my-md"/>
+                <!--Title-->
+                <div class="text-blue-grey q-mb-sm">
+                  <b>{{ $tr('isite.cms.messages.lastReport') }}{{ file.fileFormat ? ` (${file.fileFormat})` : '' }}</b>
+                </div>
+                <!--Date-->
+                <div class="text-caption">
+                  <label class="text-blue-grey">{{ $tr('isite.cms.label.date') }}:</label>
+                  {{ $trd(file.lastModified, {type: 'long'}) }}
+                </div>
+                <!--Size-->
+                <div class="text-caption">
+                  <label class="text-blue-grey">{{ $tr('isite.cms.label.size') }}:</label>
+                  {{ $helper.formatBytes(file.size) }}
+                </div>
+                <!--Action-->
+                <div class="text-right q-mt-md">
+                  <q-btn :label="$tr('isite.cms.label.download')" color="green" rounded unelevated size="13px"
+                         padding="xs sm" @click="$helper.downloadFromURL(file.path)"/>
+                </div>
               </div>
-              <!--Date-->
-              <div class="text-caption">
-                <label class="text-blue-grey">{{ $tr('isite.cms.label.date') }}:</label>
-                {{ $trd(file.lastModified, { type: 'long' }) }}
-              </div>
-              <!--Size-->
-              <div class="text-caption">
-                <label class="text-blue-grey">{{ $tr('isite.cms.label.size') }}:</label>
-                {{ $helper.formatBytes(file.size) }}
-              </div>
-              <!--Action-->
-              <div class="text-right q-mt-md">
-                <q-btn :label="$tr('isite.cms.label.download')" color="green" rounded unelevated size="13px"
-                       padding="xs sm" @click="$helper.downloadFromURL(file.path)" />
-              </div>
-            </div>
+            </template>
           </div>
         </div>
       </div>
@@ -71,23 +73,8 @@ export default {
     eventBus.off('isite.export.ready');
   },
   props: {
-    exportItem: { type: Boolean, default: false }
-  },
-  emits: ['update:modelValue'],
-  inject: {
-    filterPlugin: {
-      from: 'filterPlugin',
-      default: {
-        name: false,
-        fields: {},
-        values: {},
-        callBack: false,
-        pagination: {},
-        load: false,
-        hasValues: false,
-        storeFilter: false
-      }
-    }
+    exportItem: {type: Boolean, default: false},
+    dynamicFilterValues: {}
   },
   components: {},
   watch: {
@@ -249,9 +236,9 @@ export default {
     //Get data
     getExportData() {
       return new Promise(async (resolve, reject) => {
-        if (!this.params) return resolve(false);
-        this.loading = true;
-        const filter = await this.storeFilter();
+        if (!this.params) return resolve(false)
+        this.loading = true
+        const filter = this.dynamicFilterValues;
         //Request params
         let requestParams = {
           refresh: true,
@@ -275,8 +262,8 @@ export default {
       return new Promise(async (resolve, reject) => {
         this.loading = true;
         //Instance de apiRoute
-        const apiRoute = this.params.apiRoute || 'apiRoutes.qsite.export';
-        const filter = await this.storeFilter();
+        const apiRoute = this.params.apiRoute || 'apiRoutes.qsite.export'
+        const filter = this.dynamicFilterValues;
         //Request params
         let requestParams = {
           exportParams: {
@@ -335,6 +322,7 @@ export default {
         console.log(error);
       }
     },
+    /*
     async storeFilter() {
       const filterClone = this.filterPlugin.storeFilter
         ? { values: await this.$helper.convertStringToObject() }
@@ -354,6 +342,7 @@ export default {
       }
       return filter;
     }
+    */
   }
 };
 </script>

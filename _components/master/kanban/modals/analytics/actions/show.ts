@@ -1,6 +1,7 @@
-import Vue from 'vue';
 import crud from 'modules/qcrud/_services/baseService.js'
 import store from '../store/index'
+import { i18n, alert } from 'src/plugins/utils'
+
 export default async function showAnalytics(criteria: string = 'leadsByStatus') {
     try {
         const filters = {
@@ -23,8 +24,7 @@ export default async function showAnalytics(criteria: string = 'leadsByStatus') 
         store.loading = false;
     } catch (error) {
         store.loading = false;
-        //[ptc]
-        //Vue.prototype.$alert.error({message:  Vue.prototype.$tr('isite.cms.message.errorRequest'), pos: 'bottom'})
+        alert.error({message:  i18n.tr('isite.cms.message.errorRequest'), pos: 'bottom'})
         return { data: {} }
     }
 }

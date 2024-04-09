@@ -122,7 +122,7 @@ export default {
       return this.$getSetting('isite::secondaryContrast')
     },
     minilogo() {
-      return this.$store.getters['qsiteApp/getSettingMediaByName']('isite::logoIadminSM')['path']
+      return this.$getMediaSetting('isite::logoIadminSM')['path']
     },
     routeSubHeader() {
       this.drawer.recommendation = false
