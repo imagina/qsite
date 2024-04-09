@@ -636,18 +636,25 @@ export default {
       //Emit selected files
       this.$emit('selected', this.$clone(this.selectedFiles));
     },
-    downloadFile(file) {
-      const fileUrl = file.url;
-      const fileName = file.filename;
-      const downloadLink = document.createElement('a');
-      downloadLink.href = fileUrl;
-      downloadLink.download = fileName;
-      downloadLink.target = '_blank';
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      setTimeout(() => {
-        document.body.removeChild(downloadLink);
-      }, 100);
+    async downloadFile(file) {
+      const url = file.url;
+      const filename = file.filename;
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const urlObject = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = urlObject;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => {
+          document.body.removeChild(downloadLink);
+        }, 100);
+      } catch (error) {
+        this.$apiResponse.handleError('Error downloading file');
+      }
     },
     markAsSelected(event, name) {
       if (event?.pointerType == 'touch') return false;
