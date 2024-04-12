@@ -378,8 +378,8 @@
           "repeatAction": "Tour",
           "repeatActionDescription": "From here you can repeat this tour whenever you want"
         },
-        'documentation': {
-          'categories': "The gamification module is used to improve the user experience in the application, With this functionality it is possible to create tours, popups, or specific activities per module. It is possible to create a category that current as the grouping element and assigned to this one or several activities that the user will be available to view."
+        "documentation": {
+          "categories": "The gamification module is used to improve the user experience in the application, With this functionality it is possible to create tours, popups, or specific activities per module. It is possible to create a category that current as the grouping element and assigned to this one or several activities that the user will be available to view."
         }
       }
     },
@@ -522,9 +522,9 @@
           "rejected": "Your ad could not be verified, check your information and recreate the request for it to be reviewed"
         },
         "documentation": {
-          'ads': "Ads are published on your WEB site. They are used to promote or boost some external product to the application",
+          "ads": "Ads are published on your WEB site. They are used to promote or boost some external product to the application",
           "categories": "It is possible to create categories, with a name, description and organize them in tree mode (parent categories and child categories) in order to categorize all your plans.",
-          'ups': "When an announcement is published, it is put on a list that constantly grows with each new ad, with this functionality of Uploads it is possible to tell your application to improve the position of each ad with some definite rules,"
+          "ups": "When an announcement is published, it is put on a list that constantly grows with each new ad, with this functionality of Uploads it is possible to tell your application to improve the position of each ad with some definite rules,"
         }
       }
     },
@@ -614,8 +614,8 @@
           "codeAds": "Code ADS",
           "showAsPopup": "Show as Popup"
         },
-        'documentation': {
-          'banners': "Banners are static elements in defined locations within the WEB site that display a normally large advertising content"
+        "documentation": {
+          "banners": "Banners are static elements in defined locations within the WEB site that display a normally large advertising content"
         }
       }
     },
@@ -985,7 +985,7 @@
           "warehouse": "Warehouse | Warehouses",
           "bannerPriceList": "Head to your personal product list to start exploring. Enjoy the best prices!",
           "explorePriceList": "Browse Product List",
-          'dataSheet': 'Data sheet'
+          "dataSheet": "Data sheet"
         }
       }
     },
@@ -1025,8 +1025,8 @@
         "updateDocument": "Update Document",
         "newCategory": "New Category",
         "updateCategory": "Update Category",
-        'documentation': {
-          'documents': "The documents that are published with this module have extra functionalities when it comes to controlling which users, user groups or roles can have access to these both in your CMS and on your WEB site",
+        "documentation": {
+          "documents": "The documents that are published with this module have extra functionalities when it comes to controlling which users, user groups or roles can have access to these both in your CMS and on your WEB site",
           "categories": "It is possible to create categories, with a name, description and organize them in tree mode (parent categories and child categories) in order to categorize all your documents."
         }
       }
@@ -1209,8 +1209,8 @@
             "createdBy": "Created by"
           }
         },
-        'hints': {
-          'categoryFormField': 'If you leave this field empty we will create an initial form for your funnel.'
+        "hints": {
+          "categoryFormField": "If you leave this field empty we will create an initial form for your funnel."
         }
       }
     },
@@ -2152,7 +2152,7 @@
         "reportQueue": "You already have a report in progress, you requested it on <b>{date}</b>. As soon as it is finished we will enable the 'create' function for you... We do this to make the app work much better!",
         "sessionFound": "There is an active session",
         "alreadyInUse": "Oops! It looks like the name you've chosen is already in use. Could you please try selecting a different name? We want to make sure your unique identity shines bright!",
-        "usersToNotify": 'Users To notify',
+        "usersToNotify": "Users To notify",
         "emailsToNotify": "Emails To Notify",
         "dateCache": "Last update: {date}. Refresh whenever you want.",
         "modal": {
@@ -2486,8 +2486,8 @@
           "redirectFrom": "Redirigir desde",
           "redirectTo": "Redirigir a"
         },
-        'documentation': {
-          'redirects': "Cuando se elimina o cambia alguna pagina, como buena practica para un buen SEO de tu sitio WEB es necesario crear redirecciones de estas url para que siempre carguen un contenido en tu sitio WEB. Las redirecciones ayudan con esto"
+        "documentation": {
+          "redirects": "Cuando se elimina o cambia alguna pagina, como buena practica para un buen SEO de tu sitio WEB es necesario crear redirecciones de estas url para que siempre carguen un contenido en tu sitio WEB. Las redirecciones ayudan con esto"
         }
       }
     },
@@ -2722,7 +2722,7 @@
           "repeatActionDescription": "Desde aquí puedes repetir este tour cuando quieras"
         },
         "documentation": {
-          'categories': "El modulo de gamificación se usa para mejorar la experiencia del usuario en la aplicación, con está funcionalidad es posible crear tours, popups, o actividades especificas por modulo. Es posible crear una categoría que actual como el elemento agrupador y asignado a esta una o varias actividades que el usuario tendrá disponible para ver."
+          "categories": "El modulo de gamificación se usa para mejorar la experiencia del usuario en la aplicación, con está funcionalidad es posible crear tours, popups, o actividades especificas por modulo. Es posible crear una categoría que actual como el elemento agrupador y asignado a esta una o varias actividades que el usuario tendrá disponible para ver."
         }
       }
     },
@@ -2865,9 +2865,9 @@
           "rejected": "Tu anuncio no pudo ser verificado, revisa tu información y vuelve a crear la petición para que sea revisado"
         },
         "documentation": {
-          'ads': "Los anuncios son publicados en tu sitio WEB. Son usados para promover o impulsar algún producto externo a la aplicación",
+          "ads": "Los anuncios son publicados en tu sitio WEB. Son usados para promover o impulsar algún producto externo a la aplicación",
           "categories": "Es posible crear categories, con un nombre, descripción y organizarlas en modo de árbol (categorías padres y categorías hijas) con el fin de categorizar todos tus planes.",
-          'ups': "Cuando un anunció es publicado, se pone en una lista que crece constantemente con cada nuevo anuncio, con está funcionalidad de Subidas es posible decirle a tu aplicación que mejore la posición de cada anunció con algunas reglas definidas"
+          "ups": "Cuando un anunció es publicado, se pone en una lista que crece constantemente con cada nuevo anuncio, con está funcionalidad de Subidas es posible decirle a tu aplicación que mejore la posición de cada anunció con algunas reglas definidas"
         }
       }
     },
@@ -2957,8 +2957,8 @@
           "codeAds": "Codigo ADS",
           "showAsPopup": "Mostrar como ventana emergente"
         },
-        'documentation': {
-          'banners': "Los banners son elementos estáticos en ubicaciones definidas dentro del sitio WEB que muestran un contenido normalmente publicitario de gran tamaño"
+        "documentation": {
+          "banners": "Los banners son elementos estáticos en ubicaciones definidas dentro del sitio WEB que muestran un contenido normalmente publicitario de gran tamaño"
         }
       }
     },
@@ -3166,7 +3166,7 @@
           "warehouse": "Bodega | Bodegas",
           "bannerPriceList": "Dirígete a tu lista personal de productos para empezar a explorar. ¡Disfruta de los mejores precios!",
           "explorePriceList": "Explorar Lista de Productos",
-          'dataSheet': 'Ficha técnica'
+          "dataSheet": "Ficha técnica"
         },
         "form": {
           "formContent": "Aquí podrás encontrar la información relacionada al nombre, slug, resumen y descripción.",
@@ -3559,7 +3559,7 @@
           }
         },
         "hints": {
-          "categoryFormField": 'Si dejas este campo vacío nosotros crearemos un formulario inicial para tu embudo.'
+          "categoryFormField": "Si dejas este campo vacío nosotros crearemos un formulario inicial para tu embudo."
         }
       }
     },
@@ -4367,7 +4367,7 @@
         "reportQueue": "Ya tienes un reporte en progreso, lo solicitaste en <b>{date}</b>. Tan pronto este termine habilitaremos la función de 'crear' para ti... Esto lo hacemos para que la aplicación funcione mucho mejor!",
         "sessionFound": "Hay una sesión activa",
         "alreadyInUse": "¡Ups! Parece que el nombre que has elegido ya está en uso. ¿Podrías intentar seleccionar otro nombre? ¡Queremos asegurarnos de que tu identidad única brille con fuerza!",
-        "usersToNotify": 'Usuarios a Notificar',
+        "usersToNotify": "Usuarios a Notificar",
         "emailsToNotify": "Emails a Notificiar",
         "dateCache": "Última actualización: {date}. Refresca cuando quieras.",
         "modal": {
@@ -4407,8 +4407,8 @@
           "dependencies": "Dependencias",
           "updateNewVersion": "<b>¡Tenemos nuevas mejoras para ti!</b><br/>Es necesario actualizar uno de tus archivos. Es importante que sepas que al realizar esta actualización, la información contenida en el archivo actual será borrada. Te recomendamos respaldar cualquier información relevante que desees conservar antes de proceder con la actualización."
         },
-        'documentation': {
-          'settings': "Algunos módulos de tu aplicación cuentan con configuraciones globales extra. Estas configuraciones te permiten editar algunas características como el color, nombre, logos, etc..."
+        "documentation": {
+          "settings": "Algunos módulos de tu aplicación cuentan con configuraciones globales extra. Estas configuraciones te permiten editar algunas características como el color, nombre, logos, etc..."
         }
       }
     },
