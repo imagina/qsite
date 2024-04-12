@@ -9,10 +9,15 @@
           "providers": "Providers"
         },
         "message": {
-          "noMessages": "There isn't messages..."
+          "noMessages": "There isn't messages...",
+          "couldNotSend": "Message could not be sent"
         },
         "newProvider": "New Provider",
-        "updateProvider": "Update Provider"
+        "updateProvider": "Update Provider",
+        "label": {
+          "resend": "Resend",
+          "sendMessage": "Send a Message..."
+        }
       }
     },
     "ievent": {
@@ -329,6 +334,9 @@
         "activities": {
           "repeatAction": "Tour",
           "repeatActionDescription": "From here you can repeat this tour whenever you want"
+        },
+        'documentation': {
+          'categories': "The gamification module is used to improve the user experience in the application, With this functionality it is possible to create tours, popups, or specific activities per module. It is possible to create a category that current as the grouping element and assigned to this one or several activities that the user will be available to view."
         }
       }
     },
@@ -377,7 +385,8 @@
             "full": "Full Width"
           },
           "successText": "Success text",
-          "submitText": "Submit text"
+          "submitText": "Submit text",
+          "formNotExist": "Form ID: {id} <b class='text-red-7'>(Not exist)</b>"
         },
         "message": {
           "helpToOptionsField": "Type the option and press enter...",
@@ -389,6 +398,10 @@
         "feedBack": {
           "newForm": "Fill another Form",
           "message": "¡Done!, Your Form has been successfully sent!"
+        },
+        "documentation": {
+          "forms": "Forms allow you to capture information of different types, you can create forms and configure each field of the, names, types... the forms can be used by other modules as relations to allow capturing more information than the standard in each case.",
+          "leads": "Leads are the information captured from the forms, you can list, filter and export this information, as well as identifying from which form I enter this information."
         }
       }
     },
@@ -464,6 +477,11 @@
           "noRequested": "Your ad is not verified yet, you must create a request for it to be reviewed",
           "requested": "Just a little more, we are verifying your ad",
           "rejected": "Your ad could not be verified, check your information and recreate the request for it to be reviewed"
+        },
+        "documentation": {
+          'ads': "Ads are published on your WEB site. They are used to promote or boost some external product to the application",
+          "categories": "It is possible to create categories, with a name, description and organize them in tree mode (parent categories and child categories) in order to categorize all your plans.",
+          'ups': "When an announcement is published, it is put on a list that constantly grows with each new ad, with this functionality of Uploads it is possible to tell your application to improve the position of each ad with some definite rules,"
         }
       }
     },
@@ -534,7 +552,8 @@
         "auction": "Auction | Auctions",
         "bid": "Bids | Bids",
         "setAsWinner": "Set as Winner",
-        "existBid": "Already exist a bid from this auction"
+        "existBid": "Already exist a bid from this auction",
+        "description": "Description"
       }
     },
     "ibanners": {
@@ -551,6 +570,9 @@
         "label": {
           "codeAds": "Code ADS",
           "showAsPopup": "Show as Popup"
+        },
+        'documentation': {
+          'banners': "Banners are static elements in defined locations within the WEB site that display a normally large advertising content"
         }
       }
     },
@@ -598,7 +620,13 @@
             "success": "Everything is ready! We take care of creating Zoom meetings for you ..."
           }
         },
-        "helpShareUserResource": "You can copy the links of your services and/or your resource to share them in an easier way"
+        "helpShareUserResource": "You can copy the links of your services and/or your resource to share them in an easier way",
+        "documentation": {
+          "categories": "It is possible to create categories, with a name, description and organize them in tree mode (parent categories and child categories) in order to categorize all your services.",
+          "services": "These are the services that your users can book within your application, these services include a time that can last each turn and a price in addition to all the necessary information to describe it",
+          "resources": "The resource is in charge of executing a reserved service, each resource can have one or more assigned services but can perform only one at a time, in each resource it is possible to configure a schedule of availability so that one of your services can be reserved.",
+          "reservations": "When a user purchases a service it is called a `Reservation` so the application is able to identify which service a user reserved next to her resource ."
+        }
       }
     },
     "icheckin": {
@@ -685,7 +713,21 @@
           "value": "Value",
           "status": "Status",
           "default_currency": "Default Currency",
-          "warehouses": "Warehouses"
+          "warehouses": "Warehouses",
+          "updateTaxClass": "Update Tax Class",
+          "newWeightClasses": "New Weight Class",
+          "updateWeightClasses": "Update Weight Class",
+          "weightClasses": " Weight Classes",
+          "newLengthClasses": "New Length Class",
+          "updateLengthClasses": "Update Length Class",
+          "lengthClasses": " Length Classes",
+          "newVolumeClasses": "New Volume Class",
+          "updateVolumeClasses": "Update Volume Class",
+          "volumeClasses": " Volume Classes",
+          "newQuantityClasses": "New Quantity Class",
+          "updateQuantityClasses": "Update Quantity Class",
+          "quantityClasses": "Quantity Classes",
+          "decimals": "Decimal"
         },
         "newProduct": "New Product",
         "updateProduct": "Update Product",
@@ -828,17 +870,23 @@
           "allOrder": "Apply to all order?",
           "productHint": "Please type the product name",
           "withDiscount": "With discount",
-          "symbolLeft": "Símbolo Izquierdo",
-          "symbolRight": "Símbolo Derecho",
-          "running": "Activo",
-          "finished": "Finalizado",
+          "symbolLeft": "Left Symbol",
+          "symbolRight": "Right Symbol",
+          "running": "Running",
+          "finished": "Finished",
           "mapHelp": "Search for the address or locate the warehouse on the map.",
           "productWarehouse": "Warehouses",
           "productWarehouseContent" : "Select the different warehouses where your product is located.",
           "generalWarehouse": "General warehouse",
           "generalWarehouseHelp": "You can efficiently manage detailed information for each product, segmented according to the different warehouses. This way, you can organize and centrally manage specific data for your products at each location, simplifying inventory management and optimizing your operational control.",
           "warehouseByOptions": "Warehouse by options",
-          "warehouseByOptionsHelp": "We provide you with the ability to efficiently manage detailed information for each product option, organized according to different warehouses. This allows you to centralize the management of specific data for each variant at each location, simplifying inventory administration and optimizing operational control effectively."
+          "warehouseByOptionsHelp": "We provide you with the ability to efficiently manage detailed information for each product option, organized according to different warehouses. This allows you to centralize the management of specific data for each variant at each location, simplifying inventory administration and optimizing operational control effectively.",
+          "decimals": "Decimals",
+          "decimalSeparator": "Decimal Separator",
+          "thousandsSeparator": "Thousands Separator",
+          "volume": "Volume",
+          "advancedSummaryHelp": "Adds detailed and complex content, appears at the top right of the product, offering tables, collapsible sections and more.",
+          "showPriceIsCall": "Show Price when is for Quote"
         },
         "message": {
           "warnAddOpt": "To add options, you must first create the product",
@@ -847,7 +895,7 @@
           "selectProduct": "Select a product option",
           "warnAddDiscount": "To add discounts, you must first create the product",
           "viewProduct": "View product",
-          "advanceEdit": "Advanced Edit",
+          "advanceEdit": "Go to advanced Form",
           "quickEdit": "Quick Edit",
           "btnAddProduct": "Add Product",
           "chooseProduct": "Choose Product",
@@ -872,7 +920,30 @@
           "lastOrders": "Commerce - Last Orders",
           "productsToSoldOut": "Tienda - Products to sold out"
         },
-        "advancedSummary": "Advanced Summary"
+        "advancedSummary": "Advanced Summary",
+        "documentation": {
+          "products": "The products are those that you can sell through your store, each product can have many characteristics such as a unique SKU, quantity or existence, price or value, you can also categorize them so that in your store they can be filtered in a more organized way, add options such as color, size and many other features that allow you to have a complete enough store.",
+          "categories": "It is possible to create categories in your store, with a name, description and organize them in tree mode (parent categories and child categories) in order to categorize all your products.",
+          "options": "You can create options such as Colors (red, green, yellow...), sizes (xs, sm, md...) and all options that your products need.",
+          "payment-methods": "In order to sell your products, we offer you the option to configure one or several payment methods payment which will be shown as options at the check-out of your customers when making a purchase.",
+          "shipping-methods": "You can configure which shipping methods you will provide to your customers so that they receive all the products that you sell them and also define an extra cost for each method.",
+          "orders": "Orders are all the purchases you receive through your store, you can accept or reject them, verify payments, leave feedback, and process purchases.",
+          "coupons": "Coupons are a promotional tool that allows your users to get discounts on specific products of your store.",
+          "manufacturers": "Manufacturers refer to the companies or organizations that produce or supply the products that are sold in your store. Manufacturers can play an important role in your store, providing information about the origin of your products.",
+          "taxclasses": "Taxes are a way of categorizing your products based on the tax rate that it applies to them. This allows the application to calculate and apply the correct taxes during the checkout process. payment according to the product you are buying.",
+          "currencies": "You can configure one or several types of currency such as Pesos or Dollars, which will be used for charge for products purchased through your store. It is important to note that the value of the Traditional currencies can be subject to volatility and may not always hold their perceived value over time.",
+          "quotes": "A quote refers to a request for a custom price quote for a product specific or group of products. Quotes are often used for products that have variable prices or require customization, such as large orders or specialized products."
+        },
+        "newWarehouse": "New Warehouse",
+        "updateWarehouse": "Edit Warehouse",
+        "fieldEditableOnlyWarehouse": "This field must be updated by the warehouse",
+        "changeOnlyNestedOptionValue": "This option has child options, you can only modify this field in them",
+        "label": {
+          "warehouse": "Warehouse | Warehouses",
+          "bannerPriceList": "Head to your personal product list to start exploring. Enjoy the best prices!",
+          "explorePriceList": "Browse Product List",
+          'dataSheet': 'Data sheet'
+        }
       }
     },
     "ioffline": {
@@ -901,7 +972,7 @@
     },
     "idocs": {
       "cms": {
-        "sideba": {
+        "sidebar": {
           "adminGroup": "Documents",
           "adminDocuments": "List Documents",
           "adminCategories": "Document Categories",
@@ -911,11 +982,9 @@
         "updateDocument": "Update Document",
         "newCategory": "New Category",
         "updateCategory": "Update Category",
-        "sidebar": {
-          "adminGroup": "Documentos",
-          "adminDocuments": "Lista de Documentos",
-          "adminCategories": "Categorias de Documentos",
-          "panelDocuments": "Mis Documentos"
+        'documentation': {
+          'documents': "The documents that are published with this module have extra functionalities when it comes to controlling which users, user groups or roles can have access to these both in your CMS and on your WEB site",
+          "categories": "It is possible to create categories, with a name, description and organize them in tree mode (parent categories and child categories) in order to categorize all your documents."
         }
       }
     },
@@ -1025,6 +1094,7 @@
         "newCategory": "New Category",
         "updateCategory": "Update Category",
         "post": "Post",
+        "category": "Category",
         "quickCard": {
           "lastPosts": "Blog - Last Posts"
         },
@@ -1033,6 +1103,10 @@
           "featured": "Featured",
           "sortOrder": "Sort Order",
           "availableDate": "Available Date"
+        },
+        "documentation": {
+          "posts": "The articles are the content published on the Blog pages on your WEB site, these articles are important for your site because they help to keep your site constantly updated. You may edit them adding images, videos or external links, as well as being able to modify the content of your texts.",
+          "categories": "It is possible to create categories in your Blog, with a name, description and organize them in tree mode (parent categories and child categories) in order to categorize all your articles."
         }
       }
     },
@@ -2032,7 +2106,20 @@
           "apply": "Apply",
           "editBlockAttributes": "Edit block attributes",
           "sureDiscardBlock": "Have you saved your changes?",
-          "descriptionSureDiscardBlock": "If you continue with this action, you will lose all your progress. Take a moment to make sure!"
+          "descriptionSureDiscardBlock": "If you continue with this action, you will lose all your progress. Take a moment to make sure!",
+          "sureRefreshLayout": "Do you want to reload the layouts?",
+          "descriptionSureRefreshLayout": "Be careful! If you have unsaved changes, they will be lost when you refresh",
+          "administrator": "Go to administrator",
+          "sureChangeView": "Are you sure about this action?",
+          "chooseBlock": "Choose a Block",
+          "clone": "Clone",
+          "relate": "Relate"
+        },
+        "form": {
+          "layoutEntityType": "Defines the context or category to which the layout belongs",
+          "layoutType": "Specifies the presentation type within the selected entity",
+          "layoutDefault": "Indicates whether the layout is set as default for the corresponding entity and type",
+          "layout": "Builder Layout"
         }
       }
     },
@@ -2061,6 +2148,19 @@
           "sureCreateQr": "Do you want to generate a QR code for this record?"
         }
       }
+    },
+    "Icommercepricelist": {
+      "cms": {
+        "sidebar": {
+          "productList": "Prices",
+          "priceLists": "Lists"
+        },
+        "form": {
+          "newProductList": "New Product Price List",
+          "updateProductList": "Update Product Price List",
+          "productPriceListContent": "Choose from multiple price lists for your products."
+        }
+      }
     }
   },
   "es": {
@@ -2073,7 +2173,8 @@
           "providers": "Proveedores"
         },
         "message": {
-          "noMessages": "No tienes mensajes..."
+          "noMessages": "No tienes mensajes...",
+          "couldNotSend": "No se pudo enviar el mensaje"
         },
         "newProvider": "Nuevo Proveedor",
         "updateProvider": "Actualizar Proveedor",
@@ -2397,6 +2498,9 @@
         "activities": {
           "repeatAction": "Tour",
           "repeatActionDescription": "Desde aquí puedes repetir este tour cuando quieras"
+        },
+        "documentation": {
+          'categories': "El modulo de gamificación se usa para mejorar la experiencia del usuario en la aplicación, con está funcionalidad es posible crear tours, popups, o actividades especificas por modulo. Es posible crear una categoría que actual como el elemento agrupador y asignado a esta una o varias actividades que el usuario tendrá disponible para ver."
         }
       }
     },
@@ -2445,7 +2549,8 @@
             "full": "Full Ancho"
           },
           "successText": "Texto de exito",
-          "submitText": "Texto de enviado"
+          "submitText": "Texto de enviado",
+          "formNotExist": "ID del formulario: {id} <b class='text-red-7'>(No existe)</b>"
         },
         "message": {
           "helpToOptionsField": "Escribe la opción y preciona enter...",
@@ -2457,6 +2562,10 @@
         "feedBack": {
           "newForm": "Enviar otra respuesta",
           "message": "¡Todo listo!  Tu formulario ha sido enviado con éxito."
+        },
+        "documentation": {
+          "forms": "Los formularios permiten capturar información de diferentes tipos, puedes crear formularios y configurar cada campo de el, nombres, tipos... los formularios pueden ser usados por otros módulos como relaciones para permitir capturar más información que la estándar en cada caso.",
+          "leads": "Los Lead son la información capturada de los formularios, puedes listar, filtrar y exportar está información, al igual que identificar desde que formulario ingreso está información."
         }
       }
     },
@@ -2532,6 +2641,11 @@
           "noRequested": "Tu anuncio aún no está verificado, debes crear una petición para que sea revisado",
           "requested": "Solo un poco más, estamos verificando tu anuncio",
           "rejected": "Tu anuncio no pudo ser verificado, revisa tu información y vuelve a crear la petición para que sea revisado"
+        },
+        "documentation": {
+          'ads': "Los anuncios son publicados en tu sitio WEB. Son usados para promover o impulsar algún producto externo a la aplicación",
+          "categories": "Es posible crear categories, con un nombre, descripción y organizarlas en modo de árbol (categorías padres y categorías hijas) con el fin de categorizar todos tus planes.",
+          'ups': "Cuando un anunció es publicado, se pone en una lista que crece constantemente con cada nuevo anuncio, con está funcionalidad de Subidas es posible decirle a tu aplicación que mejore la posición de cada anunció con algunas reglas definidas"
         }
       }
     },
@@ -2602,7 +2716,8 @@
         "auction": "Licitación | Licitaciones",
         "bid": "Puja | Pujas",
         "setAsWinner": "Marcar como Ganador",
-        "existBid": "Ya tienes una puja para esta licitación"
+        "existBid": "Ya tienes una puja para esta licitación",
+        "description": "Descripción"
       }
     },
     "ibanners": {
@@ -2619,6 +2734,9 @@
         "label": {
           "codeAds": "Codigo ADS",
           "showAsPopup": "Mostrar como ventana emergente"
+        },
+        'documentation': {
+          'banners': "Los banners son elementos estáticos en ubicaciones definidas dentro del sitio WEB que muestran un contenido normalmente publicitario de gran tamaño"
         }
       }
     },
@@ -2666,7 +2784,13 @@
             "success": "Todo está listo! Nosotros nos encargamos de crear las reuniones en Zoom por ti..."
           }
         },
-        "helpShareUserResource": "Puedes copiar los link de tus servicios y/o de tu recurso para compartirlos de una forma más facil"
+        "helpShareUserResource": "Puedes copiar los link de tus servicios y/o de tu recurso para compartirlos de una forma más facil",
+        "documentation": {
+          "categories": "Es posible crear categories, con un nombre, descripción y organizarlas en modo de árbol (categorías padres y categorías hijas) con el fin de categorizar todos tus servicios.",
+          "services": "Son los servicios los que tus usuarios pueden reservar dentro de tu aplicación, estos servicios incluyen el tiempo que puede durar cada turno y un precio ademas de toda la información necesaria para describirlo",
+          "resources": "El recurso es el encargado de ejecutar un servicio reservado, cada recurso puede tener uno o varios servicios asignados pero puede realizar solo uno a la vez, en cada recurso es posible configurar un horario de disponibilidad para que un servicio suyo pueda ser reservado.",
+          "reservations": "Cuando un usuario adquiere un servicio se le llama 'Reservación' así la aplicacion es capaz de identificar que servicio reservo un usuario junto a su recurso."
+        }
       }
     },
     "icheckin": {
@@ -2721,6 +2845,8 @@
           "adminCoupons": "Cupones",
           "createCoupons": "Crear cupon",
           "editCoupons": "Editar cupon",
+          "adminQuotes": "Cotizaciones",
+          "adminQuoteCreate": "Crear Cotización",
           "adminStores": "Tiendas",
           "adminStoresCreate": "Nueva Tienda",
           "adminStoresEdit": "Editar Tienda",
@@ -2740,9 +2866,19 @@
           "adminItemTypes": "Tipos",
           "adminItemTypesCreate": "Crear Tipos",
           "adminItemTypesEdit": "Editar Tipos",
-          "adminQuotes": "Cotizaciones",
-          "adminQuoteCreate": "Crear Cotización",
           "panelOrders": "Mis Compras",
+          "newWeightClasses": "Nuevo tipo de peso",
+          "updateWeightClasses": "Actualizar tipo de peso",
+          "weightClasses": " Tipos de Peso",
+          "newLengthClasses": "Nuevo tipo de longitud",
+          "updateLengthClasses": "Actualizar tipo de longitud",
+          "lengthClasses": " Tipos de longitud",
+          "newVolumeClasses": "Nuevo tipo de volumen",
+          "updateVolumeClasses": "Actualizar tipo de volumen",
+          "volumeClasses": " Tipos de volumen",
+          "newQuantityClasses": "Nuevo tipo de cantidad",
+          "updateQuantityClasses": "Actualizar tipo de cantidad",
+          "quantityClasses": " Tipos de cantidad",
           "newCurrencies": "Nuevas monedas",
           "updateCurrency": "Actualizar moneda",
           "currencies": " Monedas",
@@ -2804,6 +2940,12 @@
         "orderHistory": "Historial de Orden",
         "newWarehouse": "Nueva Bodega",
         "updateWarehouse": "Editar Bodega",
+        "label": {
+          "warehouse": "Bodega | Bodegas",
+          "bannerPriceList": "Dirígete a tu lista personal de productos para empezar a explorar. ¡Disfruta de los mejores precios!",
+          "explorePriceList": "Explorar Lista de Productos",
+          'dataSheet': 'Ficha técnica'
+        },
         "form": {
           "formContent": "Aquí podrás encontrar la información relacionada al nombre, slug, resumen y descripción.",
           "statusContent": "Aquí podrás cambiar el estado de tu producto.",
@@ -2861,6 +3003,9 @@
           "priority": "Prioridad",
           "rate": "Tasa",
           "discountType": "Tipo de Descuento",
+          "quantitySold": "Cantidad Vendida",
+          "running": "Activo",
+          "finished": "Finalizado",
           "usersGroup": "Grupo de Usuarios",
           "manufacturer": "Fabricante | Fabricantes",
           "customerGroup": "Grupo de Usuario",
@@ -2885,6 +3030,7 @@
           "color": "Color",
           "featured": "Destacado",
           "isCall": "Producto para Cotizar",
+          "showPriceIsCall": "Mostrar precio cuando el producto es para cotizar",
           "sortOrder": "Orden de prioridad",
           "operationPrefix": "Operación",
           "value": "Valor | Valores",
@@ -2898,25 +3044,29 @@
           "withDiscount": "Con descuento",
           "symbolLeft": "Símbolo Izquierdo",
           "symbolRight": "Símbolo Derecho",
-          "running": "Activo",
-          "finished": "Finalizado",
+          "decimals": "Decimales",
+          "decimalSeparator": "Separador de Decimales",
+          "thousandsSeparator": "Separador de Miles",
+          "unit": "Unidad",
+          "volume": "Volumen",
           "mapHelp": "Busca la dirección o localíza la bodega en el mapa.",
           "productWarehouse": "Bodegas",
           "productWarehouseContent" : "Selecciona las diferentes bodegas donde se encuentra ubicado tu producto.",
           "generalWarehouse": "Bodega general",
           "generalWarehouseHelp": "Puedes gestionar de manera eficiente la información detallada de cada producto, segmentada de acuerdo a las distintas bodegas. Así, puedes organizar y administrar de forma centralizada los datos específicos de tus productos en cada ubicación, simplificando la gestión de inventario y optimizando tu control operativo.",
           "warehouseByOptions": "Bodega por Opcion",
-          "warehouseByOptionsHelp": "Te brindamos la capacidad de administrar de manera eficiente la información detallada de cada opción de producto, organizada según las distintas bodegas. Esto te permite centralizar la gestión de datos específicos para cada variante en cada ubicación, simplificando la administración del inventario y mejorando el control operativo de manera óptima."
+          "warehouseByOptionsHelp": "Te brindamos la capacidad de administrar de manera eficiente la información detallada de cada opción de producto, organizada según las distintas bodegas. Esto te permite centralizar la gestión de datos específicos para cada variante en cada ubicación, simplificando la administración del inventario y mejorando el control operativo de manera óptima.",
+          "advancedSummaryHelp": "Agrega contenidos detallados y complejos, aparece en la parte superior derecha del producto, ofreciendo tablas, secciones plegables y más."
         },
         "message": {
+          "advanceEdit": "Ir al formulario avanzado",
+          "quickEdit": "Edición Rapida",
           "warnAddOpt": "Para agregar opciones, primero debe crear el producto",
           "noOptions": "No hay opciones agregadas",
           "noDeleteOption": "No puede borrar está opción, es padre de {name}",
           "selectProduct": "Seleccione una opción de producto",
           "warnAddDiscount": "Para agregar descuentos, primero debe crear el producto",
           "viewProduct": "Ver producto",
-          "advanceEdit": "Edición Avanzada",
-          "quickEdit": "Edición Rapida",
           "btnAddProduct": "Agregar Producto",
           "chooseProduct": "Elegir Producto",
           "productSetup": "Configuración de Producto",
@@ -2940,7 +3090,24 @@
           "lastOrders": "Tienda - Ultimas Ordenes",
           "productsToSoldOut": "Tienda - Productos por agotar"
         },
-        "advancedSummary": "Resumen Avanzado"
+        "advancedSummary": "Resumen Avanzado",
+        "documentation": {
+          "products": "Los productos son los que puedes vender a través de tu tienda, cada producto puede contar con muchas características como un SKU único, cantidad o existencia, precio o valor, también puedes categorizarlos para que en tu tienda se puedan filtrar de una manera más organizada, agregarle opciones como color, talla, tamaños y muchas otras características que te permitan tener una tienda lo suficientemente completa.",
+          "categories": "Es posible crear categories en tu tienda, con un nombre, descripción y organizarlas en modo de árbol (categorías padres y categorías hijas) con el fin de categorizar todos tus productos.",
+          "options": "Puedes crear opciones como Colores (rojo, verde, amarillo...), tallas (xs, sm, md...) y todas las opciones que tus productos necesiten.",
+          "payment-methods": "Para poder vender tus productos te brindamos la opción de que configures uno o varios métodos de pago los cuales se mostraran como opciones en el check-out de tus clientes al momento de realizar una compra.",
+          "shipping-methods": "Puedes configurar que métodos de envío brindaras a tus clientes para que ellos reciban todos los productos que tu les vendes y también definir un costo extra por cada método.",
+          "orders": "Las ordenes son todas las compras que recibes por medio de tu tienda, puedes aceptar o rechazarlas, verificar pagos, dejar comentarios y procesar las compras.",
+          "coupons": "Los cupones son una herramienta promocional que permite a tus usuarios obtener descuentos sobre productos específicos de tu tienda.",
+          "manufacturers": "Los fabricantes se refieren a las compañías u organizaciones que producen o suple los productos que son vendidos en tu tienda. Los fabricantes pueden jugar un papel importante en tu tienda, brindando información acerca del origen de tus productos.",
+          "taxclasses": "Los impuestos son una forma de categorizar tus productos en función de la tasa de impuestos que se les aplica. Esto permite que la aplicación calcule y aplique los impuestos correctos durante el proceso de pago según el producto que está comprando.",
+          "currencies": "Puedes configurar uno o varios tipos de moneda como Pesos o Dólares, los cuales serán usados para cobrar los productos que se compren a través de tu tienda. Es importante tener en cuenta que el valor de las monedas tradicionales puede estar sujeto a la volatilidad y es posible que no siempre mantenga su valor percibido a lo largo del tiempo.",
+          "quotes": "Una cotización se refiere a una solicitud de cotización de precio personalizada para un producto específico o grupo de productos. Las cotizaciones a menudo se usan para productos que tienen precios variables o requieren personalización, como pedidos grandes o productos especializados."
+        },
+        "newWarehouse": "Nueva Bodega",
+        "updateWarehouse": "Editar Bodega",
+        "fieldEditableOnlyWarehouse": "Este campo se modifica por bodegas",
+        "changeOnlyNestedOptionValue": "Esta opción tiene opciones hijas, solo puedes modificar este campo en ellas"
       }
     },
     "ioffline": {
@@ -2970,10 +3137,10 @@
     "idocs": {
       "cms": {
         "sideba": {
-          "adminGroup": "Documents",
-          "adminDocuments": "List Documents",
-          "adminCategories": "Document Categories",
-          "panelDocuments": "My Documents"
+          "adminGroup": "Documentos",
+          "adminDocuments": "Lista de Documentos",
+          "adminCategories": "Categorias de Documentos",
+          "panelDocuments": "Mis Documentos"
         },
         "newDocument": "Nuevo documento",
         "updateDocument": "Actualizar Documento",
@@ -2984,6 +3151,10 @@
           "adminDocuments": "Lista de Documentos",
           "adminCategories": "Categorias de Documentos",
           "panelDocuments": "Mis Documentos"
+        },
+        "documentation": {
+          "documents": "Los documentos que publiques con este modulo tienen funcionalidades extra a la hora de controlar que usuarios, grupos de usuario o roles pueden tener acceso a estos tanto en tu CMS como en tu sitio WEB",
+          "categories": "Es posible crear categories, con un nombre, descripción y organizarlas en modo de árbol (categorías padres y categorías hijas) con el fin de categorizar todos tus documentos."
         }
       }
     },
@@ -3093,6 +3264,7 @@
         "newCategory": "Nueva Categoría",
         "updateCategory": "Actualizar Categoría",
         "post": "Entrada",
+        "category": "Categoría",
         "quickCard": {
           "lastPosts": "Blog - Ultimos Posts"
         },
@@ -3101,6 +3273,10 @@
           "featured": "Destacado",
           "sortOrder": "Orden de prioridad",
           "availableDate": "Disponible desde"
+        },
+        "documentation": {
+          "posts": "Los artículos son el contenido publicado en las paginas de Blog en tu sitio WEB, estos artículos son importantes para tu sitio por que ayudan a mantener tu sitio en constante actualización. Es posible que los edites agregando imágenes, videos o links externos, al igual que poder modificar el contenido de tus textos.",
+          "categories": "Es posible crear categories en tu Blog, con un nombre, descripción y organizarlas en modo de árbol (categorías padres y categorías hijas) con el fin de categorizar todos tus artículos."
         }
       }
     },
@@ -3957,7 +4133,20 @@
           "apply": "Aplicar",
           "editBlockAttributes": "Editar los atributos del bloque",
           "sureDiscardBlock": "¿Has guardado tus cambios?",
-          "descriptionSureDiscardBlock": "Si continuas con esta acción, perderás todo tu progreso. ¡Tómate un momento para asegurarte!"
+          "descriptionSureDiscardBlock": "Si continuas con esta acción, perderás todo tu progreso. ¡Tómate un momento para asegurarte!",
+          "sureRefreshLayout": "¿Deseas volver a cargar los layouts?",
+          "descriptionSureRefreshLayout": "¡Ten cuidado! Si tienes cambios sin guardar, se perderán al refrescar",
+          "administrator": "Ir al administrador",
+          "sureChangeView": "¿Está seguro de esta acción?",
+          "chooseBlock": "Escoge un Bloque",
+          "clone": "Clonar",
+          "relate": "Relacionar"
+        },
+        "form": {
+          "layoutEntityType": "Define el contexto o categoría al que pertenece el layout",
+          "layoutType": "Especifica el tipo de presentación dentro de la entidad seleccionada",
+          "layoutDefault": "Indica si el layout se establece como predeterminado para la entidad y el tipo correspondiente",
+          "layout": "Builder Layout"
         }
       }
     },
@@ -3984,6 +4173,19 @@
         },
         "messages": {
           "sureCreateQr": "¿Quieres generar un código QR para este registro?"
+        }
+      }
+    },
+    "Icommercepricelist": {
+      "cms": {
+        "sidebar": {
+          "productList": "Precios",
+          "priceLists": "Listas"
+        },
+        "form": {
+          "newProductList": "Nueva Lista de Precios de Productos",
+          "updateProductList": "Actualizar Lista de Precios de Productos",
+          "productPriceListContent": "Elige entre varias listas de precios para tus productos."
         }
       }
     }
