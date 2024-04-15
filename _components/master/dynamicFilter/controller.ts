@@ -27,7 +27,8 @@ export default function controller(props: any, emit: any) {
     loadedOptions: {},
     readValues: {},
     hidenFields: {},
-    systemName: '', 
+    systemName: '',
+    useAdminFilter: false,
     userData: {
       fields: [{
         //id: '',
@@ -73,6 +74,7 @@ export default function controller(props: any, emit: any) {
       state.userData = clone(store.state.quserAuth.userData)
       state.props = clone(props)
       state.systemName = state.props?.systemName || ''
+      state.useAdminFilter = state.userData.hasOwnProperty('fields')
       await methods.getUrlFilters()
       await methods.addLoadedOptionsCallback()      
       await methods.setQuickFilters()
@@ -197,7 +199,7 @@ export default function controller(props: any, emit: any) {
       //methods.mutateQuickFilters()
       methods.mutateURLFilters(filters)
       methods.emitModelValue(filters)
-      if(updateUserData){
+      if(updateUserData && state.useAdminFilter){
         methods.setAdminFilter(filters)
       }
     },
@@ -240,9 +242,11 @@ export default function controller(props: any, emit: any) {
         }
       }      
 
-      if(Object.keys(filterValues).length === 0){
-        const filters = methods.getAdminFilter()
-        filterValues = {...filters[state.systemName]}
+      if(state.useAdminFilter){
+        if(Object.keys(filterValues).length === 0){
+          const filters = methods.getAdminFilter()
+          filterValues = {...filters[state.systemName]}
+        }
       }
 
       if(Object.keys(filterValues).length !== 0){
