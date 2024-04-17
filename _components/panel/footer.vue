@@ -102,7 +102,7 @@
 <script>
 import { eventBus } from 'src/plugins/utils'
 export default {
-  beforeDestroy() {
+  beforeUnmount() {
     eventBus.off('setMobileMainAction')
   },
   props: {},

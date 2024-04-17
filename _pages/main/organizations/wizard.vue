@@ -111,7 +111,7 @@ import {
 } from 'modules/qsite/_components/organizations/wizard/steps/model/constant';
 
 export default {
-  beforeDestroy() {},
+  beforeUnmount() {},
   computed: {
     steps() {
       //Get setting to validate if show the IA step

@@ -65,7 +65,7 @@ import { eventBus } from 'src/plugins/utils'
 import offline from 'modules/qoffline/_components/drawerOffline'
 
 export default {
-  beforeDestroy() {
+  beforeUnmount() {
     eventBus.off('toggleMasterDrawer')
     eventBus.off('openMasterDrawer')
   },

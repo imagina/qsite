@@ -39,7 +39,7 @@ import 'cropperjs/dist/cropper.css';
 import { eventBus } from 'src/plugins/utils'
 
 export default {
-  beforeDestroy() {
+  beforeUnmount() {
     eventBus.off('master.cropper.image')
   },
   mixins: [zoneConfigMixing],

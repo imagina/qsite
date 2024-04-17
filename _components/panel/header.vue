@@ -28,7 +28,7 @@ import siteActions from 'modules/qsite/_components/master/siteActions'
 import { eventBus } from 'src/plugins/utils'
 
 export default {
-  beforeDestroy() {
+  beforeUnmount() {
     eventBus.off('header.badge.manage')
   },
   components: {siteActions},

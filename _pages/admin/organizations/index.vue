@@ -9,7 +9,7 @@ import crud from 'modules/qcrud/_components/crud'
 import customForm from 'modules/qsite/_pages/admin/organizations/form'
 
 export default {
-  beforeDestroy() {
+  beforeUnmount() {
     eventBus.off('page.data.refresh')
   },
   mounted() {

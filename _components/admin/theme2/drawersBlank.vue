@@ -14,7 +14,7 @@
   import { eventBus } from 'src/plugins/utils'
 
   export default {
-    beforeDestroy() {
+    beforeUnmount() {
       eventBus.off('toggleMasterDrawer')
       eventBus.off('openMasterDrawer')
     },

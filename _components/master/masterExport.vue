@@ -68,7 +68,7 @@
 import { eventBus } from 'src/plugins/utils';
 
 export default {
-  beforeMount() {
+  beforeUnmount() {
     eventBus.off('export.data.refresh');
     eventBus.off('isite.export.ready');
   },

@@ -435,7 +435,7 @@ import { eventBus } from 'src/plugins/utils'
 
 export default {
   name: 'dynamicField',
-  beforeDestroy() {
+  beforeUnmount() {
     //Close listen event
 
   },
