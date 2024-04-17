@@ -143,6 +143,17 @@ export default {
               ],
             },
           },
+          mediasSingle: {
+            name: 'mediasSingle',
+            value: {},
+            type: 'media',
+            props: {
+              label: this.$tr('isite.cms.form.firstImage'),
+              zone: 'mainimage',
+              entity: "Modules\\Isite\\Entities\\Layout",
+              entityId: null
+            }
+          }
         },
         formRight: {},
       }
