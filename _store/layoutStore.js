@@ -21,6 +21,7 @@ const data = {
 };
 const state = reactive({
   layoutList: {...data},
+  allLayouts: [],
   selectedlayoutId: null,
 });
 
@@ -38,10 +39,10 @@ export default function layoutStore() {
       //Request
       baseService.index('apiRoutes.qsite.layouts', requestParams).then(response => {
         setSelectedFile();
-        state.layoutList.fields.layoutId.files.value = mapLayoutsList(response.data);
+        setAllLayouts(response.data);
         resolve(response.data)
       }).catch(error => {
-        state.layoutList.fields.layoutId.files.value = [];
+        setAllLayouts([]);
         console.log(error);
         resolve(false)
       })
@@ -82,11 +83,27 @@ export default function layoutStore() {
     });
   }
 
+  function getAllLayouts() {
+    return state.allLayouts;
+  }
+
+  function setAllLayouts(layouts = []) {
+    state.allLayouts = layouts;
+  }
+
+  function setValueLayoutList(value = []) {
+    state.layoutList.fields.layoutId.files.value = value;
+  }
+
   return {
     getLayouts,
     getLayoutsList,
     getSelectedLayout,
     setSelectedLayout,
-    setSelectedFile
+    setSelectedFile,
+    getAllLayouts,
+    setAllLayouts,
+    setValueLayoutList,
+    mapLayoutsList
   }
 }
