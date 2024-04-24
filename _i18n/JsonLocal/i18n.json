@@ -41,7 +41,8 @@
           "adminConfig": {
             "title": "Setting",
             "headerTitle": "Notifications setting"
-          }
+          },
+          "adminPanel": "Panel"
         },
         "title": "Multimedia List/Search",
         "newFile": "New File",
@@ -55,11 +56,15 @@
         "editFile": "Edit File",
         "moveMedia": "Move Media",
         "selectMedia": "Select Media",
+        "newNotification": "New Notification",
         "form": {
           "altAttribute": "Alt Attribute",
           "keyWords": "Key words",
           "folderName": "Folder Name",
           "moveTo": "Move to"
+        },
+        "label": {
+          "message": "Message"
         },
         "messages": {
           "addYourFiles": "Add your files here",
@@ -2386,7 +2391,8 @@
           "adminConfig": {
             "title": "Configuración",
             "headerTitle": "Configuración de notificaciones"
-          }
+          },
+          "adminPanel": "Panel"
         },
         "title": "Multimedia Listar/Buscar",
         "newFile": "Nuevo Archivo",
@@ -2400,11 +2406,15 @@
         "editFile": "Editar Archivo",
         "moveMedia": "Mover Media",
         "selectMedia": "Seleccionar Media",
+        "newNotification": "Nueva Notificación",
         "form": {
           "altAttribute": "Attributo Alt",
           "keyWords": "Palabras Claves",
           "folderName": "Nombre de la carpeta",
           "moveTo": "Mover a"
+        },
+        "label": {
+          "message": "Mensaje"
         },
         "messages": {
           "addYourFiles": "Agrega tus archivos aquí",
