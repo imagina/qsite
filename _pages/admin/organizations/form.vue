@@ -32,6 +32,9 @@
 import layoutStore from 'modules/qsite/_store/layoutStore.js'
 
 export default {
+  beforeUnmount() {
+    layoutStore().setValueLayoutList([])
+  },
   props: {
     organizationId: {default: null}
   },
@@ -462,10 +465,15 @@ export default {
     getData(refresh = false) {
       return new Promise(async resolve => {
         this.loading = true
-        await Promise.all([
-          this.getOrganizationData(refresh),
-          layoutStore().getLayouts()
-        ])
+        try {
+          await Promise.all([
+            this.getOrganizationData(refresh),
+            layoutStore().getLayouts()
+          ])
+          await this.getSubscriptionData(true, this.organization.userId)
+        } catch (e) {
+          this.$alert.error({message: this.$tr('isite.cms.message.errorRequest')})
+        }
         this.loading = false
       })
     },
@@ -515,7 +523,47 @@ export default {
         })
       })
     },
-  }
+    //get Subscriptions data by user
+    getSubscriptionData(refresh = false, userId) {
+      return new Promise((resolve, reject) => {
+        //Validate if user has a organization
+        if (!userId) return resolve(null)
+        //Requets params
+        let requestParams = {
+          refresh: refresh,
+          params: {
+            include: 'plan',
+            filter: {
+              field: 'entity_id',
+              entity: "Modules\\User\\Entities\\Sentinel\\User"
+            }
+          }
+        }
+        //Request
+        this.$crud.show('apiRoutes.qplan.subscriptions', userId, requestParams).then(response => {
+          const layousByPlan = response?.data?.plan?.options?.layouts ?? [];
+          this.filteredLayouts(layousByPlan)
+          resolve(response.data)
+        }).catch(error => {
+          this.$apiResponse.handleError(error, () => {
+            reject(error)
+          })
+        })
+      })
+    },
+    //Filter layouts
+    filteredLayouts(layoutsName = []) {
+      const storeLayout = layoutStore();
+      //Get all layouts
+      const layouts = storeLayout.getAllLayouts()
+      //Filter only layouts that have the user
+      const filteredLayouts = layouts.filter(layout => layoutsName.includes(layout.systemName))
+      //Map layouts to save in layoutList
+      const mapLayouts = storeLayout.mapLayoutsList(filteredLayouts)
+      //Save layouts in layoutList
+      storeLayout.setValueLayoutList(mapLayouts)
+    }
+  },
 }
 </script>
 <style lang="scss">
