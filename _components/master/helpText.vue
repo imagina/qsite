@@ -1,26 +1,86 @@
 <template>
-  <q-btn size="xs"
-         :style="btnStyle"
-         round :color="defaultColor"
-         :icon="defaultIcon"
-         style="z-index: 4"
-         unelevated
-         outline
+  <q-btn 
+    size="xs"
+    :style="btnStyle"
+    round :color="defaultColor"
+    icon="fa-solid fa-info"
+    style="z-index: 4"
+    unelevated
   >
-    <q-menu id="helpTextMenu" anchor="top right" self="top right">
-      <!--Close actions-->
-      <div class="text-right">
-        <q-btn icon="fas fa-times" v-close-popup color="blue-grey" size="8px" unelevated
-               round padding="xs" flat/>
-      </div>
+    <q-menu 
+      class="
+        tw-rounded-2xl
+        tw-shadow-2xl
+        tw-p-5
+      "
+    >
       <!--Icon and title-->
-      <div class="text-center">
-        <q-icon :name="icon || defaultIcon" :color="defaultColor" size="25px" class="q-mb-sm"/>
-        <div v-if="title" class="q-mb-sm text-blue-grey text-weight-bold">{{ title }}</div>
+      <div 
+        v-if="title"
+        class="
+          tw-flex
+          tw-items-center
+          tw-justify-between
+          tw-mb-2.5
+        "
+      >
+        <section 
+          class="
+            tw-flex
+            tw-flex-row
+            tw-items-center
+          "
+        >
+          <q-icon 
+            :name="icon || defaultIcon" 
+            :color="defaultColor" 
+            size="20px" 
+            class="tw-mr-2.5"
+          />
+          <h3 
+            class="
+              tw-text-base
+              tw-font-semibold
+            "
+          >
+            {{ title }}
+          </h3>
+        </section>
+        <!--Close actions-->
+        <q-btn 
+          icon="fas fa-times" 
+          v-close-popup color="blue-grey" 
+          size="8px" unelevated
+          round flat
+        />
       </div>
-      <q-separator class="q-my-xs"/>
       <!--description-->
-      <div id="contentHelp" v-html="description"/>
+      <div
+        class="
+          tw-flex
+          tw-flex-row
+          tw-items-start
+          tw-justify-between
+        "
+      >
+        <q-icon
+          v-if="!title"
+          :name="icon || defaultIcon" 
+          :color="defaultColor" 
+          size="20px" 
+          class="tw-mr-2.5 tw-mt-1"
+        />
+        <p class="tw-max-w-80">
+          {{ description }}
+        </p>
+        <q-btn
+          v-if="!title"
+          icon="fas fa-times" 
+          v-close-popup color="blue-grey" 
+          size="8px" unelevated
+          round flat
+        />
+      </div>
     </q-menu>
   </q-btn>
 </template>
@@ -32,31 +92,13 @@ export default {
     description: {type: String, required: true},
     btnStyle: {type: String, default: ''}
   },
-  mounted() {
-    this.$nextTick(function () {
-    })
-  },
   data() {
     return {
-      defaultIcon: 'fa-light fa-info',
+      defaultIcon: 'fa-solid fa-circle-info',
       defaultColor: 'light-blue-8'
     }
   },
-  computed: {},
-  methods: {}
 }
 </script>
 <style lang="scss">
-#helpTextMenu {
-  border: 2px solid $info;
-  padding: 10px 15px;
-  border-radius: $custom-radius-items;
-
-  #contentHelp {
-    max-width: 20em;
-    line-height: 1.3;
-    color: $blue-grey;
-    text-align: justify;
-  }
-}
 </style>
