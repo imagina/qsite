@@ -189,7 +189,7 @@ export default {
 </script>
 <style>
 .step-plan .select-card {
-  border-color: var(--q-color-primary);
+  border-color: var(--q-primary);
   -webkit-animation: fade-in-left 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
   animation: fade-in-left 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
@@ -201,7 +201,7 @@ export default {
 
 .step-plan .activePlan .q-item {
   @apply tw-text-white tw-rounded;
-  background-color: var(--q-color-primary);
+  background-color: var(--q-primary);
 }
 
 .step-plan .activePlan .q-expansion-item--collapsed {
@@ -210,12 +210,12 @@ export default {
 
 .step-plan .activePlan .q-expansion-item--expanded {
   @apply tw-rounded-t-md tw-rounded-b-none;
-  background-color: var(--q-color-primary);
+  background-color: var(--q-primary);
 }
 
 .step-plan .activePlan .q-expansion-item__content {
   @apply tw-border;
-  border-color: var(--q-color-primary);
+  border-color: var(--q-primary);
 }
 
 .step-plan .activePlan .q-item__section--side {
@@ -227,16 +227,16 @@ export default {
   @apply tw-rounded-md tw-absolute tw-top-0 tw-right-0 tw-bottom-0 tw-left-0 tw-border;
   transition: border-color .2s, top .2s, right .2s, bottom .2s, left .2s;
   content: "";
-  border-color: var(--q-color-primary);
+  border-color: var(--q-primary);
 }
 
 .step-plan .activePlan .q-expansion-item:after, .step-plan .item-plan:hover .q-expansion-item:after {
   @apply tw--top-1.5 tw--right-1.5 tw--bottom-1.5 tw--left-1.5;
-  border-color: var(--q-color-primary);
+  border-color: var(--q-primary);
 }
 
 .step-plan .item-plan:hover  {
-  background-color: var(--q-color-primary);
+  background-color: var(--q-primary);
 }
 .step-plan .item-plan:hover .q-item__section--main,
 .step-plan .item-plan:hover .q-item__section--side > .q-icon,

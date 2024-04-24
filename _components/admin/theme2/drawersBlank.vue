@@ -2,7 +2,7 @@
     <div id="blackDrawers2">
       <!--Master filter-->
       <q-drawer bordered id="drawerFilterMaster" v-model="drawer.filter" side="right" v-if="filter.load" :overlay="false">
-        
+
       </q-drawer>
     </div>
   </template>
@@ -10,7 +10,7 @@
   //mixins
   import sidebarMixins from 'modules/qsite/_mixins/sidebarMixins'
   //Components
-  
+
   import { eventBus } from 'src/plugins/utils'
 
   export default {
@@ -78,9 +78,9 @@
       contrast() {
         const master = document.querySelector('#blackDrawers2')
         if(!master) return '#000000';
-        const bgColor = getComputedStyle(master).getPropertyValue('--q-color-primary')
+        const bgColor = getComputedStyle(master).getPropertyValue('--q-primary')
         const contrast = this.$helper.pickTextColor(bgColor)
-        const bgColor2 = getComputedStyle(master).getPropertyValue('--q-color-secondary')
+        const bgColor2 = getComputedStyle(master).getPropertyValue('--q--secondary')
         const contrast2 = this.$helper.pickTextColor(bgColor2)
         this.primaryContrast ? master.style.setProperty('--q-color-contrast',this.primaryContrast) : master.style.setProperty('--q-color-contrast',contrast)
         this.secondaryContrast ? master.style.setProperty('--q-color-contrast-two',this.secondaryContrast) : master.style.setProperty('--q-color-contrast-two',contrast2)

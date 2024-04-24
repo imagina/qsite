@@ -176,7 +176,7 @@ export default {
   @apply tw-p-1;
 }
 .step-categories  .activeClass .item-category-name {
-  background-color: var(--q-color-primary);
+  background-color: var(--q-primary);
 }
 .step-categories .activeClass {
   @apply tw-shadow-lg;
@@ -188,7 +188,7 @@ export default {
 }
 .step-categories .activeClass:after, .step-categories .item-category:hover:after {
   @apply tw--top-1.5 tw--right-1.5 tw--bottom-1.5 tw--left-1.5;
-  border-color: var(--q-color-primary);
+  border-color: var(--q-primary);
 }
 .step-categories .select-category, .step-categories .categories-text {
   -webkit-animation: fade-in-left 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
@@ -196,7 +196,7 @@ export default {
 }
 .step-categories .text-category {
   @apply tw-relative;
-  border-width: 1px; border-color: var(--q-color-primary);
+  border-width: 1px; border-color: var(--q-primary);
 }
 
 .step-categories .text-category:after {
@@ -212,7 +212,7 @@ export default {
 .step-categories .text-active-cate:after,
 .step-categories .text-category:hover:after {
   @apply tw--top-1 tw--right-1 tw--bottom-1 tw--left-1;
-  background: var(--q-color-primary);
+  background: var(--q-primary);
 }
 
 .step-categories .stepp-loading {
@@ -222,7 +222,7 @@ export default {
 
 .step-categories .stepp-loading div {
   @apply tw-absolute tw-opacity-100 tw-rounded-full;
-  border: 4px solid var(--q-color-primary);
+  border: 4px solid var(--q-primary);
   animation: step-loading 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
 

@@ -434,7 +434,7 @@ export default {
   @apply tw-text-white tw-text-xs tw-relative tw-z-0 tw-font-bold tw-inline-block;
   padding: 0.125rem 1rem;
   border-radius: 0.9375rem;
-  color: var(--q-color-primary);
+  color: var(--q-primary);
 }
 
 #wizardOrganization .selected-label:after {
@@ -442,12 +442,12 @@ export default {
   content: "";
   bottom: -2px;
   z-index: -1;
-  background: var(--q-color-primary);
+  background: var(--q-primary);
 }
 
 #wizardOrganization .selected-box {
   @apply  tw-rounded tw-px-3 tw-py-1 tw-relative tw-mb-3 tw-text-xs md:tw-text-sm;
-  border: 2px dashed var(--q-color-primary);
+  border: 2px dashed var(--q-primary);
 }
 
 #wizardOrganization .selected-box-m {
@@ -487,7 +487,7 @@ export default {
 
 #wizardOrganization .step-loading div {
   @apply tw-absolute tw-opacity-100 tw-rounded-full;
-  border: 4px solid var(--q-color-primary);
+  border: 4px solid var(--q-primary);
   animation: step-loading 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
 
