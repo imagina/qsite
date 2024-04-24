@@ -345,28 +345,48 @@
           </div>
         </div>
         <!--Text Info-->
-        <div id="bannerField" v-if="loadField('banner')" class="q-mb-md">
-          <div class="content q-py-sm q-px-md" :style="`border-color: ${fieldProps.colorValue}`">
+        <div
+          v-if="loadField('banner')"
+          class='
+            tw-flex
+            tw-flex-col
+            tw-items-end
+          '
+        >
+          <div
+            class='
+              tw-border
+              tw-border-solid
+              tw-rounded-2xl
+              tw-p-5
+            '
+            :style="{ 
+              borderColor: fieldProps.colorValue,
+              backgroundColor: `${fieldProps.colorValue}1A`
+            }"
+          >
             <!--content-->
-            <div class="row items-center no-wrap">
+            <div class='tw-flex tw-item-center'>
               <!--Icon-->
-              <div v-if="fieldProps.icon" class="q-mr-md">
-                <q-icon :name="fieldProps.icon" :color="fieldProps.color || 'info'" size="24px"/>
-              </div>
-              <!--Description-->
-              <div class="content__right full-width">
-                <!--message-->
-                <div v-html="fieldProps.message" class="content__message text-blue-grey"/>
-                <!--separator-->
-                <q-separator v-if="fieldProps.actions.length" class="q-mt-md q-mb-sm"/>
-                <!--Actions-->
-                <div class="row justify-end" v-if="fieldProps.actions.length">
-                  <q-btn v-for="(btn, keyBtn) in fieldProps.actions" :key="keyBtn" v-bind="btn.props"
-                         @click="btn.action ? btn.action() : null"/>
-                </div>
-              </div>
+              <q-icon
+                v-if="fieldProps.icon"
+                :name="fieldProps.icon"
+                :color="fieldProps.color || 'info'" 
+                size="50px"
+              />
+              <!--message-->
+              <p class='tw-ml-2'>
+                {{ fieldProps.message }}
+              </p>
             </div>
           </div>
+          <!--Actions-->
+          <q-btn
+            class='tw--mt-4 tw-mr-5'
+            v-for="(btn, keyBtn) in fieldProps.actions"
+            :key="keyBtn" v-bind="btn.props"
+            @click="btn.action ? btn.action() : null"
+          />
         </div>
         <!-- Expression -->
         <expressionField
@@ -1750,18 +1770,6 @@ export default {
     &.text-t-light {
       .q-icon, .q-field__label, input {
         color: white;
-      }
-    }
-  }
-
-  #bannerField {
-    .content {
-      border-radius: $custom-radius-items;
-      border: 2px solid;
-      overflow: hidden;
-
-      &__message {
-        line-height: 1;
       }
     }
   }
