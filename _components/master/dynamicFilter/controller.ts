@@ -4,6 +4,7 @@ import _ from "lodash";
 import service from 'modules/qsite/_components/master/dynamicFilter/services'
 import { i18n, clone, store, router } from 'src/plugins/utils';
 
+
 export default function controller(props: any, emit: any) {
   // Refs
   const refs = {
@@ -75,9 +76,11 @@ export default function controller(props: any, emit: any) {
       state.props = clone(props)
       state.systemName = state.props?.systemName || ''
       state.useAdminFilter = state.userData.hasOwnProperty('fields')
+      console.warn('->>>', state.props.filters)
       await methods.getUrlFilters()
       await methods.addLoadedOptionsCallback()      
       await methods.setQuickFilters()
+      await methods.setFilterValues()
       methods.emitValues()
     },    
 
@@ -89,9 +92,33 @@ export default function controller(props: any, emit: any) {
       emit('hideModal')
     },
 
+    // set values from crud
+    async setFilterValues(){
+      if(Object.keys(state.props.filters).length !== 0){
+        Object.keys(state.props.filters).forEach(key => {
+          if(!state.props.filters[key]?.value ) return
+
+          state.filterValues[key] = state.props.filters[key]
+          state.readOnlyData[key] = {
+            label: state.props.filters[key]?.props?.label || '', 
+            value: state.props.filters[key].value 
+          }
+
+          if(state.props.filters[key]?.quickFilter){
+            state.quickFilterValues[key] = state.props.filters[key]
+          } else {
+            if(state.props.filters[key]?.loadOptions){
+              state.hidenFields[key] = {...state.props.filters[key]}
+            }
+          }
+        })       
+      }
+    },
+
     removeReadValue(key){
       delete state.readOnlyData[key];
       state.filterValues[key] = null
+      state.props.filters[key].value = null
       methods.emitValues(true)
     },
 
@@ -126,7 +153,7 @@ export default function controller(props: any, emit: any) {
       Object.keys(state.readOnlyData).forEach(key => {
         const field = state.props.filters[key];
         if(!field?.quickFilter){
-          if(state.readOnlyData[key].value != null && state.readOnlyData[key].value){
+          if(state.readOnlyData[key].value != null && state.readOnlyData[key].value && field?.type){
             
             result[key] = { 
               label: state.readOnlyData[key].label,
@@ -183,6 +210,7 @@ export default function controller(props: any, emit: any) {
 
     //set the values to be emited
     emitValues(updateUserData = false){
+
       const filters = clone(state.readOnlyData)
       Object.keys(filters).forEach(key => {
         if(state.props.filters[key]?.quickFilter){
@@ -192,12 +220,10 @@ export default function controller(props: any, emit: any) {
           delete filters[key];
         } else {
           filters[key] = filters[key].value
-        }
-        
+        }        
       })
-      methods.setReadValues()
-      //methods.mutateQuickFilters()
-      methods.mutateURLFilters(filters)
+      methods.setReadValues()      
+      methods.mutateURLFilters({...filters})
       methods.emitModelValue(filters)
       if(updateUserData && state.useAdminFilter){
         methods.setAdminFilter(filters)
@@ -211,6 +237,14 @@ export default function controller(props: any, emit: any) {
       if(!state.systemName) return      
       const urlParams = methods.getUrlQueries()
       let paramsUrl = ''
+      
+      //removes the key if key only has value
+      Object.keys(filters).forEach(key => {
+        if(!state.props.filters[key]?.type){
+          delete filters[key]
+        }
+      })
+      
 
       urlParams[state.systemName] = JSON.stringify(filters)
       // remove from url if filters are empty
@@ -232,7 +266,7 @@ export default function controller(props: any, emit: any) {
     },
 
     async getUrlFilters(){
-      if(!state.systemName) return        
+      if(!state.systemName) return         
       
       let filterValues = {}
       const urlParams = methods.getUrlQueries()
@@ -251,7 +285,7 @@ export default function controller(props: any, emit: any) {
 
       if(Object.keys(filterValues).length !== 0){
         Object.keys(filterValues).forEach(key => {
-          if(!state.props.filters[key] ) return
+          if(!state.props.filters[key]) return
 
           state.filterValues[key] = filterValues[key]
           state.readOnlyData[key] = {

@@ -54,8 +54,7 @@
                   <!--Date-->
                   <div v-if="filter.fields && filter.fields.date" class="q-mb-sm">
                     <!--Fields date-->
-                    <dynamic-field v-for="(fieldDate, key) in dateFields" :key="key" :field="fieldDate" class="q-mb-sm"
-                                   v-model="filterValues.date[fieldDate.name || key]" :enableCache="dynamicFieldCache" />
+                   
                   </div>
                   <!--Pagination-->
                   <div v-if="filter.fields && filter.fields.pagination" class="q-mb-sm">
@@ -92,7 +91,8 @@
         </div>
       </q-card>
     </q-dialog>
-    <!-- quick filters --->    
+    <!-- quick filters --->
+    readOnlyData:{{ readOnlyData }}
       <div class="col-12 tw-mt-3" v-if="(Object.keys(readValues).length > 0) || (Object.keys(quickFilters).length > 0)">
       <!--<q-separator class="q-mb-sm"/>-->
         <div class="text-blue-grey ellipsis text-caption items-center row">          
@@ -101,7 +101,7 @@
             <b>{{ $trp('isite.cms.label.filter') }}:</b>
           </q-btn>          
           <template v-for="(item, itemKey) in readValues"  :key="itemKey" >
-            <q-chip 
+            <q-chip             
               v-if="item.label !== ''"
               removable
               color="primary" 
