@@ -76,11 +76,10 @@ export default function controller(props: any, emit: any) {
       state.props = clone(props)
       state.systemName = state.props?.systemName || ''
       state.useAdminFilter = state.userData.hasOwnProperty('fields')
-      console.warn('->>>', state.props.filters)
       await methods.setFilterValues()
       await methods.getUrlFilters()
       await methods.addLoadedOptionsCallback()      
-      await methods.setQuickFilters()      
+      await methods.setQuickFilters()
       methods.emitValues()
     },    
 
@@ -266,7 +265,7 @@ export default function controller(props: any, emit: any) {
     },
 
     async getUrlFilters(){
-      if(!state.systemName) return         
+      if(!state.systemName) return
       
       let filterValues = {}
       const urlParams = methods.getUrlQueries()
