@@ -138,6 +138,7 @@
         <q-select v-model="responseValue" v-bind="fieldProps" :label="fieldLabel" use-input  :options="formatOptions"
                   @update:modelValue="matchTags(field)" v-if="loadField('select')" @filter="filterSelectOptions"
                   @clear="val => field.props.multiple ? responseValue = [] : ''"
+                  @input-value="addedNewValue"
                   :class="`${field.help ? 'select-dynamic-field' : ''}`">
           <!--No options slot-->
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
@@ -1683,6 +1684,14 @@ export default {
       const item = this.imageFields.find((e) => e.id == id )
       return item.src
     },
+    //Persist Value in input
+    addedNewValue(val) {
+      const props = this.field?.props ?? {}
+      //Only when exist fill-input
+      if(props["fill-input"]) {
+        this.responseValue = val
+      }
+    }
   }
 }
 </script>
