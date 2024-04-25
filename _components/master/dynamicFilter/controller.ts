@@ -77,10 +77,10 @@ export default function controller(props: any, emit: any) {
       state.systemName = state.props?.systemName || ''
       state.useAdminFilter = state.userData.hasOwnProperty('fields')
       console.warn('->>>', state.props.filters)
+      await methods.setFilterValues()
       await methods.getUrlFilters()
       await methods.addLoadedOptionsCallback()      
-      await methods.setQuickFilters()
-      await methods.setFilterValues()
+      await methods.setQuickFilters()      
       methods.emitValues()
     },    
 

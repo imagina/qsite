@@ -143,6 +143,7 @@ export default defineComponent({
     filters: {type: Object, default: null},    
     modelValue: { default: false}
   },
+  emits:['update:modelValue', 'hideModal', 'showModal'],
   components: {},
   setup(props, {emit}) {
     return controller(props, emit)
