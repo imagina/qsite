@@ -109,10 +109,10 @@ export default function ({app, router, store, Vue, ssrContext}) {
 
     //Check if the version is updated
     if (response.headers['x-app-version'] > config('app.version')) {
-      const isRefresh = await cache.get.item('isRefresh')
+      const isRefresh = await cache.get.item('isRefresh::offline')
 
       if (!isRefresh) {
-        cache.set('isRefresh', true)
+        cache.set('isRefresh::offline', true)
         window.location.reload()
       }
 
