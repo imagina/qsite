@@ -138,10 +138,9 @@
         <dateRangePicker v-if="loadField('dateRange')" 
                          v-model="responseValue" 
                          :fieldProps="fieldProps"
-
-                         />
-
-        
+                         :label="fieldLabel"
+                         :class="`${field.help ? 'full-date-dynamic-field' : ''}`"
+        />
         <!--Select-->
         <q-select v-model="responseValue" v-bind="fieldProps" :label="fieldLabel" use-input  :options="formatOptions"
                   @update:modelValue="matchTags(field)" v-if="loadField('select')" @filter="filterSelectOptions"
@@ -1224,6 +1223,11 @@ export default {
           load: true
         },
         fullDate: {
+          class: 'absolute-right',
+          margin: '1em',
+          load: true
+        },
+        dateRange: {
           class: 'absolute-right',
           margin: '1em',
           load: true

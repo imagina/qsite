@@ -2,6 +2,7 @@ import { start } from "repl";
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
 import { i18n, clone } from 'src/plugins/utils'
 import moment from "moment";
+import { from } from "core-js/core/array";
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
@@ -9,19 +10,15 @@ export default function controller(props: any, emit: any) {
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
-    dateRange: ref({from: '2022/01/01', to: '2022/01/05'})
-
+    dateRange: ref({from: '', to: ''}),
+    qDateProxy: ref()
+   // type: ref(null)
   }
 
   // States
   const state = reactive({
     // Key: Default Value
-    model: {
-      from: null, 
-      to: null    
-    }, 
-    
-
+    type: null
   })
 
   // Computed
@@ -33,7 +30,8 @@ export default function controller(props: any, emit: any) {
           value: props.modelValue?.type || null,
           type: 'select',
           props: {
-            label: props.label ?? i18n.tr('isite.cms.form.date'),
+            //label: props.label ?? i18n.tr('isite.cms.form.date'),
+            label: 'Date Range',
             clearable: true,
             options: [
               {label: i18n.tr('isite.cms.label.customRange'), value: 'customRange'},
@@ -80,13 +78,19 @@ export default function controller(props: any, emit: any) {
   // Methods
   const methods = {
     // methodKey: () => {}
+    changeType(){
+      state.type = null
+    },
     changeDate() {      
-        let typeDate = clone(state.model.type)
-        let fromDate = state.model.from
-        let toDate = state.model.to
+        let typeDate = clone(state.type)
+        let fromDate = refs.dateRange.value.from
+        let toDate = refs.dateRange.value.to
 
-        const startOfDay = 'YYYY-MM-DD 00:00:00'
-        const endOFDay = 'YYYY-MM-DD 23:59:59'
+        //const startOfDay = 'YYYY-MM-DD 00:00:00'
+        //const endOFDay = 'YYYY-MM-DD 23:59:59'
+
+        const startOfDay = 'YYYY/MM/DD'
+        const endOFDay = 'YYYY/MM/DD'
         if (typeDate) {
           //Default Dates          
           //Case values
@@ -173,17 +177,17 @@ export default function controller(props: any, emit: any) {
               if (toDate)
                 toDate = moment(toDate).format(endOFDay)
               break;
-          }
-          //Set new Date
-          state.model.from = clone(fromDate)
-          state.model.to = clone(toDate)
-        }        
+          }          
+          //refs.qDateProxy.value.hide()
+        //Set new Date
+        refs.dateRange.value.from = clone(fromDate)
+        refs.dateRange.value.to = clone(toDate)
+        //refs.calendar.value.setEditingRange(fromDate, toDate)
+        ///refs.qDateProxy.value.show()
+        }  
         emit('update:modelValue', {type: typeDate, from: fromDate, to: toDate}) 
     }, 
     init(){
-      state.model.from = props.modelValue?.from || null
-      state.model.to = props.modelValue?.to || null
-      state.model.type = props.modelValue?.type || null
     } 
   }
 
@@ -192,12 +196,12 @@ export default function controller(props: any, emit: any) {
     //methods.init()
   })
 
-  // Watch
-  /*
+  // Watch  
   watch(state, (newField, oldField): void => {
-    //methods.changeDate()    
+    console.log('wacho')
+    methods.changeDate()    
   }, {deep: true})
-  */
+  
 
   return {...refs, ...(toRefs(state)), ...computeds, ...methods}
 }
