@@ -14,14 +14,12 @@
         color="blue-grey"
       >            
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-          <div style="padding: 14px;max-width: 360px;">
-            <div class="tw-flex tw-flex-row tw-gap-4">
-              <div>
-                From {{ dateRange?.from }} To {{ dateRange?.to }}
-              </div>
-              <div>
-                <dynamic-field v-model="type" class="q-mb-md" :field="fieldsConfig.type"/>
-              </div>
+          <div style="padding: 14px;max-width: 290px;">                        
+            <div>
+              <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type"/>
+            </div>
+            <div>
+              From {{ dateRange?.from }} To {{ dateRange?.to }}
             </div>
             <q-date v-model="dateRange" 
                     range
@@ -31,8 +29,9 @@
             >
             
             </q-date>
-            <div class="row items-center justify-end"></div>
-            <q-btn v-close-popup label="Close" color="primary" flat />
+            <div class="row items-center justify-end">
+              <q-btn v-close-popup label="Close" color="primary" flat />
+            </div>
           </div>
         </q-popup-proxy>
       </q-icon>
