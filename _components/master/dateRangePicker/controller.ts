@@ -2,25 +2,23 @@ import { start } from "repl";
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
 import { i18n, clone } from 'src/plugins/utils'
 import moment from "moment";
-import { from } from "core-js/core/array";
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
+  const startOfDay = 'YYYY/MM/DD'
+  const endOFDay = 'YYYY/MM/DD'
+
   // Refs
   const refs = {
-    // refKey: ref(defaultValue)
     dateRange: ref({from: '', to: ''}),
-    qDateProxy: ref()
-   // type: ref(null)
+    inputRange: ref(null),
+    type: ref()
   }
 
   // States
   const state = reactive({
-    // Key: Default Value
-    type: null, 
-    selectedRange: '', 
-    toEmit: {}
+    type: '',
   })
 
   // Computed
@@ -63,29 +61,74 @@ export default function controller(props: any, emit: any) {
         },
       }
     }),
+
+    isOneDayRange: computed(() => state.type == 'today' || state.type == 'yesterday' || state.type == 'tomorrow'),
+    //inputValue: computed(() =>  refs.dateRange  )
+
   }
 
   // Methods
   const methods = {
     // methodKey: () => {}
-    changeType(value){
-      state.type = null
-      if(value['from'] && value['to']){
-        state.selectedRange = `from: ${value.from} to `
+    
+    updateDateRange(value){
+      refs.inputRange.value = value
+      console.log(value)
+      if(value){
+        if(moment(value, 'YYYY/MM/DD - YYYY/MM/DD', true).isValid() ){
+           const from = value.split(' - ')[0]
+           const to = value.split(' - ')[1]
+           refs.dateRange.value = {from, to}
+           state.type = 'customRange'
+           methods.emitValue({
+            from, 
+            to
+           })
+        }
+        
+      }
+
+    },
+    setInputRange(value){
+      if(value != null){
+        if(value?.from){
+          refs.inputRange.value = `${value.from ?? ''} - ${value?.to ?? ''}`
+        } else {
+          refs.inputRange.value = `${value ?? ''} - ${value ?? ''}`
+        }
       }
     },
+
+    emitValue(value){
+      const from = value?.from ? value?.from : value
+      const to = value?.to ? value?.to : value
+      const toEmit = {
+        type: state.type,
+        from: moment(from).format('YYYY/MM/DD 00:00:00'),
+        to : moment(to).format('YYYY/MM/DD 23:59:59')
+      }
+      emit('update:modelValue', toEmit) 
+    },
+
+    changeType(value){
+      state.type = 'customRange'
+      methods.setInputRange(value)
+      methods.emitValue(value)
+    },
     changeDate() {      
-        let typeDate = clone(state.type)
-        let fromDate = refs.dateRange.value.from
-        let toDate = refs.dateRange.value.to
-
-        const startOfDay = 'YYYY/MM/DD 00:00:00'
-        const endOFDay = 'YYYY/MM/DD 23:59:59'
-
-        /*
-        const startOfDay = 'YYYY/MM/DD'
-        const endOFDay = 'YYYY/MM/DD'
-        */
+      let fromDate = ''
+      let toDate = ''
+      let typeDate = clone(state.type)
+      
+      
+      if(typeDate == 'today' || typeDate == 'yesterday' || typeDate == 'tomorrow'){
+        fromDate = refs.dateRange.value || moment().format(startOfDay)
+        toDate = refs.dateRange.value  || moment().format(startOfDay)     
+      } else {
+        fromDate = refs.dateRange.value?.from || moment().format(startOfDay)
+        toDate = refs.dateRange.value?.to || moment().format(startOfDay)
+      }
+        
         if (typeDate) {
           //Default Dates          
           //Case values
@@ -172,22 +215,37 @@ export default function controller(props: any, emit: any) {
               if (toDate)
                 toDate = moment(toDate).format(endOFDay)
               break;
-          }          
-          //refs.qDateProxy.value.hide()
-        //Set new Date
-        refs.dateRange.value.from = clone(fromDate)
-        refs.dateRange.value.to = clone(toDate)     
-        //toEmit   
-        }  
-        emit('update:modelValue', {type: typeDate, from: fromDate, to: toDate}) 
+          }
+          if(fromDate == toDate){
+            refs.dateRange.value = fromDate
+          } else {
+            refs.dateRange.value = {from: fromDate, to: toDate}
+          }
+        }
+        methods.setInputRange(refs.dateRange.value)        
+        methods.emitValue({from: fromDate, to: toDate})        
     }, 
     init(){
+      //check props
+      if(props.value){
+        refs.dateRange.value.from = props.value?.from ? props.value.from : null
+        refs.dateRange.value.to = props.value?.to ? props.value.to : null
+        state.type = props.value?.type ? props.value.type : null
+      } else {
+        /*
+        refs.dateRange.value.from = moment().format(startOfDay)
+        refs.dateRange.value.to = moment().format(endOFDay)
+        state.type = props.value?.type ? props.value.type : 'customRange'
+        */
+      }
+      
+
     } 
   }
 
   // Mounted
   onMounted(() => {
-    //methods.init()
+    methods.init()
   })
 
   // Watch  

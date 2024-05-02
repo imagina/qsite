@@ -1,9 +1,11 @@
 <template>      
-  <q-input 
-    :model-value="`${dateRange?.from} - ${dateRange?.to}`"
+  <q-input
+    @update:model-value="(value) => updateDateRange(value)"
+    :model-value="inputRange"
     v-bind="fieldProps.field"
     :label="label"
     :class="class"
+    debounce="500"
   >
     <template v-slot:prepend>
       <q-icon 
@@ -14,20 +16,21 @@
         color="blue-grey"
       >            
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-          <div style="padding: 14px;max-width: 290px;">                        
+          <div style="padding: 14px;max-width: 300px;">                        
             <div>
               <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type"/>
             </div>
             <div>
-              From {{ dateRange?.from }} To {{ dateRange?.to }}
+              {{ inputRange }}              
             </div>
-            <q-date v-model="dateRange" 
-                    range
-                    minimal 
-                    flat
-                    @update:model-value="(value) => changeType(value)"
-            >
-            
+            <q-date 
+              v-model="dateRange" 
+              range
+              minimal 
+              flat
+              mask="YYYY/MM/DD"
+              @update:model-value="(value) => changeType(value)"
+            >            
             </q-date>
             <div class="row items-center justify-end">
               <q-btn v-close-popup label="Close" color="primary" flat />
