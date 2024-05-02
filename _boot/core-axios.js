@@ -101,9 +101,26 @@ export default function ({app, router, store, Vue, ssrContext}) {
     return Promise.reject(error);
   });
   //========== Response interceptor
-  axios.interceptors.response.use((response) => {
+  axios.interceptors.response.use(async (response) => {
     //Show messages
     if (response.data && response.data.messages) showMessages(response.data.messages)
+
+    const KEY = 'api.version'
+    const backendVersion = response.headers['x-app-version']
+    const version = await cache.get.item(KEY)
+
+    if (version) {
+      //Check if the version is updated
+      if (backendVersion > version) {
+        router.push({ 
+          name: 'app.update.app', 
+          query: { version: backendVersion } 
+        })
+      }
+    } else {
+      await cache.set(KEY, backendVersion)
+    }
+
     //Response
     return response;
   }, (error) => {
