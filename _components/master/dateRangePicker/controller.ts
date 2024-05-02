@@ -18,12 +18,16 @@ export default function controller(props: any, emit: any) {
   // States
   const state = reactive({
     // Key: Default Value
-    type: null
+    type: null, 
+    selectedRange: '', 
+    toEmit: {}
   })
 
   // Computed
   const computeds = {
     // key: computed(() => {})
+
+
     fieldsConfig: computed(() => {
       return {
         type: {
@@ -59,38 +63,29 @@ export default function controller(props: any, emit: any) {
         },
       }
     }),
-    /*
-
-      dateInput: computed({
-      get(){
-        return `${state.model.from} - ${state.model.to}`
-      }, 
-      set(value){
-        state.model.from = value.split('-')[0]
-        state.model.to = value.split('-')[1]
-        emit('update:modelValue', state.model);
-      }
-    })
-    */
-    
   }
 
   // Methods
   const methods = {
     // methodKey: () => {}
-    changeType(){
+    changeType(value){
       state.type = null
+      if(value['from'] && value['to']){
+        state.selectedRange = `from: ${value.from} to `
+      }
     },
     changeDate() {      
         let typeDate = clone(state.type)
         let fromDate = refs.dateRange.value.from
         let toDate = refs.dateRange.value.to
 
-        //const startOfDay = 'YYYY-MM-DD 00:00:00'
-        //const endOFDay = 'YYYY-MM-DD 23:59:59'
+        const startOfDay = 'YYYY/MM/DD 00:00:00'
+        const endOFDay = 'YYYY/MM/DD 23:59:59'
 
+        /*
         const startOfDay = 'YYYY/MM/DD'
         const endOFDay = 'YYYY/MM/DD'
+        */
         if (typeDate) {
           //Default Dates          
           //Case values
@@ -181,9 +176,8 @@ export default function controller(props: any, emit: any) {
           //refs.qDateProxy.value.hide()
         //Set new Date
         refs.dateRange.value.from = clone(fromDate)
-        refs.dateRange.value.to = clone(toDate)
-        //refs.calendar.value.setEditingRange(fromDate, toDate)
-        ///refs.qDateProxy.value.show()
+        refs.dateRange.value.to = clone(toDate)     
+        //toEmit   
         }  
         emit('update:modelValue', {type: typeDate, from: fromDate, to: toDate}) 
     }, 

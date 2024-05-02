@@ -25,7 +25,7 @@
                     range
                     minimal 
                     flat
-                    @update:model-value="changeType()"
+                    @update:model-value="(value) => changeType(value)"
             >
             
             </q-date>
