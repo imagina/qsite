@@ -700,7 +700,6 @@ export default {
                 ...(props.rules || []),
                 val => {
                   if (!val) return true
-                  console.warn('rule', val)
                   return this.$moment(val, maskDateRange, true).isValid() || `${this.$tr('isite.cms.message.invalidFormat')} (${maskDateRange})`
                 }
               ]

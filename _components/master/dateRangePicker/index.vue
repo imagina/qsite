@@ -16,25 +16,21 @@
         color="blue-grey"
       >            
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-          <div style="padding: 14px;max-width: 300px;">                        
-            <div>
+          <div>                        
+            <div class="dateRangePickerSelector">
               <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type"/>
-            </div>
-            <div>
-              {{ inputRange }}              
             </div>
             <q-date 
               v-model="dateRange" 
               range
-              minimal 
-              flat
               mask="YYYY/MM/DD"
+              :subtitle="inputRange"
               @update:model-value="(value) => changeType(value)"
-            >            
-            </q-date>
+            >
             <div class="row items-center justify-end">
               <q-btn v-close-popup label="Close" color="primary" flat />
             </div>
+            </q-date>            
           </div>
         </q-popup-proxy>
       </q-icon>
@@ -65,4 +61,10 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+.dateRangePickerSelector {
+  max-width: 290px;
+  padding-top: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
 </style>
