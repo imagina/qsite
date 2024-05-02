@@ -104,7 +104,7 @@ export default function controller(props: any, emit: any) {
           }
 
           if(state.props.filters[key]?.quickFilter){
-            state.quickFilterValues[key] = state.props.filters[key]
+            state.quickFilterValues[key] = state.props.filters[key].value
           } else {
             if(state.props.filters[key]?.loadOptions){
               state.hidenFields[key] = {...state.props.filters[key]}
