@@ -24,7 +24,7 @@
               v-model="dateRange" 
               range
               flat
-              mask="YYYY/MM/DD"
+              :mask="mask"
               :subtitle="inputRange"
               @update:model-value="(value) => changeType(value)"
             >

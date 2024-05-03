@@ -6,10 +6,11 @@ import moment from "moment";
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
-  const dateFormat = 'YYYY/MM/DD';
+  const rangeDateFormat = props.fieldProps.slot.mask;
+  const dateFormat = rangeDateFormat.split(' - ')[0];
   const startOfDayFormat = `${dateFormat} 00:00:00`;
   const endOfDayFormat = `${dateFormat} 23:59:59`;
-  const rangeDateFormat = `${dateFormat} - ${dateFormat}`;
+  
 
   // Refs
   const refs = {
@@ -19,12 +20,14 @@ export default function controller(props: any, emit: any) {
 
   // States
   const state = reactive({
-    type: '',
+    type: ''
   })
 
   // Computed
   const computeds = {
     // key: computed(() => {})
+    mask: computed(() => dateFormat),
+  
     fieldsConfig: computed(() => {
       return {
         type: {
@@ -228,10 +231,16 @@ export default function controller(props: any, emit: any) {
     }, 
     init(){
       //Check props
-      if(props.value){
-        refs.dateRange.value.from = props.value?.from ? props.value.from : null
-        refs.dateRange.value.to = props.value?.to ? props.value.to : null
-        state.type = props.value?.type ? props.value.type : null
+      if(props.modelValue != null){
+        const value = props.modelValue
+        if(value?.from && value?.to){
+          refs.dateRange.value.from = moment(value.from).format(dateFormat) ?? null
+          refs.dateRange.value.to = moment(value.to).format(dateFormat) ?? null
+          state.type = value?.type ?? null
+        
+          methods.setInputRange({from: refs.dateRange.value.from, to: refs.dateRange.value.to})
+          methods.emitValue({from: refs.dateRange.value.from, to: refs.dateRange.value.to})
+        }
       }
     } 
   }

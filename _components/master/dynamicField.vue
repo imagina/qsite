@@ -683,7 +683,7 @@ export default {
           break;
         case'dateRange':
           //Instance the mask
-          const maskDateRange = "YYYY/MM/DD - YYYY/MM/DD"
+          const maskDateRange = props.mask || "YYYY/MM/DD - YYYY/MM/DD"
 
           props = {
             field: {
