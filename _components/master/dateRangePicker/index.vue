@@ -23,6 +23,7 @@
             <q-date 
               v-model="dateRange" 
               range
+              flat
               mask="YYYY/MM/DD"
               :subtitle="inputRange"
               @update:model-value="(value) => changeType(value)"

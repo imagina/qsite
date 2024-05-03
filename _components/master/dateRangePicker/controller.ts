@@ -31,7 +31,6 @@ export default function controller(props: any, emit: any) {
           type: 'select',
           props: {
             label: props.label ?? i18n.tr('isite.cms.form.date'),
-            clearable: true,
             options: [
               {label: i18n.tr('isite.cms.label.customRange'), value: 'customRange'},
               {label: i18n.tr('isite.cms.label.today'), value: 'today'},
@@ -206,12 +205,12 @@ export default function controller(props: any, emit: any) {
               toDate = moment(toDate).format(endOFDay)
             break;
         }
-        //One day range
-        if(fromDate == toDate){
-          refs.dateRange.value = fromDate
-        } else {
-          refs.dateRange.value = {from: fromDate, to: toDate}
-        }
+      }
+      //One day range
+      if(fromDate == toDate){
+        refs.dateRange.value = fromDate
+      } else {
+        refs.dateRange.value = {from: fromDate, to: toDate}
       }
       methods.setInputRange(refs.dateRange.value)
       methods.emitValue({from: fromDate, to: toDate})
