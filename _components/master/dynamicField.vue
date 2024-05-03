@@ -691,7 +691,7 @@ export default {
               color: 'primary',
               outlined: true,
               dense: true,
-              icon: 'fa-light fa-calendar-days',
+              icon: 'fa-light fa-calendar-range',
               placeHolder: maskDateRange,
               hint: `${this.$tr("isite.cms.label.format")}: ${maskDateRange}`,
               ...props,

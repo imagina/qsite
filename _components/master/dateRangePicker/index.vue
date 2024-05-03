@@ -11,7 +11,6 @@
       <q-icon 
         v-if="fieldProps.field.icon"
         :name="fieldProps.field.icon"
-        size="18px"
         class="cursor-pointer"
         color="blue-grey"
       >            
