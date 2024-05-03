@@ -16,7 +16,7 @@
         color="blue-grey"
       >            
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-          <div>                        
+          <div class="dateRangePickerModal">                        
             <div class="dateRangePickerSelector">
               <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type"/>
             </div>
@@ -51,8 +51,7 @@ export default defineComponent({
     }, 
     fieldProps: {},
     label: '',
-    class: '', 
-
+    class: '',
   },
   emits:['update:modelValue'],
   components: {},
@@ -62,6 +61,10 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+.dateRangePickerModal {
+  background-color: #ffffff;
+}
+
 .dateRangePickerSelector {
   max-width: 290px;
   padding-top: 16px;

@@ -6,8 +6,10 @@ import moment from "moment";
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
-  const startOfDay = 'YYYY/MM/DD'
-  const endOFDay = 'YYYY/MM/DD'
+  const dateFormat = 'YYYY/MM/DD';
+  const startOfDayFormat = 'YYYY/MM/DD 00:00:00';
+  const endOfDayFormat = 'YYYY/MM/DD 23:59:59';  
+  const rangeDateFormat = 'YYYY/MM/DD - YYYY/MM/DD'
 
   // Refs
   const refs = {
@@ -66,7 +68,7 @@ export default function controller(props: any, emit: any) {
     updateDateRange(value){
       refs.inputRange.value = value
       if(value){
-        if(moment(value, 'YYYY/MM/DD - YYYY/MM/DD', true).isValid() ){
+        if(moment(value, rangeDateFormat, true).isValid() ){
            const from = value.split(' - ')[0]
            const to = value.split(' - ')[1]
            refs.dateRange.value = {from, to}
@@ -75,6 +77,7 @@ export default function controller(props: any, emit: any) {
         }
       }
     },
+
     //Set and cast value for input
     setInputRange(value){
       if(value != null){
@@ -86,17 +89,19 @@ export default function controller(props: any, emit: any) {
         }
       }
     },
+
     //Emits value for model-value
     emitValue(value){
       const from = value?.from ? value?.from : value
       const to = value?.to ? value?.to : value
       const toEmit = {
         type: state.type,
-        from: moment(from).format('YYYY/MM/DD 00:00:00'),
-        to : moment(to).format('YYYY/MM/DD 23:59:59')
+        from: moment(from).format(startOfDayFormat),
+        to : moment(to).format(endOfDayFormat)
       }
       emit('update:modelValue', toEmit) 
     },
+
     //Change and update values when date changes on q-calendar
     changeType(value){
       state.type = 'customRange'
@@ -111,11 +116,11 @@ export default function controller(props: any, emit: any) {
       
       //one day range
       if(typeDate == 'today' || typeDate == 'yesterday' || typeDate == 'tomorrow'){
-        fromDate = refs.dateRange.value || moment().format(startOfDay)
-        toDate = refs.dateRange.value  || moment().format(startOfDay)     
+        fromDate = refs.dateRange.value || moment().format(dateFormat)
+        toDate = refs.dateRange.value  || moment().format(dateFormat)     
       } else {
-        fromDate = refs.dateRange.value?.from || moment().format(startOfDay)
-        toDate = refs.dateRange.value?.to || moment().format(startOfDay)
+        fromDate = refs.dateRange.value?.from || moment().format(dateFormat)
+        toDate = refs.dateRange.value?.to || moment().format(dateFormat)
       }
         
       if (typeDate) {
@@ -123,86 +128,86 @@ export default function controller(props: any, emit: any) {
         //Case values
         switch (typeDate) {
           case 'today':
-            fromDate = moment().format(startOfDay)
-            toDate = moment().format(endOFDay)
+            fromDate = moment().format(dateFormat)
+            toDate = moment().format(dateFormat)
             break;
           case 'yesterday':
-            fromDate = moment().subtract(1, 'd').format(startOfDay)
-            toDate = moment().subtract(1, 'd').format(endOFDay)
+            fromDate = moment().subtract(1, 'd').format(dateFormat)
+            toDate = moment().subtract(1, 'd').format(dateFormat)
             break;
           case 'tomorrow':
-            fromDate = moment().add(1, 'd').format(startOfDay)
-            toDate = moment().add(1, 'd').format(endOFDay)
+            fromDate = moment().add(1, 'd').format(dateFormat)
+            toDate = moment().add(1, 'd').format(dateFormat)
             break;
           case 'lastSevenDays':
-            fromDate = moment().subtract(6, 'd').format(startOfDay)
-            toDate = moment().format(endOFDay)
+            fromDate = moment().subtract(6, 'd').format(dateFormat)
+            toDate = moment().format(dateFormat)
             break;
           case 'currentWeek':
-            fromDate = moment().startOf('isoWeek').format(startOfDay)
-            toDate = moment().endOf('isoWeek').format(endOFDay)
+            fromDate = moment().startOf('isoWeek').format(dateFormat)
+            toDate = moment().endOf('isoWeek').format(dateFormat)
             break;
           case 'lastWeek':
-            fromDate = moment().subtract(1, 'weeks').startOf('isoWeek').format(startOfDay)
-            toDate = moment().subtract(1, 'weeks').endOf('isoWeek').format(endOFDay)
+            fromDate = moment().subtract(1, 'weeks').startOf('isoWeek').format(dateFormat)
+            toDate = moment().subtract(1, 'weeks').endOf('isoWeek').format(dateFormat)
             break;
           case 'nextWeek':
-            fromDate = moment().add(1, 'weeks').startOf('isoWeek').format(startOfDay)
-            toDate = moment().add(1, 'weeks').endOf('isoWeek').format(endOFDay)
+            fromDate = moment().add(1, 'weeks').startOf('isoWeek').format(dateFormat)
+            toDate = moment().add(1, 'weeks').endOf('isoWeek').format(dateFormat)
             break;
           case 'lastThirtyDays':
-            fromDate = moment().subtract(29, 'd').format(startOfDay)
-            toDate = moment().format(endOFDay)
+            fromDate = moment().subtract(29, 'd').format(dateFormat)
+            toDate = moment().format(dateFormat)
             break;
           case 'lastSixtyDays':
-            fromDate = moment().subtract(59, 'd').format(startOfDay)
-            toDate = moment().format(endOFDay)
+            fromDate = moment().subtract(59, 'd').format(dateFormat)
+            toDate = moment().format(dateFormat)
             break;
           case 'currentMonth':
-            fromDate = moment().startOf('month').format(startOfDay)
-            toDate = moment().endOf('month').format(endOFDay)
+            fromDate = moment().startOf('month').format(dateFormat)
+            toDate = moment().endOf('month').format(dateFormat)
             break;
           case 'lastMonth':
-            fromDate = moment().subtract(1, 'months').startOf('month').format(startOfDay)
-            toDate = moment().subtract(1, 'months').endOf('month').format(endOFDay)
+            fromDate = moment().subtract(1, 'months').startOf('month').format(dateFormat)
+            toDate = moment().subtract(1, 'months').endOf('month').format(dateFormat)
             break;
           case 'nextMonth':
-            fromDate = moment().add(1, 'months').startOf('month').format(startOfDay)
-            toDate = moment().add(1, 'months').endOf('month').format(endOFDay)
+            fromDate = moment().add(1, 'months').startOf('month').format(dateFormat)
+            toDate = moment().add(1, 'months').endOf('month').format(dateFormat)
             break;
           case 'twoMonthsAgo':
-            fromDate = moment().subtract(2, 'months').startOf('month').format(startOfDay)
-            toDate = moment().subtract(2, 'months').endOf('month').format(endOFDay)
+            fromDate = moment().subtract(2, 'months').startOf('month').format(dateFormat)
+            toDate = moment().subtract(2, 'months').endOf('month').format(dateFormat)
             break;
           case 'twoYearsAgo':
-            fromDate = moment().subtract(2, 'year').startOf('year').format(startOfDay)
-            toDate = moment().subtract(2, 'year').endOf('year').format(endOFDay)
+            fromDate = moment().subtract(2, 'year').startOf('year').format(dateFormat)
+            toDate = moment().subtract(2, 'year').endOf('year').format(dateFormat)
             break;
           case 'lastYear':
-            fromDate = moment().subtract(1, 'year').startOf('year').format(startOfDay)
-            toDate = moment().subtract(1, 'year').endOf('year').format(endOFDay)
+            fromDate = moment().subtract(1, 'year').startOf('year').format(dateFormat)
+            toDate = moment().subtract(1, 'year').endOf('year').format(dateFormat)
             break;
           case 'lastTwoYears':
-            fromDate = moment().subtract(1, 'year').startOf('year').format(startOfDay)
-            toDate = moment().endOf('year').format(endOFDay)
+            fromDate = moment().subtract(1, 'year').startOf('year').format(dateFormat)
+            toDate = moment().endOf('year').format(dateFormat)
             break;
           case 'currentYear':
-            fromDate = moment().startOf('year').format(startOfDay)
-            toDate = moment().endOf('year').format(endOFDay)
+            fromDate = moment().startOf('year').format(dateFormat)
+            toDate = moment().endOf('year').format(dateFormat)
             break;
           case '15daysAroundToday':
-            fromDate = moment().subtract(7, 'days').format(startOfDay);
-            toDate = moment().add(7, 'days').format(endOFDay);
+            fromDate = moment().subtract(7, 'days').format(dateFormat);
+            toDate = moment().add(7, 'days').format(dateFormat);
             break;
           case '5daysAroundToday':
-            fromDate = moment().subtract(2, 'days').format(startOfDay);
-            toDate = moment().add(2, 'days').format(endOFDay);
+            fromDate = moment().subtract(2, 'days').format(dateFormat);
+            toDate = moment().add(2, 'days').format(dateFormat);
             break;
           case 'customRange':
             if (fromDate)
-              fromDate = moment(fromDate).format(startOfDay)
+              fromDate = moment(fromDate).format(dateFormat)
             if (toDate)
-              toDate = moment(toDate).format(endOFDay)
+              toDate = moment(toDate).format(dateFormat)
             break;
         }
       }
