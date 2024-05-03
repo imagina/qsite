@@ -71,12 +71,20 @@ export default function controller(props: any, emit: any) {
       refs.inputRange.value = value
       if(value){
         if(moment(value, rangeDateFormat, true).isValid() ){
-           const from = value.split(' - ')[0]
-           const to = value.split(' - ')[1]
+           const values = value.split(' - ')
+           let from = values[0]
+           let to = values[1]
+           /*fixs the input if from is grater than to*/
+           if(from > to ){
+             from = values[1]
+             to = values[0]
+             methods.setInputRange({from, to})
+           }
            refs.dateRange.value = {from, to}
            state.type = 'customRange'
            methods.emitValue({from, to})
         } else {
+          refs.dateRange.value = {from: null, to: null}
           methods.emitValue(null)
         }
       }
