@@ -74,13 +74,16 @@ export default function controller(props: any, emit: any) {
            refs.dateRange.value = {from, to}
            state.type = 'customRange'
            methods.emitValue({from, to})
+        } else {
+          methods.emitValue(null)
         }
       }
     },
-
     //Set and cast value for input
     setInputRange(value){
-      if(value != null){
+      if(value == null){
+        refs.inputRange.value = value
+      } else {
         if(value?.from){
           refs.inputRange.value = `${value.from ?? ''} - ${value?.to ?? ''}`
         } else {
@@ -92,18 +95,23 @@ export default function controller(props: any, emit: any) {
 
     //Emits value for model-value
     emitValue(value){
-      const from = value?.from ? value?.from : value
-      const to = value?.to ? value?.to : value
-      const toEmit = {
-        type: state.type,
-        from: moment(from).format(startOfDayFormat),
-        to : moment(to).format(endOfDayFormat)
+      let toEmit = null
+
+      if(value != null ){
+        const from = value?.from ? value?.from : value
+        const to = value?.to ? value?.to : value
+        toEmit = {
+          type: state.type,
+          from: moment(from).format(startOfDayFormat),
+          to : moment(to).format(endOfDayFormat)
+        }
       }
-      emit('update:modelValue', toEmit) 
+      emit('update:modelValue', toEmit)      
     },
 
     //Change and update values when date changes on q-calendar
     changeType(value){
+      console.log(value)
       state.type = 'customRange'
       methods.setInputRange(value)
       methods.emitValue(value)

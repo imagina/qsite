@@ -5,7 +5,7 @@
     v-bind="fieldProps.field"
     :label="label"
     :class="class"
-    debounce="500"
+    debounce="300"
   >
     <template v-slot:prepend>
       <q-icon 
@@ -16,7 +16,7 @@
         color="blue-grey"
       >            
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-          <div class="dateRangePickerModal">                        
+          <div class="dateRangePickerModal">
             <div class="dateRangePickerSelector">
               <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type"/>
             </div>
