@@ -120,7 +120,7 @@
           <template v-slot:prepend>
             <q-icon name="fa-light fa-calendar-day" class="cursor-pointer" color="blue-grey">
               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                <q-date v-model="responseValue"  range v-bind="fieldProps.slot" @update:modelValue="() => $refs.qDateProxy.hide()" />
+                <q-date v-model="responseValue" v-bind="fieldProps.slot" @update:modelValue="() => $refs.qDateProxy.hide()" />
               </q-popup-proxy>
             </q-icon>
           </template>
