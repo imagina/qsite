@@ -7,15 +7,14 @@ export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
   const dateFormat = 'YYYY/MM/DD';
-  const startOfDayFormat = 'YYYY/MM/DD 00:00:00';
-  const endOfDayFormat = 'YYYY/MM/DD 23:59:59';  
-  const rangeDateFormat = 'YYYY/MM/DD - YYYY/MM/DD'
+  const startOfDayFormat = `${dateFormat} 00:00:00`;
+  const endOfDayFormat = `${dateFormat} 23:59:59`;
+  const rangeDateFormat = `${dateFormat} - ${dateFormat}`;
 
   // Refs
   const refs = {
     dateRange: ref({from: '', to: ''}),
     inputRange: ref(null),
-    type: ref()
   }
 
   // States
@@ -111,7 +110,6 @@ export default function controller(props: any, emit: any) {
 
     //Change and update values when date changes on q-calendar
     changeType(value){
-      console.log(value)
       state.type = 'customRange'
       methods.setInputRange(value)
       methods.emitValue(value)
