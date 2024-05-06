@@ -105,24 +105,31 @@ export default function ({app, router, store, Vue, ssrContext}) {
     return Promise.reject(error);
   });
   //========== Response interceptor
-  axios.interceptors.response.use(async (response) => {
+  axios.interceptors.response.use((response) => {
     //Show messages
     if (response.data && response.data.messages) showMessages(response.data.messages)
 
-    const KEY = 'api.version'
-    const backendVersion = response.headers['x-app-version']
-    const version = await cache.get.item(KEY)
+    //Check if the version is updated
+    if (response.headers['x-app-version'] > config('app.version') && !isUpdate) {
+      isUpdate = true
 
-    if (version) {
-      //Check if the version is updated
-      if (backendVersion > version) {
-        router.push({ 
-          name: 'app.update.app', 
-          query: { version: backendVersion } 
+      store.dispatch('qsiteApp/REFRESH_PAGE');
+
+      setTimeout(() => {
+        alert.showModal({
+          title: 'New update', 
+          message: 'We are creating new features, please hit the Update button to get the last version!',
+          icon: 'fa-solid fa-arrows-rotate',
+          color: 'tertiary',
+          actions: [{
+            label: 'Update',
+            color: 'tertiary',
+            handler: () => {
+              window.location.reload();
+            }
+          }]
         })
-      }
-    } else {
-      await cache.set(KEY, backendVersion)
+      }, 5000)
     }
 
     //Response
