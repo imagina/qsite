@@ -58,13 +58,11 @@ export default {
       'impersonatorData',
       'app.state.extra',
       'auth.organization.id',
-      'requests',
-      'api.version'
+      'requests'
     ],
     logout: [
       'site.default.locale',
-      'requests',
-      'api.version'
+      'requests'
     ]
   },
   //Reset Store
