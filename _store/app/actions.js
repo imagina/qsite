@@ -29,6 +29,7 @@ export const REFRESH_PAGE = ({state, commit, dispatch, getters}) => {
     commit('LOAD_PAGE', true)
     Loading.hide()
     resolve(true)
+    window.location.reload()
   })
 }
 
