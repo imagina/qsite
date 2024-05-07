@@ -33,6 +33,34 @@ export const REFRESH_PAGE = ({state, commit, dispatch, getters}) => {
   })
 }
 
+export const CLEAR_CACHE_STORAGE = async () => {
+  try {
+    const cacheNames = await caches.keys()
+
+    await Promise.all(
+      cacheNames.map(async (cacheName) => {
+        await caches.delete(cacheName)
+      })
+    )
+  } catch (error) {
+    console.error('Error clearing Cache Storage in CLEAR_CACHE_STORAGE: ', error);
+  }
+}
+
+export const DELETE_SW = async () => {
+  try {
+    if ('serviceWorker' in navigator) {
+      const registration = await navigator.serviceWorker.getRegistration()
+      if (registration) {
+        await registration.unregister()
+        window.location.reload()
+      }
+    }
+  } catch (error) {
+    console.error('Error deleting Service Worker: ', error);
+  }
+}
+
 // get ip addresss
 export const GET_IP_ADDRESS = ({commit}) => {
   return new Promise(async (resolve, reject) => {
