@@ -683,7 +683,7 @@ export default {
           break;
         case'dateRange':
           //Instance the mask
-          const maskDateRange = props.mask || "YYYY/MM/DD - YYYY/MM/DD"
+          const maskDateRange = props?.mask ? `${props.mask} - ${props.mask}` : 'YYYY/MM/DD - YYYY/MM/DD'          
 
           props = {
             field: {
@@ -707,7 +707,9 @@ export default {
             slot: {
               ...props,
               mask: maskDateRange,
-              field: props?.field || null
+              field: props?.field || null,
+              startOfDay: props?.startOfDay ?? '00:00:00',
+              endOfDay: props?.endOfDay ?? '23:59:59',
             }
           }
           break;
