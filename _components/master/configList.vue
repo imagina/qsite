@@ -3,16 +3,16 @@
     <!-- ===== Header ===== -->
     <div class="row justify-between items-center">
       <div class="text-subtitle1 row items-center">
-        <q-icon name="fas fa-cog" color="primary" size="20px" class="q-mr-sm"/>
-        <label>{{ $tr('isite.cms.label.configuration', {capitalize: true}) }}</label>
+        <q-icon name="fas fa-cog" color="primary" size="20px" class="q-mr-sm" />
+        <label>{{ $tr('isite.cms.label.configuration', { capitalize: true }) }}</label>
       </div>
       <!-- Close icon -->
       <q-icon name="fas fa-times" color="blue-grey" size="20px" class="cursor-pointer"
-              @click="eventBus.emit('toggleMasterDrawer', 'config')"/>
+              @click="eventBus.emit('toggleMasterDrawer', 'config')" />
     </div>
 
     <!--Separator-->
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" />
 
     <!--Impersonate-->
     <q-no-ssr>
@@ -43,7 +43,7 @@
             </div>
             <!--Loading-->
             <div v-if="loadingImpersonate" class="q-py-sm">
-              <q-spinner class="q-mr-sm"/>
+              <q-spinner class="q-mr-sm" />
               {{ `${$tr('isite.cms.label.loading')}...` }}
             </div>
           </div>
@@ -56,15 +56,15 @@
               <!--Icon-->
               <div v-if="!loadingImpersonate">
                 <q-icon color="red" class="q-mr-sm" name="fas fa-sign-out-alt"
-                        size="20px"/>
+                        size="20px" />
               </div>
               <!--Loading-->
               <div v-if="loadingImpersonate" class="q-py-sm">
-                <q-spinner class="q-mr-sm"/>
+                <q-spinner class="q-mr-sm" />
                 {{ `${$tr('isite.cms.label.loading')}...` }}
               </div>
               <div v-if="!loadingImpersonate" color="grey-10" style="text-decoration: none">
-                {{ $t('isite.cms.configList.leaveImpersonating', {capitalize: true}) }}
+                {{ $t('isite.cms.configList.leaveImpersonating', { capitalize: true }) }}
               </div>
             </div>
           </q-item-section>
@@ -73,20 +73,20 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md" v-if="$hasAccess('profile.user.impersonate') || quserState.impersonating"/>
+    <q-separator class="q-my-md" v-if="$hasAccess('profile.user.impersonate') || quserState.impersonating" />
 
     <!--user Data-->
     <q-no-ssr>
       <!--Title-->
       <div class="title-block">
-        {{ $tr('isite.cms.label.session', {capitalize: true}) }}
+        {{ $tr('isite.cms.label.session', { capitalize: true }) }}
       </div>
 
       <!--Roles-->
       <div class="q-mt-xs q-px-sm">
         <!-- Title -->
         <div class="text-primary">
-          <q-icon name="fas fa-user-circle"/>
+          <q-icon name="fas fa-user-circle" />
           {{ $trp('isite.cms.label.role') }}
         </div>
 
@@ -104,7 +104,7 @@
       <div class="q-mt-xs q-px-sm">
         <!-- Title -->
         <div class="text-primary">
-          <q-icon name="fas fa-people-arrows"/>
+          <q-icon name="fas fa-people-arrows" />
           {{ this.$trp('iprofile.cms.label.userGroup') }}
         </div>
 
@@ -120,7 +120,7 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md" v-if="$hasAccess('profile.user.impersonate') || quserState.impersonating"/>
+    <q-separator class="q-my-md" v-if="$hasAccess('profile.user.impersonate') || quserState.impersonating" />
 
     <!--Organization-->
     <q-no-ssr v-if="organizationField">
@@ -130,7 +130,7 @@
       </div>
       <!--dynamic field to organizations-->
       <dynamic-field v-model="organizationId" :field="organizationField" v-if="organizationField"
-                     @update:modelValue="setOrganization"/>
+                     @update:modelValue="setOrganization" />
       <!--no organizations-->
       <div v-else class="q-px-sm text-grey-7" style="line-height: 1.2">
         {{ $tr('isite.cms.messages.noOrganization') }}...
@@ -138,27 +138,27 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" />
 
     <!-- Language -->
     <div>
       <!--Title-->
       <div class="title-block">
-        {{ $tr('isite.cms.label.language', {capitalize: true}) }}
+        {{ $tr('isite.cms.label.language', { capitalize: true }) }}
       </div>
 
       <!--Data language-->
       <div class="q-mt-xs q-px-sm">
         <!-- Title -->
         <div class="text-primary">
-          <q-icon name="fas fa-language"/>
-          {{ $tr('isite.cms.label.language', {capitalize: true}) }}
+          <q-icon name="fas fa-language" />
+          {{ $tr('isite.cms.label.language', { capitalize: true }) }}
         </div>
 
         <!--Select Language-->
         <q-select :options="options.locales" dense outlined emit-value map-options
                   filter hide-underline v-if="show.locales" @update:modelValue="updateLocale"
-                  v-model="locale" class="full-width q-if-focused q-if-focusable"/>
+                  v-model="locale" class="full-width q-if-focused q-if-focusable" />
 
         <!--Current language selected-->
         <label v-else class="block ellipsis">
@@ -182,39 +182,39 @@
     </div>
 
     <!--Separator-->
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" />
 
     <!-- ===== Settings ===== -->
     <div>
       <!--Title-->
       <div class="title-block">
-        {{ $trp('isite.cms.label.action', {capitalize: true}) }}
+        {{ $trp('isite.cms.label.action', { capitalize: true }) }}
       </div>
 
       <!--Clear Cache-->
-      <div class="q-px-sm cursor-pointer q-pt-md" @click="clearCache()">
-        <q-icon color="primary" size="18px" name="fas fa-broom" class="q-mr-sm"/>
-        {{ $t('isite.cms.configList.clearCache', {capitalize: true}) }}
+      <div class="q-px-sm cursor-pointer q-pt-md" @click="$router.push({name: 'app.update.app'})">
+        <q-icon color="primary" size="18px" name="fas fa-broom" class="q-mr-sm" />
+        {{ $t('isite.cms.configList.clearCache', { capitalize: true }) }}
       </div>
 
       <!--Full Screen-->
       <div class="q-px-sm cursor-pointer q-pt-md" @click="toggleFullscreen()">
-        <q-icon color="primary" size="18px" name="fas fa-expand" class="q-mr-sm"/>
-        {{ $t('isite.cms.configList.fullScreen', {capitalize: true}) }}
+        <q-icon color="primary" size="18px" name="fas fa-expand" class="q-mr-sm" />
+        {{ $t('isite.cms.configList.fullScreen', { capitalize: true }) }}
       </div>
 
       <!--Logout  -->
       <q-no-ssr>
         <div class="q-px-sm cursor-pointer q-pt-md" @click="$router.push({name:'auth.logout'})"
              v-if="quserState.authenticated">
-          <q-icon color="red" size="18px" name="fas fa-sign-out-alt" class="q-mr-sm"/>
-          {{ $t('isite.cms.configList.signOut', {capitalize: true}) }}
+          <q-icon color="red" size="18px" name="fas fa-sign-out-alt" class="q-mr-sm" />
+          {{ $t('isite.cms.configList.signOut', { capitalize: true }) }}
         </div>
       </q-no-ssr>
     </div>
 
     <div class="text-subtitle2 fixed fixed-bottom text-blue-grey q-px-md q-py-sm text-right">
-      <q-icon name="fas fa-code-branch" class="q-mr-xs"/>
+      <q-icon name="fas fa-code-branch" class="q-mr-xs" />
       {{ versionText }}
     </div>
   </div>
@@ -223,7 +223,7 @@
 import { eventBus } from 'src/plugins/utils'
 export default {
   mounted() {
-    this.$nextTick(async function () {
+    this.$nextTick(async function() {
       this.setOptions()
     })
   },
@@ -351,7 +351,7 @@ export default {
 
     //update Locale
     async updateLocale() {
-      this.$store.dispatch('qsiteApp/SET_LOCALE', {locale: this.locale, vue: this}).then(response => {
+      this.$store.dispatch('qsiteApp/SET_LOCALE', { locale: this.locale, vue: this }).then(response => {
         this.$store.dispatch('qsiteApp/REFRESH_PAGE')
       }).catch(error => console.error(error))
     },
@@ -392,11 +392,6 @@ export default {
       }
 
       this.loadingImpersonate = false
-    },
-
-    //Clear cache
-    clearCache() {
-      this.$store.dispatch('qsiteApp/REFRESH_PAGE');
     },
 
     //set organization
