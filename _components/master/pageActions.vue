@@ -25,10 +25,10 @@
                         v-if="btn.type == 'btn-dropdown'" outline
         >
           <template v-slot:label>
-            <div class="row items-center no-wrap" @click="refreshByTime(timeRefresh)">
+            <div class="row items-center no-wrap">
               <q-icon left :name="btn.props.icon"/>
-              <div class="text-center" v-if="multipleRefresh">
-                {{ titleRefresh }}
+              <div class="text-center">
+                {{ btn.props.label }}
               </div>
             </div>
           </template>
