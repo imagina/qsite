@@ -9,6 +9,34 @@ import configApp from "src/setup/app"
 import moment from "moment";
 import momentz from "moment-timezone";
 
+export const CLEAR_CACHE_STORAGE = async ({}, excludedKeyList=[]) => {
+  const cacheNames = await caches.keys()
+
+  await Promise.all(cacheNames.map(async (cacheName) => {
+    try {
+      const deleteAll = excludedKeyList?.length === 0
+      const deleteCache = excludedKeyList?.length > 0 && !excludedKeyList?.includes(cacheName)
+
+      if (deleteAll) {
+        await caches.delete(cacheName)
+      }
+
+      if (deleteCache) {
+        console.log({ cacheName })
+        const cache = await caches.open(cacheName)
+        const requests = await cache.keys()
+        requests.forEach(async (request) => {
+          await cache.delete(request)
+        })
+      }
+      return await Promise.resolve()
+    } catch (error) {
+      console.error('Error clearing Cache Storage in CLEAR_CACHE_STORAGE: ', error);
+      return await Promise.reject(error)
+    }
+  }))
+}
+
 //Refresh page
 export const REFRESH_PAGE = ({state, commit, dispatch, getters}) => {
   return new Promise(async (resolve, reject) => {
@@ -26,25 +54,11 @@ export const REFRESH_PAGE = ({state, commit, dispatch, getters}) => {
     })//update settings sites
     dispatch('qsiteApp/SET_SITE_COLORS', null, {root: true})//Load colors
     commit('LOAD_PAGE', true)
+    dispatch('CLEAR_CACHE_STORAGE', ['compile-time-precache'])
     Loading.hide()
     
     resolve(true)
-    window.location.reload()
   })
-}
-
-export const CLEAR_CACHE_STORAGE = async () => {
-  try {
-    const cacheNames = await caches.keys()
-
-    await Promise.all(
-      cacheNames.map(async (cacheName) => {
-        await caches.delete(cacheName)
-      })
-    )
-  } catch (error) {
-    console.error('Error clearing Cache Storage in CLEAR_CACHE_STORAGE: ', error);
-  }
 }
 
 export const DELETE_SW = async () => {
@@ -53,7 +67,6 @@ export const DELETE_SW = async () => {
       const registration = await navigator.serviceWorker.getRegistration()
       if (registration) {
         await registration.unregister()
-        window.location.reload()
       }
     }
   } catch (error) {
