@@ -14,7 +14,7 @@
         class="cursor-pointer"
         color="blue-grey"
       >            
-        <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+        <q-popup-proxy transition-show="scale" transition-hide="scale">
           <div class="dateRangePickerModal">
             <div class="dateRangePickerSelector">
               <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type"/>

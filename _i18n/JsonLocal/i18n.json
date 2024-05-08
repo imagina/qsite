@@ -1349,9 +1349,9 @@
           "createNewCustomer": "Create new customer"
         },
         "sidebar": {
-          "aircraftType": "Aircraft type",
-          "airline": "Airline",
-          "airport": "Airport",
+          "aircraftType": "Aircraft types",
+          "airline": "Airlines",
+          "airport": "Airports",
           "flightSchedule": "Flight Schedule",
           "flightScheduleLeg": "Flight Schedule Leg | Flight Schedule Legs",
           "flightStatuses": "Flight Statuses",
@@ -1625,8 +1625,8 @@
           "post": "Post",
           "addFile": "Add File",
           "error": "Error",
-          "enabled": "Enable",
-          "disabled": "Disable",
+          "enabled": "Enabled",
+          "disabled": "Disabled",
           "available": "Available",
           "soldOut": "Sold Out",
           "all": "All | All",

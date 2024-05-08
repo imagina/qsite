@@ -6,11 +6,13 @@ import moment from "moment";
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
-  const field = props.fieldProps.slot.field;
-  const rangeDateFormat = props.fieldProps.slot.mask;
+  const fieldProps = props.fieldProps.slot;
+  const field = fieldProps.field;
+  const rangeDateFormat = fieldProps.mask;
   const dateFormat = rangeDateFormat.split(' - ')[0];
-  const startOfDayFormat = `${dateFormat} 00:00:00`;
-  const endOfDayFormat = `${dateFormat} 23:59:59`;
+  const emitFormat = `${dateFormat} HH:mm:ss`;
+  const startOfDay = fieldProps.startOfDay;
+  const endOfDay = fieldProps.endOfDay;
   
 
   // Refs
@@ -111,11 +113,12 @@ export default function controller(props: any, emit: any) {
       if(value != null ){
         const from = value?.from ? value?.from : value
         const to = value?.to ? value?.to : value
+
         toEmit = {
           field,
           type: state.type,
-          from: moment(from).format(startOfDayFormat),
-          to : moment(to).format(endOfDayFormat)
+          from: moment(`${from} ${startOfDay}`).format(emitFormat),
+          to : moment(`${to} ${endOfDay}`).format(emitFormat)
         }
       }
       emit('update:modelValue', toEmit)      
