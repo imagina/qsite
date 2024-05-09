@@ -169,7 +169,7 @@ export default {
         },
         // Bulk Actions
         {
-          label: this.$tr('isite.cms.label.bulkActions'),
+          label: this.$tr('isite.cms.label.bulkAction'),
           vIf: (this.params.bulkActions && !excludeActions.includes('bulkActions') && !this.isAppOffline),
           props: {
             icon: 'fa-duotone fa-boxes-packing'
