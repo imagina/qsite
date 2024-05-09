@@ -228,6 +228,7 @@
             v-bind="fieldProps.field"
             :options="formatOptions"
             placeholder=""
+            :max-height="200"
             @select="(node, instanceId) => $emit('select', {node, instanceId})"
           >
               <template #option-label="{node}">
@@ -1796,6 +1797,14 @@ export default {
         line-height: 1.9;
         padding: 0;
       }
+    }
+
+    .vue-treeselect__menu-container {
+      position: static;
+    }
+
+    .vue-treeselect__menu {
+      position: relative !important;
     }
   }
 
