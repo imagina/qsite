@@ -250,7 +250,7 @@ export default {
             props: {
               id: 'siteActionHelpCenter',
               ...this.defaultButtonProps,
-              icon: "fas fa-broom",
+              icon: "fa-light fa-broom",
             },
             action: () => this.$router.push({name: 'app.update.app'})
           },

@@ -1534,8 +1534,8 @@
           "exportReady": "Your <b>{fileName}</b> report is Ready!",
           "noOrganization": "You do not belong to an organization",
           "wantToCreateAChildForm": "¿Do you want to create a child form of",
-          "refreshAppVersion": "We are creating new features, please hit the Update button to get the last version.",
-          "updateAvailable": "Update available",
+          "refreshAppVersion": "We are excited to introduce new features and enhancements in this version. Click the update button to enjoy the latest experience.",
+          "updateAvailable": "New Update Available!",
           "updateNow": "Update now"
         },
         "startTime": "Start time",
@@ -3761,8 +3761,8 @@
           "noOrganization": "Todavía no perteneces a una organización",
           "wantToCreateAChildForm": "¿Quieres crear un formulario hijo de",
           "copyDisclosureLink": "El enlace de divulgación se ha copiado en el portapapeles",
-          "refreshAppVersion": "Estamos creando nuevas funciones. Presione el botón Actualizar para obtener la última versión.",
-          "updateAvailable": "Actualización disponible",
+          "refreshAppVersion": "Estamos emocionados de presentar nuevas funciones y mejoras en esta versión. Haga clic en el botón de actualización para disfrutar de la última experiencia.",
+          "updateAvailable": "¡Nueva actualización disponible!",
           "updateNow": "Actualizar ahora"
         },
         "startTime": "Hora de inicio",
