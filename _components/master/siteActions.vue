@@ -230,13 +230,13 @@ export default {
             label: this.$trp('isite.cms.label.helpCenter'),
             vIf: parseInt(this.$getSetting('isite::hcStatus') || '0'),
             props: {
+              id: 'siteActionHelpCenter',
               ...this.defaultButtonProps,
               icon: "fal fa-question-circle",
             },
             menu: {
               actions: [
                 {
-                  id: 'siteActionHelpCenter',
                   icon: 'fa-light fa-question-circle',
                   label: 'FAQ',
                   action: () => eventBus.emit('toggleHelpSection', {sectionName: 'faq'})
