@@ -236,6 +236,7 @@ export default {
             menu: {
               actions: [
                 {
+                  id: 'siteActionHelpCenter',
                   icon: 'fa-light fa-question-circle',
                   label: 'FAQ',
                   action: () => eventBus.emit('toggleHelpSection', {sectionName: 'faq'})
@@ -248,7 +249,6 @@ export default {
             name: 'clearCache',
             label: this.$tr('isite.cms.configList.clearCache'),
             props: {
-              id: 'siteActionHelpCenter',
               ...this.defaultButtonProps,
               icon: "fa-light fa-broom",
             },
