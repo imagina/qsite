@@ -81,11 +81,13 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
+    <bulk-actions v-model="exportParams" ref="bulkActions"/>
   </div>
 </template>
 <script>
 //Components
-import masterExport from "@imagina/qsite/_components/master/masterExport"
+import masterExport from "@imagina/qsite/_components/master/masterExport.vue"
+import bulkActions from "@imagina/qsite/_components/master/bulkActions.vue"
 
 export default {
   beforeDestroy() {
@@ -107,7 +109,7 @@ export default {
     },
     tourName: {default: null}
   },
-  components: {masterExport},
+  components: { masterExport, bulkActions },
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -164,6 +166,15 @@ export default {
             icon: 'fa-duotone fa-file-arrow-down'
           },
           action: () => this.$refs.exportComponent.showReport()
+        },
+        // Bulk Actions
+        {
+          label: this.$tr('isite.cms.label.bulkActions'),
+          vIf: (this.params.bulkActions && !excludeActions.includes('bulkActions') && !this.isAppOffline),
+          props: {
+            icon: 'fa-duotone fa-boxes-packing'
+          },
+          action: () => this.$refs.bulkActions.showReport()
         },
         //Tour
         {
