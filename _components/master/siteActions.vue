@@ -230,7 +230,6 @@ export default {
             label: this.$trp('isite.cms.label.helpCenter'),
             vIf: parseInt(this.$getSetting('isite::hcStatus') || '0'),
             props: {
-              id: 'siteActionHelpCenter',
               ...this.defaultButtonProps,
               icon: "fal fa-question-circle",
             },
@@ -243,6 +242,17 @@ export default {
                 }
               ]
             }
+          },
+          // Clear Cache
+          {
+            name: 'clearCache',
+            label: this.$tr('isite.cms.configList.clearCache'),
+            props: {
+              id: 'siteActionHelpCenter',
+              ...this.defaultButtonProps,
+              icon: "fas fa-broom",
+            },
+            action: () => this.$router.push({name: 'app.update.app'})
           },
         ],
         menu: [
