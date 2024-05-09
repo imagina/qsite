@@ -129,15 +129,21 @@ export default function controller(props: any, emit: any) {
             const options = state.props.filters[key]?.props?.options || []
             //loadedOptions callback
             state.props.filters[key].loadOptions.loadedOptions = (data) => {
-              state.loadedOptions[key] = [...options, ...data]
-              methods.setReadValues()
+              //fix setReadValues twice
+              if(!state.loadedOptions[key]){
+               state.loadedOptions[key] = [...options, ...data]
+               methods.setReadValues()
+              }
             }
 
             //(hiden) loadedOptions callback for url filters
              if(state.hidenFields[key]){
               state.hidenFields[key].loadOptions.loadedOptions = (data) => {
-                state.loadedOptions[key] = [...options, ...data]
-                methods.setReadValues()
+                //fix setReadValues twice
+                if(!state.loadedOptions[key]){ 
+                 state.loadedOptions[key] = [...options, ...data]
+                 methods.setReadValues()
+                }
               }
             }
           } else {
@@ -181,14 +187,14 @@ export default function controller(props: any, emit: any) {
       if(Object.keys(state.readValues).length > 0){        
         Object.keys(state.readValues).forEach(key => {
           if(state.readValues[key].value != null && state.readValues[key].value != undefined){
-            state.filterValues[key] = state.readValues[key].value            
+            state.filterValues[key] = state.readValues[key].value
           }
         })
       }
       //restore from quickFilters
       if(Object.keys(state.quickFilters).length > 0){        
         Object.keys(state.quickFilterValues).forEach(key => {
-          state.filterValues[key] = state.quickFilterValues[key]          
+          state.filterValues[key] = state.quickFilterValues[key]
         })
       }
     },
