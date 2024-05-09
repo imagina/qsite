@@ -167,7 +167,7 @@
         </div>
     </master-modal>
   </template>
-<script lang="ts">
+<script>
 import Vue, { 
     ref, 
     onMounted, 
