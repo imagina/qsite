@@ -95,7 +95,7 @@ export default {
   data() {
     return {
       defaultIcon: 'fa-solid fa-circle-info',
-      defaultColor: 'light-blue-8'
+      defaultColor: 'info'
     }
   },
 }
