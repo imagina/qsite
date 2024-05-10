@@ -87,7 +87,7 @@
 <script>
 //Components
 import masterExport from "@imagina/qsite/_components/master/masterExport.vue"
-import bulkActions from "@imagina/qsite/_components/master/bulkActions.vue"
+import bulkActions from "@imagina/qsite/_components/master/bulkActions"
 
 export default {
   beforeDestroy() {

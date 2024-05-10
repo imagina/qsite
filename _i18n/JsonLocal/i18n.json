@@ -3159,7 +3159,8 @@
           "noOrganization": "Todavía no perteneces a una organización",
           "refreshAppVersion": "Estamos creando nuevas funciones. Presione el botón Actualizar para obtener la última versión.",
           "updateAvailable": "Actualización disponible",
-          "updateNow": "Actualizar ahora"
+          "updateNow": "Actualizar ahora",
+          "dispatchBulkAction": "Acción masiva de envío de <b class=\"text-blue-grey\">{pageTitle}</b>"
         },
         "startTime": "Hora de inicio",
         "endTime": "Hora de finalización",
@@ -3523,7 +3524,8 @@
           "continueUser": "Continuar con este Usuario",
           "createNewAccount": "Crear Nueva Cuenta",
           "continue": "Continuar",
-          "plan": "Plan"
+          "plan": "Plan",
+          "bulkAction": "Nueva acción masiva"
         },
         "message": {
           "requestAdded": "Petición agregada a la cola sin conexión",
