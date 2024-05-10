@@ -170,10 +170,6 @@
 import { bulkActionsController } from './user.controller'
 
 export default {
-    beforeDestroy() {
-        this.$root.$off('export.data.refresh')
-        this.$eventBus.$off('isite.export.ready')
-    },
     setup(props, { expose, emit }) {
         return { ...bulkActionsController(props, { expose, emit }) }
     }
