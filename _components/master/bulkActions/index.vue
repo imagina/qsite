@@ -175,7 +175,7 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
+<style>
     .alert {
         background-color: var(--q-color-warning) + '1A';
         border-color: var(--q-color-warning);
