@@ -170,16 +170,12 @@
 import { bulkActionsController } from './user.controller'
 
 export default {
-    beforeDestroy() {
-        this.$root.$off('export.data.refresh')
-        this.$eventBus.$off('isite.export.ready')
-    },
     setup(props, { expose, emit }) {
         return { ...bulkActionsController(props, { expose, emit }) }
     }
 }
 </script>
-<style lang="scss" scoped>
+<style>
     .alert {
         background-color: var(--q-color-warning) + '1A';
         border-color: var(--q-color-warning);
