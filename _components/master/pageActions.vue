@@ -87,7 +87,7 @@
 <script>
 //Components
 import masterExport from "@imagina/qsite/_components/master/masterExport.vue"
-import bulkActions from "@imagina/qsite/_components/master/bulkActions.vue"
+import bulkActions from "@imagina/qsite/_components/master/bulkActions"
 
 export default {
   beforeDestroy() {
@@ -156,6 +156,8 @@ export default {
     actions() {
       //Instance excludeActions prop
       let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
+
+      console.log('this.params', this.params)
 
       let response = [
         //Export
