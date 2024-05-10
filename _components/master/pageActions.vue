@@ -157,8 +157,6 @@ export default {
       //Instance excludeActions prop
       let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
 
-      console.log('this.params', this.params)
-
       let response = [
         //Export
         {
