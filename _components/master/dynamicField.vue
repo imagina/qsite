@@ -381,7 +381,12 @@
             }"
           >
             <!--content-->
-            <div class='tw-flex tw-items-center'>
+            <div 
+              class='tw-flex tw-items-center'
+              :class="{
+                'tw-mb-2': fieldProps.actions.length > 0
+              }"
+            >
               <!--Icon-->
               <q-icon
                 v-if="fieldProps.icon"
