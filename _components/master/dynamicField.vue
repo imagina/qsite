@@ -371,7 +371,7 @@
             class='
               tw-border
               tw-border-solid
-              tw-rounded-2xl
+              tw-rounded-xl
               tw-w-full
               tw-p-3.5
             '
@@ -387,7 +387,7 @@
                 v-if="fieldProps.icon"
                 :name="fieldProps.icon"
                 :color="fieldProps.color || 'info'" 
-                size="34px"
+                size="26px"
               />
               <!--message-->
               <p class='tw-ml-3.5' v-html="fieldProps.message" />
