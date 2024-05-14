@@ -394,13 +394,11 @@ export default {
     },
 
     //Clear cache
-    clearCache() {
+    async clearCache() {
       this.loadingCacheClear = true
-      //Request
-      this.$crud.post('apiRoutes.qsite.cacheClear').then(response => {
-      }).catch(error => this.loadingCacheClear = false)
+      await this.$store.dispatch('qsiteApp/REFRESH_PAGE');
+      await this.$store.dispatch('qsiteApp/CLEAR_CACHE_STORAGE');
       this.loadingCacheClear = false
-      this.$store.dispatch('qsiteApp/REFRESH_PAGE');
     },
 
     //set organization
