@@ -21,17 +21,13 @@
       <!--Button Actions-->
       <div v-for="(btn, keyAction) in actions" :key="keyAction">
         <!-- if the button is dropdown -->
-        <q-btn-dropdown split v-bind="{...buttonProps}"
-                        v-if="btn.type == 'btn-dropdown'" outline
+        <q-btn-dropdown 
+           v-bind="{...buttonProps}"
+           v-if="btn.type == 'btn-dropdown'" 
+           outline
+           :icon="btn.props.icon"
+           :label="btn.props.label"
         >
-          <template v-slot:label>
-            <div class="row items-center no-wrap">
-              <q-icon left :name="btn.props.icon"/>
-              <div class="text-center">
-                {{ btn.props.label }}
-              </div>
-            </div>
-          </template>
           <q-list>
             <q-item v-for="(item, index) in btn.items" :key="index" clickable v-close-popup
                     @click="item.action != undefined ? item.action() : null" class="tw-px-4">
