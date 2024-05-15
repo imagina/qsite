@@ -62,6 +62,6 @@ export default {
     page: () => import('@imagina/qsite/_pages/master/updateApp.vue'),
     title: 'sidebar.updateApp',
     icon: 'fas fa-flask',
-    authenticated: true,
+    authenticated: false,
   },
 }

@@ -175,6 +175,11 @@ class Middleware {
       return this.router.push(to)
     }
 
+    //Include fromVueRoter to updatePage
+    if (to.name == 'app.update.app' && !to.query.updated && from.name != 'app.update.app') {
+      to.query.fromVueRoute = from.name;
+    }
+
     //Go to route
     if (nextRoute.name == to.name) return next()
     if (from.name != nextRoute.name) return this.router.push(nextRoute)
