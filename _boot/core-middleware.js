@@ -178,7 +178,6 @@ class Middleware {
     //Include fromVueRoter to updatePage
     if (to.name == 'app.update.app' && !to.query.updated && from.name != 'app.update.app') {
       to.query.fromVueRoute = from.name;
-      to.fullPath = `${to.path}?${Object.entries(to.query).map(([key, value]) => `${key}=${value}`).join('&')}`;
     }
 
     //Go to route
