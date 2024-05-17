@@ -42,7 +42,7 @@
             //Redirect after update
             if (proxy.$route.query.updated) {
                 proxy.$router.push({
-                    name: proxy.$route.query.fromVueRoute || 'app.home'
+                    name: 'app.home'
                 }) 
             } else {
                 // Start countdown to auto-update
