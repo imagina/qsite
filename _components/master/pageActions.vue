@@ -165,7 +165,7 @@ export default {
         },
         // Bulk Actions
         {
-          label: this.$tr('isite.cms.label.bulkAction'),
+          label: this.$tr('isite.cms.label.newBulkAction'),
           vIf: this.bulkActionsPermission,
           props: {
             icon: 'fa-duotone fa-boxes-packing'
@@ -300,8 +300,8 @@ export default {
       }
     },
     bulkActionsPermission() {
-      const routeParams = this.$helper.getInfoFromPermission(this.$route.meta.permission)
-      const bulkActionsPermission = `${routeParams.module}.${routeParams.entity}.bulk-actions`
+      const routeParams = this.$helper.getInfoFromPermission(this.$route.meta?.permission)
+      const bulkActionsPermission = `${routeParams?.module}.${routeParams?.entity}.bulk-actions`
       return this.$auth.hasAccess(bulkActionsPermission)
     }
   },
