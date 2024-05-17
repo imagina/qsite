@@ -21,17 +21,13 @@
       <!--Button Actions-->
       <div v-for="(btn, keyAction) in actions" :key="keyAction">
         <!-- if the button is dropdown -->
-        <q-btn-dropdown split v-bind="{...buttonProps}"
-                        v-if="btn.type == 'btn-dropdown'" outline
+        <q-btn-dropdown 
+           v-bind="{...buttonProps}"
+           v-if="btn.type == 'btn-dropdown'" 
+           outline
+           :icon="btn.props.icon"
+           :label="btn.props.label"
         >
-          <template v-slot:label>
-            <div class="row items-center no-wrap">
-              <q-icon left :name="btn.props.icon"/>
-              <div class="text-center">
-                {{ btn.props.label }}
-              </div>
-            </div>
-          </template>
           <q-list>
             <q-item v-for="(item, index) in btn.items" :key="index" clickable v-close-popup
                     @click="item.action != undefined ? item.action() : null" class="tw-px-4">
@@ -81,7 +77,7 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
-    <bulk-actions v-model="exportParams" ref="bulkActions"/>
+    <bulk-actions v-if="bulkActionsPermission" v-model="exportParams" ref="bulkActions"/>
   </div>
 </template>
 <script>
@@ -170,7 +166,7 @@ export default {
         // Bulk Actions
         {
           label: this.$tr('isite.cms.label.bulkAction'),
-          vIf: (this.params.bulkActions && !excludeActions.includes('bulkActions') && !this.isAppOffline),
+          vIf: this.bulkActionsPermission,
           props: {
             icon: 'fa-duotone fa-boxes-packing'
           },
@@ -302,6 +298,11 @@ export default {
         icon: this.$route.meta.icon,
         class: 'q-ml-sm'
       }
+    },
+    bulkActionsPermission() {
+      const routeParams = this.$helper.getInfoFromPermission(this.$route.meta.permission)
+      const bulkActionsPermission = `${routeParams.module}.${routeParams.entity}.bulk-actions`
+      return this.$auth.hasAccess(bulkActionsPermission)
     }
   },
   methods: {
