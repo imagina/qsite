@@ -21,7 +21,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const bulkActions = ref<BulkActions[]>([])
     const paramsItem = ref({})
     const showModal = ref(false)
-    const selectedAction = ref<SelectedAction | null>()
+    const selectedAction = ref<SelectedAction | null>(null)
     const optionsForBulkActions = ref<object | undefined>({})
     const optionsForSelectedBulkActions = ref({})
     const messages = ref([])
