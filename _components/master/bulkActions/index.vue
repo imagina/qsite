@@ -14,7 +14,7 @@
             <div class="col-12">
                 <!--Title-->
                 <span class="text-blue-grey">
-                    <b>{{ $tr('isite.cms.label.bulkAction') }}</b>
+                    <b>{{ $tr('isite.cms.label.newBulkAction') }}</b>
                 </span>
                 <h4
                     class="tw-mb-2 tw-mt-3.5 tw-text-sm"
@@ -34,12 +34,21 @@
                         <!--Fields-->
                         <dynamic-field
                             class="col-12"
-                            :field="field" 
+                            :field="field"
+                            @input="handleChangeBulkActions"
                             v-model="selectedAction"
+                        />
+                        <dynamic-field
+                            v-if="optionsForBulkActions"
+                            v-for="(field, key) in optionsForBulkActions"
+                            key="key"
+                            class="col-12"
+                            :field="field"
+                            v-model="optionsForSelectedBulkActions[key]"
                         />
                         <div class="text-right col-12">
                             <q-btn 
-                                v-if="!warning"
+                                v-if="!thereAreMessages"
                                 :disable="processing"
                                 label="Dispatch" 
                                 color="secondary" 
@@ -57,7 +66,7 @@
                 </div>
             </div>
 
-            <section v-if="warning" class="tw-w-full tw-mt-4">
+            <section v-if="thereAreMessages" class="tw-w-full tw-mt-4">
                 <!-- Warnings -->
                 <div
                     class="
@@ -69,34 +78,30 @@
                     <div class="tw-gap-3 tw-flex tw-flex-col">
                         <!-- Alert -->
                         <div
-                            v-for="warn in warnings"
+                            v-for="message in messages"
                             class="
-                                alert
                                 tw-flex 
                                 tw-item-center
-                                tw-border
-                                tw-border-solid
                                 tw-rounded-xl
                                 tw-p-3
                             "
+                            :style="{ backgroundColor: `${message.color}2a`}"
                         >
                             <!--Icon-->
                             <q-icon
-                                name='fa-solid fa-triangle-exclamation'
-                                color='warning'
+                                :name="message.icon"
+                                :style="{ color: message.color }"
                                 size="20px"
                             />
                             <!--message-->
-                            <p class="tw-ml-2">
-                                {{ warn.message }}
-                            </p>
+                            <p class="tw-ml-2" v-html="message.message" />
                         </div>
                     </div>
                 </div>
                     
                 <div class="tw-w-full tw-flex tw-justify-end">
                     <q-btn
-                        :label="$tr('isite.cms.label.continue')"
+                        :label="$tr('isite.cms.label.confirm')"
                         color="secondary" 
                         rounded 
                         unelevated 
@@ -113,7 +118,7 @@
                         unelevated
                         size="13px"
                         class="tw-bg-gray-200 tw-text-gray-700"
-                        @click="warning = false"
+                        @click="messages = []"
                     >
                         <template v-slot:loading>
                             <i class="fa-solid fa-spinner-third fa-spin"></i>
@@ -124,7 +129,7 @@
 
             <section class="tw-w-full tw-mt-5">
                 <h4 class="tw-font-bold tw-text-sm text-blue-grey tw-mb-3.5">
-                    Logs
+                    {{ $tr('isite.cms.label.history') }}
                 </h4>
                 <q-table
                     card-class="tw-rounded-xl"
@@ -176,8 +181,4 @@ export default {
 }
 </script>
 <style>
-    .alert {
-        background-color: var(--q-color-warning) + '1A';
-        border-color: var(--q-color-warning);
-    }
 </style>

@@ -63,3 +63,27 @@ export const initialPagination = {
     descending: true,
     rowsPerPage: 10
 }
+
+export const typesOfMessages = {
+    info: {
+        icon: 'fa-solid fa-circle-info',
+        color: 'info'
+    },
+    warning: {
+        icon: 'fa-solid fa-triangle-exclamation',
+        color: 'warning'
+    },
+}
+
+export const fieldMassiveActions = {
+    name: 'actionType',
+    value: '',
+    type: 'select',
+    required: true,
+    props: {
+        label: 'Report/Action Type',
+        options: [],
+        emitValue: false,
+        'map-options': false,
+    }
+}

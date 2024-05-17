@@ -5,8 +5,15 @@ import Vue, {
     computed, 
     getCurrentInstance,
 } from 'vue'
-import { BulkActions } from './models/interfaces/bulkActionsController'
-import { status, columns, initialPagination } from './models/defaultModels/constants'
+import { BulkActions, SelectedAction, Message } from '@imagina/qsite/_components/master/bulkActions/models/interfaces'
+import { 
+    status, 
+    columns, 
+    initialPagination, 
+    typesOfMessages,
+    fieldMassiveActions
+} from './models/defaultModels/constants'
+import { colors } from 'quasar'
 
 export const bulkActionsController = (props, { expose, emit }) => {
     const loading = ref(false)
@@ -14,15 +21,16 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const bulkActions = ref<BulkActions[]>([])
     const paramsItem = ref({})
     const showModal = ref(false)
-    const filters = ref({})
-    const selectedAction = ref('')
-    const warnings = ref([])
+    const selectedAction = ref<SelectedAction | null>()
+    const optionsForBulkActions = ref<object | undefined>({})
+    const optionsForSelectedBulkActions = ref({})
+    const messages = ref([])
     const log = ref([])
 
     const proxy = (getCurrentInstance() as any).proxy;
 
         //Get export config
-        const getExportConfig = async () => {
+    const getExportConfig = async () => {
         try {
             bulkActions.value = [] //Reset bulkActions
             const routeParams = Vue.prototype.$helper.getInfoFromPermission(proxy.$route.meta.permission);
@@ -44,7 +52,6 @@ export const bulkActionsController = (props, { expose, emit }) => {
             const response = await proxy.$crud.index('apiRoutes.qsite.configs', requestParams)
             const dataCloned = Vue.prototype.$clone(response.data);
             bulkActions.value = dataCloned;
-            emit('update:modelValue', dataCloned);
             return response.data;
         } catch (error) {
             console.error(error);
@@ -54,8 +61,10 @@ export const bulkActionsController = (props, { expose, emit }) => {
     //Get log data
     const getLog = async () => {
         try {
-            const response = await proxy.$crud.index('apiRoutes.qsite.bulkActions', { refresh: true })
-            console.log('getLog response', response)
+            const response = await proxy.$crud.index(
+                'apiRoutes.qsite.bulkActions', 
+                { refresh: true }
+            )
             const data = response.data
             data.map(item => {
                 item.icon = status[item.statusId].icon;
@@ -93,8 +102,8 @@ export const bulkActionsController = (props, { expose, emit }) => {
         return useLegacyStructure ? Vue.prototype.$tr(proxy.$route.meta.title) : proxy.$route.meta.title
     })
 
-    const warning = computed(() => {
-        return warnings.value.length > 0
+    const thereAreMessages = computed(() => {
+        return messages.value.length > 0
     })
 
     //Modal export title
@@ -103,68 +112,105 @@ export const bulkActionsController = (props, { expose, emit }) => {
     })
 
     const field = computed(() => {
-        const options = bulkActions.value?.map(option => ({
+        if (bulkActions.value.length === 0) return fieldMassiveActions
+
+        const filteredBulkActions = bulkActions.value?.filter(option => (
+            option?.permission 
+                ? Vue.prototype.$auth.hasAccess(option.permission) 
+                : true
+        ))
+
+        const options = filteredBulkActions.map(option => ({
             label: option.title,
-            value: option.name
+            value: option.name,
+            apiRoute: option.apiRoute,
+            fields: option?.fields,
         }))
 
         return {
-            name:"actionType",
-            value:"postWorkOrders",
-            type:"select",
-            required: true,
+            ...fieldMassiveActions,
             props: {
-                label: "Report/Action Type",
+                ...fieldMassiveActions.props,
                 options
             }
         }
     })
 
+    const handleChangeBulkActions = (value: BulkActions) => {
+        optionsForBulkActions.value = value?.fields
+    }
+
+    const prepareMessageObject = (messages) => {
+        const { getPaletteColor } = colors
+        return messages.map((message: Message) => {
+            if (typesOfMessages[message.type]) {
+                return {
+                    ...message,
+                    icon: typesOfMessages[message.type].icon,
+                    color: getPaletteColor(typesOfMessages[message.type].color)
+                }
+            }
+        })
+    }
+
     //Request new report
-    const newReport = async (confirm=false) => {
+    const newReport = async (confirmed=false) => {
         try {
             processing.value = true;
-            const action = bulkActions.value.find(
-                option => option.name === selectedAction.value
-            )
+
+            const payload = {
+                apiRoute: selectedAction.value?.apiRoute,
+                title: selectedAction.value?.label,
+                name: selectedAction.value?.value,
+            }
             
             const requestParams = {
-                bulkActionParams : {
-                    ...action,
-                    confirm
+                bulkAction : {
+                    ...payload,
+                    fields: {
+                        ...optionsForSelectedBulkActions.value
+                    },
                 },
+                confirmed,
                 filter: {
                     ...Vue.prototype.$filter.values
                 }
             };
 
             //Request
-            const response = await Vue.prototype.$crud.post(action?.apiRoute, requestParams)
+            const response = await Vue.prototype.$crud.post(
+                payload?.apiRoute, 
+                requestParams
+            )
             const data = response.data;
-            if (data?.warnings) warnings.value = data.warnings
+            if (data?.messages) {
+                messages.value = prepareMessageObject(data.messages)
+            }
             await getLog()
             processing.value = false;
             Vue.prototype.$alert.info(
-                'Action triggered successfully'
+                Vue.prototype.$tr('isite.cms.messages.actionSuccessfullyDispatched')
             )
         } catch (error) {
             processing.value = false;
             console.error(error);
             Vue.prototype.$alert.error(
-                'Failure to fire action'
+                Vue.prototype.$tr('isite.cms.messages.errorDispatchingAction')
             )
         }
     }
 
     //Show report
-    const showReport = (customExport) => {
+    const showReport = () => {
         showModal.value = true;
     }
 
     //Reset
     const reset = () => {
         loading.value = false;
-        filters.value = {};
+        messages.value = [];
+        selectedAction.value = null;
+        optionsForSelectedBulkActions.value = {};
     }
 
     expose({
@@ -172,11 +218,10 @@ export const bulkActionsController = (props, { expose, emit }) => {
     })
 
     return {
-        init,
         loading,
         processing,
-        warning,
-        warnings,
+        thereAreMessages,
+        messages,
         paramsItem,
         showModal,
         pageTitle,
@@ -184,10 +229,14 @@ export const bulkActionsController = (props, { expose, emit }) => {
         field,
         log,
         columns,
+        initialPagination,
+        selectedAction,
+        optionsForBulkActions,
+        optionsForSelectedBulkActions,
+        init,
         newReport,
         showReport,
         reset,
-        initialPagination,
-        selectedAction,
+        handleChangeBulkActions,
     }
 }

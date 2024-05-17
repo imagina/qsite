@@ -81,7 +81,7 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
-    <bulk-actions v-model="exportParams" ref="bulkActions"/>
+    <bulk-actions v-if="bulkActionsPermission" v-model="exportParams" ref="bulkActions"/>
   </div>
 </template>
 <script>
@@ -170,7 +170,7 @@ export default {
         // Bulk Actions
         {
           label: this.$tr('isite.cms.label.bulkAction'),
-          vIf: (this.params.bulkActions && !excludeActions.includes('bulkActions') && !this.isAppOffline),
+          vIf: this.bulkActionsPermission,
           props: {
             icon: 'fa-duotone fa-boxes-packing'
           },
@@ -302,6 +302,11 @@ export default {
         icon: this.$route.meta.icon,
         class: 'q-ml-sm'
       }
+    },
+    bulkActionsPermission() {
+      const routeParams = this.$helper.getInfoFromPermission(this.$route.meta.permission)
+      const bulkActionsPermission = `${routeParams.module}.${routeParams.entity}.bulk-actions`
+      return this.$auth.hasAccess(bulkActionsPermission)
     }
   },
   methods: {
