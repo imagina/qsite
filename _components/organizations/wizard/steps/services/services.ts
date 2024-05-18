@@ -54,7 +54,7 @@ export default function services() {
       // Get full data of products
       const paramsProducts = {
         refresh: true, params: {
-          filter: {id: plans.data.map(plan => plan.product.id), status: true, ValidationInternal:true},
+          filter: {id: plans.data.map(plan => plan.product.id), status: true, validationInternal:true},
           include: 'productOptions,optionValues,relatedProducts'
         }
       };
