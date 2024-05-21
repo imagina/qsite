@@ -21,4 +21,5 @@ export default {
   layouts: `${urlBase}/layouts`,
   logs: `${urlBase}/logs`,
   bulkActions: `${urlBase}/bulk-actions`,
+  favourites: `${urlBase}/favourites`,
 }
