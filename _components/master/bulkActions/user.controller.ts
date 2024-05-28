@@ -29,7 +29,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
 
     const proxy = (getCurrentInstance() as any).proxy;
 
-        //Get export config
+    //Get export config
     const getExportConfig = async () => {
         try {
             bulkActions.value = [] //Reset bulkActions
@@ -51,6 +51,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
             //Request
             const response = await proxy.$crud.index('apiRoutes.qsite.configs', requestParams)
             const dataCloned = Vue.prototype.$clone(response.data);
+            emit('bulkActionsConfig', Boolean(dataCloned))
             bulkActions.value = dataCloned;
             return response.data;
         } catch (error) {

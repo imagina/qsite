@@ -175,6 +175,7 @@
 import { bulkActionsController } from './user.controller'
 
 export default {
+    emits: ['bulkActionsConfig'],
     setup(props, { expose, emit }) {
         return { ...bulkActionsController(props, { expose, emit }) }
     }

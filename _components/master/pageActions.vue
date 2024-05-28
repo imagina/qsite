@@ -77,7 +77,11 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
-    <bulk-actions v-if="bulkActionsPermission" v-model="exportParams" ref="bulkActions"/>
+    <bulk-actions 
+      v-if="bulkActionsPermission" 
+      @bulkActionsConfig="(value) => bulkActionsConfig = value" 
+      ref="bulkActions"
+    />
   </div>
 </template>
 <script>
@@ -119,7 +123,8 @@ export default {
       filterData: {},
       refreshIntervalId: null,
       titleRefresh: this.$tr('isite.cms.label.refreshAtOnce'),
-      timeRefresh: 0
+      timeRefresh: 0,
+      bulkActionsConfig: false,
     }
   },
   computed: {
@@ -166,7 +171,7 @@ export default {
         // Bulk Actions
         {
           label: this.$tr('isite.cms.label.newBulkAction'),
-          vIf: this.bulkActionsPermission,
+          vIf: this.bulkActionsPermission && this.bulkActionsConfig,
           props: {
             icon: 'fa-duotone fa-boxes-packing'
           },
