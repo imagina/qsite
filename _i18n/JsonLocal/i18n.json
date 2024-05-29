@@ -1536,7 +1536,8 @@
           "wantToCreateAChildForm": "¿Do you want to create a child form of",
           "refreshAppVersion": "We are excited to introduce new features and enhancements in this version. Click the update button to enjoy the latest experience.",
           "updateAvailable": "New Update Available!",
-          "updateNow": "Update now"
+          "updateNow": "Update now",
+          "cacheCleanupMessage": "Clearing the cache can free up space and resolve some issues. The application may take a little longer to load the data next time as it will generate a new cache."
         },
         "startTime": "Start time",
         "endTime": "End time",
@@ -1923,7 +1924,8 @@
           "whatsappNumber": "Whatsapp Number",
           "codeCountry": "Code country",
           "defaultMessage": "Default message",
-          "trial": "Trial"
+          "trial": "Trial",
+          "cacheCleanup": "Cache Cleanup"
         },
         "message": {
           "requestAdded": "Request added to the offline queue successfully",
@@ -3763,7 +3765,8 @@
           "copyDisclosureLink": "El enlace de divulgación se ha copiado en el portapapeles",
           "refreshAppVersion": "Estamos emocionados de presentar nuevas funciones y mejoras en esta versión. Haga clic en el botón de actualización para disfrutar de la última experiencia.",
           "updateAvailable": "¡Nueva actualización disponible!",
-          "updateNow": "Actualizar ahora"
+          "updateNow": "Actualizar ahora",
+          "cacheCleanupMessage": "Limpiar la caché puede liberar espacio y resolver algunos problemas. La aplicación puede tardar un poco más en cargar los datos la próxima vez, ya que generará una nueva caché."
         },
         "startTime": "Hora de inicio",
         "endTime": "Hora de finalización",
@@ -4148,7 +4151,8 @@
           "informationTitle": "Información del sitio",
           "trial": "Versión de prueba",
           "copyDisclosureLink": "Copiar enlace",
-          "print": "Imprimir"
+          "print": "Imprimir",
+          "cacheCleanup": "Limpieza de Caché"
         },
         "message": {
           "requestAdded": "Petición agregada a la cola sin conexión",
