@@ -41,7 +41,6 @@ export const CLEAR_CACHE_STORAGE = async ({}, excludedKeyList=[]) => {
 export const REFRESH_PAGE = ({state, commit, dispatch, getters}) => {
   return new Promise(async (resolve, reject) => {
     let currentRoute = state.currentRoute
-    Loading.show()
     crud.post('apiRoutes.qsite.cacheClear')
       .then(response => {
       }).catch(error => console.error(error))
@@ -55,7 +54,6 @@ export const REFRESH_PAGE = ({state, commit, dispatch, getters}) => {
     dispatch('qsiteApp/SET_SITE_COLORS', null, {root: true})//Load colors
     commit('LOAD_PAGE', true)
     dispatch('CLEAR_CACHE_STORAGE', ['compile-time-precache'])
-    Loading.hide()
     
     resolve(true)
   })
