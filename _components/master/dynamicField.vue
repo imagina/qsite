@@ -1485,7 +1485,7 @@ export default {
 
           //Add Params to get options by query
           if (loadOptions && loadOptions.filterByQuery) {
-            if (query && (query.length > 2)) {
+            if (query && (query.length >= 2)) {
               params.params.filter.search = query
               params.params.take = 25
             } else {
@@ -1654,7 +1654,7 @@ export default {
 
       //Hint message for filterByQuery
       if (loadOptions && loadOptions.filterByQuery) {
-        if (val.length > 2) {
+        if (val.length >= 2) {
           if (!this.rootOptions.length) {
             this.fieldProps.hint = `${this.$tr('isite.cms.message.noResultsFoundTryAnotherSearchValue')}`
           }
