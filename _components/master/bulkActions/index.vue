@@ -41,7 +41,7 @@
                         <dynamic-field
                             v-if="optionsForBulkActions"
                             v-for="(field, key) in optionsForBulkActions"
-                            key="key"
+                            :key="key"
                             class="col-12"
                             :field="field"
                             v-model="optionsForSelectedBulkActions[key]"
