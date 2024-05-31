@@ -1782,7 +1782,9 @@
           "selectedCategory": "Selected category",
           "noCategories": "There are no categories",
           "selectedTemplate": "Selected template",
-          "noTemplates": "No templates"
+          "noTemplates": "No templates",
+          "inProgress": "In progress",
+          "failed": "Failed"
         },
         "form": {
           "whatsappNumber": "Número de Whatsapp",
@@ -3609,7 +3611,9 @@
           "selectedCategory": "Categoría seleccionada",
           "noCategories": "No existen categorías",
           "selectedTemplate": "Plantilla seleccionada",
-          "noTemplates": "No existen plantillas"
+          "noTemplates": "No existen plantillas",
+          "inProgress": "En progreso",
+          "failed": "Fallido"
         },
         "form": {
           "whatsappNumber": "Número de Whatsapp",
