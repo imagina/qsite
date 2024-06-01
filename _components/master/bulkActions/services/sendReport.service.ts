@@ -3,7 +3,7 @@ import { SelectedAction } from '../models/interfaces/selectedAction'
 
 export const sendReport = async (
     confirmed: boolean, 
-    selectedAction: SelectedAction, 
+    selectedAction: SelectedAction | null, 
     optionsForSelectedBulkActions: { [key: string]: string }, 
     prototype: any
 ) => {
