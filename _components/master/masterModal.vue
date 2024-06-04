@@ -19,17 +19,17 @@
           <b>{{ title }}</b>
         </div>
         <!--Close Button-->
-        <q-btn v-close-popup icon="fas fa-times" round color="blue-grey" unelevated class="btn-small" outline
+        <q-btn v-close-popup icon="fa-regular fa-xmark" flat round color="blue-grey" class="btn-small"
                v-if="!hideCloseAction"/>
       </div>
-      <q-separator inset/>
+      <q-separator class="tw-h-0.5"/>
       <!--Slot content-->
       <div class="master-dialog__body">
         <slot/>
       </div>
       <!--Actions Content-->
       <div class="master-dialog__actions" v-if="actions && actions.length">
-        <div class="row justify-end q-gutter-sm">
+        <div class="row tw-gap-1 tw-justify-center md:tw-justify-end">
           <q-btn 
             v-for="(btn, keyBtn) in actions"
             v-if="btn.props.vIf != undefined ? btn.props.vIf : true"
