@@ -121,12 +121,12 @@ export const bulkActionsController = (props, { expose, emit }) => {
         if (confirmed) {
             await getLog()
             messages.value = []
+            Vue.prototype.$alert.info(
+                Vue.prototype.$tr('isite.cms.messages.actionSuccessfullyDispatched')
+            )
         }
         
         processing.value = false;
-        Vue.prototype.$alert.info(
-            Vue.prototype.$tr('isite.cms.messages.actionSuccessfullyDispatched')
-        )
     }
 
     //Show report
