@@ -1704,7 +1704,8 @@
           "continue": "Continue",
           "plan": "Plan",
           "newBulkAction": "New Bulk Action",
-          "history": "History"
+          "history": "History",
+          "dispatch": "Dispatch"
         },
         "message": {
           "requestAdded": "Request added to the offline queue successfully",
@@ -3533,7 +3534,8 @@
           "continue": "Continuar",
           "plan": "Plan",
           "newBulkAction": "Nueva acción masiva",
-          "history": "Historial"
+          "history": "Historial",
+          "dispatch": "Despachar"
         },
         "message": {
           "requestAdded": "Petición agregada a la cola sin conexión",

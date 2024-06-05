@@ -6,9 +6,9 @@ import Vue, {
     getCurrentInstance,
 } from 'vue'
 import { BulkActions, Fields, SelectedAction, Message } from '@imagina/qsite/_components/master/bulkActions/models/interfaces'
-import { constants } from './models/defaultModels/constants'
+import { constants } from '@imagina/qsite/_components/master/bulkActions/models/defaultModels/constants'
 import { colors } from 'quasar'
-import { sendReport } from './services/sendReport.service'
+import { sendReport } from '@imagina/qsite/_components/master/bulkActions/services/sendReport.service'
 
 export const bulkActionsController = (props, { expose, emit }) => {
     const loading = ref(false)
@@ -118,7 +118,10 @@ export const bulkActionsController = (props, { expose, emit }) => {
         if (data?.messages) {
             messages.value = prepareMessageObject(data.messages)
         }
-        await getLog()
+        if (confirmed) {
+            await getLog()
+            messages.value = []
+        }
         
         processing.value = false;
         Vue.prototype.$alert.info(

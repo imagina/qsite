@@ -50,7 +50,7 @@
                             <q-btn 
                                 v-if="!thereAreMessages"
                                 :disable="processing"
-                                label="Dispatch" 
+                                :label="$tr('isite.cms.label.dispatch')" 
                                 color="secondary" 
                                 rounded unelevated 
                                 size="13px"
