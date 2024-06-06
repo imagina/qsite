@@ -50,7 +50,7 @@
         </q-btn>
         <q-btn v-else v-bind="{...buttonProps, ...btn.props}" @click="btn.action != undefined ? btn.action() : null">
           <q-badge v-if="btn?.badge?.vIf" v-bind="{...btn?.badge }" />
-          <q-tooltip v-if="btn.label && btn.badge?.show" v-model="showExpires">{{ btn.label }}</q-tooltip>
+          <q-tooltip v-if="btn.label && btn.badge?.show" v-model="showExpires" class="tw-z-10">{{ btn.label }}</q-tooltip>
           <q-tooltip v-else-if="btn.label">{{ btn.label }}</q-tooltip>
         </q-btn>
       </div>
