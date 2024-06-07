@@ -6,7 +6,7 @@
             @click="$eventBus.$emit('toggleMasterDrawer', 'offline')"
         >
             <q-icon
-                v-if="icon.name"
+                v-if="icon && icon.name"
                 :size="icon.size" 
                 :name="icon.name"
                 :class="icon.class"
@@ -32,11 +32,7 @@ export default {
         },
         icon: {
             type: Object,
-            default: () => ({
-                name: null,
-                size: null,
-                class: null
-            })
+            default: () => {}
         },
         message: {
             type: String,
