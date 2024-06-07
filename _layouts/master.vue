@@ -9,7 +9,7 @@
     <!-- ROUTER VIEW -->
     <q-page-container>
       <!--Page route-->
-      <offlineAlert v-if="isAppOffline"/>
+      <bannerAlert v-bind="configBanner()" v-if="isAppOffline || isWarning"/>
       <div id="routeInformationContent" v-if="appConfig.mode == 'iadmin'"
            :class="`q-hide q-md-show ${iadminTheme == 1 ? 'bg-primary' : 'bg-white'}`">
         <div id="subContent" class="row items-center">
@@ -65,7 +65,7 @@ import cropperComponent from '@imagina/qsite/_components/master/cropper'
 import activitiesActions from '@imagina/qgamification/_components/activitiesActions/index.vue'
 import Alert from '@imagina/qoffline/_components/alert.vue';
 import Progressrequest from '@imagina/qoffline/_components/Progressrequest.vue';
-import offlineAlert from '@imagina/qsite/_components/master/offlineAlert.vue';
+import bannerAlert from '@imagina/qsite/_components/master/bannerAlert.vue';
 
 export default {
   name: "MasterLayout",
@@ -101,7 +101,7 @@ export default {
     //Offline
     Alert,
     Progressrequest,
-    offlineAlert
+    bannerAlert
   },
   watch: {
     shouldChangePassword(data) {
@@ -125,6 +125,18 @@ export default {
       modalForce: {
         shouldChangePassword: false
       },
+      configBannerOffline: {
+        icon: {
+          name: 'fa-regular fa-wifi-slash',
+        },
+        message: this.$tr('isite.cms.message.appOffline'),
+        classWrapper: 'tw-text-white tw-bg-gray-900'
+      },
+      configBannerNotification: {
+        marquee: true,
+        message: this.$store.getters['qsiteApp/getSettingValueByName']('isite::globalWarningMessage'),
+        classWrapper: 'tw-bg-yellow-400 tw-text-black tw-font-semibold',
+      }
     }
   },
   computed: {
@@ -236,6 +248,9 @@ export default {
       ].filter(act => act.vIf)
 
       return activities
+    },
+    isWarning() {
+      return this.$store.getters['qsiteApp/getSettingValueByName']('isite::globalWarningMessage')
     }
   },
   methods: {
@@ -280,6 +295,10 @@ export default {
         document.onmousemove = resetTimer;
         document.onkeydown = resetTimer;
       }
+    },
+    configBanner() {
+      if (this.isAppOffline) return this.configBannerOffline 
+      if (this.isWarning) return this.configBannerNotification
     }
   }
 }
