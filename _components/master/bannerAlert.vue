@@ -2,8 +2,8 @@
     <div class="banner-wrapper">
         <div
             :class="classWrapper"
-            class="offline-alert" 
-            @click="$eventBus.$emit('toggleMasterDrawer', 'offline')"
+            class="banner-alert" 
+            @click="action"
         >
             <q-icon
                 v-if="icon.name"
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-    name: "offlineAlert",
+    name: "bannerAlert",
     props: {
         classWrapper: {
             type: String,
@@ -32,15 +32,15 @@ export default {
         },
         icon: {
             type: Object,
-            default: () => ({
-                name: null,
-                size: null,
-                class: null
-            })
+            default: () => ({})
         },
         message: {
             type: String,
             default: ''
+        },
+        action: {
+            type: Function,
+            default: () => {}
         }
     },
 }
@@ -50,7 +50,7 @@ export default {
     .banner-wrapper
         position: relative;
         min-height: 30px;
-    .offline-alert
+    .banner-alert
         position: fixed;
         top: 0;
         padding: 5px;
