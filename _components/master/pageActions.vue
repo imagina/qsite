@@ -77,11 +77,17 @@
     </div>
     <!-- Export Component -->
     <master-export v-model="exportParams" ref="exportComponent"/>
+    <bulk-actions 
+      v-if="bulkActionsPermission" 
+      @bulkActionsConfig="(value) => bulkActionsConfig = value" 
+      ref="bulkActions"
+    />
   </div>
 </template>
 <script>
 //Components
-import masterExport from "@imagina/qsite/_components/master/masterExport"
+import masterExport from "@imagina/qsite/_components/master/masterExport.vue"
+import bulkActions from "@imagina/qsite/_components/master/bulkActions"
 
 export default {
   beforeDestroy() {
@@ -103,7 +109,7 @@ export default {
     },
     tourName: {default: null}
   },
-  components: {masterExport},
+  components: { masterExport, bulkActions },
   watch: {},
   mounted() {
     this.$nextTick(function () {
@@ -117,7 +123,8 @@ export default {
       filterData: {},
       refreshIntervalId: null,
       titleRefresh: this.$tr('isite.cms.label.refreshAtOnce'),
-      timeRefresh: 0
+      timeRefresh: 0,
+      bulkActionsConfig: false,
     }
   },
   computed: {
@@ -160,6 +167,15 @@ export default {
             icon: 'fa-duotone fa-file-arrow-down'
           },
           action: () => this.$refs.exportComponent.showReport()
+        },
+        // Bulk Actions
+        {
+          label: this.$tr('isite.cms.label.newBulkAction'),
+          vIf: this.bulkActionsPermission && this.bulkActionsConfig,
+          props: {
+            icon: 'fa-duotone fa-boxes-packing'
+          },
+          action: () => this.$refs.bulkActions.showReport()
         },
         //Tour
         {
@@ -287,6 +303,11 @@ export default {
         icon: this.$route.meta.icon,
         class: 'q-ml-sm'
       }
+    },
+    bulkActionsPermission() {
+      const routeParams = this.$helper.getInfoFromPermission(this.$route.meta?.permission)
+      const bulkActionsPermission = `${routeParams?.module}.${routeParams?.entity}.bulk-actions`
+      return this.$auth.hasAccess(bulkActionsPermission)
     }
   },
   methods: {

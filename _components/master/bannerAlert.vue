@@ -6,7 +6,7 @@
             @click="action"
         >
             <q-icon
-                v-if="icon.name"
+                v-if="icon && icon.name"
                 :size="icon.size" 
                 :name="icon.name"
                 :class="icon.class"
