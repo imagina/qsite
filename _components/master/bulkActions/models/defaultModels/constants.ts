@@ -1,0 +1,97 @@
+const status = (i18n) => ({
+    1: {
+        label: i18n.$tr('isite.cms.label.pending'),
+        icon: {
+            name: 'fa-solid fa-clock',
+            color: 'tw-text-orange-400'
+        },
+    },
+    2: {
+        label: i18n.$tr('isite.cms.message.inProgress'),
+        icon: {
+            name: 'fa-duotone fa-spinner-third fa-spin',
+            color: 'tw-text-blue-400'
+        }
+    },
+    3: {
+        label: i18n.$tr('isite.cms.message.failed'),
+        icon: {
+            name: 'fa-solid fa-circle-exclamation',
+            color: 'tw-text-red-400'
+        }
+    },
+    4: {
+        label: i18n.$tr('isite.cms.label.success'),
+        icon: {
+            name: 'fa-solid fa-circle-check',
+            color: 'tw-text-green-400'
+        }
+    }
+})
+
+export const constants = (i18n) => ({
+    status: {
+        ...status(i18n)
+    },
+    columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id', sortable: true },
+        { 
+            name: 'action', 
+            label: i18n.$tr('isite.cms.label.action'), 
+            align: 'left', 
+            field: 'action', 
+            sortable: true, 
+        },
+        { 
+            name: 'createdAt', 
+            label: i18n.$tr('isite.cms.label.date'), 
+            align: 'left', 
+            field: 'createdAt', 
+            sortable: true 
+        },
+        { 
+            name: 'statusId', 
+            label: i18n.$trp('isite.cms.label.state'), 
+            align: 'left', 
+            field: 'statusId', 
+            sortable: true,
+            format: (val) => status(i18n)[val].label,
+            style: 'width: 64px'
+        },
+        { 
+            name: 'icon', 
+            label: '', 
+            align: 'center', 
+            field: 'statusId',
+            format: (val) => status(i18n)[val].icon,
+            style: 'padding-left: 0; width: 20px' 
+        },
+    ],
+    initialPagination: {
+        sortBy: 'id',
+        descending: true,
+        rowsPerPage: 10
+    },
+    typesOfMessages: {
+        info: {
+            icon: 'fa-solid fa-circle-info',
+            color: 'info'
+        },
+        warning: {
+            icon: 'fa-solid fa-triangle-exclamation',
+            color: 'warning'
+        },
+    },
+    fieldMassiveActions: {
+        name: 'actionType',
+        value: '',
+        type: 'select',
+        required: true,
+        props: {
+            label: 'Report/Action Type',
+            options: [],
+            emitValue: false,
+            'map-options': false,
+        }
+    }
+})

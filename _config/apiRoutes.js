@@ -20,5 +20,6 @@ export default {
   modulesInfo: `${urlBase}/configs/modules-info`,
   layouts: `${urlBase}/layouts`,
   logs: `${urlBase}/logs`,
+  bulkActions: `${urlBase}/bulk-actions`,
   favourites: `${urlBase}/favourites`,
 }
