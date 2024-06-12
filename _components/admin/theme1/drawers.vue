@@ -39,10 +39,11 @@
     </q-drawer>
 
     <!--Notification-->
-    <q-drawer bordered id="dawerNotificatiosMaster" v-model="drawer.notification" side="right" overlay
-              v-if="$auth.hasAccess('notification.notifications.manage')">
-      <master-notifications/>
-    </q-drawer>
+      <master-notifications
+        v-show="drawer.notification"
+        v-if="$auth.hasAccess('notification.notifications.manage')"
+      />
+  </div>
   </div>
 </template>
 <script>
