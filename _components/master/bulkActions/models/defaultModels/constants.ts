@@ -88,7 +88,7 @@ export const constants = (i18n) => ({
         type: 'select',
         required: true,
         props: {
-            label: 'Report/Action Type',
+            label: i18n.$tr('isite.cms.label.action'),
             options: [],
             emitValue: false,
             'map-options': false,

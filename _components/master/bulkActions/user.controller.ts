@@ -21,8 +21,12 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const optionsForSelectedBulkActions = ref({})
     const messages = ref([])
     const log = ref([])
-
+    
     const proxy = (getCurrentInstance() as any).proxy;
+
+    const { module, entity } = proxy.$helper.getInfoFromPermission(proxy.$route.meta?.permission)
+    const permission = `${module}.${entity}`
+
     const { 
         status, 
         columns, 
@@ -34,11 +38,10 @@ export const bulkActionsController = (props, { expose, emit }) => {
     //Get export config
     const getExportConfig = async () => {
         try {
-            bulkActions.value = [] //Reset bulkActions
-            const routeParams = Vue.prototype.$helper.getInfoFromPermission(proxy.$route.meta.permission);
-            if (!routeParams) return
+            bulkActions.value = []
+            if (!module || !entity) return
 
-            const configName = `${routeParams.module}.config.bulkActions.${routeParams.entity}`;
+            const configName = `${module}.config.bulkActions.${entity}`;
 
             //Request Params
             const requestParams = {
@@ -66,7 +69,14 @@ export const bulkActionsController = (props, { expose, emit }) => {
         try {
             const response = await proxy.$crud.index(
                 'apiRoutes.qsite.bulkActions', 
-                { refresh: true }
+                { 
+                    refresh: true, 
+                    params: { 
+                        filter: { 
+                            type: permission 
+                        }
+                    }
+                }
             )
             const data = response.data
             data.map(item => {
@@ -112,7 +122,8 @@ export const bulkActionsController = (props, { expose, emit }) => {
             confirmed, 
             selectedAction.value, 
             optionsForSelectedBulkActions.value,
-            Vue.prototype
+            Vue.prototype,
+            permission
         )
         const data = response.data;
         if (data?.messages) {
@@ -129,6 +140,10 @@ export const bulkActionsController = (props, { expose, emit }) => {
         processing.value = false;
     }
 
+    proxy.$eventBus.$on('bulkActionRefresh', async (response) => {
+        await getLog()
+    })
+
     //Show report
     const showReport = () => {
         showModal.value = true;
@@ -140,6 +155,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
         messages.value = [];
         selectedAction.value = null;
         optionsForSelectedBulkActions.value = {};
+        proxy.$eventBus.$off('bulkActionRefresh')
     }
 
     onMounted(() => {
