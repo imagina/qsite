@@ -40,7 +40,8 @@
           "adminConfig": {
             "title": "Setting",
             "headerTitle": "Notifications setting"
-          }
+          },
+          "adminPanel": "Notifications"
         },
         "title": "Multimedia List/Search",
         "newFile": "New File",
@@ -77,7 +78,10 @@
         },
         "type": "Type",        
         "cancel": "Cancel",
-        "openLink": "Open link"
+        "openLink": "Open link",
+        "helpTextBroadcastOption": "This notification will be displayed within the APP",
+        "isImportant": "BroadCast (Important)",
+        "isImportantHelpText": "This notification will be displayed in a more visible popup in the center of the APP"
       }
     },
     "menu": {
@@ -2097,7 +2101,8 @@
           "adminConfig": {
             "title": "Configuración",
             "headerTitle": "Configuración de notificaciones"
-          }
+          },
+          "adminPanel": "Notificaciones"
         },
         "title": "Multimedia Listar/Buscar",
         "newFile": "Nuevo Archivo",
@@ -2132,7 +2137,10 @@
         },
         "type": "Tipo",
         "cancel": "Cancelar",
-        "openLink": "Abrir enlace"
+        "openLink": "Abrir enlace",
+        "helpTextBroadcastOption": "Está notificación se mostrara dentro de la APP",
+        "isImportant": "BroadCast (Importante)",
+        "isImportantHelpText": "Está notificación se mostrara en un popup más visible en el centro de la APP"
       }
     },
     "menu": {
