@@ -69,6 +69,16 @@
           "failedUploadFiles": "Error uploading files",
           "errorMaxFileSize": "Files exceed the allowed size of {size}MB"
         },
+        "markAsRead": "Mark as read",
+        "markAllAsRead": "Mark all as read",
+        "tab": {
+          "all": "All",
+          "unread": "Unread",
+          "read": "Read" 
+        },
+        "type": "Type",        
+        "cancel": "Cancel",
+        "openLink": "Open link",
         "helpTextBroadcastOption": "This notification will be displayed within the APP",
         "isImportant": "BroadCast (Important)",
         "isImportantHelpText": "This notification will be displayed in a more visible popup in the center of the APP"
@@ -2118,6 +2128,16 @@
           "limitFiles": "Limite de Archivos",
           "messageLimitFiles": "El limite de archivos es de <b>{quantity}</b>. para seleccionar otro archivo primero debes quitar algunos de los seleccionados"
         },
+        "markAsRead": "Marcar como leida",
+        "markAllAsRead": "Marcar como leidas",
+        "tab": {
+          "all": "Todas",
+          "unread": "Sin leer",
+          "read": "Leidas"
+        },
+        "type": "Tipo",
+        "cancel": "Cancelar",
+        "openLink": "Abrir enlace",
         "helpTextBroadcastOption": "Está notificación se mostrara dentro de la APP",
         "isImportant": "BroadCast (Importante)",
         "isImportantHelpText": "Está notificación se mostrara en un popup más visible en el centro de la APP"

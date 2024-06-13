@@ -36,10 +36,13 @@
     </q-drawer>
 
     <!--Notification-->
-    <q-drawer bordered id="dawerNotificatiosMaster" v-model="drawer.notification" side="right" overlay
-              v-if="$auth.hasAccess('notification.notifications.manage')">
-      <master-notifications/>
-    </q-drawer>
+    <q-dialog v-model="drawer.notification" posititon="right" transition-hide="slide-up" transition-show="slide-down">
+      <master-notifications
+        v-show="drawer.notification"
+        v-if="$auth.hasAccess('notification.notifications.manage')"
+        :isMobile="this.windowSize == 'mobile' ? true : false"
+      />  
+    </q-dialog>
   </div>
 </template>
 <script>
