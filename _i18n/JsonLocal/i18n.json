@@ -67,7 +67,17 @@
           "messageLimitFiles": "The file limit is <b>{quantity}</b>. to select another file you must first remove some of the selected ones",
           "failedUploadFiles": "Error uploading files",
           "errorMaxFileSize": "Files exceed the allowed size of {size}MB"
-        }
+        },
+        "markAsRead": "Mark as read",
+        "markAllAsRead": "Mark all as read",
+        "tab": {
+          "all": "All",
+          "unread": "Unread",
+          "read": "Read" 
+        },
+        "type": "Type",        
+        "cancel": "Cancel",
+        "openLink": "Open link"
       }
     },
     "menu": {
@@ -2112,7 +2122,17 @@
           "addYourImages": "Agrega tus imagenes aquí",
           "limitFiles": "Limite de Archivos",
           "messageLimitFiles": "El limite de archivos es de <b>{quantity}</b>. para seleccionar otro archivo primero debes quitar algunos de los seleccionados"
-        }
+        },
+        "markAsRead": "Marcar como leida",
+        "markAllAsRead": "Marcar como leidas",
+        "tab": {
+          "all": "Todas",
+          "unread": "Sin leer",
+          "read": "Leidas"
+        },
+        "type": "Tipo",
+        "cancel": "Cancelar",
+        "openLink": "Abrir enlace"
       }
     },
     "menu": {
