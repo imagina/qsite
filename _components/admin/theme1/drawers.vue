@@ -42,8 +42,8 @@
       <master-notifications
         v-show="drawer.notification"
         v-if="$auth.hasAccess('notification.notifications.manage')"
-      />
-  </div>
+        :isMobile="this.windowSize == 'mobile' ? true : false"
+      />  
   </div>
 </template>
 <script>
