@@ -39,11 +39,13 @@
     </q-drawer>
 
     <!--Notification-->
+    <q-dialog v-model="drawer.notification" posititon="right" transition-hide="slide-up" transition-show="slide-down">
       <master-notifications
         v-show="drawer.notification"
         v-if="$auth.hasAccess('notification.notifications.manage')"
         :isMobile="this.windowSize == 'mobile' ? true : false"
       />  
+    </q-dialog>
   </div>
 </template>
 <script>
