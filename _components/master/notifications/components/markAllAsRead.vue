@@ -13,14 +13,11 @@
 </template>
   
   <script>
-  import baseService from '@imagina/qcrud/_services/baseService'  
+  import services from '@imagina/qsite/_components/master/notifications/services'
   export default {
   
     props: {},
     components: {},
-    mounted() {
-      this.$nextTick(function () {})
-    },
     data() {
       return {
         loading: false
@@ -31,16 +28,9 @@
     methods: {
       markAllAsRead(){
         this.loading = true
-        return new Promise((resolve, reject) => {        
-          baseService.put('apiRoutes.qnotification.markAllAsRead', {}).then(response => {            
-            this.$emit('marked')
-            this.loading = false
-            resolve(response)
-          }).catch(error => {
-            this.$apiResponse.handleError(error, () => {
-              this.loading = false
-            })
-          })
+        services.markAllAsRead().then(() => {
+          this.$emit('marked')
+          this.loading = false
         })
       }
     }

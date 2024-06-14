@@ -2,11 +2,11 @@
   <div>
   <q-item clickable dense class="no-margin no-padding" @click="openModal()">
     <q-item-section avatar>
-      <div v-if="smallIcon" class="flex flex-center notification-notification-icon-small" :style="{borderColor: iconColor }">
-        <q-icon :name="icon" :style="{color: iconColor, fontSize: '20px' }" />
+      <div v-if="smallIcon" class="flex flex-center notification-notification-icon-small" :style="{borderColor: getIconColor }">
+        <q-icon :name="getIcon" :style="{color: getIconColor, fontSize: '20px' }" />
       </div>
-      <div v-else class="flex flex-center notification-notification-icon" :style="{borderColor: iconColor }">
-        <q-icon :name="icon" :style="{color: iconColor, fontSize: '32px' }" />
+      <div v-else class="flex flex-center notification-notification-icon" :style="{borderColor: getIconColor }">
+        <q-icon :name="getIcon" :style="{color: getIconColor, fontSize: '32px' }" />
       </div>
     </q-item-section>
     <q-item-section top>
@@ -65,8 +65,8 @@
         <!--notification-->
         <q-item class="no-margin no-padding">
           <q-item-section avatar top>
-            <div class="flex flex-center notification-notification-icon-big" :style="{borderColor: iconColor }">
-              <q-icon :name="icon" :style="{color: iconColor, fontSize: '48px' }" />
+            <div class="flex flex-center notification-notification-icon-big" :style="{borderColor: getIconColor }">
+              <q-icon :name="getIcon" :style="{color: getIconColor, fontSize: '48px' }" />
             </div>
           </q-item-section>                
 
@@ -131,13 +131,12 @@
 </template>
 <script>
 //Components
-import baseService from '@imagina/qcrud/_services/baseService'
+import services from '@imagina/qsite/_components/master/notifications/services'
   export default {
     props: {
       notification: {},
-      icon: '', 
-      iconColor: '',
-      smallIcon: false
+      smallIcon: false, 
+      sourceSettings: []
     },
     components: {},
     watch: {},
@@ -153,6 +152,13 @@ import baseService from '@imagina/qcrud/_services/baseService'
       }        
     },
     computed: {
+      getIcon(){
+        return this.sourceSettings[this.notification.source] ? this.sourceSettings[this.notification.source].icon : 'fa-light fa-bell'
+      },
+
+      getIconColor(){
+        return this.sourceSettings[this.notification.source] ? this.sourceSettings[this.notification.source].color : '#2196f3'
+      },
       isUnread(){
         return !this.notification.isRead
       },
@@ -169,8 +175,8 @@ import baseService from '@imagina/qcrud/_services/baseService'
       },
       markAsRead(){        
         this.notification.isRead = true
-        return new Promise((resolve, reject) => {        
-          baseService.update('apiRoutes.qnotification.markRead', this.notification.id, {}).then(response => {            
+        return new Promise((resolve, reject) => {
+          services.markAllAsRead(this.notification.id).then(response => {            
             resolve(this.notification)
           }).catch(error => {
             this.$apiResponse.handleError(error, () => {
@@ -185,7 +191,7 @@ import baseService from '@imagina/qcrud/_services/baseService'
       }, 
       openModal(){
         this.dialog = true;
-        if(this.notification.isRead == false){
+        if(this.isUnread){
           this.notification.isRead = true          
           this.markAsRead()
         }
