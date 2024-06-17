@@ -5,13 +5,15 @@ export const sendReport = async (
     confirmed: boolean, 
     selectedAction: SelectedAction | null, 
     optionsForSelectedBulkActions: { [key: string]: string }, 
-    prototype: any
+    prototype: any,
+    permission: string
 ) => {
     try {
         const payload = {
             apiRoute: selectedAction?.apiRoute,
             title: selectedAction?.label,
             name: selectedAction?.value,
+            type: permission
         }
 
         const requestParams = {
