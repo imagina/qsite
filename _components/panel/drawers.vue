@@ -95,10 +95,10 @@
     </q-drawer>
 
     <!--Notification-->
-    <q-drawer id="dawerNotificatiosMaster" v-model="drawer.notification" side="right"
-              v-if="$hasAccess('notification.notifications.manage')" bordered>
-      <master-notifications/>
-    </q-drawer>
+    <q-dialog id="dawerNotificatiosMaster" v-model="drawer.notification" posititon="right" transition-hide="slide-up"
+              transition-show="slide-down">
+      <master-notifications v-show="drawer.notification" :isMobile="this.windowSize == 'mobile' ? true : false"/>
+    </q-dialog>
   </div>
 </template>
 <script>
