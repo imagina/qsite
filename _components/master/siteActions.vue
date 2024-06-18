@@ -178,7 +178,6 @@ export default {
           {
             name: 'notifications',
             label: this.$trp('isite.cms.label.notification'),
-            vIf: this.$auth.hasAccess('notification.notifications.manage'),
             props: {
               ...this.defaultButtonProps,
               icon: 'fa-light fa-bell',

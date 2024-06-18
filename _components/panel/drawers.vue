@@ -100,8 +100,7 @@
     </q-drawer>
 
     <!--Notification-->
-    <q-drawer id="dawerNotificatiosMaster" v-model="drawer.notification" side="right"
-              v-if="$auth.hasAccess('notification.notifications.manage')" bordered>
+    <q-drawer id="dawerNotificatiosMaster" v-model="drawer.notification" side="right" bordered>
       <master-notifications/>
     </q-drawer>
   </div>
