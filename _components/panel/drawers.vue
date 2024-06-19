@@ -100,9 +100,7 @@
     </q-drawer>
 
     <!--Notification-->
-    <q-drawer id="dawerNotificatiosMaster" v-model="drawer.notification" side="right" bordered>
-      <master-notifications/>
-    </q-drawer>
+    <master-notifications :is-open="drawer.notification" :isMobile="this.windowSize == 'mobile' ? true : false"/>
   </div>
 </template>
 <script>
