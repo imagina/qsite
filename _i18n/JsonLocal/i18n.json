@@ -67,6 +67,7 @@
         "type": "Type",
         "cancel": "Cancel",
         "openLink": "Open link",
+        "seeAll": "See All",
         "form": {
           "altAttribute": "Alt Attribute",
           "keyWords": "Key words",
@@ -2440,6 +2441,7 @@
         "type": "Tipo",
         "cancel": "Cancelar",
         "openLink": "Abrir enlace",
+        "seeAll": "Ver todas",
         "form": {
           "altAttribute": "Attributo Alt",
           "keyWords": "Palabras Claves",
