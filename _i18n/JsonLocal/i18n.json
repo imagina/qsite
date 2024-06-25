@@ -1,25 +1,5 @@
 {
-  "en": {
-    "ichat": {
-      "cms": {
-        "sidebar": {
-          "group": "Chat",
-          "adminMessages": "Chat",
-          "conversations": "Chat",
-          "providers": "Providers"
-        },
-        "message": {
-          "noMessages": "There isn't messages...",
-          "couldNotSend": "Message could not be sent"
-        },
-        "newProvider": "New Provider",
-        "updateProvider": "Update Provider",
-        "label": {
-          "resend": "Resend",
-          "sendMessage": "Send a Message..."
-        }
-      }
-    },
+  "en": {    
     "ievent": {
       "cms": {
         "sidebar": {
@@ -2373,27 +2353,7 @@
       }
     }
   },
-  "es": {
-    "ichat": {
-      "cms": {
-        "sidebar": {
-          "group": "Chat",
-          "adminMessages": "Chat",
-          "conversations": "Chat",
-          "providers": "Proveedores"
-        },
-        "message": {
-          "noMessages": "No tienes mensajes...",
-          "couldNotSend": "No se pudo enviar el mensaje"
-        },
-        "newProvider": "Nuevo Proveedor",
-        "updateProvider": "Actualizar Proveedor",
-        "label": {
-          "resend": "Reenviar",
-          "sendMessage": "Envia un mensaje..."
-        }
-      }
-    },
+  "es": {    
     "ievent": {
       "cms": {
         "sidebar": {
