@@ -130,7 +130,8 @@ export default {
           name: 'fa-regular fa-wifi-slash',
         },
         message: this.$tr('isite.cms.message.appOffline'),
-        classWrapper: 'tw-text-white tw-bg-gray-900'
+        classWrapper: 'tw-text-white tw-bg-gray-900',
+        action: () => this.$eventBus.$emit('toggleMasterDrawer', 'offline')
       },
       configBannerNotification: {
         marquee: true,
