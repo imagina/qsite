@@ -52,7 +52,8 @@ export default {
         extraPlugins: 'colorbutton,colordialog,justify,collapsibleItem,font,btgrid,simplebox,ckeditorfa',
         embed_provider: '//iframe.ly/api/oembed?url={url}&callback={callback}&api_key=7e0aa12b0cd2c01651346b',
         contentsCss: 'https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css',
-        fontSize_sizes: fontSizes.join('')
+        fontSize_sizes: fontSizes.join(''),
+        versionCheck: false
       }
     }
   },
