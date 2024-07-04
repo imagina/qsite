@@ -74,7 +74,7 @@ export default {
     crud : import('@imagina/qsite/_crud/recycle'),
     page: () => import('@imagina/qcrud/_pages/admin/crudPage'),
     layout: () => import('@imagina/qsite/_layouts/master'),
-    title: '',
+    title: 'Recycle BIN',
     icon: ''
   },
 }

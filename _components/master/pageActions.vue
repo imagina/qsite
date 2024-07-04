@@ -445,7 +445,8 @@ export default {
       return `${hours}:${minutes}${ampm} el ${day}/${month}/${year}`
     }, 
     goToRecycleBin(){
-      const routeData = this.$router.resolve({name: 'app.recycle', query: {crudData: "someData"}});
+      const paramsUrl = {module: 'qblog', crud: 'posts'}
+      const routeData = this.$router.resolve({name: 'app.recycle', query: paramsUrl});
       window.open(routeData.href, '_blank');
     }
   }
