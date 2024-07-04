@@ -65,4 +65,16 @@ export default {
     title: 'isite.cms.sidebar.adminOrganizationWizard',
     icon: 'fal fa-crown'
   },
+  reycle: {
+    permission: null,
+    authenticated: true,
+    activated: true,
+    path: '/reycle-bin',
+    name: 'app.recycle',
+    crud : import('@imagina/qsite/_crud/recycle'),
+    page: () => import('@imagina/qcrud/_pages/admin/crudPage'),
+    layout: () => import('@imagina/qsite/_layouts/master'),
+    title: 'isite.cms.sidebar.adminOrganizationWizard',
+    icon: 'fal fa-crown'
+  },
 }
