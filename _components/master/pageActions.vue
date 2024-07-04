@@ -198,6 +198,16 @@ export default {
       let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
 
       let response = [
+        //recicle  bin
+        {
+          label: 'recycle bin',
+          vIf: (!excludeActions.includes('recycle')),
+          props: {
+            icon: 'fa-light fa-recycle'
+          },
+         //action: () => {console.warn('->>', this.$helper.getInfoFromPermission(this.$route.meta.permission))}
+         action: () => this.goToRecycleBin()
+        },
         //Export Icommerce
         {
           label: this.$tr('isite.cms.label.migration'),
@@ -286,7 +296,7 @@ export default {
         //Prepend actions
         response = [...this.extraActions.filter(action => typeof action != 'string'), ...response]
         //New button action
-        if (this.extraActions.includes('new'))
+        if (this.extraActions.includes('new') && !excludeActions.includes('new'))
           response.unshift({
             vIf: this.params.create && this.params.hasPermission.create,
             props: {
@@ -433,6 +443,10 @@ export default {
       const year = cacheDate.getFullYear();
 
       return `${hours}:${minutes}${ampm} el ${day}/${month}/${year}`
+    }, 
+    goToRecycleBin(){
+      const routeData = this.$router.resolve({name: 'app.recycle', query: {cudData: "someData"}});
+      window.open(routeData.href, '_blank');
     }
   }
 }
