@@ -1,22 +1,33 @@
 <template>
     <div>
-        <p> this is the recycle bin </p>
-        {{ params }}
+        <component :is="dynamicCrud" ref="componentCrudData" @hook:mounted="init" />
     </div>
 </template>
 <script>
 export default {
+  beforeMount(){
+    //this.dynamicCrud = '@imagina/qblog/_crud/posts'
+    this.dynamicCrud = require('@imagina/qblog/_crud/posts').default;
+  },
   mounted(){
-    this.params = decodeURI(window.location).split('?')   
+    //this.params = decodeURI(window.location).split('?')
+    
+    /* import module*/        
+    //this.dynamicCrud =
 
+    //console.dir(this.dynamicCrud.computed.crudData)
+    //this.dynamicCrudData.computed
+    
   }, 
   data() {
     return {
       crudId: this.$uid(),
-      params: {}
+      params: {},
+      dynamicCrud:  null,
+      dynamicCrudData: null
     }
   },
-  computed: {
+  computed: {    
     crudData() {
       return {
         crudId: this.crudId,
@@ -204,6 +215,13 @@ export default {
     //Crud info
     crudInfo() {
       return this.$store.state.qcrudComponent.component[this.crudId] || {}
+    }
+  }, 
+  methods: {
+    init(){
+      console.log('loaded')
+      this.dynamicCrudData = this.$refs.componentCrudData.crudData
+      //console.warn('dynamicCrudData', this.dynamicCrudData)
     }
   }  
 }

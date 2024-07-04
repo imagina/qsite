@@ -445,7 +445,7 @@ export default {
       return `${hours}:${minutes}${ampm} el ${day}/${month}/${year}`
     }, 
     goToRecycleBin(){
-      const routeData = this.$router.resolve({name: 'app.recycle', query: {cudData: "someData"}});
+      const routeData = this.$router.resolve({name: 'app.recycle', query: {crudData: "someData"}});
       window.open(routeData.href, '_blank');
     }
   }
