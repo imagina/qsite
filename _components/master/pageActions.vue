@@ -129,6 +129,7 @@ export default {
       default: () => {}
     },
     expiresIn: {type: Number},
+    apiRoute: null
   },
   inject: {
     filterPlugin: {
@@ -445,7 +446,7 @@ export default {
       return `${hours}:${minutes}${ampm} el ${day}/${month}/${year}`
     }, 
     goToRecycleBin(){
-      const paramsUrl = {module: 'qblog.posts'}
+      const paramsUrl = {module: this.apiRoute.replace('apiRoutes.', '')}
       const routeData = this.$router.resolve({name: 'app.recycle', query: paramsUrl});
       window.open(routeData.href, '_blank');
     }
