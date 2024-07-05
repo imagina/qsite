@@ -1,55 +1,70 @@
 <template>
-    <div>
-        <component :is="dynamicCrud" ref="componentCrudData" @hook:mounted="init" />
-    </div>
+  <div>    
+      <component v-if="dynamicCrud" :is="dynamicCrud" ref="componentCrudData" />
+  </div>
 </template>
 <script>
+import dynamicCrud from '@imagina/qsite/_plugins/dynamicCrud'
 export default {
-  beforeMount(){
-    this.configDynamicCrud();
+beforeMount(){
+},
+mounted(){
+}, 
+data() {
+  return {
+    crudId: this.$uid(),
+    params: {},
+    modules: null, 
+    cruds: []
+  }
+},
+computed: {  
+  //Crud info
+  crudInfo() {
+    return this.$store.state.qcrudComponent.component[this.crudId] || {}
   },
-  mounted(){}, 
-  data() {
-    return {
-      crudId: this.$uid(),
-      params: {},
-      dynamicCrud:  null,
-      dynamicCrudData: null
-    }
-  },
-  computed: {    
-    crudData() {
-      return this.dynamicCrudData
-    },
-    //Crud info
-    crudInfo() {
-      return this.$store.state.qcrudComponent.component[this.crudId] || {}
-    }
-  }, 
-  methods: {
-    init(){
-      this.setDynamicCrudData()
-    },
-    configDynamicCrud(){
-      const queries  = this.getUrlQueries()
-      if(queries?.module && queries?.crud){
+  dynamicCrud(){
+    //return false          
+    if (this.isRecycle) {    
+      if(this.getModule){
         try {
-          const modulePath = `${queries.module}/_crud/${queries.crud}`
-          console.log('to open', modulePath)
-          //this.dynamicCrud = require(`@imagina/${modulePath}`).default;
-          this.dynamicCrud = require(path.toString()).default;
-        } catch(e){
+          //return require(`@imagina/qblog/_crud/${this.getModule}`).default
+          return dynamicCrud.importCrud(this.getModule[0], this.getModule[1])          
+        } catch(e) {
           console.log(e)
-        }        
-      }      
-    },
-    setDynamicCrudData(){
-      console.log('loaded')
-      this.dynamicCrudData = this.$refs.componentCrudData.crudData
+        }
+      }
+    } else {
+      return false
+    }
+  },
+  isRecycle(){
+    return this.$route.name == 'app.recycle'
+  },
+  getModule(){        
+    const params = decodeURI(window.location).split('?')
+    if(Array.isArray(params) ){
+      if(params.length > 1){
+        const query =  params[1]
+          .split('&')
+          .map(param => param.split('='))
+          .reduce((values, [ key, value ]) => {
+            values[ key ] = value
+            return values
+          }, {})          
+        
+        return query['module'] ? query['module'].split('.') : false        
+      }
+    }
+    return false
+  },
+  crudData(){      
+    if(this.$refs.componentCrudData && this.$refs.componentCrudData?.crudData){
+     const dynamicCrudData = this.$refs.componentCrudData.crudData
       //exclude page actions 
-      this.dynamicCrudData.read['excludeActions'] =  ['new', 'edit', 'destroy', 'sync', 'export', 'share', 'recycle'] 
+      dynamicCrudData.read['excludeActions'] =  ['new', 'edit', 'destroy', 'sync', 'export', 'share', 'recycle'] 
       // add new actions
-      this.dynamicCrudData.read['actions'] = [
+      dynamicCrudData.read['actions'] = [
         {//restore item action
           icon: 'fa-light fa-floppy-disk-circle-arrow-right',
           color: 'green',
@@ -69,24 +84,14 @@ export default {
           }
         },
       ]
-      //console.warn('dynamicCrudData', this.dynamicCrudData)
-    },     
-    getUrlQueries(){
-      const params = decodeURI(window.location).split('?')
-      if(Array.isArray(params) ){
-        if(params.length > 1){
-          const query =  params[1]
-            .split('&')
-            .map(param => param.split('='))
-            .reduce((values, [ key, value ]) => {
-              values[ key ] = value
-              return values
-            }, {})
-          return query
-        }
-      }
-      return {}
-    },
-  }  
+      return dynamicCrudData
+    }
+    return ''      
+  }
+}, 
+methods: {
+  init(){
+  }      
+}  
 }
 </script>
