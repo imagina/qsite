@@ -1,7 +1,7 @@
 <template>
   <q-btn size="xs"
          :style="btnStyle"
-         round :color="defaultColor"
+         round :color="iconColor || defaultColor"
          :icon="defaultIcon"
          style="z-index: 4"
          unelevated
@@ -30,7 +30,8 @@ export default {
     icon: {default: null},
     title: {type: String, default: null},
     description: {type: String},
-    btnStyle: {type: String, default: ''}
+    btnStyle: {type: String, default: ''},
+    iconColor: {type: String, default: null}
   },
   components: {},
   watch: {},
