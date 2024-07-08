@@ -31,6 +31,7 @@
             v-model="options.languageToClone"
             :label="$trp('isite.cms.label.language')"
             :options="optionsLanguagesToClone"
+            emit-value map-options
           />
           <!--Button clone language-->
           <div class="text-right q-mt-sm q-gutter-x-sm">
