@@ -145,8 +145,8 @@ computed: {
     if(this.$refs.componentCrudData && this.$refs.componentCrudData?.crudData){
      const dynamicCrudData = this.$refs.componentCrudData.crudData
       //exclude page actions 
-      dynamicCrudData.read['excludeActions'] =  ['new', 'edit', 'destroy', 'sync', 'export', 'share', 'recycle'] 
-      dynamicCrudData.read['excludeColumns'] = ['qr', 'status']
+      dynamicCrudData.read['excludeActions'] =  ['new', 'edit', 'destroy', 'sync', 'export', 'share', 'recycle']       
+      dynamicCrudData['update'] = false
       // add new actions
       dynamicCrudData.read['actions'] = [
         {//restore item action
