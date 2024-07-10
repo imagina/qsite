@@ -12,6 +12,143 @@ export default function controller(props: any, emit: any) {
   const endOfDay = fieldProps.endOfDay;
   
 
+  const dateRanges = {
+    customRange: {
+      label: i18n.tr('isite.cms.label.customRange'),
+      value: 'customRange'
+    },    
+    today: {           
+      label: i18n.tr('isite.cms.label.today')      ,
+      from: moment().format(dateFormat),
+      to: moment().format(dateFormat), 
+      value: 'today'
+    }, 
+    yesterday: {
+      label: i18n.tr('isite.cms.label.yesterday'),       
+      from: moment().subtract(1, 'd').format(dateFormat), 
+      to:  moment().subtract(1, 'd').format(dateFormat), 
+      value: 'yesterday'
+    }, 
+    tomorrow: {
+      label: i18n.tr('isite.cms.label.tomorrow'), 
+      from: moment().add(1, 'd').format(dateFormat),
+      to: moment().add(1, 'd').format(dateFormat),
+      value: 'tomorrow'
+    },
+    lastSevenDays: {
+      label: i18n.tr('isite.cms.label.LastNumDays', {numDays: 7}), 
+      from: moment().subtract(6, 'd').format(dateFormat),
+      to:  moment().format(dateFormat),
+      value: 'lastSevenDays'
+    },
+    lastThirtyDays: {
+      label: i18n.tr('isite.cms.label.LastNumDays', {numDays: 30}),
+      from: moment().subtract(29, 'd').format(dateFormat),
+      to: moment().format(dateFormat),
+      value: 'lastThirtyDays'
+    },
+    lastSixtyDays: {
+      label: i18n.tr('isite.cms.label.LastNumDays', {numDays: 60}),
+      from: moment().subtract(59, 'd').format(dateFormat),
+      to: moment().format(dateFormat), 
+      value: 'lastSixtyDays'
+    },
+    currentWeek: {
+      label: i18n.tr('isite.cms.label.currentWeek'),
+      from: moment().startOf('isoWeek').format(dateFormat),
+      to: moment().endOf('isoWeek').format(dateFormat),
+      value: 'currentWeek'
+    },
+    lastWeek: {
+      label: i18n.tr('isite.cms.label.lastWeek'), 
+      from: moment().subtract(1, 'weeks').startOf('isoWeek').format(dateFormat),
+      to: moment().subtract(1, 'weeks').endOf('isoWeek').format(dateFormat),
+      value: 'lastWeek'
+    },
+    nextWeek: {
+      label: i18n.tr('isite.cms.label.nextWeek'),
+      from: moment().add(1, 'weeks').startOf('isoWeek').format(dateFormat),
+      to: moment().add(1, 'weeks').endOf('isoWeek').format(dateFormat),
+      value: 'nextWeek'
+    },
+    nextMonth: {
+      label: i18n.tr('isite.cms.label.nextMonth'),
+      from: moment().add(1, 'months').startOf('month').format(dateFormat),
+      to: moment().add(1, 'months').endOf('month').format(dateFormat),
+      value: 'nextMonth'
+    },
+    currentMonth: {
+      label: i18n.tr('isite.cms.label.currentMonth'),
+      from: moment().startOf('month').format(dateFormat),
+      to: moment().endOf('month').format(dateFormat),
+      value: 'currentMonth'
+    },
+    lastMonth: {
+      label: i18n.tr('isite.cms.label.lastMonth'),
+      from: moment().subtract(1, 'months').startOf('month').format(dateFormat),
+      to: moment().subtract(1, 'months').endOf('month').format(dateFormat),
+      value: 'lastMonth'
+    },
+    twoMonthsAgo: {
+      label: i18n.tr('isite.cms.label.numMonthsAgo', {numMonths: 2}), 
+      from: moment().subtract(2, 'months').startOf('month').format(dateFormat), 
+      to: moment().subtract(2, 'months').endOf('month').format(dateFormat), 
+      value: 'twoMonthsAgo'
+    },
+    currentYear: {
+      label: i18n.tr('isite.cms.label.currentYear'), 
+      from: moment().startOf('year').format(dateFormat),
+      to: moment().endOf('year').format(dateFormat),
+      value: 'currentYear'
+    },
+    lastYear: {
+      label: i18n.tr('isite.cms.label.lastYear'), 
+      from: moment().subtract(1, 'year').startOf('year').format(dateFormat),
+      to: moment().subtract(1, 'year').endOf('year').format(dateFormat),
+      value: 'lastYear'
+    },
+    twoYearsAgo: {
+      label: i18n.tr('isite.cms.label.numYearsAgo', {numYears: 2}),
+      from: moment().subtract(2, 'year').startOf('year').format(dateFormat),
+      to: moment().subtract(2, 'year').endOf('year').format(dateFormat),
+      value: 'twoYearsAgo'
+    },
+    lastTwoYears: {
+      label: i18n.tr('isite.cms.label.lastNumYears', {numYears: 2}),
+      from: moment().subtract(1, 'year').startOf('year').format(dateFormat),
+      to: moment().endOf('year').format(dateFormat),
+      value: 'lastTwoYears'
+    },
+    fifteenDaysAroundToday: {
+      label: i18n.tr('isite.cms.label.daysAroundToday', {numDays: 15}), 
+      from: moment().subtract(7, 'days').format(dateFormat),
+      to: moment().add(7, 'days').format(dateFormat),
+      value: '15daysAroundToday'
+    },
+    fiveDaysAroundToday: {
+      label: i18n.tr('isite.cms.label.daysAroundToday', {numDays: 5}), 
+      from: moment().subtract(2, 'days').format(dateFormat),
+      to: moment().add(2, 'days').format(dateFormat),
+      value: '5daysAroundToday'
+    } 
+  }
+
+  function rangeOptions(){
+    /*const option = []
+    Object.keys(dateRanges).forEach((e) => {
+      option.push({label: dateRanges[e].label, value: dateRanges[e].value}) 
+    })
+    return option
+    */
+    
+    return Object.keys(dateRanges).reduce((arr, e) => {
+      arr.push({label: dateRanges[e].label, value: dateRanges[e].value}) 
+      return arr
+    }, [])
+  }  
+
+   
+
   // Refs
   const refs = {
     dateRange: ref({from: '', to: ''}),
@@ -20,14 +157,13 @@ export default function controller(props: any, emit: any) {
 
   // States
   const state = reactive({
-    type: ''
+    type: null
   })
 
   // Computed
   const computeds = {
     // key: computed(() => {})
-    mask: computed(() => dateFormat),
-  
+    mask: computed(() => dateFormat),    
     fieldsConfig: computed(() => {
       return {
         type: {
@@ -35,29 +171,8 @@ export default function controller(props: any, emit: any) {
           type: 'select',
           props: {
             label: props.label ?? i18n.tr('isite.cms.form.date'),
-            options: [
-              {label: i18n.tr('isite.cms.label.customRange'), value: 'customRange'},
-              {label: i18n.tr('isite.cms.label.today'), value: 'today'},
-              {label: i18n.tr('isite.cms.label.yesterday'), value: 'yesterday'},
-              {label: i18n.tr('isite.cms.label.tomorrow'), value: 'tomorrow'},
-              {label: i18n.tr('isite.cms.label.LastNumDays', {numDays: 7}), value: 'lastSevenDays'},
-              {label: i18n.tr('isite.cms.label.LastNumDays', {numDays: 30}), value: 'lastThirtyDays'},
-              {label: i18n.tr('isite.cms.label.LastNumDays', {numDays: 60}), value: 'lastSixtyDays'},
-              {label: i18n.tr('isite.cms.label.currentWeek'), value: 'currentWeek'},
-              {label: i18n.tr('isite.cms.label.lastWeek'), value: 'lastWeek'},
-              {label: i18n.tr('isite.cms.label.nextWeek'), value: 'nextWeek'},
-              {label: i18n.tr('isite.cms.label.currentMonth'), value: 'currentMonth'},
-              {label: i18n.tr('isite.cms.label.lastMonth'), value: 'lastMonth'},
-              {label: i18n.tr('isite.cms.label.nextMonth'), value: 'nextMonth'},
-              {label: i18n.tr('isite.cms.label.numMonthsAgo', {numMonths: 2}), value: 'twoMonthsAgo'},
-              {label: i18n.tr('isite.cms.label.currentYear'), value: 'currentYear'},
-              {label: i18n.tr('isite.cms.label.lastYear'), value: 'lastYear'},
-              {label: i18n.tr('isite.cms.label.numYearsAgo', {numYears: 2}), value: 'twoYearsAgo'},
-              {label: i18n.tr('isite.cms.label.lastNumYears', {numYears: 2}), value: 'lastTwoYears'},
-              {label: i18n.tr('isite.cms.label.daysAroundToday', {numDays: 15}), value: '15daysAroundToday'},
-              {label: i18n.tr('isite.cms.label.daysAroundToday', {numDays: 5}), value: '5daysAroundToday'}
-            ]
-          }
+            options: rangeOptions()                
+           }
         },
       }
     }),
@@ -79,9 +194,9 @@ export default function controller(props: any, emit: any) {
             methods.setInputRange({from, to})
           }
           refs.dateRange.value = {from, to}
-          state.type = 'customRange'
+          state.type = methods.getType(refs.dateRange.value)
           methods.emitValue({from, to})
-      } else {
+      } else {        
         refs.dateRange.value = {from: null, to: null}
         methods.emitValue(null)
       }
@@ -120,9 +235,20 @@ export default function controller(props: any, emit: any) {
 
     //Change and update values when date changes on q-calendar
     changeType(value){
-      state.type = 'customRange'
+      state.type = methods.getType(value)
       methods.setInputRange(value)
       methods.emitValue(value)
+    },
+    getType(value){      
+      const fromDate = value?.from || value
+      const toDate = value?.to || value
+      console.warn('_>>',toDate, toDate)
+      /* one day range */
+      if(fromDate == dateRanges.today.from && toDate == dateRanges.today.to) return dateRanges.today.value
+      if(fromDate == dateRanges.yesterday.from && toDate == dateRanges.yesterday.to) return dateRanges.yesterday.value
+      if(fromDate == dateRanges.tomorrow.from && toDate == dateRanges.tomorrow.to) return dateRanges.tomorrow.value
+
+      return 'customRange'
     },
     //Change the date due the type selector
     changeDate() {      
@@ -139,92 +265,13 @@ export default function controller(props: any, emit: any) {
         toDate = refs.dateRange.value?.to || moment().format(dateFormat)
       }
         
-      if (typeDate) {
-        //Default Dates          
-        //Case values
-        switch (typeDate) {
-          case 'today':
-            fromDate = moment().format(dateFormat)
-            toDate = moment().format(dateFormat)
-            break;
-          case 'yesterday':
-            fromDate = moment().subtract(1, 'd').format(dateFormat)
-            toDate = moment().subtract(1, 'd').format(dateFormat)
-            break;
-          case 'tomorrow':
-            fromDate = moment().add(1, 'd').format(dateFormat)
-            toDate = moment().add(1, 'd').format(dateFormat)
-            break;
-          case 'lastSevenDays':
-            fromDate = moment().subtract(6, 'd').format(dateFormat)
-            toDate = moment().format(dateFormat)
-            break;
-          case 'currentWeek':
-            fromDate = moment().startOf('isoWeek').format(dateFormat)
-            toDate = moment().endOf('isoWeek').format(dateFormat)
-            break;
-          case 'lastWeek':
-            fromDate = moment().subtract(1, 'weeks').startOf('isoWeek').format(dateFormat)
-            toDate = moment().subtract(1, 'weeks').endOf('isoWeek').format(dateFormat)
-            break;
-          case 'nextWeek':
-            fromDate = moment().add(1, 'weeks').startOf('isoWeek').format(dateFormat)
-            toDate = moment().add(1, 'weeks').endOf('isoWeek').format(dateFormat)
-            break;
-          case 'lastThirtyDays':
-            fromDate = moment().subtract(29, 'd').format(dateFormat)
-            toDate = moment().format(dateFormat)
-            break;
-          case 'lastSixtyDays':
-            fromDate = moment().subtract(59, 'd').format(dateFormat)
-            toDate = moment().format(dateFormat)
-            break;
-          case 'currentMonth':
-            fromDate = moment().startOf('month').format(dateFormat)
-            toDate = moment().endOf('month').format(dateFormat)
-            break;
-          case 'lastMonth':
-            fromDate = moment().subtract(1, 'months').startOf('month').format(dateFormat)
-            toDate = moment().subtract(1, 'months').endOf('month').format(dateFormat)
-            break;
-          case 'nextMonth':
-            fromDate = moment().add(1, 'months').startOf('month').format(dateFormat)
-            toDate = moment().add(1, 'months').endOf('month').format(dateFormat)
-            break;
-          case 'twoMonthsAgo':
-            fromDate = moment().subtract(2, 'months').startOf('month').format(dateFormat)
-            toDate = moment().subtract(2, 'months').endOf('month').format(dateFormat)
-            break;
-          case 'twoYearsAgo':
-            fromDate = moment().subtract(2, 'year').startOf('year').format(dateFormat)
-            toDate = moment().subtract(2, 'year').endOf('year').format(dateFormat)
-            break;
-          case 'lastYear':
-            fromDate = moment().subtract(1, 'year').startOf('year').format(dateFormat)
-            toDate = moment().subtract(1, 'year').endOf('year').format(dateFormat)
-            break;
-          case 'lastTwoYears':
-            fromDate = moment().subtract(1, 'year').startOf('year').format(dateFormat)
-            toDate = moment().endOf('year').format(dateFormat)
-            break;
-          case 'currentYear':
-            fromDate = moment().startOf('year').format(dateFormat)
-            toDate = moment().endOf('year').format(dateFormat)
-            break;
-          case '15daysAroundToday':
-            fromDate = moment().subtract(7, 'days').format(dateFormat);
-            toDate = moment().add(7, 'days').format(dateFormat);
-            break;
-          case '5daysAroundToday':
-            fromDate = moment().subtract(2, 'days').format(dateFormat);
-            toDate = moment().add(2, 'days').format(dateFormat);
-            break;
-          case 'customRange':
-            if (fromDate)
-              fromDate = moment(fromDate).format(dateFormat)
-            if (toDate)
-              toDate = moment(toDate).format(dateFormat)
-            break;
+      if (typeDate) {        
+        if(typeDate == dateRanges.customRange.value){
+          fromDate = moment(fromDate).format(dateFormat)
+          toDate = moment(toDate).format(dateFormat)
+        } else {
+          fromDate = dateRanges[typeDate].from
+          toDate = dateRanges[typeDate].to
         }
       }
       //One day range
