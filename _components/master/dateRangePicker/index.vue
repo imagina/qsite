@@ -6,6 +6,7 @@
     :label="label"
     :class="class"
     debounce="300"
+    :clearable="true"
   >
     <template v-slot:prepend>
       <q-icon 

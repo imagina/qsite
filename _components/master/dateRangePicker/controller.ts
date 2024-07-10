@@ -1,11 +1,8 @@
-import { start } from "repl";
-import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
+import {computed, reactive, ref, onMounted, toRefs, watch } from "vue";
 import { i18n, clone } from 'src/plugins/utils'
 import moment from "moment";
 
 export default function controller(props: any, emit: any) {
-  const proxy = getCurrentInstance()!.appContext.config.globalProperties
-
   const fieldProps = props.fieldProps.slot;
   const field = fieldProps.field;
   const rangeDateFormat = fieldProps.mask;
@@ -68,28 +65,25 @@ export default function controller(props: any, emit: any) {
 
   // Methods
   const methods = {
-    // methodKey: () => {}
     //Get and validate the value from input
     updateDateRange(value){
       refs.inputRange.value = value
-      if(value){
-        if(moment(value, rangeDateFormat, true).isValid() ){
-           const values = value.split(' - ')
-           let from = values[0]
-           let to = values[1]
-           /*fixs the input if from is grater than to*/
-           if(from > to ){
-             from = values[1]
-             to = values[0]
-             methods.setInputRange({from, to})
-           }
-           refs.dateRange.value = {from, to}
-           state.type = 'customRange'
-           methods.emitValue({from, to})
-        } else {
-          refs.dateRange.value = {from: null, to: null}
-          methods.emitValue(null)
-        }
+      if(value && moment(value, rangeDateFormat, true).isValid() ){
+          const values = value.split(' - ')
+          let from = values[0]
+          let to = values[1]
+          /*fixs the input if from is grater than to*/
+          if(from > to ){
+            from = values[1]
+            to = values[0]
+            methods.setInputRange({from, to})
+          }
+          refs.dateRange.value = {from, to}
+          state.type = 'customRange'
+          methods.emitValue({from, to})
+      } else {
+        refs.dateRange.value = {from: null, to: null}
+        methods.emitValue(null)
       }
     },
     //Set and cast value for input
