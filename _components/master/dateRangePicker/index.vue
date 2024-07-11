@@ -26,6 +26,7 @@
               flat
               :mask="mask"
               :subtitle="inputRange"
+              color="primary"              
               @update:model-value="(value) => changeType(value)"
             >
             <div class="row items-center justify-end">

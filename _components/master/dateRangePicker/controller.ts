@@ -109,12 +109,10 @@ export default function controller(props: any, emit: any) {
       const fromDate = value?.from || value
       const toDate = value?.to || value
       let type = dateRanges.customRange.value
-      console.warn('_>>',toDate, toDate)      
 
       Object.keys(dateRanges).forEach((range) => {
         if(dateRanges[range]?.from && dateRanges[range]?.to){
           if(fromDate == dateRanges[range].from && toDate == dateRanges[range].to){
-            console.log(dateRanges[range].value)
             type =  dateRanges[range].value
           }
         }
@@ -126,7 +124,6 @@ export default function controller(props: any, emit: any) {
       let fromDate = ''
       let toDate = ''
       let typeDate = clone(state.type)
-      console.log(typeDate)
       
       //one day range
       if(typeDate == 'today' || typeDate == 'yesterday' || typeDate == 'tomorrow'){
