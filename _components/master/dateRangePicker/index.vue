@@ -5,7 +5,7 @@
     v-bind="fieldProps.field"
     :label="label"
     :class="class"
-    debounce="300"
+    debounce="600"
     :clearable="true"
   >
     <template v-slot:prepend>
