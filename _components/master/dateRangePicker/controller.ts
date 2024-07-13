@@ -23,7 +23,8 @@ export default function controller(props: any, emit: any) {
 
   // States
   const state = reactive({
-    type: null
+    type: null,
+    focus: false
   })
 
   // Computed
@@ -60,11 +61,11 @@ export default function controller(props: any, emit: any) {
             methods.setInputRange({from, to})
           }
           refs.dateRange.value = {from, to}
-          state.type = methods.getType({from, to})
+          methods.getType({from, to})
           methods.emitValue({from, to})
-      } else {        
+      } else {
+        state.type = null
         refs.dateRange.value = {from: null, to: null}
-        methods.emitValue(null)
       }
     },
     //Set and cast value for input
@@ -84,24 +85,27 @@ export default function controller(props: any, emit: any) {
     //Emits value for model-value
     emitValue(value){
       let toEmit = null
-
       if(value != null ){
-        const from = value?.from ? value?.from : value
-        const to = value?.to ? value?.to : value
+        console.warn('bfore emit', value)
+        //if(value.from != null && value.to != null){
+          console.log(value)
+          const from = value?.from ? value?.from : value
+          const to = value?.to ? value?.to : value
 
-        toEmit = {
-          field,
-          type: state.type,
-          from: moment(`${from} ${startOfDay}`).format(emitFormat),
-          to : moment(`${to} ${endOfDay}`).format(emitFormat)
-        }
+          toEmit = {
+            field,
+            type: state.type,
+            from: moment(`${from} ${startOfDay}`).format(emitFormat),
+            to : moment(`${to} ${endOfDay}`).format(emitFormat)
+          }
+        //}
       }
       emit('update:modelValue', toEmit)      
     },
 
     //Change and update values when date changes on q-calendar
     changeType(value){
-      state.type = methods.getType(value)
+      methods.getType(value)
       methods.setInputRange(value)
       methods.emitValue(value)
     },
@@ -117,7 +121,7 @@ export default function controller(props: any, emit: any) {
           }
         }
       })     
-      return type
+      state.type = type
     },
     //Change the date due the type selector
     changeDate() {      
@@ -143,15 +147,25 @@ export default function controller(props: any, emit: any) {
           toDate = dateRanges[typeDate].to
         }
       }
-      //One day range
-      if(fromDate == toDate){
-        refs.dateRange.value = fromDate
-      } else {
-        refs.dateRange.value = {from: fromDate, to: toDate}
-      }
+      methods.setDateRange({fromDate, toDate})
       methods.setInputRange(refs.dateRange.value)
       methods.emitValue({from: fromDate, to: toDate})
-    }, 
+    },
+    clear(){
+      methods.setInputRange({from: null, to: null})
+      refs.dateRange.value = {from: null, to: null}
+      methods.emitValue(null)
+    },
+    setFocus({value}){
+      state.focus = value
+    },
+    setDateRange({from, to}){
+      if(from == to){
+        refs.dateRange.value = from
+      } else {
+        refs.dateRange.value = {from, to}
+      }
+    },
     init(){
       //Check props
       if(props.modelValue != null){
@@ -173,9 +187,19 @@ export default function controller(props: any, emit: any) {
     methods.init()
   })
 
-  // Watch  
-  watch(state, (newField, oldField): void => {
-    methods.changeDate()    
+  watch(props, (newField, oldField): void => {
+    const model = newField.modelValue
+    if(model?.type != null  && model?.from != null && model?.to != null){
+        const from = model?.from ? moment(model.from).format(dateFormat) : null
+        const to = model?.to ? moment(model.to).format(dateFormat) : null
+        methods.setInputRange({ from, to})
+        methods.getType({from, to})
+        methods.setDateRange({from, to})
+    } else {
+      if(!state.focus){
+        methods.clear()
+      }
+    }
   }, {deep: true})
   
 

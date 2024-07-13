@@ -1,4 +1,4 @@
-<template>      
+<template>
   <q-input
     @update:model-value="(value) => updateDateRange(value)"
     :model-value="inputRange"
@@ -7,6 +7,9 @@
     :class="class"
     debounce="600"
     :clearable="true"
+    @clear="() => clear()"
+    @focus="setFocus(true)"
+    @blur="setFocus(false)"
   >
     <template v-slot:prepend>
       <q-icon 
@@ -18,7 +21,7 @@
         <q-popup-proxy transition-show="scale" transition-hide="scale">
           <div class="dateRangePickerModal">
             <div class="dateRangePickerSelector">
-              <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type"/>
+              <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type" @update:model-value="(value) => changeDate()"/>
             </div>
             <q-date 
               v-model="dateRange" 
