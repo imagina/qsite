@@ -74,6 +74,7 @@ export default function controller(props: any, emit: any) {
     async init(){      
       state.userData = clone(store.state.quserAuth.userData)
       state.props = clone(props)
+      state.props.filters = methods.removeNullValues(state.props.filters)
       state.systemName = state.props?.systemName || ''
       state.useAdminFilter = state.userData.hasOwnProperty('fields')
       await methods.setFilterValues()
@@ -375,6 +376,25 @@ export default function controller(props: any, emit: any) {
       }
       return {}
     },
+    //removes if filter.value is an empty object
+    removeNullValues(filters){
+      Object.keys(filters).forEach((filter) => {
+        if(!filters[filter]?.value ) return
+        if (typeof filters[filter].value === 'object'){
+          Object.keys(filters[filter].value).forEach((element) => {
+            if (filters[filter].value[element] == null){
+              delete filters[filter].value[element]
+            }
+          })
+
+          //remove value if empty
+          if(Object.keys(filters[filter].value).length == 0){
+            filters[filter].value = null
+          }
+        }
+      })
+      return filters
+    }
   }
 
   // Mounted
