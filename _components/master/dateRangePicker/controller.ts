@@ -86,19 +86,15 @@ export default function controller(props: any, emit: any) {
     emitValue(value){
       let toEmit = null
       if(value != null ){
-        console.warn('bfore emit', value)
-        //if(value.from != null && value.to != null){
-          console.log(value)
-          const from = value?.from ? value?.from : value
-          const to = value?.to ? value?.to : value
+        const from = value?.from ? value?.from : value
+        const to = value?.to ? value?.to : value
 
-          toEmit = {
-            field,
-            type: state.type,
-            from: moment(`${from} ${startOfDay}`).format(emitFormat),
-            to : moment(`${to} ${endOfDay}`).format(emitFormat)
-          }
-        //}
+        toEmit = {
+          field,
+          type: state.type,
+          from: moment(`${from} ${startOfDay}`).format(emitFormat),
+          to : moment(`${to} ${endOfDay}`).format(emitFormat)
+        }        
       }
       emit('update:modelValue', toEmit)      
     },
