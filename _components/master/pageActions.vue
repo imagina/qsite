@@ -444,23 +444,11 @@ export default {
 
       return `${hours}:${minutes}${ampm} el ${day}/${month}/${year}`
     },
+    /* open crud in recycle-bin mode*/
     goToRecycleBin(){
-      this.$route.meta.crud.then((module) => {
-        try {
-          /* Gets the module file.vue fullpath*/
-          const path = module.default.__file
-          /* Checks if it's a valid crud file*/
-          if(path && path.includes('_crud') && module.default?.computed?.crudData){
-            /* Convert: node_modules/@imagina/quser/_crud/users.vue => quser.users */
-            let crud = path.split('.')[0].replace('node_modules/@imagina/', '')
-            crud = crud.replace('/_crud/', '.')
-
-            const paramsUrl = {module: crud}
-            const routeData = this.$router.resolve({name: 'app.recycle', query: paramsUrl});
-            window.open(routeData.href, '_blank');
-          }
-        } catch(e) {}
-      })
+      const paramsUrl = {['recycle-bin']: true}
+      const routeData = this.$router.resolve({name: this.$route.name, query: paramsUrl});
+      window.open(routeData.href, '_blank');
     }
   }
 }
