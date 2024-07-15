@@ -46,20 +46,20 @@ export default {
       },
       currentWeek: {
         label: i18n.tr('isite.cms.label.currentWeek'),
-        from: moment().startOf('isoWeek').format(dateFormat),
-        to: moment().endOf('isoWeek').format(dateFormat),
+        from: moment().startOf('week').format(dateFormat),
+        to: moment().endOf('week').format(dateFormat),
         value: 'currentWeek'
       },
       lastWeek: {
         label: i18n.tr('isite.cms.label.lastWeek'), 
-        from: moment().subtract(1, 'weeks').startOf('isoWeek').format(dateFormat),
-        to: moment().subtract(1, 'weeks').endOf('isoWeek').format(dateFormat),
+        from: moment().subtract(1, 'weeks').startOf('week').format(dateFormat),
+        to: moment().subtract(1, 'weeks').endOf('week').format(dateFormat),
         value: 'lastWeek'
       },
       nextWeek: {
         label: i18n.tr('isite.cms.label.nextWeek'),
-        from: moment().add(1, 'weeks').startOf('isoWeek').format(dateFormat),
-        to: moment().add(1, 'weeks').endOf('isoWeek').format(dateFormat),
+        from: moment().add(1, 'weeks').startOf('week').format(dateFormat),
+        to: moment().add(1, 'weeks').endOf('week').format(dateFormat),
         value: 'nextWeek'
       },
       nextMonth: {
