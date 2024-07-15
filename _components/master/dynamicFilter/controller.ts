@@ -153,7 +153,6 @@ export default function controller(props: any, emit: any) {
         }
       })      
     },
-
     setReadValues(){
       const result = {}      
       Object.keys(state.readOnlyData).forEach(key => {
@@ -177,6 +176,8 @@ export default function controller(props: any, emit: any) {
                   result[key].option = option[field.loadOptions?.select?.label] || option.name || option.title || option.label || option.id || option.value || ''
                 }
               }
+            } else if(field?.type == 'dateRange'){
+              result[key].option = `${state.readOnlyData[key].value.from} - ${state.readOnlyData[key].value.to}`
             }
           }
         }
