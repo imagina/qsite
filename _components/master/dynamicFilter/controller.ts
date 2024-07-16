@@ -3,6 +3,7 @@ import { debounce } from 'quasar'
 import _ from "lodash";
 import service from 'modules/qsite/_components/master/dynamicFilter/services'
 import { i18n, clone, store, router } from 'src/plugins/utils';
+import moment from "moment";
 
 
 export default function controller(props: any, emit: any) {
@@ -177,7 +178,7 @@ export default function controller(props: any, emit: any) {
                 }
               }
             } else if(field?.type == 'dateRange'){
-              result[key].option = `${state.readOnlyData[key].value.from} - ${state.readOnlyData[key].value.to}`
+              result[key].option = `${moment(state.readOnlyData[key].value.from).format('LL')} - ${moment(state.readOnlyData[key].value.to).format('LL')}`
             }
           }
         }
