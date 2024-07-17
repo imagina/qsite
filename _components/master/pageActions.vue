@@ -198,14 +198,13 @@ export default {
       let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
 
       let response = [
-        //recicle  bin
+        //recycle  bin
         {
           label: 'recycle bin',
-          vIf: (!excludeActions.includes('recycle')),
+          vIf: (!excludeActions.includes('recycle') && this.$store.getters['quserAuth/hasAccess']('isite.soft-delete.index')),
           props: {
             icon: 'fa-light fa-recycle'
           },
-         //action: () => {console.warn('->>', this.$helper.getInfoFromPermission(this.$route.meta.permission))}
          action: () => this.goToRecycleBin()
         },
         //Export Icommerce
