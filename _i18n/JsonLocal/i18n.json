@@ -1742,7 +1742,15 @@
           "copy": "Copy",
           "insert": "Insert",
           "phoneNumber": "Phone number",
-          "quickLook": "Quick look"
+          "quickLook": "Quick look",
+          "registerId": "Registro ID {id}",
+          "recycleBin": {
+            "infoMessage": "The Recycle Bin serves as a temporary storage area for deleted files and folders. When you remove a register (or any item), it is not permanently deleted immediately; instead, it is transferred to the Recycle Bin. This allows you to easily recover accidentally deleted items.<br><br>From the Recycle Bin, you can either:<br><br><strong>Restore:</strong> Quickly return a deleted item to its original location.<br/><strong>Permanent Deletion:</strong> Remove the item permanently, making it unrecoverable.",
+            "restoreMessage": "Do you want to restore this register?, this action will move the register to its original table.",
+            "restoreLabel": "Restore this register",
+            "deleteMessage": "Do you want to delete Permanently this register?, Once you delete this register, there is no going back. Please be certain.",
+            "deleteLabel": "Delete this register permanently"
+          }
         },
         "message": {
           "showDemo": "Demo",
@@ -1972,6 +1980,7 @@
         "usersToNotify": "Users To notify",
         "emailsToNotify": "Emails To Notify"
       }
+
     },
     "setupagione": {
       "cms": {
@@ -3672,7 +3681,15 @@
           "copy": "Copiar",
           "insert": "Insertar",
           "phoneNumber": "Número de teléfono",
-          "quickLook": "Vistazo rápido"
+          "quickLook": "Vistazo rápido",
+          "registerId": "Registro ID {id}",
+          "recycleBin": {
+            "infoMessage": "The Recycle Bin serves as a temporary storage area for deleted files and folders. When you remove a register (or any item), it is not permanently deleted immediately; instead, it is transferred to the Recycle Bin. This allows you to easily recover accidentally deleted items.<br><br>From the Recycle Bin, you can either:<br><br><strong>Restore:</strong> Quickly return a deleted item to its original location.<br/><strong>Permanent Deletion:</strong> Remove the item permanently, making it unrecoverable.",
+            "restoreMessage": "Do you want to restore this register?, this action will move the register to its original table.",
+            "restoreLabel": "Restore this register",
+            "deleteMessage": "Do you want to delete Permanently this register?, Once you delete this register, there is no going back. Please be certain.",
+            "deleteLabel": "Delete this register permanently"
+          }
         },
         "message": {
           "showDemo": "Ver Demo",
