@@ -1743,6 +1743,7 @@
           "insert": "Insert",
           "phoneNumber": "Phone number",
           "quickLook": "Quick look",
+          "deletedAt": "Deleted at",
           "restore": "Restore",
           "registerId": "Registro ID {id}",
           "recycleBin": {
@@ -3683,6 +3684,7 @@
           "insert": "Insertar",
           "phoneNumber": "Número de teléfono",
           "quickLook": "Vistazo rápido",
+          "deletedAt": "Eliminado en",
           "restore": "Restaurar",
           "registerId": "Registro ID {id}",
           "recycleBin": {
