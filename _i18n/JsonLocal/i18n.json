@@ -1743,9 +1743,10 @@
           "insert": "Insert",
           "phoneNumber": "Phone number",
           "quickLook": "Quick look",
+          "restore": "Restore",
           "registerId": "Registro ID {id}",
           "recycleBin": {
-            "infoMessage": "The Recycle Bin serves as a temporary storage area for deleted files and folders. When you remove a register (or any item), it is not permanently deleted immediately; instead, it is transferred to the Recycle Bin. This allows you to easily recover accidentally deleted items.<br><br>From the Recycle Bin, you can either:<br><br><strong>Restore:</strong> Quickly return a deleted item to its original location.<br/><strong>Permanent Deletion:</strong> Remove the item permanently, making it unrecoverable.",
+            "infoMessage": "<strong>The Recycle Bin</strong> serves as a temporary storage area for deleted files and registers. When you remove a register (or any item), it is not permanently deleted immediately; instead, it is transferred to the Recycle Bin. This allows you to easily recover accidentally deleted items.<br><br>From the Recycle Bin, you can either:<br><br><strong>Restore:</strong> Quickly return a deleted item to its original location.<br/><strong>Permanent Deletion:</strong> Remove the item permanently, making it unrecoverable.",
             "restoreMessage": "Do you want to restore this register?, this action will move the register to its original table.",
             "restoreLabel": "Restore this register",
             "deleteMessage": "Do you want to delete Permanently this register?, Once you delete this register, there is no going back. Please be certain.",
@@ -3682,13 +3683,14 @@
           "insert": "Insertar",
           "phoneNumber": "Número de teléfono",
           "quickLook": "Vistazo rápido",
+          "restore": "Restaurar",
           "registerId": "Registro ID {id}",
           "recycleBin": {
-            "infoMessage": "The Recycle Bin serves as a temporary storage area for deleted files and folders. When you remove a register (or any item), it is not permanently deleted immediately; instead, it is transferred to the Recycle Bin. This allows you to easily recover accidentally deleted items.<br><br>From the Recycle Bin, you can either:<br><br><strong>Restore:</strong> Quickly return a deleted item to its original location.<br/><strong>Permanent Deletion:</strong> Remove the item permanently, making it unrecoverable.",
-            "restoreMessage": "Do you want to restore this register?, this action will move the register to its original table.",
-            "restoreLabel": "Restore this register",
-            "deleteMessage": "Do you want to delete Permanently this register?, Once you delete this register, there is no going back. Please be certain.",
-            "deleteLabel": "Delete this register permanently"
+            "infoMessage": "<strong>La Papelera de reciclaje</strong> sirve como un área de almacenamiento temporal para archivos y registros eliminados. Cuando eliminas un registro (o cualquier elemento), no se borra de forma permanente de inmediato; en su lugar, se transfiere a la Papelera de reciclaje. Esto te permite recuperar fácilmente los elementos eliminados por accidente.<br><br>Desde la Papelera de reciclaje, puedes:<br><br><strong>Restaurar:</strong> Devolver rápidamente un elemento eliminado a su ubicación original.<br/><strong>Eliminación permanente:</strong> Eliminar el elemento de forma permanente, haciéndolo irrecuperable.",
+            "restoreMessage": "¿Deseas restaurar este registro? Esta acción moverá el registro a su tabla original.",
+            "restoreLabel": "Restaurar este registro",
+            "deleteMessage": "¿Deseas eliminar permanentemente este registro? Una vez que elimines este registro, no habrá vuelta atrás. Por favor, asegúrate.",
+            "deleteLabel": "Eliminar este registro permanentemente."
           }
         },
         "message": {
