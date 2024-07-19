@@ -63,6 +63,7 @@ export const GET_SITE_SETTINGS = ({commit, dispatch, state, getters}, params = {
       //Set the settings
       if (params.setToSite) {
         commit('SET_SITE_SETTINGS', data.siteSettings)
+        commit('SET_MODULES_INFO', data.modulesInfo)
         commit('SET_AVAILABLE_LOCALES', data.availableLocales)
         commit('SET_AVAILABLE_THEMES', data.availableThemes)
         commit('SET_DEFAULT_LOCALE', data.defaultLocale)

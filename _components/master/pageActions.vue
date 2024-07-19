@@ -128,7 +128,8 @@ export default {
       type: Object,
       default: () => {}
     },
-    expiresIn: {type: Number}
+    expiresIn: {type: Number},
+    path: false
   },
   inject: {
     filterPlugin: {
@@ -201,7 +202,7 @@ export default {
         //recycle  bin
         {
           label: 'recycle bin',
-          vIf: (!excludeActions.includes('recycle') && this.$store.getters['quserAuth/hasAccess']('isite.soft-delete.index')),
+          vIf: this.showRecycleBin(),
           props: {
             icon: 'fa-light fa-recycle'
           },
@@ -442,6 +443,28 @@ export default {
       const year = cacheDate.getFullYear();
 
       return `${hours}:${minutes}${ampm} el ${day}/${month}/${year}`
+    },
+    showRecycleBin(){
+      if (this.excludeActions.includes('recycle')) return false
+
+      let isSoftDeleteEnable = false
+      const modules = this.$store.getters['qsiteApp/getModulesInfo']
+
+      Object.keys(modules).forEach((moduleName) => {
+        const entities = modules[moduleName]['entities']
+        if(entities){
+          Object.keys(entities).forEach((entityName) => {
+            if((entities[entityName]['path'] == this.path)){
+              if(entities[entityName]['isSoftDeleteEnable']){
+                isSoftDeleteEnable = entities[entityName]['isSoftDeleteEnable']
+              }
+            }
+          })
+        }
+      })
+      const permission = this.$store.getters['quserAuth/hasAccess']('isite.soft-delete.index') || false
+      if(isSoftDeleteEnable) return permission
+      return isSoftDeleteEnable
     },
     /* open crud in recycle-bin mode*/
     goToRecycleBin(){
