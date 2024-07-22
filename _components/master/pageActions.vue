@@ -464,7 +464,7 @@ export default {
       })
       const permission = this.$store.getters['quserAuth/hasAccess']('isite.soft-delete.index') || false
       if(isSoftDeleteEnable) return permission
-      return isSoftDeleteEnable
+      return false
     },
     /* open crud in recycle-bin mode*/
     goToRecycleBin(){
