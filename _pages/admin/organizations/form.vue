@@ -284,6 +284,7 @@ export default {
                 "value": [],
                 "type": "media",
                 "colClass": "col-12",
+                "fieldItemId": this.organization.id,
                 "props": {
                   "label": "Logo",
                   "zone": "mainimage",
