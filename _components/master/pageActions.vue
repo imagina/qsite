@@ -129,7 +129,7 @@ export default {
       default: () => {}
     },
     expiresIn: {type: Number},
-    path: false
+    permission: false
   },
   inject: {
     filterPlugin: {
@@ -448,20 +448,30 @@ export default {
       if (this.excludeActions.includes('recycle')) return false
 
       let isSoftDeleteEnable = false
-      const modules = this.$store.getters['qsiteApp/getModulesInfo']
+      const modules = this.$store.getters['qsiteApp/getSiteModulesInfo']
+      let currentModule = this.permission.split('.')[0] || false
+      let currentView = this.permission.split('.')[1] || false
 
-      Object.keys(modules).forEach((moduleName) => {
-        const entities = modules[moduleName]['entities']
-        if(entities){
-          Object.keys(entities).forEach((entityName) => {
-            if((entities[entityName]['path'] == this.path)){
-              if(entities[entityName]['isSoftDeleteEnable']){
-                isSoftDeleteEnable = entities[entityName]['isSoftDeleteEnable']
+      if(currentModule == 'profile' && currentView == 'user'){
+        currentModule = 'user'
+        currentView = 'users'
+      }
+      if(currentModule == 'profile') currentModule = 'iprofile'
+
+      if(modules && currentModule && currentView){
+        Object.keys(modules).forEach((moduleName) => {
+          if(modules[moduleName]['name'].toLowerCase() == currentModule){
+            const entities = modules[moduleName]['entities']
+            Object.keys(entities).forEach((entityName) => {
+              const entity = entities[entityName]
+              if((entity['name'].toLowerCase() == currentView || entity['pluralName'].toLowerCase() == currentView)) {
+                isSoftDeleteEnable = entity['isSoftDeleteEnable']
               }
-            }
-          })
-        }
-      })
+            })
+          }
+        })
+      }
+
       const permission = this.$store.getters['quserAuth/hasAccess']('isite.soft-delete.index') || false
       if(isSoftDeleteEnable) return permission
       return false
