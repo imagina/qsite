@@ -63,7 +63,7 @@ export const GET_SITE_SETTINGS = ({commit, dispatch, state, getters}, params = {
       //Set the settings
       if (params.setToSite) {
         commit('SET_SITE_SETTINGS', data.siteSettings)
-        commit('SET_MODULES_INFO', data.modulesInfo)
+        
         commit('SET_AVAILABLE_LOCALES', data.availableLocales)
         commit('SET_AVAILABLE_THEMES', data.availableThemes)
         commit('SET_DEFAULT_LOCALE', data.defaultLocale)
@@ -344,5 +344,17 @@ export const SET_AXIOS_TIMEZONE = ({commit, dispatch, state}) => {
       console.error('[store-qsite]Error:: Store SET_AXIOS_TIMEZONE - ', error)
       reject(error)
     }
+  })
+}
+
+export const GET_SITE_MODULES_INFO = ({commit, dispatch, state, getters}, params = {}) => {
+  return new Promise((resolve, reject) => {    
+    crud.index('apiRoutes.qsite.siteModulesInfo', {}).then(async response => {
+      if (response.data) commit('SET_SITE_MODULES_INFO', response.data)
+      resolve(true)
+    }).catch(error => {
+      console.error('[store-qsite]Error:: Store getting modules info - ', error)
+      reject(error)
+    })
   })
 }

@@ -34,8 +34,8 @@ export const getDefaultLocale = (state) => {
   return state.defaultLocale;
 };
 
-export const getModulesInfo = (state) => {
-  return state.modulesInfo;
+export const getSiteModulesInfo = (state) => {
+  return state.siteModulesInfo;
 };
 
 export const availableLocalesSelect = (state) => {
