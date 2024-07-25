@@ -1753,6 +1753,10 @@
             "restoreLabel": "Restore this register",
             "deleteMessage": "Do you want to delete Permanently this register?, Once you delete this register, there is no going back. Please be certain.",
             "deleteLabel": "Delete this register permanently"
+          },
+          "conflict": {
+            "deletedMessage": "The record cannot be saved because there is already one in the recycle bin with the same information. Please manage the record in the recycle bin and try again.", 
+            "duplicatedMessage": "The record cannot be saved due to a conflict with an existing record. Please ensure the information provided is unique and try again."
           }
         },
         "message": {
@@ -3695,6 +3699,10 @@
             "restoreLabel": "Restaurar este registro",
             "deleteMessage": "¿Deseas eliminar permanentemente este registro? Una vez que elimines este registro, no habrá vuelta atrás. Por favor, asegúrate.",
             "deleteLabel": "Eliminar este registro permanentemente."
+          }, 
+          "conflict": {
+            "deletedMessage": "No se puede guardar el registro debido a que existe uno en la papelera de reciclaje con la misma informacion. Por favor, gestione el registro en la papelera y vuelva a intentarlo.", 
+            "duplicatedMessage": "No se puede guardar el registro debido a un conflicto con otro registro existente. Asegúrese de que la información proporcionada sea única y vuelva a intentarlo."
           }
         },
         "message": {
