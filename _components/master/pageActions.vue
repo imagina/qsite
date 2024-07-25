@@ -201,7 +201,7 @@ export default {
       let response = [
         //recycle  bin
         {
-          label: 'recycle bin',
+          label: this.$tr('isite.cms.label.recycleBin.label'),
           vIf: this.showRecycleBin(),
           props: {
             icon: 'fa-light fa-recycle'

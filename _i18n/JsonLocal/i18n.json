@@ -1748,6 +1748,7 @@
           "restore": "Restore",
           "registerId": "Registro ID {id}",
           "recycleBin": {
+            "label": "Papelera de reciclaje",
             "infoMessage": "<strong>The Recycle Bin</strong> serves as a temporary storage area for deleted files and registers. When you remove a register (or any item), it is not permanently deleted immediately; instead, it is transferred to the Recycle Bin. This allows you to easily recover accidentally deleted items.<br><br>From the Recycle Bin, you can either:<br><br><strong>Restore:</strong> Quickly return a deleted item to its original location.<br/><strong>Permanent Deletion:</strong> Remove the item permanently, making it unrecoverable.",
             "restoreMessage": "Do you want to restore this register?, this action will move the register to its original table.",
             "restoreLabel": "Restore this register",
@@ -3694,6 +3695,7 @@
           "restore": "Restaurar",
           "registerId": "Registro ID {id}",
           "recycleBin": {
+            "label": "Recycle bin",
             "infoMessage": "<strong>La Papelera de reciclaje</strong> sirve como un área de almacenamiento temporal para archivos y registros eliminados. Cuando eliminas un registro (o cualquier elemento), no se borra de forma permanente de inmediato; en su lugar, se transfiere a la Papelera de reciclaje. Esto te permite recuperar fácilmente los elementos eliminados por accidente.<br><br>Desde la Papelera de reciclaje, puedes:<br><br><strong>Restaurar:</strong> Devolver rápidamente un elemento eliminado a su ubicación original.<br/><strong>Eliminación permanente:</strong> Eliminar el elemento de forma permanente, haciéndolo irrecuperable.",
             "restoreMessage": "¿Deseas restaurar este registro? Esta acción moverá el registro a su tabla original.",
             "restoreLabel": "Restaurar este registro",
