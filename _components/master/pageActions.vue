@@ -129,6 +129,7 @@ export default {
       default: () => {}
     },
     expiresIn: {type: Number},
+    permission: false
   },
   inject: {
     filterPlugin: {
@@ -198,6 +199,15 @@ export default {
       let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : [])
 
       let response = [
+        //recycle  bin
+        {
+          label: this.$tr('isite.cms.label.recycleBin.label'),
+          vIf: this.showRecycleBin(),
+          props: {
+            icon: 'fa-light fa-recycle'
+          },
+         action: () => this.goToRecycleBin()
+        },
         //Export Icommerce
         {
           label: this.$tr('isite.cms.label.migration'),
@@ -286,7 +296,7 @@ export default {
         //Prepend actions
         response = [...this.extraActions.filter(action => typeof action != 'string'), ...response]
         //New button action
-        if (this.extraActions.includes('new'))
+        if (this.extraActions.includes('new') && !excludeActions.includes('new'))
           response.unshift({
             vIf: this.params.create && this.params.hasPermission.create,
             props: {
@@ -433,6 +443,44 @@ export default {
       const year = cacheDate.getFullYear();
 
       return `${hours}:${minutes}${ampm} el ${day}/${month}/${year}`
+    },
+    showRecycleBin(){
+      if (this.excludeActions.includes('recycle')) return false
+
+      let isSoftDeleteEnable = false
+      const modules = this.$store.getters['qsiteApp/getSiteModulesInfo']
+      let currentModule = this.permission.split('.')[0] || false
+      let currentView = this.permission.split('.')[1] || false
+
+      if(currentModule == 'profile' && currentView == 'user'){
+        currentModule = 'user'
+        currentView = 'users'
+      }
+      if(currentModule == 'profile') currentModule = 'iprofile'
+
+      if(modules && currentModule && currentView){
+        Object.keys(modules).forEach((moduleName) => {
+          if(modules[moduleName]['name'].toLowerCase() == currentModule){
+            const entities = modules[moduleName]['entities']
+            Object.keys(entities).forEach((entityName) => {
+              const entity = entities[entityName]
+              if((entity['name'].toLowerCase() == currentView || entity['pluralName'].toLowerCase() == currentView)) {
+                isSoftDeleteEnable = entity['isSoftDeleteEnable']
+              }
+            })
+          }
+        })
+      }
+
+      const permission = this.$store.getters['quserAuth/hasAccess']('isite.soft-delete.index') || false
+      if(isSoftDeleteEnable) return permission
+      return false
+    },
+    /* open crud in recycle-bin mode*/
+    goToRecycleBin(){
+      const paramsUrl = {['recycle-bin']: true}
+      const routeData = this.$router.resolve({name: this.$route.name, query: paramsUrl});
+      window.open(routeData.href, '_blank');
     }
   }
 }
