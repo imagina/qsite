@@ -24,5 +24,4 @@ export default {
   generateFile: `${urlBase}/synchronizables/generate-spread-sheet`,
   sync: `${urlBase}/synchronizables/sync`,
   siteModulesInfo: `${urlBase}/site/modules-info`
-
 }

@@ -64,5 +64,5 @@ export default {
     layout: () => import('@imagina/qsite/_layouts/blank.vue'),
     title: 'isite.cms.sidebar.adminOrganizationWizard',
     icon: 'fal fa-crown'
-  }
+  },
 }

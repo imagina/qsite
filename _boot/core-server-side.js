@@ -10,8 +10,7 @@ export default async ({app, router, store, Vue}) => {
     store.dispatch('qsiteApp/GET_SITE_SETTINGS', {refresh: false}),
     store.dispatch('qsiteApp/GET_MODULE_CONFIGS', {refresh: false}),
     store.dispatch('qsiteApp/GET_SITE_MODULES_INFO', {refresh: false}),
-    store.dispatch('qsiteApp/GET_SITE_HOOKS', {refresh: false}),
-
+    store.dispatch('qsiteApp/GET_SITE_HOOKS', {refresh: false})
   ])
   //Switch between new page config or old page config
   const legacyStructure = parseInt(store.getters['qsiteApp/getSettingValueByName']('isite::legacyStructureCMS') || 0)
