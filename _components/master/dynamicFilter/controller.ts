@@ -151,6 +151,26 @@ export default function controller(props: any, emit: any) {
           } else {
             state.loadedOptions[key] = state.props.filters[key]?.props?.options
           }
+        } else if(state.props.filters[key]?.type == 'crud'){
+            //loadedOptions callback for crud select
+            state.props.filters[key]['props']['config']['loadedOptions'] = (data) => {
+              //fix setReadValues twice
+              if(!state.loadedOptions[key]){
+                state.loadedOptions[key] = [...data]
+                methods.setReadValues()
+              }
+            }
+
+            //(hiden) loadedOptions callback for url filters
+            if(state.hidenFields[key]){
+              state.hidenFields[key]['props']['config']['loadedOptions'] = (data) => {
+                //fix setReadValues twice
+                if(!state.loadedOptions[key]){ 
+                  state.loadedOptions[key] = [...data]
+                  methods.setReadValues()
+                }
+              }
+          }
         }
       })      
     },
@@ -162,7 +182,7 @@ export default function controller(props: any, emit: any) {
         if(state.readOnlyData[key].value != null && state.readOnlyData[key].value && field?.type){
           
           result[key] = {
-            label: state.readOnlyData[key].label || state.props.filters[key].label,
+            label: state.readOnlyData[key].label || state.props.filters[key].label ||  '' , 
             value: state.readOnlyData[key].value,
             option: ''
           }
@@ -179,6 +199,8 @@ export default function controller(props: any, emit: any) {
             }
           } else if(field?.type == 'dateRange'){
             result[key].option = `${moment(state.readOnlyData[key].value.from).format('LL')} - ${moment(state.readOnlyData[key].value.to).format('LL')}`
+          } else if(field?.type == 'crud'){
+            result[key] = methods.setReadValuesTypeCrud(result[key], key)
           }
 
           if(result[key]['value']) toEmit[key] = {...result[key]}
@@ -189,6 +211,19 @@ export default function controller(props: any, emit: any) {
       emit('update:summary', toEmit)
     },
 
+    //dynamicFiledtype: crud
+    setReadValuesTypeCrud(result, key){
+      result.label = state.props.filters[key]?.props?.crudProps?.label || ''
+      const labelKey = state.props.filters[key]?.props?.config?.options?.label //finds the label  crud props
+      // find the options on loaded options
+      const option = state.loadedOptions[key].find((option) => {
+        if(option.id.toString() == result.value.toString()){
+          return option
+        }
+      })
+      result.option = option[labelKey] || option.name || option.title || option.label || option.id || option.value || ''
+      return result
+    },
     restoreFilterValues(){
       if(Object.keys(state.readValues).length > 0){        
         Object.keys(state.readValues).forEach(key => {
