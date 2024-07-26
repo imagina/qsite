@@ -171,7 +171,7 @@ export default function controller(props: any, emit: any) {
             if(state.loadedOptions[key]){
               const option = state.loadedOptions[key].find((element) => {
                 const value = element.id || element.value
-                return value == state.readOnlyData[key].value
+                return value.toString() == state.readOnlyData[key].value.toString()
               })
               if(option){
                 result[key].option = option[field.loadOptions?.select?.label] || option.name || option.title || option.label || option.id || option.value || ''
@@ -239,6 +239,7 @@ export default function controller(props: any, emit: any) {
       if(updateUserData && state.useAdminFilter){
         methods.setAdminFilter(filters)
       }
+      methods.hideModal()
     },
     //emit 
     emitModelValue:debounce((filters) => emit('update:modelValue', filters) , 800),
