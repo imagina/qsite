@@ -1,8 +1,7 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, markRaw} from "vue";
-import service from 'modules/qsite/_components/v3/demo/services'
-import store from 'modules/qsite/_components/v3/demo/store'
 
-export default function controller(props: any, emit: any) {
+
+export default function controller(props, emit) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
   // Refs
@@ -13,8 +12,6 @@ export default function controller(props: any, emit: any) {
   // States
   const state = reactive({
     // Key: Default Value
-    columns: [], 
-    rows: []
   })
 
   // Computed
@@ -25,27 +22,18 @@ export default function controller(props: any, emit: any) {
   // Methods
   const methods = {
     // methodKey: () => {}
-    init(){
-      methods.setColumns()
-      methods.setRows()
-    },
-    setColumns(){
-      state.columns = props.columns
-    }, 
-    setRows(){
-      state.rows = props.rows
+    updateRow(value){
+      console.warn('update row ===>> ', value)
     }
   }
 
   // Mounted
-  onMounted(() => {
-    methods.init()
-  })
+  onMounted(() => {})
 
   // Watch
   // watch(key, (newField, oldField): void => {
   //
   // }, {deep: true})
 
-  return {...refs, ...(toRefs(state)), ...computeds, ...methods, store}
+  return {...refs, ...(toRefs(state)), ...computeds, ...methods}
 }
