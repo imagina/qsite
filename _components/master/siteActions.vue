@@ -161,7 +161,7 @@ export default {
             name: 'offline',
             label: this.$tr('isite.cms.label.offline'),
             badgeColor: 'orange',
-            badgeLabel: this.$store.state.qofflineMaster.totalRequests,
+            badgeLabel: this.$store.state.qofflineMaster.pendingRequests,
             props: {
               ...this.defaultButtonProps,
               icon: 'fa-light fa-cloud-slash',
