@@ -15,12 +15,12 @@ export default function controller(props: any, emit: any) {
   const state = reactive({
     // Key: Default Value
     countries: Object,
-    map: Object,            
+    map: Object,
     marker: Object,
-    responseValue: false,      
+    responseValue: false,
     mapZoom: 6,
     searchLoading: false,
-    searchProvider: {}, 
+    searchProvider: {},
     address: null,
     geolocations: [],
     coordinates: [],
@@ -37,29 +37,29 @@ export default function controller(props: any, emit: any) {
     // methodKey: () => {}
     isPositionMarkerMap: () =>  {
       return props.type == 'positionMarkerMap'
-    }, 
+    },
     init: () => {
       methods.setMap()
       methods.setDefaultValue()
       methods.setPolygon()
-    },    
+    },
     //Set default values
     async setDefaultValue() {
       //Validate map types
-      if(methods.isPositionMarkerMap()){        
-        //Set default value and response value        
+      if(methods.isPositionMarkerMap()){
+        //Set default value and response value
         let center = props.modelValue//Set default value
         if (center?.lat && center?.lng) {
           state.map.setZoom(15)
-          methods.moveMarker(center.lat, center.lng)          
+          methods.moveMarker(center.lat, center.lng)
           await methods.getMarkerInfo(center.lat, center.lng) || {}
-        } else {              
+        } else {
           center = {lat: props.defaultCenter.lat, lng: props.defaultCenter.lng}
         }
-        
+
         if(props.emitDefault){
           await methods.getMarkerInfo(center.lat, center.lng)
-        }      
+        }
       }
     },
     //Handler to click over map
@@ -120,7 +120,7 @@ export default function controller(props: any, emit: any) {
       const controlsPosition = 'bottomright' //'bottomright' //default: topleft
       const layer = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
       const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      const accessToken = store.getSetting('isite::api-open-street-maps')      
+      const accessToken = store.getSetting('isite::api-open-street-maps')
 
       state.searchProvider =  new OpenStreetMapProvider({params: {countrycodes: methods.getCountries()}})
       state.map = L.map(props.mapId, {
@@ -129,7 +129,7 @@ export default function controller(props: any, emit: any) {
       }).setView([props.defaultCenter.lat, props.defaultCenter.lng], state.mapZoom);
 
       L.tileLayer(layer, {
-        attribution, 
+        attribution,
         accessToken
       }).addTo(state.map);
 
@@ -137,7 +137,7 @@ export default function controller(props: any, emit: any) {
       if(props.readOnly){
         state.map.dragging.disable();
       }
-      
+
       L.control.zoom({
         position: controlsPosition
       }).addTo(state.map);
@@ -145,14 +145,14 @@ export default function controller(props: any, emit: any) {
       state.map.addControl(new L.Control.Fullscreen({
         position: controlsPosition
       }));
-      
+
       if(methods.isPositionMarkerMap()){
         state.marker = L.marker([props.defaultCenter.lat, props.defaultCenter.lng]).addTo(state.map)
-      } 
+      }
 
       // disable zoon on doubleclick
-      state.map.doubleClickZoom.disable();       
-     
+      state.map.doubleClickZoom.disable();
+
       if(!props.readOnly){
         /* prevent map propagation by user inputs */
         const div = L.DomUtil.get('leaflet_search_input');
@@ -163,12 +163,12 @@ export default function controller(props: any, emit: any) {
           methods.addEditableControls();
         }
       }
-      
+
     },
     setMapEvents(){
       state.map.on('dblclick', async (event) => {
         const lat = event.latlng.lat
-        const lng = event.latlng.lng        
+        const lng = event.latlng.lng
         if (methods.isPositionMarkerMap() && !props.readOnly){
           state.geolocations = []
           state.address = null
@@ -184,9 +184,9 @@ export default function controller(props: any, emit: any) {
       state.map.on('moveend', async (event) => {
         state.showSearch = true
       });
-      
+
       // Polygons
-      // Getcoordinates and type       
+      // Getcoordinates and type
       if(props.polygonControls){
         state.map.on('editable:drawing:start', async (event) => {
           state.showSearch = false
@@ -210,12 +210,12 @@ export default function controller(props: any, emit: any) {
           methods.getGeometry(event)
         });
 
-        // 
+        //
         state.map.on('layeradd', async (e) => {
             const layer = e.layer
             if (e.layer instanceof L.Path) e.layer.on('click', L.DomEvent.stop).on('click', (e) => {            //layer.toggleEdit
               if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) ) layer.editor.deleteShapeAt(e.latlng);
-            }, e.layer);          
+            }, e.layer);
         });
       }
     },
@@ -232,17 +232,17 @@ export default function controller(props: any, emit: any) {
           shadowSize: [41, 41],
         }
       );
-    }, 
+    },
     moveMarker(lat, lng){
       state.map.setView([lat, lng], state.map.getZoom())
       state.marker.setLatLng([lat, lng])
-    }, 
+    },
     getCountries(){
       const value = store.getSetting('ilocations::availableCountries') || ["co"]
       return value.map(val => val.toLowerCase())
-    },    
+    },
     //
-    // Polygon - editable controls     
+    // Polygon - editable controls
     //
     addEditableControls(){
       // Adds control layer
@@ -313,26 +313,26 @@ export default function controller(props: any, emit: any) {
         }
       });
 
-      // Add controls    
+      // Add controls
       // state.map.addControl(new L.NewLineControl());
       state.map.addControl(new L.NewPolygonControl()); //
       state.map.addControl(new L.NewRectangleControl());
       // state.map.addControl(new L.NewCircleControl());
-      
+
       //custom delete control
-      state.map.addControl(new L.NewDeleteControl());     
-    }, 
+      state.map.addControl(new L.NewDeleteControl());
+    },
     // emits geometry: {type: String, coordinates: Array }
     getGeometry(event){
       const geometry = event.layer.toGeoJSON().geometry
-      let points = geometry.coordinates[0]      
+      let points = geometry.coordinates[0]
       points = points.map((x) => {
         return {
           lat: x[1], lng: x[0]
         }
       });
-      emit('update:modelValue', {...props.modelValue, points})
-    }, 
+      emit('update:modelValue', points)
+    },
     // Delete all Polygon
     deletePolygons(){
       state.map.eachLayer(layer => {
@@ -340,13 +340,13 @@ export default function controller(props: any, emit: any) {
           layer.remove()
         }
       })
-      emit('update:modelValue', {...props.modelValue, points: []})
-    }, 
+      emit('update:modelValue', [])
+    },
     setPolygon(){
-      let polygon = null      
-      if (props.modelValue?.points) {
-        let points = props.modelValue.points
-        if(points.length){          
+      let polygon = null
+      if (props.polygonControls) {
+        let points = props.modelValue
+        if(points.length){
           points = points.map((x) => [x.lat, x.lng]);
           //rectangle
           if(points.length == 4){
@@ -358,12 +358,12 @@ export default function controller(props: any, emit: any) {
             polygon.enableEdit()
           }
 
-          state.map.fitBounds(polygon.getBounds());          
+          state.map.fitBounds(polygon.getBounds());
         }
       }
     }
 
-    
+
   }
 
   // Mounted
@@ -378,10 +378,10 @@ export default function controller(props: any, emit: any) {
     if(model?.lat && model?.lng){
       methods.moveMarker(model.lat, model.lng)
     }
-    if(model?.points){
-      if(model.points.length) methods.setPolygon()
+    if(props.polygonControls){
+      if(Array.isArray(model) && model.length) methods.setPolygon()
     }
-    
+
   }, {deep: true})
 
   return {...refs, ...(toRefs(state)), ...computeds, ...methods}

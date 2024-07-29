@@ -2,18 +2,18 @@
   <div class="banner-wrapper">
       <div 
         :class="classWrapper"
-        class="banner" 
+        class="banner tw-flex tw-items-center tw-justify-center" 
         @click="action"
       >
         <q-icon
-            v-if="icon && icon.name"
-            :size="icon.size" 
-            :name="icon.name"
-            :class="icon.class"
-            class="q-mr-sm" 
-          />
-          <marquee v-if="marquee">{{ message }}</marquee>
-          <span v-else-if="!marquee">{{ message }}</span>
+          v-if="icon && icon.name"
+          :size="icon.size" 
+          :name="icon.name"
+          :class="icon.class"
+          class="q-mr-sm" 
+        />
+        <marquee v-if="marquee">{{ message }}</marquee>
+        <div class="tw-flex tw-items-center" v-else-if="!marquee" v-html="message" />
       </div>
   </div>
 </template>
