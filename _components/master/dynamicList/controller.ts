@@ -60,6 +60,14 @@ export default function controller(props: any, emit: any) {
         }
       })
     },
+    updateRow(row){
+      console.dir(row)
+      services.updateItem(props.apiRoute, row.id, row).then((response) => {
+        if(response?.data){
+          emit('updatedRow', response.data)
+        }
+      })
+    }
   }
 
   // Mounted

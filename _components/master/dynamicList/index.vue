@@ -6,6 +6,7 @@
      :rows="rows"
      :actions="actions"
      :loading="loading"
+     @updateRow="(row) => updateRow(row)"
     />
   </div>
 </template>

@@ -21,10 +21,7 @@ export default function controller(props, emit) {
 
   // Methods
   const methods = {
-    // methodKey: () => {}
-    updateRow(value){
-      console.warn('update row ===>> ', value)
-    }
+    // methodKey: () => {}    
   }
 
   // Mounted

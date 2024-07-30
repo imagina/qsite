@@ -4,7 +4,7 @@
       v-model="tableProps.row[col.name]"
       v-slot="scope"              
       no-caps
-      @update:model-value="(value) => $emit('updateRow', {col: col, row: tableProps.row})"
+      @update:model-value="(value) => $emit('updateRow', tableProps.row)"
     >    
       <p>Update {{ col.label }} Id: {{tableProps.row.id}} </p>
       <div class="q-py-sm">

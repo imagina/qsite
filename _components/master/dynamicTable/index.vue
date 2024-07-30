@@ -24,9 +24,7 @@
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
-          > 
-
-          
+          >          
 
 
             <!--Actions column-->
@@ -48,7 +46,7 @@
             <editablePopup 
               :tableProps="props"
               :col="col"
-              @updateRow="(value) =>updateRow(value)"
+              @updateRow="(row) => $emit('updateRow', row)"
             />            
           </q-td>
         </q-tr>
