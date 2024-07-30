@@ -2,12 +2,15 @@
   <div id="dynamic-table">
     <q-table      
       :title="title"
+      :loading="loading"
       :rows="rows"
       :columns="columns"
       row-key="name"
       class="stick-table"
-
     >
+      <template v-slot:loading>
+        <q-inner-loading showing color="primary" />
+      </template>
       <template v-slot:body="props">
         <q-tr :props="props">
           
@@ -53,7 +56,8 @@ import contextMenu from 'modules/qsite/_components/master/dynamicTable/component
 
 
 export default defineComponent({
-  props: {    
+  props: {
+    loading: { default: false},
     title: { default: ''},
     columns: {default: []},
     rows: {default: []},
