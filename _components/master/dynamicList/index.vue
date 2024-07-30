@@ -1,5 +1,5 @@
 <template>
-  <div id="pageId">
+  <div id="dynamicList">
     <dynamicTable 
      :title="title"
      :columns="columns"

@@ -25,6 +25,10 @@
             :key="col.name"
             :props="props"
           > 
+
+          
+
+
             <!--Actions column-->
             <div v-if="col.name == 'actions'">              
               <btn-menu
@@ -33,8 +37,12 @@
               />  
             </div>
 
-            <!--cell content-->            
-            <div v-else class="ellipsis-2-lines" style="max-width: 300px;" v-html="props.row[col.name]"></div>
+            <!-- dynamic content  -->
+            <contentType
+              v-if="col.name != 'actions'"
+              :col="col"
+              :row="props.row"
+            />            
 
             <!---quick click edit popup-->
             <editablePopup 
@@ -52,6 +60,7 @@
 import {defineComponent} from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicTable/controller'
 import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup.vue'
+import contentType from 'modules/qsite/_components/master/dynamicTable/components/contentType.vue'
 import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu.vue'
 
 
@@ -65,7 +74,8 @@ export default defineComponent({
   },
   components: {
     editablePopup,
-    contextMenu
+    contextMenu, 
+    contentType
   },
   setup(props, {emit}) {
     return controller(props, emit)
