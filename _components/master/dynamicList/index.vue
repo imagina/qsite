@@ -2,7 +2,7 @@
   <div id="dynamicList">
     <dynamicTable 
      :title="title"
-     :columns="columns"
+     :columns="getColumns"
      :rows="rows"
      :actions="actions"
      :loading="loading"
@@ -19,7 +19,8 @@ export default defineComponent({
     apiRoute: { default: ''},
     title: { default: ''},
     columns: {default: []},
-    actions: {default: []}
+    actions: {default: []},
+    permission: {default: ''}
   },
   components: {
     dynamicTable
