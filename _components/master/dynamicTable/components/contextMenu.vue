@@ -12,7 +12,7 @@
         <q-item                    
           v-bind="action.props"
           v-close-popup                    
-          @click.native="action.action(row)"
+          @click.native="runAction(action)"
         >
           <q-item-section>
             <div class="row items-center text-blue-grey">
@@ -30,9 +30,18 @@
 import {defineComponent} from 'vue'
 
 export default defineComponent({
-  props: {    
-    row: {default: []},
-    actions: {default: []}
+  props: {        
+    actions: {default: []},
+    actionData: {default: []},
+  },
+  methods: {
+    //Call custom action
+    async runAction(action) {
+      //Define action params
+      let actionData = this.$clone(this.actionData || {});
+      //Check if has action function
+      if (action.action) await action.action(actionData);
+    },
   },
 })
 </script>
