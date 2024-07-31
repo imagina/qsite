@@ -40,7 +40,7 @@ export default function controller(props: any, emit: any) {
     // methodKey: () => {}
     async init(){
       await methods.setColumns()
-      methods.getData(props.apiRoute, true)
+      methods.getData(props.apiRoute, true, props.requestParams )
     },
     setColumns(){
       state.columns = props.columns      

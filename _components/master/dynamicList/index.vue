@@ -6,6 +6,7 @@
      :rows="rows"
      :actions="actions"
      :loading="loading"
+     :beforeUpdate="beforeUpdate"
      @updateRow="(row) => updateRow(row)"
     />
   </div>
@@ -21,7 +22,12 @@ export default defineComponent({
     title: { default: ''},
     columns: {default: []},
     actions: {default: []},
-    permission: {default: ''}
+    permission: {default: ''}, 
+    requestParams: {default: {}}, 
+    beforeUpdate: {        
+      type: Function,
+      default: () => {}
+    }
   },
   components: {
     dynamicTable
