@@ -33,12 +33,20 @@
     </q-popup-edit>            
   </template>
   <script lang="ts">
-  import {defineComponent} from 'vue'  
+  import {defineComponent} from 'vue'
+  import controller from 'modules/qsite/_components/master/dynamicTable/controllers/editablePopupController'
   
   export default defineComponent({
     props: {    
       tableProps: {type: Object, default: null},    
-      col: {type: Object, default: null},    
+      col: {type: Object, default: null},
+      beforeUpdate: {        
+        type: Function,
+        default: () => {}
+      }
+    },
+    setup(props, {emit}) {
+      return controller(props, emit)
     },
     components: {}
   })

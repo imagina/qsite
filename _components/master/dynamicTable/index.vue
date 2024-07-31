@@ -6,14 +6,12 @@
       :rows="rows"
       :columns="columns"
       row-key="name"
-      class="stick-table"
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
-      </template>
+      </template>      
       <template v-slot:body="props">
         <q-tr :props="props">
-          
           <!---right click --->
           <contextMenu
             :actions="actions"
@@ -24,7 +22,7 @@
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
-          >          
+          >
 
 
             <!--Actions column-->
@@ -47,6 +45,7 @@
               v-if="col?.dynamicField"
               :tableProps="props"
               :col="col"
+              :beforeUpdate="beforeUpdate"
               @updateRow="(row) => $emit('updateRow', row)"
             />            
           </q-td>
@@ -69,7 +68,11 @@ export default defineComponent({
     title: { default: ''},
     columns: {default: []},
     rows: {default: []},
-    actions: {default: []}
+    actions: {default: []},
+    beforeUpdate: {        
+      type: Function,
+      default: () => {}
+    }
   },
   components: {
     editablePopup,
@@ -132,21 +135,13 @@ export default defineComponent({
       padding: 12px 16px !important;
     }
 
-    .stick-table {
-      th:last-child, td:last-child {
-        background-color: white;
-        position: sticky;
-        right: 0;
-        z-index: 1;
-      }
-
-      th:first-child, td:first-child {
-        background-color: white;
-        position: sticky;
-        left: 0;
-        z-index: 1;
-      }
+    .sticky-actions {
+      background-color: white;
+      position: sticky;
+      left: 0;
+      z-index: 1;
     }
+    
 
     .default-card-grid {
       .default-card-grid_item-image {
