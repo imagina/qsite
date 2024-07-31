@@ -44,6 +44,7 @@
 
             <!---quick click edit popup-->
             <editablePopup 
+              v-if="col?.dynamicField"
               :tableProps="props"
               :col="col"
               @updateRow="(row) => $emit('updateRow', row)"

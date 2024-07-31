@@ -46,7 +46,8 @@ export default function controller(props: any, emit: any) {
       state.columns = props.columns      
       //set isEditable
       state.columns.forEach(col => {
-        col['isEditable'] = computeds.hasPermission.value['edit']
+
+        col['isEditable'] = computeds.hasPermission.value['edit'] && col.hasOwnProperty('dynamicField')
       });      
     },
     
