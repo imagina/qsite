@@ -10,11 +10,11 @@
       :is="component" 
       :col="col"
       :row="row"
-      :data="row[col.name]"
+      :data="tableData"
     /> 
     
     <!-- default content -->
-    <div v-if="!isContent && !isComponent" class="ellipsis-2-lines" style="max-width: 300px;" v-html="row[col.name]"></div>
+    <div v-if="!isContent && !isComponent" class="ellipsis-2-lines" style="max-width: 300px;" v-html="tableData"></div>
   </div>
 </template>
 <script lang="ts">
