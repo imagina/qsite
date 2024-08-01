@@ -74,9 +74,9 @@
         "tab": {
           "all": "All",
           "unread": "Unread",
-          "read": "Read" 
+          "read": "Read"
         },
-        "type": "Type",        
+        "type": "Type",
         "cancel": "Cancel",
         "openLink": "Open link",
         "helpTextBroadcastOption": "This notification will be displayed within the APP",
@@ -1951,7 +1951,7 @@
         "configList": {
           "loggedAs": "logged as",
           "fullScreen": "show in full screen",
-          "signOut": "sign out",
+          "signOut": "Sign Out",
           "leaveImpersonating": "Leave impersonating",
           "clearCache": "Clear cache",
           "goToSite": "Go to site"
