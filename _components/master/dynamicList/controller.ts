@@ -17,6 +17,7 @@ export default function controller(props: any, emit: any) {
     loading: false,
     columns: [],
     rows: [],
+    loadPageActions: false
   })
 
   // Computed
@@ -39,21 +40,27 @@ export default function controller(props: any, emit: any) {
   const methods = {
     // methodKey: () => {}
     async init(){
+      await methods.setPageActions()
       await methods.setColumns()
-      methods.getData(props.apiRoute, true, props.requestParams )
+      methods.getData(true)
+    },
+    setPageActions(){
+      props.pageActions
+      if(props?.filters && props?.pageActions){
+        state.loadPageActions = true
+      }
     },
     setColumns(){
       state.columns = props.columns      
       //set isEditable
       state.columns.forEach(col => {
-
         col['isEditable'] = computeds.hasPermission.value['edit'] && col.hasOwnProperty('dynamicField')
       });      
     },
     
-    async getData(apiRoute, refresh = false, params = {}){
+    async getData(refresh = false){
       state.loading = true
-      services.getData(apiRoute, refresh, params).then((response) => {
+      services.getData(props.apiRoute, refresh, props.requestParams ).then((response) => {
         if(response?.data){
           state.rows = response.data
           state.loading = false
@@ -62,9 +69,10 @@ export default function controller(props: any, emit: any) {
       })
     },
     updateRow(row){
-      console.dir(row)
+      state.loading = true
       services.updateItem(props.apiRoute, row.id, row).then((response) => {
         if(response?.data){
+          state.loading = false
           emit('updatedRow', response.data)
         }
       })
