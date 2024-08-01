@@ -1,12 +1,11 @@
 <template>
   <!--cell content-->
   <div>
-    <!--custom html content -->
-    <div v-if="isContent" v-html="htmlContent"></div>
+    
     
     <!-- custom component -->  
     <component 
-      v-if="isComponent && component" 
+      v-if="component" 
       :is="component" 
       :col="col"
       :row="row"
@@ -14,7 +13,7 @@
     /> 
     
     <!-- default content -->
-    <div v-if="!isContent && !isComponent" class="ellipsis-2-lines" style="max-width: 300px;" v-html="tableData"></div>
+    <div v-if="!isComponent" class="ellipsis-2-lines" style="max-width: 300px;" v-html="tableData"></div>
   </div>
 </template>
 <script lang="ts">

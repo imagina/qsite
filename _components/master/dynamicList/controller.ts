@@ -69,6 +69,11 @@ export default function controller(props: any, emit: any) {
       })
     },
     updateRow(row){
+      
+      console.log('service update')
+      return false
+      
+
       state.loading = true
       services.updateItem(props.apiRoute, row.id, row).then((response) => {
         if(response?.data){

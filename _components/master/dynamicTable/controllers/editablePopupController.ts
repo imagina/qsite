@@ -21,12 +21,25 @@ export default function controller(props, emit) {
 
   // Methods
   const methods = {
-    // methodKey: () => {}
-    checkBeforeUpdate(val){
-      if(props.beforeUpdate){
-        props.beforeUpdate(val)
-      }
-    }
+    // methodKey: () => {} 
+    runBeforeUpdate(scope){
+      const tempRow = {...props.row}
+      tempRow[props.col.name] = scope.value
+      
+        if(props.beforeUpdate){        
+          props.beforeUpdate(tempRow).then((response) => {ç
+            scope.set
+            console.warn('solved', response)                      
+          }).catch(error => {
+            
+            console.log('run no update')
+            console.log(error)
+            return false
+          })
+        }
+      emit('updateRow', tempRow)
+      return true
+    }       
   }
 
   // Mounted

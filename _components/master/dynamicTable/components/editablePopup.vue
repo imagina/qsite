@@ -1,12 +1,21 @@
 <template>    
     <q-popup-edit
       v-if="col?.isEditable && col?.dynamicField || false"
-      v-model="tableProps.row[col.name]"
+      ref="popupEditRef"
+      v-model="row[col.name]"
       v-slot="scope"              
       no-caps
-      @update:model-value="(value) => $emit('updateRow', tableProps.row)"
-    >    
-      <p>Update {{ col.label }} Id: {{tableProps.row.id}} </p>
+     
+    >
+    <q-form
+      autocorrect="off"
+      autocomplete="off"
+      ref="formContent"
+      @submit="() => {runBeforeUpdate(scope) ? $refs.popupEditRef.hide() : $refs.popupEditRef.cancel() }"
+      @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))"
+      >
+
+      <p>Update {{ col.label }} Id: {{row.id}} </p>
       <div class="q-py-sm">
         <dynamic-field
           v-model="scope.value"
@@ -25,11 +34,12 @@
             no-caps
             unelevated
             rounded
-            @click.stop.prevent="scope.set"
+            @click.stop.prevent="$refs.formContent.submit()"
             :disable="scope.validate(scope.value) === false || scope.initialValue === scope.value"
           />
         </div>
       </div>
+      </q-form>
     </q-popup-edit>            
   </template>
   <script lang="ts">
@@ -38,7 +48,7 @@
   
   export default defineComponent({
     props: {    
-      tableProps: {type: Object, default: null},    
+      row: {type: Object, default: null},    
       col: {type: Object, default: null},
       beforeUpdate: {        
         type: Function,
