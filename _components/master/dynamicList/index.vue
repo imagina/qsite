@@ -3,7 +3,7 @@
     <!--Content-->
     <div id="backend-page">
       <!--Page Actions-->
-      <div class="q-my-md">
+      <div class="q-my-md">        
         <page-actions 
           v-if="loadPageActions"
           :title="title" 
@@ -15,7 +15,9 @@
           <label id="titleCrudTable" v-if="title">{{ title }}</label>          
         </div>
       </div>
-      <div class="relative-position col-12">
+      <slot name="top-table" >
+      </slot>
+      <div class="row">        
         <dynamicTable
           :columns="getColumns"
           :rows="rows"
