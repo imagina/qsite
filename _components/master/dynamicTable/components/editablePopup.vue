@@ -5,16 +5,15 @@
       v-model="row[col.name]"
       v-slot="scope"              
       no-caps
-     
+      :cover="false" :offset="[0, 4]"
     >
     <q-form
       autocorrect="off"
       autocomplete="off"
       ref="formContent"
-      @submit="() => {runBeforeUpdate(scope) ? $refs.popupEditRef.hide() : $refs.popupEditRef.cancel() }"
+      @submit="runBeforeUpdate(scope)"
       @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))"
-      >
-
+    >
       <p>Update {{ col.label }} Id: {{row.id}} </p>
       <div class="q-py-sm">
         <dynamic-field
@@ -34,7 +33,7 @@
             no-caps
             unelevated
             rounded
-            @click.stop.prevent="$refs.formContent.submit()"
+            @click="$refs.formContent.submit()"
             :disable="scope.validate(scope.value) === false || scope.initialValue === scope.value"
           />
         </div>

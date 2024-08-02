@@ -9,6 +9,7 @@ export default function controller(props: any, emit: any) {
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
+    dynamicTable: ref()
   }
 
   // States
@@ -69,15 +70,18 @@ export default function controller(props: any, emit: any) {
       })
     },
     updateRow(row){
-      
-      console.log('service update')
-      return false
-      
-
       state.loading = true
       services.updateItem(props.apiRoute, row.id, row).then((response) => {
         if(response?.data){
-          state.loading = false
+          state.loading = false          
+          const foundIndex = state.rows.findIndex(r => r.id == row.id);
+          //state.rows[foundIndex] 
+          Object.keys(state.rows[foundIndex]).forEach((key) => {
+            if(response.data[key]){
+              state.rows[foundIndex][key] = response.data[key]
+            }
+          })
+          
           emit('updatedRow', response.data)
         }
       })

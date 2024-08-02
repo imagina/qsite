@@ -5,7 +5,7 @@
       :loading="loading"
       :rows="rows"
       :columns="columns"
-      row-key="name"
+      row-key="name"      
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />

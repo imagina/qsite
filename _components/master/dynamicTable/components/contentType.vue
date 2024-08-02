@@ -1,8 +1,6 @@
 <template>
   <!--cell content-->
   <div>
-    
-    
     <!-- custom component -->  
     <component 
       v-if="component" 
@@ -10,8 +8,7 @@
       :col="col"
       :row="row"
       :data="tableData"
-    /> 
-    
+    />
     <!-- default content -->
     <div v-if="!isComponent" class="ellipsis-2-lines" style="max-width: 300px;" v-html="tableData"></div>
   </div>

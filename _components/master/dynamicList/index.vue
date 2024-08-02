@@ -22,6 +22,7 @@
           :actions="actions"
           :loading="loading"
           :beforeUpdate="beforeUpdate"
+          ref="dynamicTable"
           @updateRow="(row) => updateRow(row)"
         />
       </div>
