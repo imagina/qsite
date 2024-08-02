@@ -1,8 +1,8 @@
 <template>
   <div id="componentCrudIndex">
     <!--Content-->
-    <div id="backend-page">
-      <!--Page Actions-->
+    <div id="backend-page">      
+      <!--Page Actions-->      
       <div class="q-my-md">        
         <page-actions 
           v-if="loadPageActions"
@@ -19,7 +19,7 @@
       </slot>
       <div class="row">        
         <dynamicTable
-          :columns="getColumns"
+          :columns="columns"
           :rows="rows"
           :actions="actions"
           :loading="loading"
@@ -38,18 +38,20 @@ import dynamicTable from 'modules/qsite/_components/master/dynamicTable'
 
 export default defineComponent({
   props: {
-    apiRoute: { default: ''},
-    title: { default: ''},
-    columns: {default: []},
-    actions: {default: []},
-    permission: {default: ''}, 
-    requestParams: {default: {}}, 
-    filters: { default: {}},
-    help: { default: {}},
-    pageActions: {default: true},
-    beforeUpdate: {        
-      type: Function,
-      default: () => {}
+    tableData: {
+      apiRoute: { default: ''},
+      title: { default: ''},
+      columns: {default: []},
+      actions: {default: []},
+      permission: {default: ''}, 
+      requestParams: {default: {}}, 
+      filters: { default: {}},
+      help: { default: {}},
+      pageActions: {default: true},
+      beforeUpdate: {        
+        type: Function,
+        default: () => {}
+      }
     }
   },
   components: {

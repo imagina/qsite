@@ -2,6 +2,8 @@ import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} f
 
 import services from "modules/qsite/_components/master/dynamicList/services";
 import { store, i18n } from 'src/plugins/utils';
+import { permission } from "process";
+import { before } from "node:test";
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
@@ -18,22 +20,27 @@ export default function controller(props: any, emit: any) {
     loading: false,
     columns: [],
     rows: [],
-    loadPageActions: false
+    loadPageActions: false, 
+    
   })
 
   // Computed
   const computeds = {
     // key: computed(() => {})
-    getColumns: computed(() => state.columns),
+    
     hasPermission: computed(() => {
       //Default permission
       return  {
-        create: props?.permission ? store.hasAccess(`${props.permission}.create`) : true,
-        index: props?.permission ? store.hasAccess(`${props.permission}.index`) : true,
-        edit: props?.permission ? store.hasAccess(`${props.permission}.edit`) : true,
-        destroy: props?.permission ? store.hasAccess(`${props.permission}.destroy`) : true
+        create: props.tableData?.permission ? store.hasAccess(`${props.tableData?.permission}.create`) : true,
+        index: props.tableData?.permission ? store.hasAccess(`${props.tableData?.permission}.index`) : true,
+        edit: props.tableData?.permission ? store.hasAccess(`${props.tableData?.permission}.edit`) : true,
+        destroy: props.tableData?.permission ? store.hasAccess(`${props.tableData?.permission}.destroy`) : true
       };
-    })
+    }), 
+    beforeUpdate: computed(() => props.tableData?.beforeUpdate || false),
+    title: computed(() => props?.tableData?.title || false),
+    help: computed(() => props?.tableData?.read.help || false),
+    actions: computed(() => props?.tableData?.actions || false),
   }
   
 
@@ -45,14 +52,13 @@ export default function controller(props: any, emit: any) {
       await methods.setColumns()
       methods.getData(true)
     },
-    setPageActions(){
-      props.pageActions
-      if(props?.filters && props?.pageActions){
+    setPageActions(){      
+      if(props.tableData?.read.filters){
         state.loadPageActions = true
       }
     },
     setColumns(){
-      state.columns = props.columns      
+      state.columns = props.tableData.read.columns      
       //set isEditable
       state.columns.forEach(col => {
         col['isEditable'] = computeds.hasPermission.value['edit'] && col.hasOwnProperty('dynamicField')
@@ -61,7 +67,7 @@ export default function controller(props: any, emit: any) {
     
     async getData(refresh = false){
       state.loading = true
-      services.getData(props.apiRoute, refresh, props.requestParams ).then((response) => {
+      services.getData(props.tableData.apiRoute, refresh, props.tableData.read.requestParams ).then((response) => {
         if(response?.data){
           state.rows = response.data
           state.loading = false
@@ -71,7 +77,7 @@ export default function controller(props: any, emit: any) {
     },
     updateRow(row){
       state.loading = true
-      services.updateItem(props.apiRoute, row.id, row).then((response) => {
+      services.updateItem(props.tableData.apiRoute, row.id, row).then((response) => {
         if(response?.data){
           state.loading = false          
           const foundIndex = state.rows.findIndex(r => r.id == row.id);
