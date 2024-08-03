@@ -1,7 +1,7 @@
 import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} from "vue";
 
 import services from "modules/qsite/_components/master/dynamicList/services";
-import { store, i18n } from 'src/plugins/utils';
+import { store, i18n, clone } from 'src/plugins/utils';
 import { permission } from "process";
 import { before } from "node:test";
 
@@ -20,7 +20,9 @@ export default function controller(props: any, emit: any) {
     loading: false,
     columns: [],
     rows: [],
-    loadPageActions: false, 
+    loadPageActions: false,
+    requestParams: {}, 
+    showModal: false
     
   })
 
@@ -41,6 +43,22 @@ export default function controller(props: any, emit: any) {
     title: computed(() => props?.tableData?.title || false),
     help: computed(() => props?.tableData?.read.help || false),
     actions: computed(() => props?.tableData?.actions || false),
+    tableActions: computed(() => {
+      //Default response
+      let response = []      
+      //Add search action
+      if (props.tableData.read.search !== false) response.push('search')
+      
+      //Add create action
+      if (props.tableData.create && computeds.hasPermission.value['create']) {         
+       response.push('new')
+      }
+     
+      // extras for page action
+      if (props.tableData?.extraActions?.length > 0) response.push(...props.tableData.extraActions)      
+      
+      return response.filter((item) => !item.vIfAction)      
+    }),    
   }
   
 
@@ -48,6 +66,7 @@ export default function controller(props: any, emit: any) {
   const methods = {
     // methodKey: () => {}
     async init(){
+      state.requestParams = {...props.tableData.read.requestParams}
       await methods.setPageActions()
       await methods.setColumns()
       methods.getData(true)
@@ -57,6 +76,14 @@ export default function controller(props: any, emit: any) {
         state.loadPageActions = true
       }
     },
+    search(val){
+      if(val){
+        state.requestParams.filter = {search: val} 
+      } else {
+        state.requestParams = {...props.tableData.read.requestParams}
+      }
+      methods.getData(true)
+    },
     setColumns(){
       state.columns = props.tableData.read.columns      
       //set isEditable
@@ -64,10 +91,18 @@ export default function controller(props: any, emit: any) {
         col['isEditable'] = computeds.hasPermission.value['edit'] && col.hasOwnProperty('dynamicField')
       });      
     },
+    getRequestParams(){
+      const requestParams =  clone({...props.tableData.read.requestParams, ...state.requestParams})      
+      if(requestParams.search){
+        console.log('delete')
+        delete requestParams.filter.date
+      }
+      return requestParams
+    },
     
-    async getData(refresh = false){
+    async getData(refresh = false){      
       state.loading = true
-      services.getData(props.tableData.apiRoute, refresh, props.tableData.read.requestParams ).then((response) => {
+      services.getData(props.tableData.apiRoute, refresh,  state.requestParams).then((response) => {
         if(response?.data){
           state.rows = response.data
           state.loading = false

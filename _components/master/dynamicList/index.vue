@@ -6,8 +6,11 @@
       <div class="q-my-md">        
         <page-actions 
           v-if="loadPageActions"
+          :extra-actions="tableActions"          
           :title="title" 
           :help="help"
+          @new="$refs.crudComponent.handlerActionCreate"
+          @search="val => search(val)"
           @refresh="getData(true)"          
         />
         <!--table title-->
@@ -27,6 +30,19 @@
           ref="dynamicTable"
           @updateRow="(row) => updateRow(row)"
         />
+        <!--Modal create/update component-->
+        <!--<crud-form 
+          v-model="showModal"
+          v-show="(tableData.create ) && showModal"
+          :params="tableData"
+          :item-id="false"
+          :field="false"
+        />
+      -->
+      <crud
+        ref="crudComponent"
+        :crud-data="tableData" 
+      />
       </div>
     </div>
   </div>
@@ -35,6 +51,7 @@
 import {defineComponent} from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicList/controller'
 import dynamicTable from 'modules/qsite/_components/master/dynamicTable'
+import crudForm from 'modules/qcrud/_components/form';
 
 export default defineComponent({
   props: {
@@ -54,9 +71,7 @@ export default defineComponent({
       }
     }
   },
-  components: {
-    dynamicTable
-  },
+  components: { dynamicTable, crudForm },
   setup(props, {emit}) {
     return controller(props, emit)
   }
