@@ -9,7 +9,7 @@
           :extra-actions="tableActions"          
           :title="title" 
           :help="help"
-          @new="$refs.crudComponent.handlerActionCreate"
+          @new="$refs.crudComponent.$refs.crudIndex.handlerActionCreate()"
           @search="val => search(val)"
           @refresh="getData(true)"          
         />

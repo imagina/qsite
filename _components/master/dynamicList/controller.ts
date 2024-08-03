@@ -11,7 +11,7 @@ export default function controller(props: any, emit: any) {
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
-    dynamicTable: ref()
+    dynamicTable: ref(),
   }
 
   // States
