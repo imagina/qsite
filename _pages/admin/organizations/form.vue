@@ -496,7 +496,7 @@ export default {
         //Request
         this.$crud.show('apiRoutes.qsite.organizations', this.organizationIdLocal, requestParams).then(response => {
           this.organization = this.$clone(response.data)
-          this.form = this.$clone(response.data)
+          setTimeout(() => this.form = this.$clone(response.data), 100)
           layoutStore().setSelectedLayout(response.data.layoutId);
           resolve(response.data)
         }).catch(error => {
