@@ -24,7 +24,8 @@ export default function controller(props: any, emit: any) {
   // States
   const state = reactive({
     type: null,
-    focus: false
+    focus: false, 
+    modal: false,
   })
 
   // Computed
@@ -96,6 +97,7 @@ export default function controller(props: any, emit: any) {
           to : moment(`${to} ${endOfDay}`).format(emitFormat)
         }        
       }
+      if(fieldProps?.autoClose) state.modal = false
       emit('update:modelValue', toEmit)      
     },
 

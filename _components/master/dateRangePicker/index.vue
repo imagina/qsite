@@ -19,7 +19,7 @@
         class="cursor-pointer"
         color="blue-grey"
       >            
-        <q-popup-proxy transition-show="scale" transition-hide="scale">
+        <q-popup-proxy transition-show="scale" transition-hide="scale" v-model="modal">
           <div class="dateRangePickerModal">
             <div class="dateRangePickerSelector">
               <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type" @update:model-value="(value) => changeDate()"/>
