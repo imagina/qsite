@@ -6,10 +6,11 @@
     :label="label"
     :class="class"
     debounce="600"
-    :clearable="true"
+    :clearable="fieldProps.field.clearable"
     @clear="() => clear()"
     @focus="setFocus(true)"
     @blur="setFocus(false)"
+    
   >
     <template v-slot:prepend>
       <q-icon 

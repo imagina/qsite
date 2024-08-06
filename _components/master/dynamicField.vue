@@ -733,6 +733,7 @@ export default {
           props = {
             field: {
               bgColor: 'white',
+              clearable: props?.clearable || true,
               color: 'primary',
               outlined: true,
               dense: true,
