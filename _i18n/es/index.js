@@ -481,7 +481,8 @@ export default {
         "history": "Historial",
         "dispatch": "Despachar",
         "bulkPermissions": "Permisos masivos",
-        "entityPermissions": "Permisos de entidad"
+        "entityPermissions": "Permisos de entidad",
+        "cancelled": "Cancelado",
       },
       "message": {
         "requestAdded": "Petición agregada a la cola sin conexión",

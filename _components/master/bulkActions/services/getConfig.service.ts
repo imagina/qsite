@@ -19,6 +19,6 @@ export const getConfig = async (route: any, helper: any) => {
         const { data } = await baseService.index('apiRoutes.qsite.configs', requestParams)
         return data
     } catch (error) {
-        throw new Error('Error in config request')
+        console.error(error)
     }
 }

@@ -28,6 +28,13 @@ const status = () => ({
             name: 'fa-solid fa-circle-check',
             color: 'tw-text-green-400'
         }
+    },
+    5: {
+        label: i18n.tr('isite.cms.label.cancelled'),
+        icon: {
+            name: 'fa-solid fa-circle-xmark',
+            color: 'tw-text-red-400'
+        }
     }
 })
 

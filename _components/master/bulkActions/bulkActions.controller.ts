@@ -56,23 +56,15 @@ export const bulkActionsController = (props, { expose, emit }) => {
 
     //Get export config
     const getExportConfig = async () => {
-        try {
-            bulkActions.value = []
-            const data = await getConfig(route, helper)
-            emit('bulkActionsConfig', Boolean(data))
-            bulkActions.value = filterAndSortBulkActions(data)
-        } catch (error) {
-            console.error(error);
-        }
+        bulkActions.value = []
+        const data = await getConfig(route, helper)
+        emit('bulkActionsConfig', Boolean(data))
+        bulkActions.value = filterAndSortBulkActions(data)
     }
 
     const fetchDataLog = async () => {
-        try {
-            const data = await getDataLog(status, permission)
-            log.value = data;
-        } catch (error) {
-            console.error(error);
-        }
+        const data = await getDataLog(status, permission)
+        log.value = data;
     }
 
     const init = async () => {

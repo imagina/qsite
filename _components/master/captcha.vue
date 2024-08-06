@@ -73,32 +73,21 @@ export default {
               },
               'expired-callback': () => {
                 this.$emit('update:modelValue', null)
-                this.reset()
+                grecaptcha.reset(this.widget)
               }
             })
           } else {//(V3)
             grecaptcha.ready(() => {
-              this.vEmitTokenV3()
+              grecaptcha.execute(this.captcha.key, {action: 'submit'}).then(token => {
+                this.$emit('update:modelValue', {version: 3, token: token})
+              })
             })
           }
         }, 500)
       } catch (error) {
         console.error(error)
       }
-    },
-    //Emit token of version 3
-    vEmitTokenV3() {
-      grecaptcha.execute(this.captcha.key, {action: 'homepage'}).then(token => {
-        this.$emit('update:modelValue', {version: 3, token: token})
-      })
-    },
-    //Reset captcha
-    reset() {
-      if (this.captcha.key) {
-        if (this.captcha.version == '2') grecaptcha.reset(this.widget)
-        else this.vEmitTokenV3()
-      }
-    },
+    }
   }
 }
 </script>

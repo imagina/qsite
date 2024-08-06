@@ -20,6 +20,6 @@ export const getDataLog = async (status: ActionsStatus, permission: string | nul
         })
         return data;
     } catch (error) {
-        throw new Error('Error in the request for actions')
+        console.error(error)
     }
 }

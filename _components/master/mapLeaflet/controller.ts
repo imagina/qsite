@@ -348,12 +348,8 @@ export default function controller(props: any, emit: any) {
         let points = props.modelValue
         if(points.length){
           points = points.map((x) => [x.lat, x.lng]);
-          //rectangle
-          if(points.length == 4){
-            polygon = L.rectangle(points).addTo(state.map)
-          } else {
-            polygon = L.polygon(points).addTo(state.map)
-          }
+          polygon = L.polygon(points).addTo(state.map)
+
           if(!props.readOnly){
             polygon.enableEdit()
           }
