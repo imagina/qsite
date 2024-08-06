@@ -184,7 +184,7 @@ export default function controller(props: any, emit: any) {
           result[key] = {
             label: state.readOnlyData[key].label || state.props.filters[key].label ||  '' , 
             value: state.readOnlyData[key].value,
-            option: ''
+            option: state.readOnlyData[key].value || ''
           }
 
           if(field?.type == 'select' || field?.type == 'treeSelect'){
