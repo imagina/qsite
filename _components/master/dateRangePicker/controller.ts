@@ -97,7 +97,7 @@ export default function controller(props: any, emit: any) {
           to : moment(`${to} ${endOfDay}`).format(emitFormat)
         }        
       }
-      if(fieldProps?.autoClose) state.modal = false
+      if(fieldProps?.autoClose && toEmit != null) state.modal = false      
       emit('update:modelValue', toEmit)      
     },
 

@@ -15,7 +15,7 @@
           :dynamicFilterSummary="dynamicFilterSummary"
           @toggleDynamicFilterModal="toggleDynamicFilterModal"
           @new="() => {
-            $refs.crudComponent.test()            //$refs.crudComponent.$refs.crudIndex.handlerActionCreate()
+            $refs.crudComponent.showCreateModal()            //$refs.crudComponent.$refs.crudIndex.handlerActionCreate()
           }"
           @search="val => search(val)"
           @refresh="getData(true)"          
