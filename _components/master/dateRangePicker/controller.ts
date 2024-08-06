@@ -8,7 +8,7 @@ export default function controller(props: any, emit: any) {
   const field = fieldProps.field;
   const rangeDateFormat = fieldProps.mask;
   const dateFormat = rangeDateFormat.split(' - ')[0];
-  const emitFormat = `${dateFormat} HH:mm:ss`;
+  const emitFormat = fieldProps?.removeTime ? dateFormat : `${dateFormat} HH:mm:ss`;
   const startOfDay = fieldProps.startOfDay;
   const endOfDay = fieldProps.endOfDay;  
 
