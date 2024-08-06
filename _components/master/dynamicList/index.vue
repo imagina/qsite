@@ -1,5 +1,5 @@
 <template>
-  <div id="componentCrudIndex">
+  <div id="componentDynamicList">
     <!--Content-->
     <div id="backend-page">      
       <!--Page Actions-->      
@@ -9,9 +9,27 @@
           :extra-actions="tableActions"          
           :title="title" 
           :help="help"
-          @new="$refs.crudComponent.$refs.crudIndex.handlerActionCreate()"
+          :expires-in="expiresIn"
+          :dynamicFilter="dynamicFilter"
+          :dynamicFilterValues="dynamicFilterValues"
+          :dynamicFilterSummary="dynamicFilterSummary"
+          @toggleDynamicFilterModal="toggleDynamicFilterModal"
+          @new="() => {
+            $refs.crudComponent.test()            //$refs.crudComponent.$refs.crudIndex.handlerActionCreate()
+          }"
           @search="val => search(val)"
           @refresh="getData(true)"          
+        />
+        <!-- dynamicFilter -->
+        <dynamicFilter
+          v-if="dynamicFilter"
+          :systemName="systemName"
+          :modelValue="showDynamicFilterModal"
+          :filters="dynamicFilter"
+          @showModal="showDynamicFilterModal = true"
+          @hideModal="showDynamicFilterModal = false"
+          @update:modelValue="filters => updateDynamicFilterValues(filters)"
+          @update:summary="summary => dynamicFilterSummary = summary"
         />
         <!--table title-->
         <div v-if="!loadPageActions" :class="`row text-primary text-weight-bold ellipsis title-content items-center`">
@@ -52,6 +70,7 @@ import {defineComponent} from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicList/controller'
 import dynamicTable from 'modules/qsite/_components/master/dynamicTable'
 import crudForm from 'modules/qcrud/_components/form';
+import dynamicFilter from 'modules/qsite/_components/master/dynamicFilter';
 
 export default defineComponent({
   props: {
@@ -71,14 +90,14 @@ export default defineComponent({
       }
     }
   },
-  components: { dynamicTable, crudForm },
+  components: { dynamicTable, crudForm, dynamicFilter },
   setup(props, {emit}) {
     return controller(props, emit)
   }
 })
 </script>
 <style lang="scss">
-#componentCrudIndex {
+#componentDynamicList {
   .btn-menu-offline {
     @apply tw-bg-yellow-400;
   }

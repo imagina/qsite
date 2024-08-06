@@ -4,6 +4,7 @@ import services from "modules/qsite/_components/master/dynamicList/services";
 import { store, i18n, clone } from 'src/plugins/utils';
 import { permission } from "process";
 import { before } from "node:test";
+import { stat } from "fs";
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
@@ -22,8 +23,13 @@ export default function controller(props: any, emit: any) {
     rows: [],
     loadPageActions: false,
     requestParams: {}, 
-    showModal: false
-    
+    showModal: false, 
+    expiresIn: null,     
+    /* dynamicFilter */
+    showDynamicFilterModal: false,
+    dynamicFilterValues: {},
+    dynamicFilterSummary: {}
+    /* dynamicFilter */
   })
 
   // Computed
@@ -47,18 +53,29 @@ export default function controller(props: any, emit: any) {
       //Default response
       let response = []      
       //Add search action
-      if (props.tableData.read.search !== false) response.push('search')
-      
+      if (props.tableData.read.search !== false) response.push('search')      
       //Add create action
-      if (props.tableData.create && computeds.hasPermission.value['create']) {         
+      if (props.tableData.create && computeds.hasPermission.value['create']) {
        response.push('new')
-      }
-     
+      }     
       // extras for page action
-      if (props.tableData?.extraActions?.length > 0) response.push(...props.tableData.extraActions)      
-      
+      if (props.tableData?.extraActions?.length > 0) response.push(...props.tableData.extraActions)
       return response.filter((item) => !item.vIfAction)      
-    }),    
+    }),
+
+    dynamicFilter: computed(() =>  {
+      if (props.tableData.read?.filters) {
+        if (Object.keys(props.tableData.read?.filters).length > 0) {
+          return props.tableData.read?.filters;
+        }
+      }
+      return {};
+    }),
+
+    systemName: computed(() => {
+      return props.tableData.read?.systemName || props.tableData?.permission || props.tableData?.entityName;
+    }),
+
   }
   
 
@@ -67,6 +84,8 @@ export default function controller(props: any, emit: any) {
     // methodKey: () => {}
     async init(){
       state.requestParams = {...props.tableData.read.requestParams}
+      state.requestParams['filters'] = {...state.requestParams['filters'], ...state.dynamicFilterValues}
+
       await methods.setPageActions()
       await methods.setColumns()
       methods.getData(true)
@@ -103,9 +122,11 @@ export default function controller(props: any, emit: any) {
     async getData(refresh = false){      
       state.loading = true
       services.getData(props.tableData.apiRoute, refresh,  state.requestParams).then((response) => {
+        state.expiresIn = response?.expiresIn;
         if(response?.data){
           state.rows = response.data
           state.loading = false
+          
           emit('dataLoaded', response.data)
         }
       })
@@ -126,7 +147,16 @@ export default function controller(props: any, emit: any) {
           emit('updatedRow', response.data)
         }
       })
-    }
+    }, 
+    toggleDynamicFilterModal() {
+      state.showDynamicFilterModal = !state.showDynamicFilterModal;
+    },
+    updateDynamicFilterValues(filters) {
+      state.dynamicFilterValues = filters;
+      state.requestParams = {...state.requestParams, ...filters}
+      //this.table.filter = filters;
+      methods.getData(true);
+    },
   }
 
   // Mounted
