@@ -5,7 +5,8 @@
       :loading="loading"
       :rows="rows"
       :columns="columns"
-      row-key="name"      
+      row-key="name"
+      :pagination.sync="pagination"  
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
@@ -51,6 +52,12 @@
           </q-td>
         </q-tr>
       </template>
+      <!-- pagination -->
+      <template #bottom="props">
+        <pagination 
+          :pagination="pagination"
+        />
+      </template>
     </q-table>
   </div>
 </template>
@@ -60,6 +67,7 @@ import controller from 'modules/qsite/_components/master/dynamicTable/controller
 import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup.vue'
 import contentType from 'modules/qsite/_components/master/dynamicTable/components/contentType.vue'
 import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu.vue'
+import pagination from 'modules/qsite/_components/master/dynamicTable/components/pagination.vue'
 
 
 export default defineComponent({
@@ -69,6 +77,7 @@ export default defineComponent({
     columns: {default: []},
     rows: {default: []},
     actions: {default: []},
+    pagination: {default: {}},
     beforeUpdate: {        
       type: Function,
       default: () => {}
@@ -77,7 +86,8 @@ export default defineComponent({
   components: {
     editablePopup,
     contextMenu, 
-    contentType
+    contentType, 
+    pagination
   },
   setup(props, {emit}) {
     return controller(props, emit)

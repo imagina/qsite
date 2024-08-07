@@ -17,6 +17,7 @@ export default function controller(props, emit) {
   // Computed
   const computeds = {
     // key: computed(() => {})
+    pagination: computed(() => props.pagination)
   }
 
   // Methods

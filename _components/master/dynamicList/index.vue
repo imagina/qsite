@@ -38,11 +38,13 @@
       </div>
       <slot name="top-table" >
       </slot>
-      <div class="row">        
+      <div class="row">       
+        {{ pagination }} 
         <dynamicTable
           :columns="columns"
           :rows="rows"
           :actions="actions"
+          :pagination="pagination"
           :loading="loading"
           :beforeUpdate="beforeUpdate"
           ref="dynamicTable"
