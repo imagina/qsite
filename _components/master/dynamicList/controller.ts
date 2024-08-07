@@ -28,8 +28,14 @@ export default function controller(props: any, emit: any) {
     /* dynamicFilter */
     showDynamicFilterModal: false,
     dynamicFilterValues: {},
-    dynamicFilterSummary: {}
+    dynamicFilterSummary: {},
     /* dynamicFilter */
+    pagination: {
+      page: 1,
+      rowsNumber: '',
+      rowsPerPage: 10,
+      descending: true
+    },
   })
 
   // Computed
@@ -95,12 +101,13 @@ export default function controller(props: any, emit: any) {
         state.loadPageActions = true
       }
     },
-    search(val){
-      if(val){
+    search(val){      
+      if(val){        
         state.requestParams.filter = {search: val} 
       } else {
         state.requestParams = {...props.tableData.read.requestParams}
       }
+      state.requestParams['filters'] = {...state.requestParams['filters'], ...state.dynamicFilterValues}
       methods.getData(true)
     },
     setColumns(){
