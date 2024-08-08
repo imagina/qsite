@@ -35,11 +35,9 @@
         <div v-if="!loadPageActions" :class="`row text-primary text-weight-bold ellipsis title-content items-center`">
           <label id="titleCrudTable" v-if="title">{{ title }}</label>          
         </div>
-      </div>
-      <slot name="top-table" >
-      </slot>
-      <div class="row">       
-        {{ pagination }} 
+      
+        <slot name="top-table" >
+        </slot>     
         <dynamicTable
           :columns="columns"
           :rows="rows"
@@ -49,20 +47,11 @@
           :beforeUpdate="beforeUpdate"
           ref="dynamicTable"
           @updateRow="(row) => updateRow(row)"
-        />
-        <!--Modal create/update component-->
-        <!--<crud-form 
-          v-model="showModal"
-          v-show="(tableData.create ) && showModal"
-          :params="tableData"
-          :item-id="false"
-          :field="false"
-        />
-      -->
-      <crud
-        ref="crudComponent"
-        :crud-data="tableData" 
-      />
+        />        
+        <crud
+          ref="crudComponent"
+          :crud-data="tableData" 
+        />     
       </div>
     </div>
   </div>

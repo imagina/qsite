@@ -27,6 +27,10 @@ export default function controller(props, emit) {
       const end = showTable < rowsPerPage ? totalPage : page * showTable
       return `${start} - ${end} ${i18n.tr('isite.cms.label.of')} ${totalPage}`
     }),
+
+    windowSize: computed(()=>  {
+      return window.innerWidth >= '500' ? 'desktop' : 'mobile';
+    }),
   }
 
   // Methods
