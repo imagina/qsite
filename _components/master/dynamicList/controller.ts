@@ -184,7 +184,10 @@ export default function controller(props: any, emit: any) {
     toggleDynamicFilterModal() {
       state.showDynamicFilterModal = !state.showDynamicFilterModal;
     },
-    updateDynamicFilterValues(filters) {
+    updateFilter(key, value){
+      state.dynamicFilterValues[key] = value;
+    },
+    updateDynamicFilterValues(filters) {      
       state.dynamicFilterValues = filters;
       state.requestParams.filter = state.dynamicFilterValues
       state.pagination.page = 1
