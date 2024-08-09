@@ -42,7 +42,7 @@
           :columns="columns"
           :rows="rows"
           :actions="actions"
-          :pagination="pagination"
+          
           :loading="loading"
           :beforeUpdate="beforeUpdate"
           ref="dynamicTable"

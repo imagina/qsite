@@ -8,7 +8,16 @@ export default function controller(props, emit) {
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
-    pagination:  ref(props.pagination),
+    pagination:  ref({
+      pagination: {
+        page: 1,
+        rowsNumber: '',
+        rowsPerPage: 10,
+        descending: true, 
+        //sortBy: 'desc',
+  
+      },
+    }),
   }
   
 

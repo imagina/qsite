@@ -87,7 +87,7 @@
             <div class="flex items-center tw-mr-4 text-blue-grey">
               <span class="sm:tw-text-sm">{{ $tr('isite.cms.label.show') }}</span>
               <q-select
-                v-model="props.rowsPerPage"
+                v-model="pagination.rowsPerPage"
                 :options="rowsPerPageOption"
                 options-cover
                 dense
@@ -142,7 +142,6 @@ export default defineComponent({
     columns: {default: []},
     rows: {default: []},
     actions: {default: []},
-    pagination: {default: {}},
     beforeUpdate: {        
       type: Function,
       default: () => {}
