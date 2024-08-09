@@ -30,7 +30,8 @@
               flat
               :mask="mask"
               :subtitle="inputRange"
-              color="primary"              
+              color="primary"
+              :first-day-of-week="0"
               @update:model-value="(value) => changeType(value)"
             >
             <div class="row items-center justify-end">

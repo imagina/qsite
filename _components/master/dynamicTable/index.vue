@@ -1,13 +1,16 @@
 <template>
   <div id="dynamic-table">
+    {{ pagination }}
     <q-table      
       :title="title"
       :loading="loading"
       :rows="rows"
       :columns="columns"
       row-key="name"
-      :pagination.sync="pagination"  
-    >
+      v-model:pagination="pagination"
+      :pagination.sync="pagination"
+      @request="() => {console.log('request')}"
+    >    
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
       </template>      
@@ -54,9 +57,72 @@
       </template>
       <!-- pagination -->
       <template #bottom="props">
-        <pagination 
-          :pagination="pagination"
-        />
+        <!--pagination-->
+          {{ props }}
+        <div :class="`bottonCrud full-width flex items-center ${windowSize == 'mobile' ? 'justify-center' : 'justify-between'}`">
+          <div class="sm:tw-text-sm":class="`text-blue-grey ${windowSize == 'mobile' ? 'q-mb-sm' : ''} `">
+            {{ $tr('isite.cms.label.showing') }} <b>{{ countPage(props) }}</b> {{ $trp('isite.cms.label.entry') }}
+          </div>
+          <div class="col-12 q-ml-sm q-mr-lg flex flex-center">
+            <q-pagination
+              id="crudPaginationComponent"
+              v-if="showPagination(props)"
+              v-model="pagination.page"
+              :value="props.pagination"
+              @click.prevent="() => {console.log('pagination')}"
+              round
+              input-class="no-shadow"
+              color="while"
+              text-color="primary"
+              active-color="primary"
+              active-text-color="white"
+              :max="props.pagesNumber"
+              :max-pages="6"
+              :ellipses="false"
+              :boundary-numbers="false"
+              unelevated
+            />      
+          </div>
+          <div class="flex items-center">
+            <div class="flex items-center tw-mr-4 text-blue-grey">
+              <span class="sm:tw-text-sm">{{ $tr('isite.cms.label.show') }}</span>
+              <q-select
+                v-model="props.rowsPerPage"
+                :options="rowsPerPageOption"
+                options-cover
+                dense
+                class="q-mx-sm text-caption"
+                outlined
+              />
+              <span class="sm:tw-text-sm">{{ $trp('isite.cms.label.entry') }}</span>
+            </div>
+            <div class="actionsBtnPag">
+              <q-btn
+                color="primary"
+                class="tw-mr-2"
+                dense
+                size="14px"
+                round
+                flat
+                :disable="props.isFirstPage"
+                @click="props.prevPage"
+              >
+                <i class="fa-solid fa-chevron-left"></i>
+              </q-btn>
+              <q-btn
+                color="primary"
+                dense
+                size="14px"
+                round
+                flat
+                :disable="props.isLastPage"
+                @click="props.nextPage"
+              >
+                <i class="fa-solid fa-chevron-right"></i>
+              </q-btn>
+            </div>
+          </div>
+        </div>
       </template>
     </q-table>
   </div>
@@ -67,7 +133,6 @@ import controller from 'modules/qsite/_components/master/dynamicTable/controller
 import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup.vue'
 import contentType from 'modules/qsite/_components/master/dynamicTable/components/contentType.vue'
 import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu.vue'
-import pagination from 'modules/qsite/_components/master/dynamicTable/components/pagination.vue'
 
 
 export default defineComponent({
@@ -86,12 +151,21 @@ export default defineComponent({
   components: {
     editablePopup,
     contextMenu, 
-    contentType, 
-    pagination
+    contentType,
   },
   setup(props, {emit}) {
     return controller(props, emit)
-  }
+  }, 
+  computed: {
+    windowSize() {
+      return window.innerWidth >= '500' ? 'desktop' : 'mobile'
+    },
+  }, 
+  methods: {
+    showPagination(props) { 
+      return this.windowSize == 'desktop' && props.pagesNumber > 1
+    }
+  },
 })
 </script>
 <style lang="scss">

@@ -2,9 +2,7 @@ import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} f
 
 import services from "modules/qsite/_components/master/dynamicList/services";
 import { store, i18n, clone } from 'src/plugins/utils';
-import { permission } from "process";
-import { before } from "node:test";
-import { stat } from "fs";
+
 
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
@@ -34,7 +32,9 @@ export default function controller(props: any, emit: any) {
       page: 1,
       rowsNumber: '',
       rowsPerPage: 10,
-      descending: true
+      descending: true, 
+      //sortBy: 'desc',
+
     },
   })
 
@@ -89,12 +89,18 @@ export default function controller(props: any, emit: any) {
   const methods = {
     // methodKey: () => {}
     async init(){
+      /*
       state.requestParams = {...props.tableData.read.requestParams}
-      state.requestParams['filters'] = {...state.requestParams['filters'], ...state.dynamicFilterValues}
+      state.requestParams['filter'] = {...state.requestParams['filter'], ...state.dynamicFilterValues}
+      */
 
       await methods.setPageActions()
       await methods.setColumns()
-      methods.getData(true)
+
+      if(!dynamicFilter){
+        methods.getData(true)
+      }
+      
     },
     setPageActions(){      
       if(props.tableData?.read.filters){
@@ -107,7 +113,7 @@ export default function controller(props: any, emit: any) {
       } else {
         state.requestParams = {...props.tableData.read.requestParams}
       }
-      state.requestParams['filters'] = {...state.requestParams['filters'], ...state.dynamicFilterValues}
+      state.requestParams['filter'] = {...state.requestParams['filter'], ...state.dynamicFilterValues}
       methods.getData(true)
     },
     setColumns(){
@@ -117,24 +123,38 @@ export default function controller(props: any, emit: any) {
         col['isEditable'] = computeds.hasPermission.value['edit'] && col.hasOwnProperty('dynamicField')
       });      
     },
-    getRequestParams(){
-      const requestParams =  clone({...props.tableData.read.requestParams, ...state.requestParams})      
-      if(requestParams.search){
-        console.log('delete')
-        delete requestParams.filter.date
-      }
-      return requestParams
-    },
+
     
-    async getData(refresh = false){      
+    async getData(refresh = false){  
+      //get include: 
+      if(props.tableData.read?.requestParams?.include ) state.requestParams.include = props.tableData.read.requestParams.include 
+      //get filters:
+      state.requestParams.filter = {...state.requestParams?.filter || {}, ...props.tableData.read?.requestParams?.filter || {}, ...state.dynamicFilterValues}
+      
+      state.requestParams['page'] = state.pagination.page
+      state.requestParams['take'] = state.pagination.rowsPerPage
+
+      //Set order by      
+      let sortBy = state.pagination?.sortBy || 'id';
+      state.requestParams.filter.order = {
+        field: sortBy,
+        way: (state.pagination.descending != undefined) ? (state.pagination.descending ? 'desc' : 'asc') : 'desc'
+      };      
+
       state.loading = true
       services.getData(props.tableData.apiRoute, refresh,  state.requestParams).then((response) => {
         state.expiresIn = response?.expiresIn;
         if(response?.data){
           state.rows = response.data
           state.loading = false
-          
+
+          state.pagination.page = clone(response?.meta.page.currentPage);
+          state.pagination.rowsNumber = clone(response?.meta.page.total);
+          state.pagination.rowsPerPage = clone(state.pagination.rowsPerPage);
+          //state.pagination.sortBy = clone(state.pagination.sortBy);
+          state.pagination.descending = clone(state.pagination.descending);          
           emit('dataLoaded', response.data)
+          console.log(state)
         }
       })
     },
@@ -159,8 +179,10 @@ export default function controller(props: any, emit: any) {
       state.showDynamicFilterModal = !state.showDynamicFilterModal;
     },
     updateDynamicFilterValues(filters) {
+      console.log('update dynamic filters')
+      console.log(filters)
       state.dynamicFilterValues = filters;
-      state.requestParams = {...state.requestParams, ...filters}
+      state.requestParams.filter = state.dynamicFilterValues
       //this.table.filter = filters;
       methods.getData(true);
     },

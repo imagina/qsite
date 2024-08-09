@@ -37,7 +37,7 @@
         </div>
       
         <slot name="top-table" >
-        </slot>     
+        </slot>
         <dynamicTable
           :columns="columns"
           :rows="rows"
