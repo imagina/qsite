@@ -1,6 +1,5 @@
 <template>
   <div id="dynamic-table">
-    {{ pagination }}
     <q-table      
       :title="title"
       :loading="loading"
@@ -8,6 +7,7 @@
       :columns="columns"
       row-key="name"
       v-model:pagination="pagination"
+      hide-pagination
       :pagination.sync="pagination"
       @request="() => {console.log('request')}"
     >    
@@ -27,8 +27,6 @@
             :key="col.name"
             :props="props"
           >
-
-
             <!--Actions column-->
             <div v-if="col.name == 'actions'">              
               <btn-menu
@@ -58,7 +56,6 @@
       <!-- pagination -->
       <template #bottom="props">
         <!--pagination-->
-          {{ props }}
         <div :class="`bottonCrud full-width flex items-center ${windowSize == 'mobile' ? 'justify-center' : 'justify-between'}`">
           <div class="sm:tw-text-sm":class="`text-blue-grey ${windowSize == 'mobile' ? 'q-mb-sm' : ''} `">
             {{ $tr('isite.cms.label.showing') }} <b>{{ countPage(props) }}</b> {{ $trp('isite.cms.label.entry') }}
@@ -69,7 +66,7 @@
               v-if="showPagination(props)"
               v-model="pagination.page"
               :value="props.pagination"
-              @click.prevent="() => {console.log('pagination')}"
+              @click.prevent="() => $emit('onPagination', pagination)"
               round
               input-class="no-shadow"
               color="while"
@@ -89,6 +86,7 @@
               <q-select
                 v-model="pagination.rowsPerPage"
                 :options="rowsPerPageOption"
+                @update:modelValue="(val) => $emit('onPagination', pagination)"
                 options-cover
                 dense
                 class="q-mx-sm text-caption"
@@ -142,6 +140,7 @@ export default defineComponent({
     columns: {default: []},
     rows: {default: []},
     actions: {default: []},
+    initialPagination: {default: []},
     beforeUpdate: {        
       type: Function,
       default: () => {}

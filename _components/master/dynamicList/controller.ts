@@ -98,7 +98,7 @@ export default function controller(props: any, emit: any) {
       await methods.setColumns()
 
       if(!dynamicFilter){
-        methods.getData(true)
+        methods.getData({pagination: {page: 1}}, true)
       }
       
     },
@@ -114,7 +114,9 @@ export default function controller(props: any, emit: any) {
         state.requestParams = {...props.tableData.read.requestParams}
       }
       state.requestParams['filter'] = {...state.requestParams['filter'], ...state.dynamicFilterValues}
-      methods.getData(true)
+      state.pagination.page = 1
+      state.pagination.take = 10
+      methods.getData()
     },
     setColumns(){
       state.columns = props.tableData.read.columns      
@@ -124,14 +126,19 @@ export default function controller(props: any, emit: any) {
       });      
     },
 
+    setPagination(pagination){
+      const getData = pagination.rowsPerPage > state.pagination.rowsNumber
+      state.pagination = {...state.pagination, ...pagination}
+      if(getData) methods.getData()
+    },
     
-    async getData(refresh = false){  
+    async getData(pagination = false, refresh = false){  
       //get include: 
       if(props.tableData.read?.requestParams?.include ) state.requestParams.include = props.tableData.read.requestParams.include 
       //get filters:
       state.requestParams.filter = {...state.requestParams?.filter || {}, ...props.tableData.read?.requestParams?.filter || {}, ...state.dynamicFilterValues}
       
-      state.requestParams['page'] = state.pagination.page
+      state.requestParams['page'] = pagination?.page || state.pagination.page
       state.requestParams['take'] = state.pagination.rowsPerPage
 
       //Set order by      
@@ -154,7 +161,6 @@ export default function controller(props: any, emit: any) {
           //state.pagination.sortBy = clone(state.pagination.sortBy);
           state.pagination.descending = clone(state.pagination.descending);          
           emit('dataLoaded', response.data)
-          console.log(state)
         }
       })
     },
@@ -179,12 +185,10 @@ export default function controller(props: any, emit: any) {
       state.showDynamicFilterModal = !state.showDynamicFilterModal;
     },
     updateDynamicFilterValues(filters) {
-      console.log('update dynamic filters')
-      console.log(filters)
       state.dynamicFilterValues = filters;
       state.requestParams.filter = state.dynamicFilterValues
-      //this.table.filter = filters;
-      methods.getData(true);
+      state.pagination.page = 1
+      methods.getData();
     },
   }
 

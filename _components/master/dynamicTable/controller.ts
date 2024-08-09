@@ -8,22 +8,20 @@ export default function controller(props, emit) {
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
-    pagination:  ref({
-      pagination: {
-        page: 1,
-        rowsNumber: '',
-        rowsPerPage: 10,
-        descending: true, 
-        //sortBy: 'desc',
-  
-      },
+    pagination: ref({
+      page: 1,
+      //rowsNumber: props.initialPagination.rowsNumber,
+      rowsPerPage: 10,
+      descending: true, 
+      //sortBy: 'desc',
     }),
   }
   
 
   // States
   const state = reactive({
-    // Key: Default Value
+    // Key: Default Value    
+    
   })
 
   // Computed
@@ -47,14 +45,13 @@ export default function controller(props, emit) {
   // Methods
   const methods = {
     // methodKey: () => {}    
-    countPage(value){
-      console.log(props.rows.length)
-      const page = value.pagination.page;
-      const rowsPerPage = value.pagination.rowsPerPage;
-      const showTable = props.rows.length;
-      const totalPage = value.pagination.rowsNumber;
+    countPage(pagination){
+      const page = pagination.pagination.page;
+      const rowsPerPage = pagination.pagination.rowsPerPage;
+      const showTable = props.initialPagination.rowsNumber;
+      const totalPage = props.initialPagination.rowsNumber;
       const start = page == 1 ? 1 : page * rowsPerPage - ((rowsPerPage - (page - 1)) <= 0 ? 1 : rowsPerPage - (page - 1));
-      const end = showTable < rowsPerPage ? totalPage : page * showTable;
+      const end = showTable < rowsPerPage ? totalPage : page * rowsPerPage;
       return `${start} - ${end} ${i18n.tr('isite.cms.label.of')} ${totalPage}`
     },
   }

@@ -42,10 +42,11 @@
           :columns="columns"
           :rows="rows"
           :actions="actions"
-          
+          :initialPagination="pagination"
           :loading="loading"
           :beforeUpdate="beforeUpdate"
           ref="dynamicTable"
+          @onPagination="(value) => setPagination(value)"
           @updateRow="(row) => updateRow(row)"
         />        
         <crud
