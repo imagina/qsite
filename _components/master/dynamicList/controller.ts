@@ -9,7 +9,7 @@ export default function controller(props: any, emit: any) {
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
-    crudComponent: ref('crudComponent')
+    //crudComponent: ref('crudComponent')
   }
 
   // States
@@ -43,41 +43,41 @@ export default function controller(props: any, emit: any) {
     hasPermission: computed(() => {
       //Default permission
       return  {
-        create: props.tableData?.permission ? store.hasAccess(`${props.tableData?.permission}.create`) : true,
-        index: props.tableData?.permission ? store.hasAccess(`${props.tableData?.permission}.index`) : true,
-        edit: props.tableData?.permission ? store.hasAccess(`${props.tableData?.permission}.edit`) : true,
-        destroy: props.tableData?.permission ? store.hasAccess(`${props.tableData?.permission}.destroy`) : true
+        create: props.listData?.permission ? store.hasAccess(`${props.listData?.permission}.create`) : true,
+        index: props.listData?.permission ? store.hasAccess(`${props.listData?.permission}.index`) : true,
+        edit: props.listData?.permission ? store.hasAccess(`${props.listData?.permission}.edit`) : true,
+        destroy: props.listData?.permission ? store.hasAccess(`${props.listData?.permission}.destroy`) : true
       };
     }), 
-    beforeUpdate: computed(() => props.tableData?.beforeUpdate || false),
-    title: computed(() => props?.tableData?.title || false),
-    help: computed(() => props?.tableData?.read.help || false),
-    actions: computed(() => props?.tableData?.actions || false),
+    beforeUpdate: computed(() => props.listData?.beforeUpdate || false),
+    title: computed(() => props?.listData?.title || false),
+    help: computed(() => props?.listData?.read.help || false),
+    actions: computed(() => props?.listData?.actions || false),
     tableActions: computed(() => {
       //Default response
       let response = []      
       //Add search action
-      if (props.tableData.read.search !== false) response.push('search')      
+      if (props.listData.read.search !== false) response.push('search')      
       //Add create action
-      if (props.tableData.create && computeds.hasPermission.value['create']) {
+      if (props.listData.create && computeds.hasPermission.value['create']) {
        response.push('new')
       }     
       // extras for page action
-      if (props.tableData?.extraActions?.length > 0) response.push(...props.tableData.extraActions)
+      if (props.listData?.extraActions?.length > 0) response.push(...props.listData.extraActions)
       return response.filter((item) => !item.vIfAction)      
     }),
 
     dynamicFilter: computed(() =>  {
-      if (props.tableData.read?.filters) {
-        if (Object.keys(props.tableData.read?.filters).length > 0) {
-          return props.tableData.read?.filters;
+      if (props.listData.read?.filters) {
+        if (Object.keys(props.listData.read?.filters).length > 0) {
+          return props.listData.read?.filters;
         }
       }
       return {};
     }),
 
     systemName: computed(() => {
-      return props.tableData.read?.systemName || props.tableData?.permission || props.tableData?.entityName;
+      return props.listData.read?.systemName || props.listData?.permission || props.listData?.entityName;
     }),
 
   }
@@ -94,7 +94,7 @@ export default function controller(props: any, emit: any) {
       }      
     },
     setPageActions(){      
-      if(props.tableData?.read.filters){
+      if(props.listData?.read.filters){
         state.loadPageActions = true
       }
     },
@@ -102,7 +102,7 @@ export default function controller(props: any, emit: any) {
       if(val){        
         state.requestParams.filter = {search: val} 
       } else {
-        state.requestParams = {...props.tableData.read.requestParams}
+        state.requestParams = {...props.listData.read.requestParams}
       }
       state.requestParams['filter'] = {...state.requestParams['filter'], ...state.dynamicFilterValues}
       state.pagination.page = 1
@@ -110,7 +110,7 @@ export default function controller(props: any, emit: any) {
       methods.getData()
     },
     setColumns(){
-      state.columns = props.tableData.read.columns      
+      state.columns = props.listData.read.columns      
       //set isEditable
       state.columns.forEach(col => {
         col['isEditable'] = computeds.hasPermission.value['edit'] && col.hasOwnProperty('dynamicField')
@@ -125,9 +125,9 @@ export default function controller(props: any, emit: any) {
     
     async getData(pagination = false, refresh = false){  
       //get include: 
-      if(props.tableData.read?.requestParams?.include ) state.requestParams.include = props.tableData.read.requestParams.include 
+      if(props.listData.read?.requestParams?.include ) state.requestParams.include = props.listData.read.requestParams.include 
       //get filters:
-      state.requestParams.filter = {...state.requestParams?.filter || {}, ...props.tableData.read?.requestParams?.filter || {}, ...state.dynamicFilterValues}
+      state.requestParams.filter = {...state.requestParams?.filter || {}, ...props.listData.read?.requestParams?.filter || {}, ...state.dynamicFilterValues}
       
       state.requestParams['page'] = pagination?.page || state.pagination.page
       state.requestParams['take'] = state.pagination.rowsPerPage
@@ -140,7 +140,7 @@ export default function controller(props: any, emit: any) {
       };      
 
       state.loading = true
-      services.getData(props.tableData.apiRoute, refresh,  state.requestParams).then((response) => {
+      services.getData(props.listData.apiRoute, refresh,  state.requestParams).then((response) => {
         state.expiresIn = response?.expiresIn;
         if(response?.data){
           state.rows = response.data
@@ -157,7 +157,7 @@ export default function controller(props: any, emit: any) {
     },
     updateRow(row){
       state.loading = true
-      services.updateItem(props.tableData.apiRoute, row.id, row).then((response) => {
+      services.updateItem(props.listData.apiRoute, row.id, row).then((response) => {
         if(response?.data){
           state.loading = false          
           const foundIndex = state.rows.findIndex(r => r.id == row.id);
@@ -172,9 +172,6 @@ export default function controller(props: any, emit: any) {
         }
       })
     },
-    deleteRow(item){
-      refs.crudComponent.value.delete(item)
-    }, 
     toggleDynamicFilterModal() {
       state.showDynamicFilterModal = !state.showDynamicFilterModal;
     },

@@ -45,12 +45,11 @@
           :initialPagination="pagination"
           :loading="loading"
           :beforeUpdate="beforeUpdate"
-          ref="dynamicTable"
           @onPagination="(value) => setPagination(value)"
           @updateRow="(row) => updateRow(row)"
         />
-        <crud
-          :ref="crudComponent"
+        <crud          
+          ref="crudComponent"
           :crud-data="crudData" 
           @created="getData({page: 1}, true)"
         />     
@@ -67,7 +66,7 @@ import dynamicFilter from 'modules/qsite/_components/master/dynamicFilter';
 
 export default defineComponent({
   props: {
-    tableData: {
+    listData: {
       apiRoute: { default: ''},
       title: { default: ''},
       columns: {default: []},
@@ -98,7 +97,7 @@ export default defineComponent({
             }
           },
           computed: {            
-            crudData: () => this.tableData, 
+            crudData: () => this.listData, 
             //Crud info
             crudInfo() {
               return this.$store.state.qcrudComponent.component[this.crudId] || {}
@@ -106,8 +105,14 @@ export default defineComponent({
           }
         }
       }      
+    },    
+    crud(){
+      return this.$refs.crudComponent
     }
-  }
+  }, 
+  methods: {
+  
+  },
 })
 </script>
 <style lang="scss">
