@@ -3,14 +3,13 @@ import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance} f
 import services from "modules/qsite/_components/master/dynamicList/services";
 import { store, i18n, clone } from 'src/plugins/utils';
 
-
 export default function controller(props: any, emit: any) {
   const proxy = getCurrentInstance()!.appContext.config.globalProperties
 
   // Refs
   const refs = {
     // refKey: ref(defaultValue)
-    dynamicTable: ref(),
+    crudComponent: ref('crudComponent')
   }
 
   // States
@@ -34,7 +33,6 @@ export default function controller(props: any, emit: any) {
       rowsPerPage: 10,
       descending: true, 
       //sortBy: 'desc',
-
     },
   })
 
@@ -84,23 +82,16 @@ export default function controller(props: any, emit: any) {
 
   }
   
-
   // Methods
   const methods = {
     // methodKey: () => {}
     async init(){
-      /*
-      state.requestParams = {...props.tableData.read.requestParams}
-      state.requestParams['filter'] = {...state.requestParams['filter'], ...state.dynamicFilterValues}
-      */
-
       await methods.setPageActions()
       await methods.setColumns()
 
       if(!dynamicFilter){
         methods.getData({pagination: {page: 1}}, true)
-      }
-      
+      }      
     },
     setPageActions(){      
       if(props.tableData?.read.filters){
@@ -180,6 +171,9 @@ export default function controller(props: any, emit: any) {
           emit('updatedRow', response.data)
         }
       })
+    },
+    deleteRow(item){
+      refs.crudComponent.value.delete(item)
     }, 
     toggleDynamicFilterModal() {
       state.showDynamicFilterModal = !state.showDynamicFilterModal;

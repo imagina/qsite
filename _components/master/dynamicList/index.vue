@@ -15,10 +15,10 @@
           :dynamicFilterSummary="dynamicFilterSummary"
           @toggleDynamicFilterModal="toggleDynamicFilterModal"
           @new="() => {
-            $refs.crudComponent.showCreateModal()            //$refs.crudComponent.$refs.crudIndex.handlerActionCreate()
+            $refs.crudComponent.create()
           }"
           @search="val => search(val)"
-          @refresh="getData(true)"          
+          @refresh="getData({pagination: {page:1}}, true)"          
         />
         <!-- dynamicFilter -->
         <dynamicFilter
@@ -48,17 +48,18 @@
           ref="dynamicTable"
           @onPagination="(value) => setPagination(value)"
           @updateRow="(row) => updateRow(row)"
-        />        
+        />
         <crud
-          ref="crudComponent"
-          :crud-data="tableData" 
+          :ref="crudComponent"
+          :crud-data="crudData" 
+          @created="getData({page: 1}, true)"
         />     
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent, toRaw} from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicList/controller'
 import dynamicTable from 'modules/qsite/_components/master/dynamicTable'
 import crudForm from 'modules/qcrud/_components/form';
@@ -85,6 +86,27 @@ export default defineComponent({
   components: { dynamicTable, crudForm, dynamicFilter },
   setup(props, {emit}) {
     return controller(props, emit)
+  }, 
+  computed: {
+    crudData(){
+      return {        
+        'default': { 
+          template: ``,
+          data() {
+            return {
+              crudId: this.$uid()
+            }
+          },
+          computed: {            
+            crudData: () => this.tableData, 
+            //Crud info
+            crudInfo() {
+              return this.$store.state.qcrudComponent.component[this.crudId] || {}
+            }
+          }
+        }
+      }      
+    }
   }
 })
 </script>
