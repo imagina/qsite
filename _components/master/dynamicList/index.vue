@@ -23,7 +23,9 @@
         <crud          
           ref="crudComponent"
           :crud-data="crudData" 
+          :type="null"
           @created="getData({page: 1}, true)"
+          @deleted="getData({page: 1}, true)"
         />     
         <!-- dynamicFilter -->
         <dynamicFilter
