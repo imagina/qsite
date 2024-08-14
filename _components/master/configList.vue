@@ -3,16 +3,16 @@
     <!-- ===== Header ===== -->
     <div class="row justify-between items-center">
       <div class="text-subtitle1 row items-center">
-        <q-icon name="fas fa-cog" color="primary" size="20px" class="q-mr-sm"/>
-        <label>{{ $tr('isite.cms.label.configuration', {capitalize: true}) }}</label>
+        <q-icon name="fas fa-cog" color="primary" size="20px" class="q-mr-sm" />
+        <label>{{ $tr('isite.cms.label.configuration', { capitalize: true }) }}</label>
       </div>
       <!-- Close icon -->
       <q-icon name="fas fa-times" color="blue-grey" size="20px" class="cursor-pointer"
-              @click="$eventBus.$emit('toggleMasterDrawer', 'config')"/>
+              @click="$eventBus.$emit('toggleMasterDrawer', 'config')" />
     </div>
 
     <!--Separator-->
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" />
 
     <!--Impersonate-->
     <q-no-ssr>
@@ -42,8 +42,8 @@
               </q-select>
             </div>
             <!--Loading-->
-            <div v-if="loadingImpersonate" class="q-py-sm">
-              <q-spinner class="q-mr-sm"/>
+            <div v-if="loadingImpersonate" class="q-py-sm row items-center">
+              <q-spinner class="q-mr-sm" />
               {{ `${$tr('isite.cms.label.loading')}...` }}
             </div>
           </div>
@@ -53,18 +53,15 @@
         <q-item tag="label" link v-else @click.native="impersonate">
           <q-item-section>
             <div class="row items-center">
-              <!--Icon-->
-              <div v-if="!loadingImpersonate">
-                <q-icon color="red" class="q-mr-sm" name="fas fa-sign-out-alt"
-                        size="20px"/>
-              </div>
               <!--Loading-->
-              <div v-if="loadingImpersonate" class="q-py-sm">
-                <q-spinner class="q-mr-sm"/>
+              <div v-if="loadingImpersonate" class="q-py-sm row items-center">
+                <q-spinner class="q-mr-sm" />
                 {{ `${$tr('isite.cms.label.loading')}...` }}
               </div>
-              <div v-if="!loadingImpersonate" color="grey-10" style="text-decoration: none">
-                {{ $t('isite.cms.configList.leaveImpersonating', {capitalize: true}) }}
+              <div v-else color="grey-10" style="text-decoration: none">
+                <q-icon color="red" class="q-mr-sm" name="fas fa-sign-out-alt"
+                        size="20px" />
+                {{ $t('isite.cms.configList.leaveImpersonating', { capitalize: true }) }}
               </div>
             </div>
           </q-item-section>
@@ -73,20 +70,20 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md" v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating"/>
+    <q-separator class="q-my-md" v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating" />
 
     <!--user Data-->
     <q-no-ssr>
       <!--Title-->
       <div class="title-block">
-        {{ $tr('isite.cms.label.session', {capitalize: true}) }}
+        {{ $tr('isite.cms.label.session', { capitalize: true }) }}
       </div>
 
       <!--Roles-->
       <div class="q-mt-xs q-px-sm">
         <!-- Title -->
         <div class="text-primary">
-          <q-icon name="fas fa-user-circle"/>
+          <q-icon name="fas fa-user-circle" />
           {{ $trp('isite.cms.label.role') }}
         </div>
 
@@ -94,7 +91,7 @@
         <label class="block text-grey-8" style="line-height: 1.4">
           {{
             quserState.userData.roles.map(role => {
-              return role.name
+              return role.name;
             }).join(', ')
           }}
         </label>
@@ -104,7 +101,7 @@
       <div class="q-mt-xs q-px-sm">
         <!-- Title -->
         <div class="text-primary">
-          <q-icon name="fas fa-people-arrows"/>
+          <q-icon name="fas fa-people-arrows" />
           {{ this.$trp('iprofile.cms.label.userGroup') }}
         </div>
 
@@ -112,7 +109,7 @@
         <label class="block text-grey-8" style="line-height: 1.4">
           {{
             quserState.userData.departments.map(department => {
-              return department.title
+              return department.title;
             }).join(', ')
           }}
         </label>
@@ -120,7 +117,7 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md" v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating"/>
+    <q-separator class="q-my-md" v-if="$auth.hasAccess('profile.user.impersonate') || quserState.impersonating" />
 
     <!--Organization-->
     <q-no-ssr v-if="organizationField">
@@ -130,7 +127,7 @@
       </div>
       <!--dynamic field to organizations-->
       <dynamic-field v-model="organizationId" :field="organizationField" v-if="organizationField"
-                     @input="setOrganization"/>
+                     @input="setOrganization" />
       <!--no organizations-->
       <div v-else class="q-px-sm text-grey-7" style="line-height: 1.2">
         {{ $tr('isite.cms.messages.noOrganization') }}...
@@ -138,27 +135,27 @@
     </q-no-ssr>
 
     <!--Separator-->
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" />
 
     <!-- Language -->
     <div>
       <!--Title-->
       <div class="title-block">
-        {{ $tr('isite.cms.label.language', {capitalize: true}) }}
+        {{ $tr('isite.cms.label.language', { capitalize: true }) }}
       </div>
 
       <!--Data language-->
       <div class="q-mt-xs q-px-sm">
         <!-- Title -->
         <div class="text-primary">
-          <q-icon name="fas fa-language"/>
-          {{ $tr('isite.cms.label.language', {capitalize: true}) }}
+          <q-icon name="fas fa-language" />
+          {{ $tr('isite.cms.label.language', { capitalize: true }) }}
         </div>
 
         <!--Select Language-->
         <q-select :options="options.locales" dense outlined emit-value map-options
                   filter hide-underline v-if="show.locales" @input="updateLocale"
-                  v-model="locale" class="full-width q-if-focused q-if-focusable"/>
+                  v-model="locale" class="full-width q-if-focused q-if-focusable" />
 
         <!--Current language selected-->
         <label v-else class="block ellipsis">
@@ -168,40 +165,40 @@
     </div>
 
     <!--Separator-->
-    <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md" />
 
     <!-- ===== Settings ===== -->
     <div>
       <!--Title-->
       <div class="title-block">
-        {{ $trp('isite.cms.label.action', {capitalize: true}) }}
+        {{ $trp('isite.cms.label.action', { capitalize: true }) }}
       </div>
 
       <!--Clear Cache-->
       <div class="q-px-sm cursor-pointer q-pt-md" @click="clearCache()">
-        <q-spinner color="primary" size="20px" v-if="loadingCacheClear" class="q-mr-sm"/>
-        <q-icon v-else color="primary" size="18px" name="fas fa-broom" class="q-mr-sm"/>
-        {{ $t('isite.cms.configList.clearCache', {capitalize: true}) }}
+        <q-spinner color="primary" size="20px" v-if="loadingCacheClear" class="q-mr-sm" />
+        <q-icon v-else color="primary" size="18px" name="fas fa-broom" class="q-mr-sm" />
+        {{ $t('isite.cms.configList.clearCache', { capitalize: true }) }}
       </div>
 
       <!--Full Screen-->
       <div class="q-px-sm cursor-pointer q-pt-md" @click="toggleFullscreen()">
-        <q-icon color="primary" size="18px" name="fas fa-expand" class="q-mr-sm"/>
-        {{ $t('isite.cms.configList.fullScreen', {capitalize: true}) }}
+        <q-icon color="primary" size="18px" name="fas fa-expand" class="q-mr-sm" />
+        {{ $t('isite.cms.configList.fullScreen', { capitalize: true }) }}
       </div>
 
       <!--Logout  -->
       <q-no-ssr>
         <div class="q-px-sm cursor-pointer q-pt-md" @click="$router.push({name:'auth.logout'})"
              v-if="quserState.authenticated">
-          <q-icon color="red" size="18px" name="fas fa-sign-out-alt" class="q-mr-sm"/>
-          {{ $t('isite.cms.configList.signOut', {capitalize: true}) }}
+          <q-icon color="red" size="18px" name="fas fa-sign-out-alt" class="q-mr-sm" />
+          {{ $t('isite.cms.configList.signOut', { capitalize: true }) }}
         </div>
       </q-no-ssr>
     </div>
 
     <div class="text-subtitle2 fixed fixed-bottom text-blue-grey q-px-md q-py-sm text-right">
-      <q-icon name="fas fa-code-branch" class="q-mr-xs"/>
+      <q-icon name="fas fa-code-branch" class="q-mr-xs" />
       {{ versionText }}
     </div>
   </div>
@@ -212,9 +209,9 @@ export default {
   components: {},
   watch: {},
   mounted() {
-    this.$nextTick(async function () {
-      this.setOptions()
-    })
+    this.$nextTick(async function() {
+      this.setOptions();
+    });
   },
   data() {
     return {
@@ -237,26 +234,26 @@ export default {
       userToImpersonate: null,
       loadingImpersonate: false,
       userList: [],
-      loadingCacheClear: false,
-    }
+      loadingCacheClear: false
+    };
   },
   computed: {
     versionText() {
-      return 'v' + config('app.version')
+      return 'v' + config('app.version');
     },
     quserState() {
-      return this.$store.state.quserAuth
+      return this.$store.state.quserAuth;
     },
     forceRoleAndDepartment() {
-      return config('app.forceRoleAndDepartment')
+      return config('app.forceRoleAndDepartment');
     },
     //return organization field
     organizationField() {
       //get organizations
-      let organizations = this.$store.state.quserAuth.organizations || []
+      let organizations = this.$store.state.quserAuth.organizations || [];
 
       //validate organizations
-      if (!organizations.length) return false
+      if (!organizations.length) return false;
 
       //return field
       return {
@@ -265,121 +262,123 @@ export default {
         props: {
           label: this.$tr('isite.cms.label.organization'),
           options: organizations.map(item => {
-            return {label: item.title, value: item.id}
+            return { label: item.title, value: item.id };
           }),
           readonly: organizations.length == 1 ? true : false
         }
-      }
+      };
     }
   },
   methods: {
     //Toggle fullscreen
     toggleFullscreen() {
-      this.$q.fullscreen.toggle()
+      this.$q.fullscreen.toggle();
     },
 
     //Set departments and roles to options
     async setOptions() {
-      let roleUser = await this.$cache.get.item('auth.role.id')//Get role form storage
-      let departmentUser = await this.$cache.get.item('auth.department.id')//Get department form storage
+      let roleUser = await this.$cache.get.item('auth.role.id');//Get role form storage
+      let departmentUser = await this.$cache.get.item('auth.department.id');//Get department form storage
 
-      this.roleId = roleUser
-      this.departmentId = departmentUser
+      this.roleId = roleUser;
+      this.departmentId = departmentUser;
 
       //Check if exist more then one role and department
       if (this.options.roles.length >= 2) {
-        this.show.roles = true
+        this.show.roles = true;
       }
       if (this.options.departments.length >= 2) {
-        this.show.departments = true
+        this.show.departments = true;
       }
       if (this.options.departments.length == 1) {
         if (this.options.departments[0].children) {
-          this.show.departments = true
+          this.show.departments = true;
         }
       }
       if (this.options.locales.length >= 2) {
-        this.show.locales = true
+        this.show.locales = true;
       }
     },
 
     //Update department and role id
     async updateDepRolUser(reset = false) {
       if (this.forceRoleAndDepartment) {
-        const departmentId = await this.$cache.get.item('auth.department.id')//Get department selected
-        const roleId = await this.$cache.get.item('auth.role.id')//Get role selected
+        const departmentId = await this.$cache.get.item('auth.department.id');//Get department selected
+        const roleId = await this.$cache.get.item('auth.role.id');//Get role selected
 
         //Check that role or department selected are distinct to atorage
         if ((departmentId != this.departmentId) || (roleId != this.roleId)) {
-          await this.$cache.set('auth.department.id', this.departmentId)
-          await this.$cache.set('auth.role.id', this.roleId)
-          this.$store.dispatch('qsiteApp/REFRESH_PAGE')
+          await this.$cache.set('auth.department.id', this.departmentId);
+          await this.$cache.set('auth.role.id', this.roleId);
+          this.$store.dispatch('qsiteApp/REFRESH_PAGE');
         }
       }
     },
 
     //update Locale
     async updateLocale() {
-      this.$store.dispatch('qsiteApp/SET_LOCALE', {locale: this.locale, vue: this}).then(response => {
-        this.$store.dispatch('qsiteApp/REFRESH_PAGE')
-      }).catch(error => console.error(error))
+      this.$store.dispatch('qsiteApp/SET_LOCALE', { locale: this.locale, vue: this }).then(response => {
+        this.$store.dispatch('qsiteApp/REFRESH_PAGE');
+      }).catch(error => console.error(error));
     },
 
     //Get users to impersonate
     getUsers(val, update, abort) {
       //Validate length of val
-      if (val.length < 2) return abort()
+      if (val.length < 2) return abort();
 
-      let params = {params: {take: 100, filter: {search: val}}}
+      let params = { params: { take: 100, filter: { search: val } } };
       //Request
       this.$crud.index('apiRoutes.quser.users', params).then(response => {
         update(() => {
-          let userId = this.$store.state.quserAuth.userId
-          let options = []
+          let userId = this.$store.state.quserAuth.userId;
+          let options = [];
           response.data.forEach(item => {
-            if (item.id != userId) options.push({label: item.fullName, value: item.id})
-          })
-          this.userList = this.$clone(options)
-        })
+            if (item.id != userId) options.push({ label: item.fullName, value: item.id });
+          });
+          this.userList = this.$clone(options);
+        });
       }).catch(error => {
         this.$apiResponse.handleError(error, () => {
           update(() => {
-            this.userList = []
-          })
-        })
-      })
+            this.userList = [];
+          });
+        });
+      });
     },
 
     //toggle impersonate
     async impersonate() {
-      this.loadingImpersonate = true
+      this.loadingImpersonate = true;
 
       if (this.quserState.impersonating) {
-        await this.$store.dispatch('quserAuth/USER_LEAVE_IMPERSONATE')
+        await this.$store.dispatch('quserAuth/USER_LEAVE_IMPERSONATE');
       } else if (this.userToImpersonate) {
-        await this.$store.dispatch('quserAuth/USER_IMPERSONATE', this.userToImpersonate)
+        await this.$store.dispatch('quserAuth/USER_IMPERSONATE', this.userToImpersonate);
       }
 
-      this.loadingImpersonate = false
+      this.loadingImpersonate = false;
+      if (this.$route.name != 'app.home') this.$router.push({ name: 'app.home' });
+      setTimeout(() => window.location.reload(), 200)
     },
 
     //Clear cache
     clearCache() {
-      this.loadingCacheClear = true
+      this.loadingCacheClear = true;
       //Request
       this.$crud.post('apiRoutes.qsite.cacheClear').then(response => {
-      }).catch(error => this.loadingCacheClear = false)
-      this.loadingCacheClear = false
+      }).catch(error => this.loadingCacheClear = false);
+      this.loadingCacheClear = false;
       this.$store.dispatch('qsiteApp/REFRESH_PAGE');
     },
 
     //set organization
     async setOrganization(organizationId) {
-      await this.$store.dispatch('quserAuth/SET_ORGANIZATION', {organizationId})
-      this.$store.dispatch('qsiteApp/REFRESH_PAGE')
+      await this.$store.dispatch('quserAuth/SET_ORGANIZATION', { organizationId });
+      this.$store.dispatch('qsiteApp/REFRESH_PAGE');
     }
   }
-}
+};
 </script>
 <style lang="stylus">
 #configList
