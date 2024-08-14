@@ -50,7 +50,7 @@ export default function controller(props: any, emit: any) {
       };
     }), 
     beforeUpdate: computed(() => props.listData?.beforeUpdate || false),
-    title: computed(() => props?.listData?.title || false),
+    title: computed(() => props?.listData?.read.title || false),
     help: computed(() => props?.listData?.read.help || false),
     actions: computed(() => props?.listData?.actions || false),
     tableActions: computed(() => {
@@ -156,18 +156,20 @@ export default function controller(props: any, emit: any) {
       })
     },
     updateRow(row){
-      state.loading = true
+      //state.loading = true
+      const foundIndex = state.rows.findIndex(r => r.id == row.id);
+      state.rows[foundIndex]['isLoading'] = true
+
       services.updateItem(props.listData.apiRoute, row.id, row).then((response) => {
+        
         if(response?.data){
-          state.loading = false          
-          const foundIndex = state.rows.findIndex(r => r.id == row.id);
-          //state.rows[foundIndex] 
-          Object.keys(state.rows[foundIndex]).forEach((key) => {
-            if(response.data[key]){
-              state.rows[foundIndex][key] = response.data[key]
-            }
+          const requestParams = props.listData.read?.requestParams ? {...props.listData.read.requestParams} : {}
+            
+          services.showItem(props.listData.apiRoute, row.id, {params: requestParams}).then((response) => {            
+            state.rows[foundIndex] = response.data
+            state.rows[foundIndex]['isLoading'] = false
           })
-          
+          //state.loading = false
           emit('updatedRow', response.data)
         }
       })

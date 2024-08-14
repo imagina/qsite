@@ -14,9 +14,18 @@ export default {
   updateItem(configName, criteria, data, params = {params: {}}): Promise<any> {
     return new Promise((resolve, reject) => {      
       //Request
-      baseService.update(configName, criteria, data, params = {params: {}}).then(response => {
+      baseService.update(configName, criteria, data, params).then(response => {
         resolve(response)
       }).catch(error => reject(error))
     })
-  }
+  }, 
+
+  showItem(configName, criteria, params = {}): Promise<any> {
+    return new Promise((resolve, reject) => {      
+      //Request
+      baseService.show(configName, criteria, params).then(response => {
+        resolve(response)
+      }).catch(error => reject(error))
+    })
+  },
 }

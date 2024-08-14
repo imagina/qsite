@@ -26,6 +26,7 @@
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
+            :class="`${col?.dynamicField && !props.row?.isLoading ? 'cursor-pointer' : ''}`"
           >
             <!--Actions column-->
             <div v-if="col.name == 'actions'">              
@@ -44,12 +45,12 @@
 
             <!---quick click edit popup-->
             <editablePopup 
-              v-if="col?.dynamicField"
+              v-if="col?.dynamicField && !props.row?.isLoading"              
               :row="props.row"
               :col="col"
               :beforeUpdate="beforeUpdate"
               @updateRow="(row) => $emit('updateRow', row)"
-            />            
+            />
           </q-td>
         </q-tr>
       </template>

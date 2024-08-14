@@ -20,6 +20,11 @@
           @search="val => search(val)"
           @refresh="getData({pagination: {page:1}}, true)"          
         />
+        <crud          
+          ref="crudComponent"
+          :crud-data="crudData" 
+          @created="getData({page: 1}, true)"
+        />     
         <!-- dynamicFilter -->
         <dynamicFilter
           v-if="dynamicFilter"
@@ -47,12 +52,7 @@
           :beforeUpdate="beforeUpdate"
           @onPagination="(value) => setPagination(value)"
           @updateRow="(row) => updateRow(row)"
-        />
-        <crud          
-          ref="crudComponent"
-          :crud-data="crudData" 
-          @created="getData({page: 1}, true)"
-        />     
+        />        
       </div>
     </div>
   </div>
@@ -89,8 +89,8 @@ export default defineComponent({
   computed: {
     crudData(){
       return {        
-        'default': { 
-          template: ``,
+        'default': {
+          render() {},
           data() {
             return {
               crudId: this.$uid()

@@ -1,4 +1,4 @@
-<template>    
+<template>
     <q-popup-edit
       v-if="col?.isEditable && col?.dynamicField || false"
       ref="popupEditRef"
@@ -6,6 +6,8 @@
       v-slot="scope"              
       no-caps
       :cover="false" :offset="[0, 4]"
+      transition-show="fade-in" 
+      transition-hide="fade-out"
     >
     <q-form
       autocorrect="off"
@@ -17,6 +19,11 @@
       <p>Update {{ col.label }} Id: {{row.id}} </p>
       <div class="q-py-sm">
         <dynamic-field
+          v-if="isSelectField"
+          v-model="scope.value.id"
+          :field="col['dynamicField']"
+        />
+        <dynamic-field v-else
           v-model="scope.value"
           :field="col['dynamicField']"
         />

@@ -32,7 +32,7 @@ export default function controller(props, emit) {
 
     
 
-    rowsPerPageOption: computed(() => [3, 5, 10, 20, 50, 100, 300, 500]),
+    rowsPerPageOption: computed(() => [5, 10, 20, 50, 100, 300, 500]),
     /*
     windowSize: computed(() => props.window >= '500' ? 'desktop' : 'mobile'),
      //showPagination
