@@ -53,33 +53,45 @@
         <div class="q-ml-xs q-mr-sm text-blue-grey">{{ quserState.userData.firstName }}</div>
         <q-icon name="fas fa-chevron-down" size="14px" color="blue-grey"/>
         <!--Menu-->
-        <q-menu anchor="bottom right" self="top right">
-          <div class="row no-wrap q-pa-md">
-            <!--Left content-->
-            <div class="column">
-              <div style="max-width: 110px">
-                <!--Image profile-->
-                <div class="text-center">
-                  <q-avatar size="72px" class="q-mx-auto">
-                    <img :src="profileImage.mediumThumb">
-                  </q-avatar>
-                </div>
-                <!--User Data-->
-                <div class="text-subtitle1 ellipsis q-mt-md">{{ quserState.userData.fullName }}</div>
-                <div class="ellipsis text-caption">
-                  {{ quserState.userData.roles.map(role => role.name).join(', ') }}
-                </div>
-              </div>
+        <q-menu 
+          anchor="bottom right" 
+          self="top right" 
+          :offset="[0, 18]"
+          class="
+            tw-rounded-2xl 
+            tw-shadow-none 
+            tw-top-3 
+            tw-border-2 
+            tw-border-gray-100 
+            tw-py-5
+          "
+        >
+          <div 
+            class="tw-mb-5"
+            :class="{
+              'tw-text-center': profileImage.mediumThumb,
+              'tw-ml-5': !profileImage.mediumThumb
+            }"
+          >
+            <q-avatar v-if="profileImage.mediumThumb" size="84px" class="tw-mb-2.5">
+              <img :src="profileImage.mediumThumb">
+            </q-avatar>
+            <div class="tw-font-bold tw-text-base">
+              {{ quserState.userData.fullName }}
             </div>
-            <!--Seaprator-->
-            <q-separator vertical inset class="q-ml-lg q-mr-sm"/>
-            <!--Right content-->
-            <div class="column text-left">
+            <div class="ellipsis text-caption tw-text-gray-500">
+              {{ quserState.userData.roles.map(role => role.name).join(', ') }}
+            </div>
+          </div>
+          <div class="row no-wrap">
+            <div class="column">
               <template v-for="(btn, keyAction) in actions.menu">
                 <q-btn
                   :key="keyAction"
+                  class="tw-px-5"
                   v-bind="btn.props"
-                  v-if="btn?.vIf != undefined ? btn.vIf : true" v-close-popup padding="xs md"
+                  v-if="btn?.vIf != undefined ? btn.vIf : true" 
+                  v-close-popup
                   @click="btn.action != undefined ? btn.action() : null"
                 />
               </template>
@@ -267,7 +279,7 @@ export default {
               label: this.$tr('iprofile.cms.sidebar.panelProfile'),
               icon: 'fa-light fa-circle-user',
               round: false,
-              rounded: true,
+              square: true,
               align: "left",
               id: 'profileButton'
             },
@@ -282,7 +294,7 @@ export default {
               label: this.$trp('isite.cms.label.setting'),
               icon: 'fa-light fa-folder-gear',
               round: false,
-              rounded: true,
+              square: true,
               align: "left"
             },
             action: () => eventBus.emit('toggleMasterDrawer', 'config')
@@ -296,7 +308,8 @@ export default {
               label: this.$tr('isite.cms.configList.signOut'),
               icon: 'fa-light fa-right-from-bracket',
               round: false,
-              rounded: true,
+              square: true,
+              textColor: 'red',
               align: "left"
             },
             action: this.logout
