@@ -67,11 +67,8 @@
           "
         >
           <div 
-            class="tw-mb-5"
-            :class="{
-              'tw-text-center': profileImage.mediumThumb,
-              'tw-ml-5': !profileImage.mediumThumb
-            }"
+            class="tw-mb-5 tw-mx-5"
+            :class="{ 'tw-text-center': profileImage.mediumThumb }"
           >
             <q-avatar v-if="profileImage.mediumThumb" size="84px" class="tw-mb-2.5">
               <img :src="profileImage.mediumThumb">
@@ -83,19 +80,17 @@
               {{ quserState.userData.roles.map(role => role.name).join(', ') }}
             </div>
           </div>
-          <div class="row no-wrap">
-            <div class="column">
-              <template v-for="(btn, keyAction) in actions.menu">
-                <q-btn
-                  :key="keyAction"
-                  class="tw-px-5"
-                  v-bind="btn.props"
-                  v-if="btn?.vIf != undefined ? btn.vIf : true" 
-                  v-close-popup
-                  @click="btn.action != undefined ? btn.action() : null"
-                />
-              </template>
-            </div>
+          <div class="column">
+            <template v-for="(btn, keyAction) in actions.menu">
+              <q-btn
+                :key="keyAction"
+                class="tw-px-5"
+                v-bind="btn.props"
+                v-if="btn?.vIf != undefined ? btn.vIf : true" 
+                v-close-popup
+                @click="btn.action != undefined ? btn.action() : null"
+              />
+            </template>
           </div>
         </q-menu>
       </q-btn>
