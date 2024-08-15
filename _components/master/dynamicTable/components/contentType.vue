@@ -11,7 +11,7 @@
       :data="tableData"
     />
     <!-- default content -->
-    <div v-if="!isComponent" v-show="!isLoading"  class="ellipsis-2-lines" style="max-width: 300px;" v-html="tableData"></div>
+    <div v-if="!isComponent" v-show="!isLoading"  class="ellipsis" v-html="tableData"></div>
     <q-skeleton v-if="isLoading" animated type="text" />
   </div>
 </template>
