@@ -1,5 +1,5 @@
 import baseService from 'modules/qcrud/_services/baseService'
-import { SelectedAction } from '../models/interfaces/selectedAction'
+import { SelectedAction } from '../models/interfaces'
 import { alert, i18n } from 'src/plugins/utils'
 
 export const sendReport = async (
@@ -7,7 +7,8 @@ export const sendReport = async (
     selectedAction: SelectedAction | null, 
     optionsForSelectedBulkActions: { [key: string]: string },
     dynamicFilterValues: any,
-    permission: string | null
+    permission: string | null,
+    description: string
 ) => {
     try {
         const payload = {
@@ -15,6 +16,7 @@ export const sendReport = async (
             title: selectedAction?.label,
             name: selectedAction?.value,
             type: permission,
+            description
         }
 
         const requestParams = {

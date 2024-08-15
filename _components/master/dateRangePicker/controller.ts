@@ -8,7 +8,7 @@ export default function controller(props: any, emit: any) {
   const field = fieldProps.field;
   const rangeDateFormat = fieldProps.mask;
   const dateFormat = rangeDateFormat.split(' - ')[0];
-  const emitFormat = `${dateFormat} HH:mm:ss`;
+  const emitFormat = fieldProps?.removeTime ? dateFormat : `${dateFormat} HH:mm:ss`;
   const startOfDay = fieldProps.startOfDay;
   const endOfDay = fieldProps.endOfDay;  
 
@@ -24,7 +24,8 @@ export default function controller(props: any, emit: any) {
   // States
   const state = reactive({
     type: null,
-    focus: false
+    focus: false, 
+    modal: false,
   })
 
   // Computed
@@ -96,6 +97,7 @@ export default function controller(props: any, emit: any) {
           to : moment(`${to} ${endOfDay}`).format(emitFormat)
         }        
       }
+      if(fieldProps?.autoClose && toEmit != null) state.modal = false      
       emit('update:modelValue', toEmit)      
     },
 

@@ -42,7 +42,7 @@
               </q-select>
             </div>
             <!--Loading-->
-            <div v-if="loadingImpersonate" class="q-py-sm">
+            <div v-else class="q-py-sm row items-center">
               <q-spinner class="q-mr-sm" />
               {{ `${$tr('isite.cms.label.loading')}...` }}
             </div>
@@ -53,17 +53,14 @@
         <q-item tag="label" link v-else @click.native="impersonate">
           <q-item-section>
             <div class="row items-center">
-              <!--Icon-->
-              <div v-if="!loadingImpersonate">
-                <q-icon color="red" class="q-mr-sm" name="fas fa-sign-out-alt"
-                        size="20px" />
-              </div>
               <!--Loading-->
-              <div v-if="loadingImpersonate" class="q-py-sm">
+              <div v-if="loadingImpersonate" class="q-py-sm row items-center">
                 <q-spinner class="q-mr-sm" />
                 {{ `${$tr('isite.cms.label.loading')}...` }}
               </div>
-              <div v-if="!loadingImpersonate" color="grey-10" style="text-decoration: none">
+              <div v-else color="grey-10" style="text-decoration: none">
+                <q-icon color="red" class="q-mr-sm" name="fas fa-sign-out-alt"
+                        size="20px" />
                 {{ $t('isite.cms.configList.leaveImpersonating', { capitalize: true }) }}
               </div>
             </div>
@@ -192,11 +189,11 @@
       </div>
 
       <!--Clear Cache-->
-      <div 
-        v-if="!isAppOffline" 
+      <div
+        v-if="!isAppOffline"
         class="q-px-sm cursor-pointer q-pt-md"
         @click="$router.push({
-          name: 'app.update.app', 
+          name: 'app.update.app',
           query: { fromCache: 1 }
         })"
       >
@@ -399,6 +396,8 @@ export default {
       }
 
       this.loadingImpersonate = false
+      if (this.$route.name != 'app.home') this.$router.push({ name: 'app.home' });
+      setTimeout(() => window.location.reload(), 200)
     },
 
     //set organization

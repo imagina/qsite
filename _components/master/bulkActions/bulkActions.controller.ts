@@ -6,7 +6,13 @@ import {
     computed,
 } from 'vue'
 import { useRoute } from 'vue-router'
-import { BulkActions, Fields, SelectedAction, Message } from './models/interfaces'
+import { 
+    BulkActions, 
+    Fields, 
+    SelectedAction, 
+    Message, 
+    Filters 
+} from './models/interfaces'
 import { constants } from './models/defaultModels/constants'
 import { prepareMessageObject } from './helpers'
 import { sendReport, getDataLog, getConfig } from './services'
@@ -84,16 +90,35 @@ export const bulkActionsController = (props, { expose, emit }) => {
         optionsForSelectedBulkActions.value[key] = value;
     }
 
+    const generateDescriptionFromFilters = (filters: Filters) => {
+        let description = ''
+
+        Object.keys(filters).map(key => {
+            const label = filters[key].label 
+            const option = filters[key].option
+
+            description += `
+                <span class="tw-bg-gray-100 tw-rounded-lg tw-p-1 tw-mr-1">
+                    <b>${label}</b> ${option}
+                </span>
+            `
+        })
+
+        return description
+    }
+
     const newReport = async (confirmed=false) => {
         processing.value = true;
-
+        
         try {
+            const description = generateDescriptionFromFilters(dynamicFilterSummary.value)
             const response = await sendReport(
                 confirmed, 
                 selectedAction.value, 
                 optionsForSelectedBulkActions.value,
                 dynamicFilterValues.value,
-                permission
+                permission,
+                description
             )
 
             const data = response?.data;

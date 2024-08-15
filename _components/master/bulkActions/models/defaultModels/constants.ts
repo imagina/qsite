@@ -52,6 +52,12 @@ export const constants = () => ({
             sortable: true, 
         },
         { 
+            name: 'description', 
+            label: i18n.tr('isite.cms.label.description'), 
+            align: 'left', 
+            field: 'description',
+        },
+        { 
             name: 'createdAt', 
             label: i18n.tr('isite.cms.label.date'), 
             align: 'left', 
@@ -63,7 +69,6 @@ export const constants = () => ({
             label: i18n.trp('isite.cms.label.state'), 
             align: 'left', 
             field: 'statusId', 
-            sortable: true,
             format: (val) => status()[val].label,
             style: 'width: 64px'
         },

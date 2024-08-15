@@ -6,10 +6,11 @@
     :label="label"
     :class="class"
     debounce="600"
-    :clearable="true"
+    :clearable="fieldProps.field.clearable"
     @clear="() => clear()"
     @focus="setFocus(true)"
     @blur="setFocus(false)"
+    
   >
     <template v-slot:prepend>
       <q-icon 
@@ -18,7 +19,7 @@
         class="cursor-pointer"
         color="blue-grey"
       >            
-        <q-popup-proxy transition-show="scale" transition-hide="scale">
+        <q-popup-proxy transition-show="scale" transition-hide="scale" v-model="modal">
           <div class="dateRangePickerModal">
             <div class="dateRangePickerSelector">
               <dynamic-field v-model="type" class="q-ma-0 q-pa-0" :field="fieldsConfig.type" @update:model-value="(value) => changeDate()"/>
@@ -29,7 +30,8 @@
               flat
               :mask="mask"
               :subtitle="inputRange"
-              color="primary"              
+              color="primary"
+              :first-day-of-week="0"
               @update:model-value="(value) => changeType(value)"
             >
             <div class="row items-center justify-end">
