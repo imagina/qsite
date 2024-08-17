@@ -18,7 +18,11 @@ export default function controller(props, emit) {
   const computeds = {
     // key: computed(() => {})
     //data to display
-    data: computed(() => props.col?.format ? props.col.format(props.row[props.col.name]) : props.row[props.col.name]),        
+    data: computed(() => { 
+      const data = props.col?.notDeleteHtml ? props.row[props.col.name] : methods.deleteHtml(props.row[props.col.name])
+      return props.col?.format ? props.col.format(data) : data
+      //return props.col?.format ? props.col.format(props.row[props.col.name]) : props.row[props.col.name]
+    }),        
     isComponent: computed(() => props.col?.component || false ),
     isLoading: computed(() => props.row?.isLoading || false),
     showOnLoading: computed(() =>  computeds.isLoading.value && props.col.name != 'id')
@@ -34,7 +38,12 @@ export default function controller(props, emit) {
       if(computeds.isComponent.value){        
         state.component = markRaw(props.col.component)
       }
+    },
+    deleteHtml(data) {
+      if (!data) return '';
+      return typeof data === 'string' ? data.replace(/<[^>]+>/g, '') : data
     }
+    ,
   }
 
   // Mounted

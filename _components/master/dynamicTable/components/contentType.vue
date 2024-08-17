@@ -11,7 +11,7 @@
       :data="data"
     />
     <!-- default content -->
-    <div v-if="!isComponent" v-show="!isLoading" class="ellipsis" v-html="deleteHtml(data)" ></div>
+    <div v-if="!isComponent" v-show="!isLoading" class="ellipsis" v-html="data" ></div>
     <q-skeleton v-if="isLoading" animated type="text" />
   </div>
 </template>
@@ -26,16 +26,6 @@ export default defineComponent({
   },
   setup(props, {emit}) {
     return controller(props, emit)
-  },
-  computed: {
-    deleteHtml() {
-      return data => {
-        if (!data) return '';
-        return typeof data === 'string' ?
-          data.replace(/<[^>]+>/g, '') :
-          data;
-      };
-    },
   }
 })
 </script>
