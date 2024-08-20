@@ -633,6 +633,21 @@ class Helper {
 
     return true;
   }
+  detectDevice() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    console.log(navigator);
+    if (/iphone|ipad|ipod/.test(userAgent)) {
+      return "iPhone";
+    } else if (/android/.test(userAgent)) {
+      return "Android";
+    } else if (/macintosh|mac os x/.test(userAgent)) {
+      return "Mac";
+    } else if (/windows/.test(userAgent)) {
+      return "Windows";
+    } else {
+      return "Unknown";
+    }
+  }
 }
 
 const helper = new Helper();
