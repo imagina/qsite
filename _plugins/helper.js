@@ -636,19 +636,38 @@ class Helper {
   detectDevice() {
     const userAgent = navigator.userAgent.toLowerCase();
 
+    let device = "Unknown";
+    let version = "Unknown";
+
     if (/iphone|ipad|ipod/.test(userAgent)) {
-      return "iPhone";
+      device = "iPhone/iPad/iPod";
+      const versionMatch = userAgent.match(/os (\d+_\d+)/);
+      if (versionMatch) {
+        version = versionMatch[1].replace('_', '.');
+      }
     } else if (/android/.test(userAgent)) {
-      return "Android";
+      device = "Android";
+      const versionMatch = userAgent.match(/android (\d+(\.\d+)?)/);
+      if (versionMatch) {
+        version = versionMatch[1];
+      }
     } else if (/macintosh|mac os x/.test(userAgent)) {
-      return "Mac";
+      device = "Mac";
+      const versionMatch = userAgent.match(/mac os x (\d+[_\d]+)/);
+      if (versionMatch) {
+        version = versionMatch[1].replace(/_/g, '.');
+      }
     } else if (/windows/.test(userAgent)) {
-      return "Windows";
-    } else {
-      return "Unknown";
+      device = "Windows";
+      const versionMatch = userAgent.match(/windows nt (\d+(\.\d+)?)/);
+      if (versionMatch) {
+        version = versionMatch[1];
+      }
     }
+
+      return `${device} ${version}`;
+   }
   }
-}
 
 const helper = new Helper();
 
