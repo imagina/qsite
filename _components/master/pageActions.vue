@@ -181,6 +181,7 @@ export default {
       badgeAppear: false,
       timeOuts: [],
       bulkActionsConfig: false,
+      enableTourAction: false
     };
   },
   watch: {
@@ -253,7 +254,7 @@ export default {
         //Tour
         {
           label: 'Tour',
-          vIf: (this.tourName && !config('app.disableTours') && (this.$store.getters['qsiteApp/getConfigApp']('igamification') != undefined)),
+          vIf: this.enableTourAction,
           props: {
             icon: 'fa-light fa-shoe-prints',
             id: 'actionStartTour'
@@ -412,13 +413,15 @@ export default {
   methods: {
     init() {
       this.showBadgeRefresh(this.expiresIn)
-      //this.handlerEvent();
+      this.validateEnableTour();
     },
-    /*
-    handlerEvent() {
-      eventBus.on('toggleMasterDrawer', () => this.toggleMasterFilter(false));
+    async validateEnableTour() {
+      if(this.tourName && !config('app.disableTours') &&
+        (this.$store.getters['qsiteApp/getConfigApp']('igamification') != undefined)){
+        let tour = await this.$tour.getTourData(this.tourName, true)
+        if(tour) this.enableTourAction = true
+      }
     },
-    */
     refreshByTime(time) {
       this.timeRefresh = time;
       this.titleRefresh = time === 0
@@ -454,6 +457,7 @@ export default {
     },
     //Handle start tour
     startTour(forceStart) {
+      console.warn(">>>>",this.tourName)
       this.$tour.start(this.tourName, {
         forceStart,
         extraSteps: [
