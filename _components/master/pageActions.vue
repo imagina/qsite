@@ -141,7 +141,7 @@ export default {
       }
     },
   },
-  emits: ['search', 'new', 'refresh', 'toggleDynamicFilterModal'],
+  emits: ['search', 'new', 'refresh', 'toggleDynamicFilterModal', 'activateTour'],
   /*
   inject: {
     filterPlugin: {
@@ -419,7 +419,10 @@ export default {
       if(this.tourName && !config('app.disableTours') &&
         (this.$store.getters['qsiteApp/getConfigApp']('igamification') != undefined)){
         let tour = await this.$tour.getTourData(this.tourName, true)
-        if(tour) this.enableTourAction = true
+        if(tour.status) { 
+          this.enableTourAction = true
+          this.$emit('activateTour');
+        }
       }
     },
     refreshByTime(time) {
