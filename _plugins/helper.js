@@ -635,7 +635,7 @@ class Helper {
   }
   detectDevice() {
     const userAgent = navigator.userAgent.toLowerCase();
-    console.log(navigator);
+
     if (/iphone|ipad|ipod/.test(userAgent)) {
       return "iPhone";
     } else if (/android/.test(userAgent)) {
