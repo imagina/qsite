@@ -17,7 +17,7 @@
 </template>
 <script lang="ts">
 import {defineComponent} from 'vue'
-import controller from 'modules/qsite/_components/master/dynamicTable/controllers/contentTypeController'
+import controller from 'modules/qsite/_components/master/dynamicTable/components/contentType/controller'
 
 export default defineComponent({
   props: {

@@ -132,9 +132,9 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicTable/controller'
-import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup.vue'
-import contentType from 'modules/qsite/_components/master/dynamicTable/components/contentType.vue'
-import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu.vue'
+import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup'
+import contentType from 'modules/qsite/_components/master/dynamicTable/components/contentType'
+import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu'
 
 
 export default defineComponent({
