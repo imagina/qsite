@@ -419,7 +419,7 @@ export default {
       if(this.tourName && !config('app.disableTours') &&
         (this.$store.getters['qsiteApp/getConfigApp']('igamification') != undefined)){
         let tour = await this.$tour.getTourData(this.tourName, true)
-        if(tour.status) { 
+        if(tour) { 
           this.enableTourAction = true
           this.$emit('activateTour');
         }
@@ -460,7 +460,6 @@ export default {
     },
     //Handle start tour
     startTour(forceStart) {
-      console.warn(">>>>",this.tourName)
       this.$tour.start(this.tourName, {
         forceStart,
         extraSteps: [
