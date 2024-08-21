@@ -173,6 +173,11 @@ export default defineComponent({
 </script>
 <style lang="scss">
   #dynamic-table {
+
+    .q-table {
+      padding-bottom: 16px;
+    }
+
     .q-table__top, .q-table__middle, .q-table__bottom {
       border-radius: $custom-radius;
       //box-shadow: $custom-box-shadow;
@@ -189,6 +194,7 @@ export default defineComponent({
     td {
       color: #222222;
     }
+    
 
     .q-table__card {
       background-color: transparent !important;

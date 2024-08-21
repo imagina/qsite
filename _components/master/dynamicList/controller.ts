@@ -173,7 +173,6 @@ export default function controller(props: any, emit: any) {
       })
     },
     reloadRow(row){
-      console.log(row)
       const foundIndex = state.rows.findIndex(r => r.id == row.id);
       state.rows[foundIndex]['isLoading'] = true
       
