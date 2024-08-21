@@ -34,6 +34,10 @@ export const getDefaultLocale = (state) => {
   return state.defaultLocale;
 };
 
+export const getSiteModulesInfo = (state) => {
+  return state.siteModulesInfo;
+};
+
 export const availableLocalesSelect = (state) => {
   return array.select(state.availableLocales, {label: 'name', id: 'iso'});
 };
