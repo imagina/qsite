@@ -22,7 +22,8 @@ export default function controller(props, emit) {
       const data = props.col?.notDeleteHtml ? props.row[props.col.name] : methods.deleteHtml(props.row[props.col.name])
       return props.col?.format ? props.col.format(data) : data
       //return props.col?.format ? props.col.format(props.row[props.col.name]) : props.row[props.col.name]
-    }),        
+    }),
+    onClick: computed(() => props.col?.onClick ? props.col.onClick : () => {}),
     isComponent: computed(() => props.col?.component || false ),
     isLoading: computed(() => props.row?.isLoading || false),
     showOnLoading: computed(() =>  computeds.isLoading.value && props.col.name != 'id')

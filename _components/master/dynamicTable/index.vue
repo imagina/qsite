@@ -27,7 +27,7 @@
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
-            :class="`${col?.dynamicField && !props.row?.isLoading ? 'cursor-pointer' : ''}`"
+            :class="`${(col?.dynamicField || col?.onClick) && !props.row?.isLoading ? 'cursor-pointer' : ''}`"
           >
             <!---quick click edit popup-->
             <editablePopup 

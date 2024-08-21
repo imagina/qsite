@@ -17,7 +17,7 @@ export default function controller(props, emit) {
   // Computed
   const computeds = {
     // key: computed(() => {})
-    maxWidth: computed(() => props.col.dynamicField?.maxWidth ? props.col.dynamicField.maxWidth : '260px' ),
+    maxWidth: computed(() => props.col.dynamicField?.maxWidth ? props.col.dynamicField.maxWidth : '300px' ),
     isSelectField: computed(() => props.col.dynamicField.type == 'select'), 
     fieldName: computed(() => props.col.dynamicField?.name ? props.col.dynamicField.name : props.col.name) //field to update
   }
