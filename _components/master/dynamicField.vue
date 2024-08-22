@@ -1823,7 +1823,7 @@ export default {
         unit: this.fieldProps.field.navigation?.unit || 'day',
         amount: this.fieldProps.field.navigation?.amount || 1
       };
-      // console.log(this.$date.calculateNewDate())
+
       if(this.modelValue) this.$emit('update:modelValue', this.$date.calculateNewDate(this.modelValue, params))
     }
   }
