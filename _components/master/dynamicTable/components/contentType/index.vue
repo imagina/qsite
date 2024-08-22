@@ -8,7 +8,7 @@
       :is="component" 
       :col="col"
       :row="row"
-      :data="val"
+      :val="val"
     />
     <!-- default content -->
     <div v-if="!isComponent" v-show="!isLoading" class="ellipsis" v-html="val" @click="onClick({col, row, val})"></div>
