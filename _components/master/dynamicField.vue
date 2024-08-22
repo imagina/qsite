@@ -1819,20 +1819,12 @@ export default {
     updateDate(isAdd = false) {
       const params = {
         isAdd,
-        dateToFormat: this.modelValue,
         format: this.fieldProps.slot.mask,
         unit: this.fieldProps.field.navigation?.unit || 'day',
         amount: this.fieldProps.field.navigation?.amount || 1
       };
-
-      this.$emit('update:modelValue', this.calculateNewDate(params))
-    },
-    calculateNewDate({ isAdd = false, dateToFormat, amount = 1, unit = 'day', format }) {
-      let newDate = this.$moment(dateToFormat);
-
-      newDate = isAdd ? newDate.add(amount, unit) : newDate.subtract(amount, unit);
-
-      return newDate.startOf(unit).format(format);
+      // console.log(this.$date.calculateNewDate())
+      if(this.modelValue) this.$emit('update:modelValue', this.$date.calculateNewDate(this.modelValue, params))
     }
   }
 };
