@@ -11,7 +11,7 @@
       :val="val"
     />
     <!-- default content -->
-    <div v-if="!isComponent" v-show="!isLoading" class="ellipsis" v-html="val" @click="onClick({col, row, val})"></div>
+    <div v-if="!isComponent" v-show="!isLoading" class="ellipsis" v-html="val" @click="onClick({val, col, row})"></div>
     <q-skeleton v-if="isLoading" animated type="text" />
   </div>
 </template>

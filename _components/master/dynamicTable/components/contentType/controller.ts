@@ -43,7 +43,6 @@ export default function controller(props, emit) {
       if (!val) return '';
       return typeof val === 'string' ? val.replace(/<[^>]+>/g, '') : val
     }
-    ,
   }
 
   // Mounted
