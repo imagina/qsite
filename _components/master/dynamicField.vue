@@ -75,60 +75,59 @@
           </template>
         </q-input>
         <!--Date-->
-        <div v-if="loadField('date')" class="tw-w-full" :class="field.quickNavigation ? 'row no-wrap items-center tw-gap-x-1' : ''">
-          <!-- Quick Navigation Button (Previous Day) -->
-          <q-btn
-            v-show="field.quickNavigation"
-            text-color="primary"
-            class="q-mr-sm"
-            size="sm"
-            unelevated
-            round
-            style="margin-top: -15px"
-            icon="fa-regular fa-chevron-left"
-            @click="updateDate(false)"
-          >
-            <q-tooltip anchor="bottom middle" self="top middle">
-              {{ $tr('isite.cms.label.previous') }}
-            </q-tooltip>
-          </q-btn>
-          <q-input
-            v-model="responseValue"
-            v-bind="fieldProps.field"
-            :label="fieldLabel"
-            class="tw-w-full"
-            :class="`${field.help ? 'date-dynamic-field' : ''}`">
-            <template v-slot:prepend>
-              <!--Float calendar-->
-              <q-icon v-if="fieldProps.field.icon"
-                      :name="fieldProps.field.icon"
-                      size="18px"
-                      class="cursor-pointer"
-                      color="blue-grey">
-                <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                  <q-date v-model="responseValue" v-bind="fieldProps.slot"
-                          @update:modelValue="() => $refs.qDateProxy.hide()" />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-          <!-- Quick Navigation Button (Next Day) -->
-          <q-btn
-            v-show="field.quickNavigation"
-            text-color="primary"
-            class="q-mr-sm"
-            size="sm"
-            unelevated
-            round
-            icon="fa-regular fa-chevron-right"
-            style="margin-top: -15px"
-            @click="updateDate(true)"
-          >
-            <q-tooltip anchor="bottom middle" self="top middle">
-              {{ $tr('isite.cms.label.next') }}
-            </q-tooltip>
-          </q-btn>
-        </div>
+        <q-input
+          v-if="loadField('date')"
+          v-model="responseValue"
+          v-bind="fieldProps.field"
+          :label="fieldLabel"
+          class="tw-w-full"
+          :class="`${field.help ? 'date-dynamic-field' : ''}`">
+          <template v-slot:prepend>
+            <!-- Quick Navigation Button (Previous Day) -->
+            <q-btn
+              v-show="field.quickNavigation"
+              text-color="primary"
+              class="q-mr-sm"
+              size="sm"
+              unelevated
+              round
+              icon="fa-regular fa-chevron-left"
+              @click="updateDate(false)"
+            >
+              <q-tooltip anchor="bottom middle" self="top middle">
+                {{ $tr('isite.cms.label.previous') }}
+              </q-tooltip>
+            </q-btn>
+            <!--Float calendar-->
+            <q-icon v-if="fieldProps.field.icon"
+                    :name="fieldProps.field.icon"
+                    size="18px"
+                    class="cursor-pointer"
+                    color="blue-grey">
+              <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                <q-date v-model="responseValue" v-bind="fieldProps.slot"
+                        @update:modelValue="() => $refs.qDateProxy.hide()" />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+          <template v-slot:append>
+            <!-- Quick Navigation Button (Next Day) -->
+            <q-btn
+              v-show="field.quickNavigation"
+              text-color="primary"
+              class="q-mr-sm"
+              size="sm"
+              unelevated
+              round
+              icon="fa-regular fa-chevron-right"
+              @click="updateDate(true)"
+            >
+              <q-tooltip anchor="bottom middle" self="top middle">
+                {{ $tr('isite.cms.label.next') }}
+              </q-tooltip>
+            </q-btn>
+          </template>
+        </q-input>
         <!--Hour-->
         <q-input v-if="loadField('hour')"
                  v-model="responseValue"
@@ -1821,17 +1820,19 @@ export default {
       const params = {
         isAdd,
         dateToFormat: this.modelValue,
-        format: this.fieldProps.slot.mask
+        format: this.fieldProps.slot.mask,
+        unit: this.fieldProps.field.navigation?.unit || 'day',
+        amount: this.fieldProps.field.navigation?.amount || 1
       };
 
       this.$emit('update:modelValue', this.calculateNewDate(params))
     },
-    calculateNewDate({ isAdd = false, dateToFormat, amount = 1, unit = 'days', unitOfTime = 'day', format }) {
+    calculateNewDate({ isAdd = false, dateToFormat, amount = 1, unit = 'day', format }) {
       let newDate = this.$moment(dateToFormat);
 
       newDate = isAdd ? newDate.add(amount, unit) : newDate.subtract(amount, unit);
 
-      return newDate.startOf(unitOfTime).format(format);
+      return newDate.startOf(unit).format(format);
     }
   }
 };
