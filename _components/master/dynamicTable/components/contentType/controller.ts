@@ -18,10 +18,9 @@ export default function controller(props, emit) {
   const computeds = {
     // key: computed(() => {})
     //data to display
-    data: computed(() => { 
-      const data = props.col?.notDeleteHtml ? props.row[props.col.name] : methods.deleteHtml(props.row[props.col.name])
-      return props.col?.format ? props.col.format({val: data, col: props.col, row: props.row}) : data
-      //return props.col?.format ? props.col.format(props.row[props.col.name]) : props.row[props.col.name]
+    val: computed(() => { 
+      const val = props.col?.notDeleteHtml ? props.row[props.col.name] : methods.deleteHtml(props.row[props.col.name])
+      return props.col?.format ? props.col.format({val: val, col: props.col, row: props.row}) : val
     }),
     onClick: computed(() => props.col?.onClick ? props.col.onClick : () => {}),
     isComponent: computed(() => props.col?.component || false ),
@@ -40,9 +39,9 @@ export default function controller(props, emit) {
         state.component = markRaw(props.col.component)
       }
     },
-    deleteHtml(data) {
-      if (!data) return '';
-      return typeof data === 'string' ? data.replace(/<[^>]+>/g, '') : data
+    deleteHtml(val) {
+      if (!val) return '';
+      return typeof val === 'string' ? val.replace(/<[^>]+>/g, '') : val
     }
     ,
   }
