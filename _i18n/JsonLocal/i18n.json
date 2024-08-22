@@ -944,7 +944,9 @@
           "userGroup": "User Group | User Groups",
           "registerAs": "Register as",
           "incognitoProfile": "Incognito profile",
-          "reset": "Restablecer Contraseña"
+          "reset": "Restablecer Contraseña",
+          "available": "Available",
+          "away": "Away"
         },
         "form": {
           "lastLogin": "Last login",
@@ -2907,7 +2909,9 @@
           "userGroup": "Grupo de usuario | Grupos de usuario",
           "registerAs": "Registrarme como",
           "incognitoProfile": "Perfil incógnito",
-          "reset": "Restablecer Contraseña"
+          "reset": "Restablecer Contraseña",
+          "available": "Disponible",
+          "away": "Lejos"
         },
         "form": {
           "lastLogin": "Ultima sesión",
