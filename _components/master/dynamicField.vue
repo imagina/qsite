@@ -172,6 +172,13 @@
             </q-icon>
           </template>
         </q-input>
+        <!--Time spent -->
+         <timeSpent v-if="loadField('timeSpent')"
+                         v-model="responseValue"
+                         :fieldProps="fieldProps"
+                         :label="fieldLabel"
+                         :class="`${field.help ? 'full-date-dynamic-field' : ''}`"
+        />
         <!--Date range -->
         <dateRangePicker v-if="loadField('dateRange')"
                          v-model="responseValue"
@@ -511,6 +518,7 @@ import expressionField from 'modules/qsite/_components/master/expressionField/in
 import localizedPhone from 'modules/qsite/_components/master/localizedPhone/index.vue';
 import multipleDynamicFields from 'modules/qsite/_components/master/multipleDynamicFields/views';
 import dateRangePicker from 'modules/qsite/_components/master/dateRangePicker';
+import timeSpent from 'modules/qsite/_components/master/timeSpent';
 import { eventBus } from 'src/plugins/utils';
 
 export default {
@@ -552,7 +560,8 @@ export default {
     expressionField,
     localizedPhone,
     multipleDynamicFields,
-    dateRangePicker
+    dateRangePicker,
+    timeSpent
   },
   watch: {
     modelValue: {
@@ -793,6 +802,39 @@ export default {
             }
           };
           break;
+        case'timeSpent':
+          //Instance the mask
+          const maskTimeSpent = '2w 4d 6h 45m'
+          const regexTimeSpent = /^(\d+[wdhm]\s*)+\s*$/; //numbers and wdhm
+          props = {
+            field: {
+              unit: props?.unit || 'minutes',
+              bgColor: 'white',
+              clearable: props?.clearable || true,
+              color: 'primary',
+              outlined: true,
+              dense: true,
+              icon: 'fa-light fa-timer',
+              //placeHolder: '2w 4d 6h 45m',
+              regex: regexTimeSpent,
+              hint: `${this.$tr('isite.cms.label.format')}: ${maskTimeSpent}`,
+              ...props,
+              rules: [
+                ...(props.rules || []),
+                val => {
+                  if (!val) return true;
+                  return regexTimeSpent.test(val) || `${this.$tr('isite.cms.message.invalidFormat')} (${maskTimeSpent})`;
+                }
+              ]
+              
+            },
+            slot: {
+              ...props,
+              field: props?.field || null
+            }
+          };
+          break;
+          
         case'hour':
           //Instance the mask
           const maskHour = 'HH:mm';
@@ -1296,6 +1338,11 @@ export default {
           load: true
         },
         fullDate: {
+          class: 'absolute-right',
+          margin: '1em',
+          load: true
+        },
+        timeSpent: {
           class: 'absolute-right',
           margin: '1em',
           load: true
