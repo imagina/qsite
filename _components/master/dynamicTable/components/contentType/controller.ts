@@ -19,7 +19,7 @@ export default function controller(props, emit) {
     // key: computed(() => {})
     //data to display
     val: computed(() => { 
-      const val = props.col?.notDeleteHtml ? props.row[props.col.name] : methods.deleteHtml(props.row[props.col.name])
+      const val = props.col?.deleteHtml ? methods.deleteHtml(props.row[props.col.name]) : props.row[props.col.name]
       return props.col?.format ? props.col.format({val: val, col: props.col, row: props.row}) : val
     }),
     onClick: computed(() => props.col?.onClick ? props.col.onClick : () => {}),
