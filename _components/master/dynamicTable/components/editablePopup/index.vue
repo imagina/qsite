@@ -5,9 +5,11 @@
       v-model="row[col.name]"
       v-slot="scope"              
       no-caps
-      :cover="false" :offset="[0, 4]"
+      :cover="false"
+      anchor="bottom start"
       transition-show="fade-in" 
       transition-hide="fade-out"
+     :max-width="maxWidth"
     >
     <q-form
       autocorrect="off"
@@ -52,7 +54,7 @@
   </template>
   <script lang="ts">
   import {defineComponent} from 'vue'
-  import controller from 'modules/qsite/_components/master/dynamicTable/controllers/editablePopupController'
+  import controller from 'modules/qsite/_components/master/dynamicTable/components/editablePopup/controller'
   
   export default defineComponent({
     props: {    

@@ -1,6 +1,7 @@
 <template>
   <div id="dynamic-table">
     <q-table      
+      v-bind="tableProps"
       :title="title"
       :loading="loading"
       :rows="rows"
@@ -26,8 +27,17 @@
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
-            :class="`${col?.dynamicField && !props.row?.isLoading ? 'cursor-pointer' : ''}`"
+            :class="`${(col?.dynamicField || col?.onClick) && !props.row?.isLoading ? 'cursor-pointer' : ''}`"
           >
+            <!---quick click edit popup-->
+            <editablePopup 
+              v-if="col.name != 'actions' && props.row[col.name] && col?.dynamicField && !props.row?.isLoading"
+              :row="props.row"
+              :col="col"
+              :beforeUpdate="beforeUpdate"
+              @updateRow="(row) => $emit('updateRow', row)"
+            />
+
             <!--Actions column-->
             <div v-if="col.name == 'actions'">              
               <btn-menu
@@ -43,14 +53,7 @@
               :row="props.row"
             />            
 
-            <!---quick click edit popup-->
-            <editablePopup 
-              v-if="col?.dynamicField && !props.row?.isLoading"              
-              :row="props.row"
-              :col="col"
-              :beforeUpdate="beforeUpdate"
-              @updateRow="(row) => $emit('updateRow', row)"
-            />
+            
           </q-td>
         </q-tr>
       </template>
@@ -129,13 +132,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicTable/controller'
-import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup.vue'
-import contentType from 'modules/qsite/_components/master/dynamicTable/components/contentType.vue'
-import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu.vue'
+import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup'
+import contentType from 'modules/qsite/_components/master/dynamicTable/components/contentType'
+import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu'
 
 
 export default defineComponent({
   props: {
+    tableProps: { default: null},
     loading: { default: false},
     title: { default: ''},
     columns: {default: []},
@@ -169,6 +173,11 @@ export default defineComponent({
 </script>
 <style lang="scss">
   #dynamic-table {
+
+    .q-table {
+      padding-bottom: 16px;
+    }
+
     .q-table__top, .q-table__middle, .q-table__bottom {
       border-radius: $custom-radius;
       //box-shadow: $custom-box-shadow;
@@ -185,6 +194,7 @@ export default defineComponent({
     td {
       color: #222222;
     }
+    
 
     .q-table__card {
       background-color: transparent !important;

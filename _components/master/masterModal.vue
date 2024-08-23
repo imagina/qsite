@@ -19,8 +19,7 @@
           <b>{{ title }}</b>
           <q-chip
             v-if="chip"
-            class="tw-ml-3 tw-font-medium"
-            square
+            class="tw-ml-3 tw-font-semibold tw-text-gray-500 tw-text-sm"
             v-bind="chip"
           />
         </div>

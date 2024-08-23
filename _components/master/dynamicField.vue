@@ -75,12 +75,29 @@
           </template>
         </q-input>
         <!--Date-->
-        <q-input v-if="loadField('date')"
-                 v-model="responseValue"
-                 v-bind="fieldProps.field"
-                 :label="fieldLabel"
-                 :class="`${field.help ? 'date-dynamic-field' : ''}`">
+        <q-input
+          v-if="loadField('date')"
+          v-model="responseValue"
+          v-bind="fieldProps.field"
+          :label="fieldLabel"
+          class="tw-w-full"
+          :class="`${field.help ? 'date-dynamic-field' : ''}`">
           <template v-slot:prepend>
+            <!-- Quick Navigation Button (Previous Day) -->
+            <q-btn
+              v-show="field.quickNavigation"
+              text-color="primary"
+              class="q-mr-sm"
+              size="sm"
+              unelevated
+              round
+              icon="fa-regular fa-chevron-left"
+              @click="updateDate(false)"
+            >
+              <q-tooltip anchor="bottom middle" self="top middle">
+                {{ $tr('isite.cms.label.previous') }}
+              </q-tooltip>
+            </q-btn>
             <!--Float calendar-->
             <q-icon v-if="fieldProps.field.icon"
                     :name="fieldProps.field.icon"
@@ -92,6 +109,23 @@
                         @update:modelValue="() => $refs.qDateProxy.hide()" />
               </q-popup-proxy>
             </q-icon>
+          </template>
+          <template v-slot:append>
+            <!-- Quick Navigation Button (Next Day) -->
+            <q-btn
+              v-show="field.quickNavigation"
+              text-color="primary"
+              class="q-mr-sm"
+              size="sm"
+              unelevated
+              round
+              icon="fa-regular fa-chevron-right"
+              @click="updateDate(true)"
+            >
+              <q-tooltip anchor="bottom middle" self="top middle">
+                {{ $tr('isite.cms.label.next') }}
+              </q-tooltip>
+            </q-btn>
           </template>
         </q-input>
         <!--Hour-->
@@ -1781,6 +1815,16 @@ export default {
     configModules(name) {
       if (!name) return;
       return Boolean(config(name));
+    },
+    updateDate(isAdd = false) {
+      const params = {
+        isAdd,
+        format: this.fieldProps.slot.mask,
+        unit: this.fieldProps.field.navigation?.unit || 'day',
+        amount: this.fieldProps.field.navigation?.amount || 1
+      };
+
+      if(this.modelValue) this.$emit('update:modelValue', this.$date.calculateNewDate(this.modelValue, params))
     }
   }
 };
