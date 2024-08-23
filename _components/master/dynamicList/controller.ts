@@ -172,16 +172,17 @@ export default function controller(props: any, emit: any) {
         }
       })
     },
-    reloadRow(row){
+    async reloadRow(row){
       const foundIndex = state.rows.findIndex(r => r.id == row.id);
       state.rows[foundIndex]['isLoading'] = true
       
       const requestParams = props.listData.read?.requestParams ? {...props.listData.read.requestParams} : {}
             
-      services.showItem(props.listData.apiRoute, row.id, {params: requestParams, refresh: true}).then((response) => {            
+      await services.showItem(props.listData.apiRoute, row.id, {params: requestParams, refresh: true}).then((response) => {
         state.rows[foundIndex] = response.data
         state.rows[foundIndex]['isLoading'] = false
       })
+      return state.rows[foundIndex]
       
     },
     toggleDynamicFilterModal() {
