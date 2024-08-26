@@ -16,8 +16,8 @@ export default function controller(props: any, emit: any) {
 
   // States
   const state = reactive({
-    timeSpent: null
-    
+    timeSpent: null,
+    focus: false
   })
 
   // Computed
@@ -27,20 +27,57 @@ export default function controller(props: any, emit: any) {
 
   // Methods
   const methods = {
-    init(){
-      if(props.modelValue){
-        methods.setTimeSpent(props.modelValue)
+    init(){      
+      if(props.modelValue && !state.focus){        
+        state.timeSpent = methods.convertMinutesToHumanReadable(props.modelValue)
       }
+    },
+
+    // const types = ['m', 'h', 'd', 'w']
+
+    convertMinutesToHumanReadable(minutes){      
+      if (!minutes || minutes == '') return null
+      if (minutes < 60) {
+        return `${minutes}${types[0]}`
+      }
+
+      const weeks = Math.floor(minutes / (60 * 24 * 7));
+      const days = Math.floor((minutes % (60 * 24 * 7)) / (60 * 24));
+      const hours = Math.floor((minutes % (60 * 24)) / 60);
+      const remainingMinutes = minutes % 60;
+      let result = '';
+
+      if (weeks > 0) {
+        result =  `${weeks}${types[3]}`
+      }
+
+      if (days > 0) {
+        result =  `${result} ${days}${types[2]}`
+      }
+
+      if (hours > 0) {
+        result = `${result} ${hours}${types[1]}`
+      }
+
+      if (remainingMinutes > 0) {
+        result = `${result} ${remainingMinutes}${types[0]}`
+      }      
+      return result
     },
 
     clear(){
       state.timeSpent = null
       emit('update:model-value', null)
-
     },
-
+    setFocus(value){
+      state.focus = value
+    },
+    /* converts from 2w 4d 6h 45m to unit weeks, hous */
     setTimeSpent(val){
-      if(!val || val == '' || !regex.test(val)) return false
+      if(!val || val == '' || !regex.test(val)) {
+        methods.clear()
+        return false        
+      }
 
       let timeSpent = val.toString().split(' ')
       let totalTimeSpent = 0
@@ -48,7 +85,6 @@ export default function controller(props: any, emit: any) {
       timeSpent.forEach(element => {
         if(element == '') return
         const str = element.toLowerCase()
-
         
         /*
         get last char if not valid or missing 
@@ -98,13 +134,16 @@ export default function controller(props: any, emit: any) {
 
   // Mounted
   onMounted(() => {
-    //methods.init()
+   methods.init()
   })
 
-  /*
-  watch(props, (newField, oldField): void => {    
+  
+  watch(props, (newField, oldField): void => {
+    //if(newField.modelValue != oldField.modelValue){
+      methods.init()
+    //}    
   }, {deep: true})
-  */
+  
   
 
   return {...refs, ...(toRefs(state)), ...computeds, ...methods}

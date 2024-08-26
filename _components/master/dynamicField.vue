@@ -805,7 +805,7 @@ export default {
         case'timeSpent':
           //Instance the mask
           const maskTimeSpent = '2w 4d 6h 45m'
-          const regexTimeSpent = /^(\d+[wdhm]\s*)+\s*$/; //numbers and wdhm
+          const regexTimeSpent = /^\s*(\d+[wdhmWDHM]\s*)+\s*$/; //numbers and wdhm
           props = {
             field: {
               unit: props?.unit || 'minutes',

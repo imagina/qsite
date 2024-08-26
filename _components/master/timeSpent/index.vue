@@ -1,4 +1,4 @@
-<template>  
+<template>
   <q-input
     @update:model-value="(value) => setTimeSpent(value)"
     v-model="timeSpent"
@@ -8,6 +8,8 @@
     debounce="600"
     :clearable="fieldProps.field.clearable"
     @clear="() => clear()"
+    @focus="setFocus(true)"
+    @blur="setFocus(false)"
   >
   </q-input>
 </template>
