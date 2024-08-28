@@ -39,6 +39,13 @@ export default function ({app, router, store, Vue, ssrContext}) {
       }
     })
   }
+
+  function versionToNumber(version) {
+    return version.split('.').reduce((acc, part, index) => {
+      return acc + parseInt(part, 10) * Math.pow(1000, 2 - index);
+    }, 0);
+  }
+  
   async function addRequestDB(request, userID) {
     const objReq = {
         _id: new Date().toISOString(),
@@ -115,7 +122,7 @@ export default function ({app, router, store, Vue, ssrContext}) {
 
     if (version && backendVersion) {
       //Check if the version is updated
-      if (backendVersion > version && router.currentRoute.name != 'app.update.app') {
+      if (versionToNumber(backendVersion) > versionToNumber(version) && router.currentRoute.name != 'app.update.app') {
         router.push({
           name: 'app.update.app',
           query: {
