@@ -81,6 +81,7 @@
       v-if="bulkActionsPermission" 
       @bulkActionsConfig="(value) => bulkActionsConfig = value" 
       ref="bulkActions"
+      @refresh="emitRefresh"
     />
   </div>
 </template>

@@ -6,9 +6,11 @@ export const sendReport = async (
     selectedAction: SelectedAction | null, 
     optionsForSelectedBulkActions: { [key: string]: string }, 
     prototype: any,
-    permission: string
+    permission: string,
+    rowIds: number[] = []
 ) => {
     try {
+        const id = rowIds.length > 0 ? {id: rowIds} : {}
         const payload = {
             apiRoute: selectedAction?.apiRoute,
             title: selectedAction?.label,
@@ -25,7 +27,8 @@ export const sendReport = async (
             },
             confirmed,
             filter: {
-                ...prototype.$filter.values
+                ...prototype.$filter.values,
+                ...id
             }
         };
 
