@@ -22,7 +22,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const messages = ref([])
     const log = ref([])
     const rowIds = ref<number[]>([]);
-    
+    const criteria = ref<string>('id');
     const proxy = (getCurrentInstance() as any).proxy;
 
     const { module, entity } = proxy.$helper.getInfoFromPermission(proxy.$route.meta?.permission)
@@ -126,6 +126,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
             Vue.prototype,
             permission,
             rowIds.value,
+            criteria.value,
         )
         const data = response.data;
         if (data?.messages) {
@@ -159,6 +160,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
         selectedAction.value = null;
         optionsForSelectedBulkActions.value = {};
         rowIds.value = [];
+        criteria.value = 'id';
         proxy.$eventBus.$off('bulkActionRefresh')
     }
 
@@ -236,6 +238,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
         reset,
         handleChangeBulkActions,
         bulkActions,
-        rowIds
+        rowIds,
+        criteria
     }
 }

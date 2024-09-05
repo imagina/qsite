@@ -7,10 +7,11 @@ export const sendReport = async (
     optionsForSelectedBulkActions: { [key: string]: string }, 
     prototype: any,
     permission: string,
-    rowIds: number[] = []
+    rowIds: number[] = [],
+    criteria: string = 'id'
 ) => {
     try {
-        const id = rowIds.length > 0 ? {id: rowIds} : {}
+        const id = rowIds.length > 0 ? {[criteria]: rowIds} : {}
         const payload = {
             apiRoute: selectedAction?.apiRoute,
             title: selectedAction?.label,
