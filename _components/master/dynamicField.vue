@@ -1696,7 +1696,8 @@ export default {
                 if(responseData.length){
                   if (Array.isArray(this.value)) {
                     //Remove value if isn't on response.data
-                    const results = this.value.filter((value) => responseData.find((data) => data.id == value)) || null
+                    const keyForValue = loadOptions?.select?.id || 'id'
+                    const results = this.value.filter((value) => responseData.find((data) => data[keyForValue] == value)) || null
                     this.setDefaultVModel(results)
                   }
 
