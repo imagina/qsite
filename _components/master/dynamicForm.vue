@@ -70,7 +70,8 @@
                                      :item-id="field.fieldItemId"/>
                       <!--Sample field-->
                       <dynamic-field v-else :field="field" :key="key" :item-id="field.fieldItemId"
-                                     v-model="locale.formTemplate[field.name || key]" :language="locale.language"/>
+                                     v-model="locale.formTemplate[field.name || key]" :language="locale.language"
+                                     :ref="field.type" />
                       <!--Child fields-->
                       <div v-if="field.children">
                         <!--Title-->
@@ -515,9 +516,9 @@ export default {
         const lastBlock = blocks[blocks.length - 1]
 
         if (!Array.isArray(lastBlock.fields)) {
-          lastBlock.fields.captcha = {type: 'captcha'}
+          lastBlock.fields.captcha = {type: 'captcha', ref: 'captcha',}
         } else {
-          lastBlock.fields.push({type: 'captcha', name: 'captcha', value: ''})
+          lastBlock.fields.push({type: 'captcha', name: 'captcha', value: '', ref: 'captcha'})
         }
       }
 
@@ -832,6 +833,11 @@ export default {
     async changeStep(toStep, isSubmit = false) {
       //Validate if new Step it's not same to current step
       let isValid = (toStep == 'previous') ? true : await this.$refs.formContent.validate()
+
+      if(isSubmit && this.useCaptcha && isValid){
+        await this.captchaHandler()
+      }
+
       //Dispatch event to know if if is valid
       this.$emit('validated', isValid)
       //Validate if new Step it's not same to current step
@@ -885,6 +891,15 @@ export default {
       this.locale.form = false
       this.init()
       this.$emit('newForm')
+    },
+    async captchaHandler(){
+      const {version} = this.locale.formTemplate['captcha']
+      if(version == 3){
+        const ref = this.$refs.captcha[0].getRef()
+        await ref.getToken().then((response) => {
+          this.locale.formTemplate['captcha'] = response
+        })
+      }
     }
   }
 }
