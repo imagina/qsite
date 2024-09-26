@@ -12,11 +12,11 @@
   >
     <q-menu
       max-width="200px"
-      class="btn-menu-component__menu"
+      class="btn-menu-component__menu tw-shadow-md"
       anchor="bottom right"
       self="top right"
     >
-      <q-list dense separator>
+      <q-list dense>
         <template v-for="(action, keyAction) in actionsData">
           <q-item
             :key="keyAction"
@@ -24,6 +24,7 @@
             v-close-popup
             v-if="showActionMenu(action)"
             @click.native="runAction(action)"
+            class="tw-rounded-lg"
           >
             <q-item-section>
               <div class="row items-center text-blue-grey">
@@ -97,7 +98,7 @@ export default {
 .btn-menu-component__menu {
   padding: 8px;
   min-width: auto;
-  border-radius: 5px;
+  border-radius: 8px;
   .q-list {
     min-width: 150px;
   }
