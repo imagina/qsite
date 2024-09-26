@@ -1887,6 +1887,10 @@ export default {
     font-size: 16px;
   }
 
+  .q-field--outlined .q-field__control:before {
+    border-color: rgb(229 229 229); //tw-text-neutral-200
+  }
+
   .q-field--outlined .q-field__control {
     padding-left: 12px;
   }

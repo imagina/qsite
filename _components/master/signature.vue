@@ -127,7 +127,7 @@ export default {
 
 <style lang="scss">
 #signatureContent {
-  border: 1px solid $grey-5;
+  border: 1px solid rgb(229 229 229); //text-neutral-200
   border-radius: $custom-radius;
 
   #btnActions {

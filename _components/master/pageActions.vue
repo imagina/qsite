@@ -214,7 +214,7 @@ export default {
         dense: true,
         unelevated: true,
         textColor: 'primary',
-        style: 'border: 1px solid rgba(0, 13, 71, 0.15)',
+        style: 'border: 1px solid rgb(229 229 229)', //text-neutral-200
         class: `btn-${this.size}`,
         noCaps: true
       };
@@ -526,6 +526,10 @@ export default {
 #pageActionscomponent {
   #titleCrudTable {
     font-size: 20px;
+  }
+
+  .q-field--outlined .q-field__control:before {
+    border: 1px solid rgb(229 229 229); //tw-text-neutral-200
   }
 
   .animated {
