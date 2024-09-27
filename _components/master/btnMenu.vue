@@ -12,7 +12,7 @@
   >
     <q-menu
       max-width="200px"
-      class="btn-menu-component__menu tw-shadow-md"
+      class="btn-menu-component__menu tw-shadow-lg"
       anchor="bottom right"
       self="top right"
     >
