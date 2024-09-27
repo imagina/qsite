@@ -529,7 +529,7 @@ export default {
   }
 
   .q-field--outlined .q-field__control:before {
-    border: 1px solid rgb(229 229 229); //tw-text-neutral-200
+    border-color: rgb(229 229 229); //tw-text-neutral-200
   }
 
   .animated {
