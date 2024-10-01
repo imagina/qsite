@@ -157,24 +157,25 @@ export default function controller(props: any, emit: any) {
             state.loadedOptions[key] = state.props.filters[key]?.props?.options
           }
         } else if(state.props.filters[key]?.type == 'crud'){
-            //loadedOptions callback for crud select
-            state.props.filters[key]['props']['config']['loadedOptions'] = (data) => {
-              //fix setReadValues twice
-              if(!state.loadedOptions[key]){
-                state.loadedOptions[key] = [...data]
-                methods.setReadValues()
-              }
+          //loadedOptions callback for crud select
+          if(!state.props.filters[key].props?.config) state.props.filters[key].props.config = {}
+          state.props.filters[key].props.config.loadedOptions = (data) => {
+            //fix setReadValues twice
+            if(!state.loadedOptions[key]){
+              state.loadedOptions[key] = [...data]
+              methods.setReadValues()
             }
+          }
 
-            //(hiden) loadedOptions callback for url filters
-            if(state.hidenFields[key]){
-              state.hidenFields[key]['props']['config']['loadedOptions'] = (data) => {
-                //fix setReadValues twice
-                if(!state.loadedOptions[key]){
-                  state.loadedOptions[key] = [...data]
-                  methods.setReadValues()
-                }
-              }
+          //(hiden) loadedOptions callback for url filters
+          state.hidenFields[key] = {...state.props.filters[key]}
+          if(!state.hidenFields[key].props?.config) state.hidenFields[key].props.config = {}
+          state.hidenFields[key].props.config.loadedOptions = (data) => {
+            //fix setReadValues twice
+            if(!state.loadedOptions[key]){
+              state.loadedOptions[key] = [...data]
+              methods.setReadValues()
+            }
           }
         }
       })
@@ -224,15 +225,26 @@ export default function controller(props: any, emit: any) {
 
     //dynamicFiledtype: crud
     setReadValuesTypeCrud(result, key){
+      //finds the label  crud props
       result.label = state.props.filters[key]?.props?.crudProps?.label || ''
-      const labelKey = state.props.filters[key]?.props?.config?.options?.label //finds the label  crud props
+      const labelKey = state.props.filters[key]?.props?.config?.options?.label || 'title'
       // find the options on loaded options
-      const option = state.loadedOptions[key].find((option) => {
-        if(option.id.toString() == result.value.toString()){
-          return option
-        }
-      })
-      result.option = option[labelKey] || option.name || option.title || option.label || option.id || option.value || ''
+      if(state.loadedOptions[key]){
+        const options = []
+        const selectedValues = state.props.filters[key].props?.crudProps?.multiple ? result.value : [result.value]
+          selectedValues.forEach((selectedValue) => {
+            const option = state.loadedOptions[key].find((option) => {
+              if(option.id.toString() == selectedValue.toString()){
+                return option
+              }
+            })
+            if(option){
+              const optionLabel = option[labelKey] || option.name || option.title || option.label || option.id || option.value || ''
+              if(optionLabel) options.push(optionLabel)
+            }
+        })
+        result.option = options.join(', ')
+      }
       return result
     },
     restoreFilterValues(){
