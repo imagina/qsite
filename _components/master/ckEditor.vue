@@ -18,6 +18,7 @@ import pluginCollapsibleItem from 'src/plugins/ckEditorPlugins/collapsibleItem/p
 import pluginGrid from 'src/plugins/ckEditorPlugins/grid/plugin'
 import pluginEmbed from 'src/plugins/ckEditorPlugins/embed/plugin'
 import pluginFa from 'src/plugins/ckEditorPlugins/ckeditorfa-fa6/plugin'
+import pluginSimpleButton from 'src/plugins/ckEditorPlugins/simpleButton/plugin'
 import { eventBus } from 'src/plugins/utils'
 
 /* range 7px to 36px*/
@@ -55,7 +56,7 @@ export default {
       configEditor: {
         allowedContent: true,
         filebrowserBrowseUrl: this.configModules('main.qmedia.moduleName') ? this.$router.resolve({name: 'app.media.select'}).href : null,
-        extraPlugins: 'colorbutton,colordialog,justify,collapsibleItem,font,btgrid,simplebox,ckeditorfa',
+        extraPlugins: 'colorbutton,colordialog,justify,collapsibleItem,font,btgrid,simplebox,ckeditorfa,simplebutton',
         embed_provider: '//iframe.ly/api/oembed?url={url}&callback={callback}&api_key=7e0aa12b0cd2c01651346b',
         contentsCss: 'https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css',
         fontSize_sizes: fontSizes.join('')
@@ -82,6 +83,7 @@ export default {
       pluginGrid.load(CKEDITOR);
       pluginEmbed.load(CKEDITOR);
       pluginFa.load(CKEDITOR);
+      pluginSimpleButton.load(CKEDITOR)
       CKEDITOR.dtd.$removeEmpty['span'] = false;
       //events
       CKEDITOR.on('instanceReady', (event) => {
@@ -197,6 +199,11 @@ export default {
   .cke_button__ckeditorfa_icon {
     background-image: url("src/plugins/ckEditorPlugins/ckeditorfa-fa6/icons/ckeditorfa.png") !important;
   }
+
+  .cke_button__simplebutton_icon {
+    background-image: url("src/plugins/ckEditorPlugins/simpleButton/icons/simplebutton.png") !important;
+  }
+
 }
 
 /* ckeditor-fa pluging */
