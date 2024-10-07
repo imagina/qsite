@@ -60,7 +60,7 @@
     </span>
     <!-- Export Component -->
     <master-export
-      v-if="!this.isAppOffline && excludeActions ? !excludeActions.includes('export') : true"
+      v-if="!this.isAppOffline && Array.isArray(excludeActions) ? !excludeActions.includes('export') : true"
       v-model="exportParams"
       ref="exportComponent"
       :dynamicFilterValues="dynamicFilterValues"
