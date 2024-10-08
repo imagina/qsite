@@ -488,6 +488,10 @@
             />
           </template>
         </q-input>
+
+        <!--Avatar Image-->
+        <avatar-image v-if="loadField('viewImage') && fieldProps.src" v-bind="fieldProps"
+                      :class="fieldProps.class ? fieldProps.class : 'img-file full-height' "/>
       </div>
     </div>
   </div>
@@ -1190,6 +1194,12 @@ export default {
             outlined: true,
             dense: true,
             inputClass: 'ellipsis',
+            ...props
+          };
+          break;
+        case'viewImage':
+          props = {
+            height: "100vh",
             ...props
           };
           break;
