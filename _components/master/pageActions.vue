@@ -60,7 +60,7 @@
     </span>
     <!-- Export Component -->
     <master-export
-      v-if="(this.exportParams && !excludeActions.includes('export')) && !this.isAppOffline"
+      v-if="!this.isAppOffline && Array.isArray(excludeActions) ? !excludeActions.includes('export') : true"
       v-model="exportParams"
       ref="exportComponent"
       :dynamicFilterValues="dynamicFilterValues"
@@ -418,7 +418,9 @@ export default {
     },
     async validateEnableTour() {
       if(this.tourName && !config('app.disableTours') &&
-        (this.$store.getters['qsiteApp/getConfigApp']('igamification') != undefined)){
+        (this.$store.getters['qsiteApp/getConfigApp']('igamification') != undefined) &&
+        !this.excludeActions.includes('tour')
+      ){
         let tour = await this.$tour.getTourData(this.tourName, true)
         if(tour) {
           this.enableTourAction = true

@@ -211,10 +211,6 @@
               <q-item-section avatar v-if="field.props && field.props.multiple">
                 <q-checkbox v-model="responseValue" :val="scope.opt.value" />
               </q-item-section>
-              <!--Icon-->
-              <q-item-section v-else-if="scope.opt.icon" avatar>
-                <q-icon size="20px" :name="scope.opt.icon" class="q-mr-sm" />
-              </q-item-section>
               <!--Image-->
               <q-item-section avatar v-if="field.props.imageField">
                 <q-avatar>
@@ -226,16 +222,14 @@
               </q-item-section>
               <!--Labels-->
               <q-item-section>
-                <div :class="{'tw-flex': field.props.selectColor }">
+                <div class="row items-center">
                   <div v-if="field.props.selectColor">
-                    <div
-                      class="
-                        tw-h-4
-                        tw-w-4
-                        tw-rounded-full
-                        tw-py-3"
-                      :class="badgeColor(field, scope)"
-                    />
+                    <div class="tw-h-4 tw-w-4 tw-rounded-full tw-py-3"
+                         :class="badgeColor(field, scope)" />
+                  </div>
+                  <div v-if="scope.opt.icon">
+                    <q-icon size="20px" :name="scope.opt.icon"
+                            :style="`color: ${scope.opt.color ?? ''}`" class="q-mr-sm" />
                   </div>
                   <div :class="{'tw-px-4' : field.props.selectColor }">
                     <q-item-label v-html="scope.opt.label" />
@@ -1553,7 +1547,10 @@ export default {
           this.responseValue = [];
           propValue.forEach(item => {
             if (this.fieldProps['emit-value']) {
-              let value = (typeof item == 'object') ? item.id : item;
+              //Map the value
+              let value = (typeof item != 'object') ? item :
+                (this.field.mapValue ? this.field.mapValue(item) : item.id);
+              //Set the value to response
               this.responseValue.push(value.toString());
             } else {
               this.responseValue.push(item);

@@ -1,74 +1,90 @@
-import {computed, reactive, ref, onMounted, toRefs, watch, markRaw, shallowRef} from "vue";
+import { computed, reactive, ref, onMounted, toRefs, watch, markRaw, shallowRef } from 'vue';
 
 
-export default function controller(props, emit) {
+export default function controller (props, emit)
+{
 
   // Refs
   const refs = {
-    // refKey: ref(defaultValue)
-  }
+    popupProxy: ref()
+  };
 
   // States
   const state = reactive({
     // Key: Default Value
-    dynamicModel: null,
-  })
+    responseValue: null,
+    loading: false
+  });
 
   // Computed
   const computeds = {
-    dynamicField: computed(() => {
+    //Get the dynamicField to edit
+    dynamicField: computed(() =>
+    {
       let field = props.col.dynamicField ?? null;
-      if (!field || !props.col.isEditable) return null;
       // Validate if field is a function and format it
       if (typeof field == 'function') field = field(props.row);
       // Return field
-      return { name: props.col.name, maxWidth: '300px', ...field };
+      return field ? { name: props.col.name, maxWidth: '300px', ...field } : null;
     }),
-    maxWidth: computed(() => computeds.dynamicField?.value.maxWidth ?? ''),
-    isSelectField: computed(() => computeds.dynamicField.value.type == 'select')
+    // Validate if edit is enable
+    canEdit: computed(() =>
+    {
+      if (!computeds.dynamicField.value || !props.col.isEditable) return false;
+      return true;
+    })
   };
 
   // Methods
   const methods = {
-    // methodKey: () => {}
-    async runBeforeUpdate(scope){
-      let response = true
-
-      const value = computeds.isSelectField.value ? scope.value.id : scope.value //if selectField
-      const tempRow = {...props.row}
-      tempRow[computeds.dynamicField.value.name] = value
-
-      if(props.beforeUpdate){
-        await props.beforeUpdate({val: value, row: tempRow }).then((val) => {
-          if(val){
-            //replaces the value by returned on resolve(val)
-            scope.value = val
-            tempRow[computeds.dynamicField.value.name] = val
-          } else {
-            scope.set()
-          }
-          emit('updateRow', tempRow)
-        }).catch((val) => {
-          //replaces the value by returned on reject(val) or into its inital state
-          scope.value =  val ? val : scope.initialValue
-          response = false
-        })
-      } else {
-        scope.set()
-        emit('updateRow', tempRow)
+    //Instance the default response value
+    setInitialValue ()
+    {
+      if (computeds.canEdit.value)
+      {
+        //Get the scope
+        const scope = props.row[props.col.field || props.col.name];
+        const dynamicField = computeds.dynamicField.value;
+        //Instance the initial response value
+        if (dynamicField.type == 'select' && !dynamicField.props?.multiple)
+        {
+          state.responseValue = scope.id;
+        } else state.responseValue = scope;
       }
-      return response
+    },
+    // methodKey: () => {}
+    async updateRow ()
+    {
+      state.loading = true;
+      //Instance tmpRow with new value
+      let tmpRow = {
+        ...props.row,
+        [computeds.dynamicField.value.name]: state.responseValue
+      };
+      //Emit the updateRow
+      if (props.beforeUpdate)
+      {
+        await props.beforeUpdate({ val: state.responseValue, row: tmpRow })
+          .then(val =>
+          {
+            state.loading = false;
+            refs.popupProxy.value.hide();
+            emit('updateRow', tmpRow);
+          }).catch((val) => state.loading = false);
+      } else emit('updateRow', tmpRow);
     }
-  }
+  };
 
   // Mounted
-  onMounted(() => {
-  })
+  onMounted(() =>
+  {
+    methods.setInitialValue();
+  });
 
   // Watch
   // watch(key, (newField, oldField): void => {
   //
   // }, {deep: true})
 
-  return {...refs, ...(toRefs(state)), ...computeds, ...methods}
+  return { ...refs, ...(toRefs(state)), ...computeds, ...methods };
 }

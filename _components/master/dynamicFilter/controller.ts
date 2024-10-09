@@ -97,7 +97,11 @@ export default function controller(props: any, emit: any) {
     async setFilterValues(){
       if(Object.keys(state.props.filters).length !== 0){
         Object.keys(state.props.filters).forEach(key => {
-          if(!state.props.filters[key]?.value ) return
+          //returns if initial value is null or an empty array
+          if(!state.props.filters[key]?.value ) return 
+          if( Array.isArray(state.props.filters[key]?.value)){
+            if(!state.props.filters[key]?.value.length) return
+          }
 
           state.filterValues[key] = state.props.filters[key]
           state.readOnlyData[key] = {
@@ -118,8 +122,9 @@ export default function controller(props: any, emit: any) {
 
     removeReadValue(key){
       delete state.readOnlyData[key];
-      state.filterValues[key] = null
-      state.props.filters[key].value = null
+      const value  = state.props.filters[key].props?.multiple ? [] : null
+      state.filterValues[key] = value
+      state.props.filters[key].value = value
       methods.emitValues(true)
     },
 
@@ -152,24 +157,25 @@ export default function controller(props: any, emit: any) {
             state.loadedOptions[key] = state.props.filters[key]?.props?.options
           }
         } else if(state.props.filters[key]?.type == 'crud'){
-            //loadedOptions callback for crud select
-            state.props.filters[key]['props']['config']['loadedOptions'] = (data) => {
-              //fix setReadValues twice
-              if(!state.loadedOptions[key]){
-                state.loadedOptions[key] = [...data]
-                methods.setReadValues()
-              }
+          //loadedOptions callback for crud select
+          if(!state.props.filters[key].props?.config) state.props.filters[key].props.config = {}
+          state.props.filters[key].props.config.loadedOptions = (data) => {
+            //fix setReadValues twice
+            if(!state.loadedOptions[key]){
+              state.loadedOptions[key] = [...data]
+              methods.setReadValues()
             }
+          }
 
-            //(hiden) loadedOptions callback for url filters
-            if(state.hidenFields[key]){
-              state.hidenFields[key]['props']['config']['loadedOptions'] = (data) => {
-                //fix setReadValues twice
-                if(!state.loadedOptions[key]){
-                  state.loadedOptions[key] = [...data]
-                  methods.setReadValues()
-                }
-              }
+          //(hiden) loadedOptions callback for url filters
+          state.hidenFields[key] = {...state.props.filters[key]}
+          if(!state.hidenFields[key].props?.config) state.hidenFields[key].props.config = {}
+          state.hidenFields[key].props.config.loadedOptions = (data) => {
+            //fix setReadValues twice
+            if(!state.loadedOptions[key]){
+              state.loadedOptions[key] = [...data]
+              methods.setReadValues()
+            }
           }
         }
       })
@@ -189,13 +195,19 @@ export default function controller(props: any, emit: any) {
 
           if(field?.type == 'select' || field?.type == 'treeSelect'){
             if(state.loadedOptions[key]){
-              const option = state.loadedOptions[key].find((element) => {
-                const value = element.id ?? element.value
-                return value.toString() == state.readOnlyData[key].value.toString()
+              const options = []
+              const selectedValues = state.props.filters[key].props?.multiple ? state.readOnlyData[key].value : [state.readOnlyData[key].value]
+              selectedValues.forEach((selectedValue) => {
+                const option = state.loadedOptions[key].find((element) => {
+                  const value = element.id ?? element.value
+                  return value.toString() == selectedValue.toString()
+                })
+                if(option){
+                  const optionLabel = option[field.loadOptions?.select?.label] || option.name || option.title || option.label || option.id || option.value || ''
+                  if(optionLabel) options.push(optionLabel)
+                }
               })
-              if(option){
-                result[key].option = option[field.loadOptions?.select?.label] || option.name || option.title || option.label || option.id || option.value || ''
-              }
+              result[key].option = options.join(', ')
             }
           } else if(field?.type == 'dateRange'){
             result[key].option = `${moment(state.readOnlyData[key].value.from).format('LL')} - ${moment(state.readOnlyData[key].value.to).format('LL')}`
@@ -204,7 +216,7 @@ export default function controller(props: any, emit: any) {
           }
 
           if(result[key]['value']) toEmit[key] = {...result[key]}
-          if(field?.quickFilter) delete result[key]
+          if(field?.quickFilter || (Array.isArray(state.readOnlyData[key].value) && !state.readOnlyData[key].value.length) ) delete result[key];
         }
       });
       state.readValues = result
@@ -213,15 +225,26 @@ export default function controller(props: any, emit: any) {
 
     //dynamicFiledtype: crud
     setReadValuesTypeCrud(result, key){
+      //finds the label  crud props
       result.label = state.props.filters[key]?.props?.crudProps?.label || ''
-      const labelKey = state.props.filters[key]?.props?.config?.options?.label //finds the label  crud props
+      const labelKey = state.props.filters[key]?.props?.config?.options?.label || 'title'
       // find the options on loaded options
-      const option = state.loadedOptions[key].find((option) => {
-        if(option.id.toString() == result.value.toString()){
-          return option
-        }
-      })
-      result.option = option[labelKey] || option.name || option.title || option.label || option.id || option.value || ''
+      if(state.loadedOptions[key]){
+        const options = []
+        const selectedValues = state.props.filters[key].props?.crudProps?.multiple ? result.value : [result.value]
+          selectedValues.forEach((selectedValue) => {
+            const option = state.loadedOptions[key].find((option) => {
+              if(option.id.toString() == selectedValue.toString()){
+                return option
+              }
+            })
+            if(option){
+              const optionLabel = option[labelKey] || option.name || option.title || option.label || option.id || option.value || ''
+              if(optionLabel) options.push(optionLabel)
+            }
+        })
+        result.option = options.join(', ')
+      }
       return result
     },
     restoreFilterValues(){
@@ -262,7 +285,7 @@ export default function controller(props: any, emit: any) {
         if(state.props.filters[key]?.quickFilter){
           state.quickFilterValues[key] = filters[key].value
         }
-        if ( (filters[key].value === null) || (filters[key].value === undefined) || (filters[key].value === false) || filters[key].value === 0) {
+        if ( (filters[key].value === null) || (filters[key].value === undefined) || (filters[key].value === false) || filters[key].value === 0 || (Array.isArray(filters[key].value) && !filters[key].value?.length)) {
           delete filters[key];
         } else {
           filters[key] = filters[key].value
@@ -421,6 +444,7 @@ export default function controller(props: any, emit: any) {
     removeNullValues(filters){
       Object.keys(filters).forEach((filter) => {
         if(!filters[filter]?.value ) return
+        if( Array.isArray(filters[filter]?.value)) return
         if (typeof filters[filter].value === 'object'){
           Object.keys(filters[filter].value).forEach((element) => {
             if (filters[filter].value[element] == null){

@@ -1,55 +1,32 @@
 <template>
-  <q-popup-edit
-    v-if="dynamicField"
-    ref="popupEditRef"
-    v-model="row[col.name]"
-    v-slot="scope"
-    no-caps
-    :cover="false"
-    anchor="bottom start"
-    transition-show="fade-in"
-    transition-hide="fade-out"
-    :max-width="maxWidth"
-  >
-    <q-form
-      autocorrect="off"
-      autocomplete="off"
-      ref="formContent"
-      @submit="runBeforeUpdate(scope)"
-      @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))"
-    >
+  <q-popup-proxy v-if="canEdit" :cover="false" anchor="bottom start"
+                 transition-show="fade-in" transition-hide="fade-out"
+                 :max-width="dynamicField.maxWidth" ref="popupProxy">
+    <div class="q-pa-md relative-position">
+      <!-- Title -->
       <b class="text-blue-grey">
         {{ $tr('isite.cms.label.edit') }}: ID {{ row.id }} | {{ col.label }}
       </b>
       <q-separator class="q-mt-sm" />
-      <div class="q-py-sm">
-        <dynamic-field
-          v-if="isSelectField"
-          v-model="scope.value.id"
-          :field="dynamicField"
-          :enableCache="true"
-        />
-        <dynamic-field v-else
-                       v-model="scope.value"
-                       :field="dynamicField"
-                       :enableCache="true"
-        />
-        <div class="justify-end row q-gutter-sm">
-          <q-btn
-            :label="$tr('isite.cms.label.cancel')"
-            no-caps color="grey" unelevated rounded
-            @click.stop.prevent="scope.cancel"
-          />
-          <q-btn
-            :label="$tr('isite.cms.label.save')" color="green"
-            no-caps unelevated rounded
-            @click="$refs.formContent.submit()"
-            :disable="scope.validate(scope.value) === false || scope.initialValue === scope.value"
-          />
+      <!-- Form -->
+      <q-form autocorrect="off" autocomplete="off" @submit="updateRow"
+              @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
+        <div class="q-py-sm">
+          <!-- Field -->
+          <dynamic-field v-model="responseValue" :field="dynamicField" />
+          <!--Actions-->
+          <div class="justify-end row q-gutter-sm">
+            <q-btn :label="$tr('isite.cms.label.cancel')"
+                   no-caps color="grey" unelevated rounded v-close-popup />
+            <q-btn :label="$tr('isite.cms.label.save')" color="green"
+                   no-caps unelevated rounded v-close-popup type="submit" />
+          </div>
         </div>
-      </div>
-    </q-form>
-  </q-popup-edit>
+      </q-form>
+      <!-- Loading -->
+      <inner-loading :visible="loading" />
+    </div>
+  </q-popup-proxy>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
@@ -62,7 +39,7 @@ export default defineComponent({
     beforeUpdate: {
       type: Function as PropType<() => void>,
       required: false,
-      default: null,
+      default: null
     }
   },
   setup (props, { emit })

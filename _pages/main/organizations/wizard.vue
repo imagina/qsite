@@ -267,9 +267,9 @@ export default {
       this.configProgress()
       this.$refs.stepper.previous();
     },
-    updateData(data){
-      this.$cache.set('org-wizard-step', storeWizard.step)
-      this.$cache.set('org-wizard-data', storeWizard.data)
+    updateData(){
+      this.$cache.set('org-wizard-step', this.$clone(storeWizard.step))
+      this.$cache.set('org-wizard-data', this.$clone(storeWizard.data))
     },
     async redirectAfterWizard() {
       //Instance the url

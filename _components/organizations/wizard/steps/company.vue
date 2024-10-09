@@ -6,7 +6,7 @@
     </div>
 
     <div class="tw-px-2 md:tw-px-10 tw-mb-8">
-      <dynamic-field v-model="name" :field="formFields.nameOrganizations"/>
+      <dynamic-field v-model="name" :field="formFields.nameOrganizations" />
     </div>
 
     <div v-if="stepContent" class="step-sidebar">
@@ -30,16 +30,15 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async function () {
+    this.$nextTick(async function() {
+      this.checkName();
       this.getData();
       this.getStepInfo();
     })
   },
   watch: {
     name(newName, oldName) {
-      if(newName){
-        this.checkName();
-      }
+      this.checkName();
     }
   },
   computed: {
@@ -75,13 +74,13 @@ export default {
     getStepInfo() {
       this.stepContent = storeWizard.infoCompany
     },
-    async checkOrganizationName(name){
+    async checkOrganizationName(name) {
       return new Promise((resolve, reject) => {
         //Requets params
         let requestParams = {
           refresh: true,
           params: {
-            filter: {field: 'title'}
+            filter: { field: 'title' }
           }
         }
         //Request

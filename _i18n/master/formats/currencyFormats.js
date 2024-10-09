@@ -11,6 +11,11 @@ export default {
       style: 'percent',
       minimumFractionDigits: 0,
       maximumFractionDigits: 2
+    },
+    decimal: {
+      style: 'decimal',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     }
   },
   'es': {
@@ -20,6 +25,12 @@ export default {
     },
     percent: {
       style: 'percent',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    },
+    decimal: {
+      style: 'decimal',
+      useGrouping: true,
       minimumFractionDigits: 0,
       maximumFractionDigits: 2
     }

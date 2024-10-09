@@ -482,7 +482,8 @@ export default {
         'dispatch': 'Despachar',
         'bulkPermissions': 'Permisos masivos',
         'entityPermissions': 'Permisos de entidad',
-        'cancelled': 'Cancelado'
+        'cancelled': 'Cancelado',
+        'stackTrace': 'Seguimiento de pila'
       },
       'message': {
         'requestAdded': 'Petición agregada a la cola sin conexión',

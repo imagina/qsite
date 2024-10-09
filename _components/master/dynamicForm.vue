@@ -43,7 +43,8 @@
                   </div>
                   <!--Actions-->
                   <div :class="`col-6 text-right ${block.title ? '' : 'offset-6'}`">
-                    <q-btn text-color="primary" outline rounded v-if="canEditForm && (keyBlock == 0)" dense class="btn-small"
+                    <q-btn text-color="primary" outline rounded v-if="canEditForm && (keyBlock == 0)" dense
+                           class="btn-small"
                            icon="fa-solid fa-pencil"
                            style="border: 1px solid rgba(0, 13, 71, 0.15)"
                            @click="$refs.editFormModal.editForm(formId)">
@@ -58,7 +59,7 @@
                 <!--Fields-->
                 <div class="row q-col-gutter-x-md q-mb-sm">
                   <template v-for="(field, key) in block.fields" :key="key">
-                    
+
                     <div v-if="hidenFields(field)"
                          :class="field.children ? 'col-12' : (field.colClass || field.columns || defaultColClass)">
                       <!--fake field-->
@@ -72,7 +73,7 @@
                                        :item-id="field.fieldItemId" />
                         <!--Sample field-->
                         <dynamic-field v-else :field="field" :item-id="field.fieldItemId"
-                                       v-model="locale.formTemplate[field.name || key]" :language="locale.language" 
+                                       v-model="locale.formTemplate[field.name || key]" :language="locale.language"
                                        :ref="field.type" />
                         <!--Child fields-->
                         <div v-if="field.children">
@@ -156,7 +157,7 @@
       </div>
     </div>
     <!-- Edit form Modal-->
-    <edit-form-modal ref="editFormModal" @hide="init"/>
+    <edit-form-modal ref="editFormModal" @hide="init" />
   </div>
 </template>
 
@@ -843,31 +844,38 @@ export default {
       //Validate if new Step it's not same to current step
       let isValid = (toStep == 'previous') ? true : await this.$refs.formContent.validate();
 
-      if(isSubmit && this.useCaptcha && isValid){
+      if (isSubmit && this.useCaptcha && isValid) {
         await this.captchaHandler()
       }
       //Dispatch event to know if if is valid
       this.$emit('validated', isValid);
       //Validate if new Step it's not same to current step
-      
+
       if (isValid) {
         //Emit submit form
         if (isSubmit) {
           if (this.sendTo && this.sendTo.apiRoute) {
             this.innerLoading = true;
             //Request Data
-            let requestData = { ...this.locale.form, ...(this.sendTo.extraData || {}) };
+            let requestData = { ...this.locale.form };
+            if (this.sendTo.extraData) {
+              requestData = {
+                ...requestData,
+                ...((typeof this.sendTo.extraData == 'function') ?
+                  this.sendTo.extraData(requestData) : this.sendTo.extraData)
+              };
+            }
+
             //Request
             this.$crud.create(this.sendTo.apiRoute, requestData).then(response => {
               this.innerLoading = false;
               this.reset();
               this.$emit('sent', this.$clone(this.locale.form));
-
+              this.$emit('feedBack', this.$clone(response.data));
               //feedBack
-              if (this.withFeedBack && response?.data) {
+              if (this.withFeedBack) {
                 this.showForm = false;
                 this.showFeedBack = true;
-                this.$emit('feedBack', this.$clone(response.data));
               }
 
             }).catch(error => {
@@ -901,9 +909,9 @@ export default {
       this.init();
       this.$emit('newForm');
     },
-    async captchaHandler(){
+    async captchaHandler() {
       const {version} = this.locale.formTemplate['captcha']
-      if(version == 3){
+      if (version == 3) {
         const ref = this.$refs.captcha[0].getRef()
         await ref.getToken().then((response) => {
           this.locale.formTemplate['captcha'] = response
