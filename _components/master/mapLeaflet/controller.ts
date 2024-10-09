@@ -17,6 +17,7 @@ export default function controller(props: any, emit: any) {
     countries: Object,
     map: Object,
     marker: Object,
+    markers: [],
     responseValue: false,
     mapZoom: 6,
     searchLoading: false,
@@ -42,9 +43,11 @@ export default function controller(props: any, emit: any) {
       methods.setMap()
       methods.setDefaultValue()
       methods.setPolygon()
+      methods.setMarkers()
     },
     //Set default values
     async setDefaultValue() {
+      if(props.markers) return
       //Validate map types
       if(methods.isPositionMarkerMap()){
         //Set default value and response value
@@ -146,7 +149,7 @@ export default function controller(props: any, emit: any) {
         position: controlsPosition
       }));
 
-      if(methods.isPositionMarkerMap()){
+      if(methods.isPositionMarkerMap() && !props.markers){
         state.marker = L.marker([props.defaultCenter.lat, props.defaultCenter.lng]).addTo(state.map)
       }
 
@@ -357,6 +360,20 @@ export default function controller(props: any, emit: any) {
           state.map.fitBounds(polygon.getBounds());
         }
       }
+    },
+
+    setMarkers(){
+      const model = props.modelValue
+      if(props.markers){
+        if(Array.isArray(model) && model.length){
+          model.forEach(m => {
+           state.markers.push(L.marker([m.lat, m.lng]).addTo(state.map))
+          })
+          /* calculate zoom*/
+          const fg = L.featureGroup(state.markers);
+          state.map.fitBounds(fg.getBounds());
+        }
+      }
     }
 
 
@@ -377,6 +394,11 @@ export default function controller(props: any, emit: any) {
     if(props.polygonControls){
       if(Array.isArray(model) && model.length) methods.setPolygon()
     }
+
+    if(props.markers){
+      if(Array.isArray(model) && model.length) methods.setMarkers()
+    }
+
 
   }, {deep: true})
 

@@ -63,6 +63,7 @@ export default defineComponent({
     },
     emitDefault: {type: Boolean, default: false},
     polygonControls: { type: Boolean, default: false}, 
+    markers: { type: Boolean, default: false}, 
     points: { type: Array, default: []}, 
   },
   emit: ["update:modelValue"],
