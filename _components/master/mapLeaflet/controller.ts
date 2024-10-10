@@ -128,7 +128,7 @@ export default function controller(props: any, emit: any) {
       state.searchProvider =  new OpenStreetMapProvider({params: {countrycodes: methods.getCountries()}})
       state.map = L.map(props.mapId, {
         editable: true,
-        zoomControl: false
+        zoomControl: false,
       }).setView([props.defaultCenter.lat, props.defaultCenter.lng], state.mapZoom);
 
       L.tileLayer(layer, {
@@ -366,6 +366,7 @@ export default function controller(props: any, emit: any) {
       const model = props.modelValue
       if(props.markers){
         state.map.dragging.enable();
+        state.map.setZoom(15);
         if(Array.isArray(model) && model.length){
           model.forEach(m => {
             const marker = L.marker([m.lat, m.lng], {title: m.title}).addTo(state.map)
