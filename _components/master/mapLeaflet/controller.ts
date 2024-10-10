@@ -368,9 +368,19 @@ export default function controller(props: any, emit: any) {
         state.map.dragging.enable();
         if(Array.isArray(model) && model.length){
           model.forEach(m => {
-           const marker = L.marker([m.lat, m.lng], {title: m.title}).addTo(state.map)
-           marker.bindPopup(m.content)
-           state.markers.push(marker)
+            const marker = L.marker([m.lat, m.lng], {title: m.title}).addTo(state.map)
+            //add content
+            if(m?.content) marker.bindPopup(m.content)
+            //callback to add data when click
+            if(m?.onClick){
+              marker.on('click', () => {
+                if(m?.loadingLabel) marker.bindPopup(m.loadingLabel).openPopup()
+                m.onClick().then(response => {
+                  marker.bindPopup(response).openPopup()
+                })
+              })
+            }
+            state.markers.push(marker)
           })
           /* calculate zoom*/
           const fg = L.featureGroup(state.markers);
@@ -399,7 +409,6 @@ export default function controller(props: any, emit: any) {
     if(props.markers){
       if(Array.isArray(model) && model.length) methods.setMarkers()
     }
-
 
   }, {deep: true})
 
