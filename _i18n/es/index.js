@@ -483,7 +483,8 @@ export default {
         'bulkPermissions': 'Permisos masivos',
         'entityPermissions': 'Permisos de entidad',
         'cancelled': 'Cancelado',
-        'stackTrace': 'Seguimiento de pila'
+        'stackTrace': 'Seguimiento de pila',
+        "appliedFilters": "Tienes filtros aplicados, haz clic aquí para abrir."
       },
       'message': {
         'requestAdded': 'Petición agregada a la cola sin conexión',

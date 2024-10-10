@@ -4,6 +4,7 @@ import _ from "lodash";
 import service from 'modules/qsite/_components/master/dynamicFilter/services'
 import { i18n, clone, store, router } from 'src/plugins/utils';
 import moment from "moment";
+import { Screen } from 'quasar'
 
 
 export default function controller(props: any, emit: any) {
@@ -63,6 +64,9 @@ export default function controller(props: any, emit: any) {
         //emit('updateModelValue', newValue)
       }
     }),
+    isMobile: computed(() => Screen.width < '500' ),
+    //hide on mobile by default
+    showQuickFilters: computed(() => computeds.isMobile.value ? props.showOnMobile : true)
   }
 
   // Methods
@@ -186,9 +190,8 @@ export default function controller(props: any, emit: any) {
       Object.keys(state.readOnlyData).forEach(key => {
         const field = state.props.filters[key];
         if(state.readOnlyData[key].value != null && state.readOnlyData[key].value && field?.type){
-
           result[key] = {
-            label: state.readOnlyData[key].label || state.props.filters[key].label ||  '' ,
+            label: state.readOnlyData[key].label || state.props.filters[key].label ||  '',
             value: state.readOnlyData[key].value,
             option: state.readOnlyData[key].value || ''
           }
@@ -273,7 +276,7 @@ export default function controller(props: any, emit: any) {
     },
     /* quickFiltres*/
     quickFilterHandler(key){
-      state.readOnlyData[key] = {value: state.quickFilterValues[key], label: ''}
+      state.readOnlyData[key] = {value: state.quickFilterValues[key], label: state.props.filters[key]?.props?.label }
       methods.emitValues(true)
     },
 

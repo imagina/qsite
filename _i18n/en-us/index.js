@@ -483,7 +483,8 @@ export default {
         "dispatch": "Dispatch",
         "bulkPermissions": "Bulk Permissions",
         "entityPermissions": "Entity Permissions",
-        "stackTrace": "Stack Trace"
+        "stackTrace": "Stack Trace",
+        "appliedFilters": "You have filters applied, click here to open."
       },
       "message": {
         "requestAdded": "Request added to the offline queue successfully",
