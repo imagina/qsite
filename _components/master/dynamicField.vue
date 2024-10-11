@@ -490,8 +490,7 @@
         </q-input>
 
         <!--Avatar Image-->
-        <avatar-image v-if="loadField('viewImage') && fieldProps.src" v-bind="fieldProps"
-                      :class="fieldProps.class ? fieldProps.class : 'img-file full-height' "/>
+        <preview-file v-if="loadField('previewFile')" v-bind="fieldProps" />
       </div>
     </div>
   </div>
@@ -521,6 +520,7 @@ import localizedPhone from 'modules/qsite/_components/master/localizedPhone/inde
 import multipleDynamicFields from 'modules/qsite/_components/master/multipleDynamicFields/views';
 import dateRangePicker from 'modules/qsite/_components/master/dateRangePicker';
 import timeSpent from 'modules/qsite/_components/master/timeSpent';
+import previewFile from 'modules/qsite/_components/v3/previewFile/index.vue'
 import { eventBus } from 'src/plugins/utils';
 
 export default {
@@ -563,7 +563,8 @@ export default {
     localizedPhone,
     multipleDynamicFields,
     dateRangePicker,
-    timeSpent
+    timeSpent,
+    previewFile
   },
   watch: {
     modelValue: {
@@ -1197,9 +1198,13 @@ export default {
             ...props
           };
           break;
-        case'viewImage':
+        case'previewFile':
           props = {
-            height: "100vh",
+            imgProps: {
+              height: "100vh",
+              class: 'img-file full-height',
+            },
+            fileClass: props.class,
             ...props
           };
           break;
