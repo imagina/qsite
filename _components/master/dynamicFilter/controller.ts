@@ -32,6 +32,7 @@ export default function controller(props: any, emit: any) {
     hidenFields: {},
     systemName: '',
     useAdminFilter: false,
+    hasAppliedFilters: false,
     userData: {
       fields: [{
         //id: '',
@@ -66,7 +67,7 @@ export default function controller(props: any, emit: any) {
     }),
     isMobile: computed(() => Screen.width < '500' ),
     //hide on mobile by default
-    showQuickFilters: computed(() => computeds.isMobile.value ? props.showOnMobile : true)
+    showFilters: computed(() => computeds.isMobile.value ? props.showOnMobile : true)
   }
 
   // Methods
@@ -294,6 +295,7 @@ export default function controller(props: any, emit: any) {
           filters[key] = filters[key].value
         }
       })
+      state.hasAppliedFilters = (Object.keys(filters).length > 0)
       methods.setReadValues()
       methods.mutateURLFilters({...filters})
       methods.emitModelValue(filters)
