@@ -165,17 +165,29 @@ export default function controller(props: any, emit: any) {
         refs.dateRange.value = {from, to}
       }
     },
+    setByType(type){
+      if(dateRanges[type]){
+        refs.dateRange.value.from = moment(new Date(dateRanges[type].from)).format(dateFormat)
+        refs.dateRange.value.to = moment(new Date(dateRanges[type].to)).format(dateFormat)
+        state.type = type
+        methods.changeDate()
+      }
+    },
     init(){
       //Check props
       if(props.modelValue != null){
         const value = props.modelValue
-        if(value?.from && value?.to){
-          refs.dateRange.value.from = moment(new Date(value.from)).format(dateFormat) ?? null
-          refs.dateRange.value.to = moment(new Date(value.to)).format(dateFormat) ?? null
-          state.type = value?.type ?? null
-        
-          methods.setInputRange({from: refs.dateRange.value.from, to: refs.dateRange.value.to})
-          methods.emitValue({from: refs.dateRange.value.from, to: refs.dateRange.value.to})
+        if( (value?.from && value?.to) || value?.type){
+          //set value by type
+          if(value?.type){
+            methods.setByType(value.type)
+          } else {
+            refs.dateRange.value.from = moment(new Date(value.from)).format(dateFormat) ?? null
+            refs.dateRange.value.to = moment(new Date(value.to)).format(dateFormat) ?? null
+            state.type = value?.type ?? null
+            methods.setInputRange({from: refs.dateRange.value.from, to: refs.dateRange.value.to})
+            methods.emitValue({from: refs.dateRange.value.from, to: refs.dateRange.value.to})
+          }
         }
       }
     } 

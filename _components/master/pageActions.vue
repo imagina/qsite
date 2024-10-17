@@ -19,7 +19,7 @@
         </template>
       </q-input>
       <!--Button Actions-->
-      <div v-for="(btn, keyAction) in actions" :key="keyAction">
+      <div v-for="(btn, keyAction) in actions()" :key="keyAction">
         <!-- if the button is dropdown -->
         <q-btn-dropdown
           v-bind="{...buttonProps}"
@@ -219,139 +219,6 @@ export default {
         noCaps: true
       };
     },
-    //Page Actions
-    actions() {
-      //Instance excludeActions prop
-      let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : []);
-
-      let response = [
-        //Export Icommerce
-        {
-          label: this.$tr('isite.cms.label.migration'),
-          vIf: (this.syncParams && !excludeActions.includes('sync')),
-          props: {
-            icon: 'fa-light fa-folder-tree'
-          },
-          action: () => this.$refs.syncComponent.show()
-        },
-        //Export
-        {
-          label: this.$tr('isite.cms.label.export'),
-          vIf: (this.exportParams && !excludeActions.includes('export')) && !this.isAppOffline,
-          props: {
-            icon: 'fa-light fa-file-arrow-down'
-          },
-          action: () => this.$refs.exportComponent.showReport()
-        },
-        // Bulk Actions
-        {
-          label: this.$tr('isite.cms.label.newBulkAction'),
-          vIf: this.bulkActionsPermission && this.bulkActionsConfig && !this.isAppOffline,
-          props: {
-            icon: 'fa-light fa-boxes-packing'
-          },
-          action: () => this.$refs.bulkActions.showReport()
-        },
-        //Tour
-        {
-          label: 'Tour',
-          vIf: this.enableTourAction,
-          props: {
-            icon: 'fa-light fa-shoe-prints',
-            id: 'actionStartTour'
-          },
-          action: () => this.startTour(true)
-        },
-        //recommendations
-        {
-          type: 'recommendation',
-          label: this.$trp('isite.cms.label.recommendation'),
-          vIf: (this.params.recommendations && !excludeActions.includes('recommendations')) ? true : false,
-          props: {
-            icon: 'fas fa-hat-wizard'
-          },
-          action: () => eventBus.emit('toggleMasterDrawer', 'recommendation')
-        },
-        //Filter
-        {
-          label: this.$tr('isite.cms.label.filter'),
-          vIf: ( Object.keys(this.dynamicFilter).length && !excludeActions.includes('filter') && !this.isAppOffline),
-          props: {
-            icon: 'fa-light fa-filter',
-            id: 'filter-button-crud'
-          },
-          action: () => this.$emit('toggleDynamicFilterModal')
-        },
-
-        //Refresh
-        {
-          label: !!this.expiresIn ? this.$tr('isite.cms.dateCache', { date: this.getDiffCacheTime() }) : this.$trp('isite.cms.label.refresh'),
-          type: this.multipleRefresh ? 'btn-dropdown' : '',
-          vIf: (this.params.refresh && !excludeActions.includes('refresh') && !this.isAppOffline),
-          props: {
-            icon: 'fa-light fa-rotate-right',
-            id: 'refresh-button-crud'
-          },
-          badge: {
-            vIf: (!!this.expiresIn && this.badgeAppear),
-            floating: true,
-            color: 'warning',
-            rounded: true,
-            show: true
-          },
-          items: [
-            {
-              label: this.$tr('isite.cms.label.refreshAtOnce'),
-              action: () => {this.refreshByTime(0)}
-            },
-            {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 1 }),
-              action: () => {this.refreshByTime(1)}
-            },
-            {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 5 }),
-              action: () => {this.refreshByTime(5)}
-            },
-            {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 10 }),
-              action: () => {this.refreshByTime(10)}
-            },
-            {
-              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 15 }),
-              action: () => {this.refreshByTime(15)}
-            }
-          ],
-          action: () => {this.emitRefresh()}
-        }
-      ];
-
-      //Validate extra actions
-      if (this.extraActions) {
-        //Prepend actions
-        response = [...this.extraActions.filter(action => typeof action != 'string'), ...response];
-        //New button action
-        if (this.extraActions.includes('new'))
-          response.unshift({
-            vIf: this.params.create && this.params.hasPermission.create,
-            props: {
-              label: this.$tr(`isite.cms.label.new`),
-              icon: 'fa-light fa-plus',
-              textColor: 'primary',
-              round: false,
-              rounded: true,
-              padding: '5px 15px',
-              id: 'new-button-crud'
-            },
-            action: () => this.$emit('new')
-          });
-      }
-
-      //force styles
-      response = response.map(item => ({ ...item, props: { ...(item.props.label ? { padding: '5px 15px' } : {}), ...item.props, color: 'white', outline: false } }));
-
-      //Response
-      return response.filter(item => item.vIf !== undefined ? item.vIf : true);
-    },
     //Quick filters
     quickFilters() {
       var response = {};
@@ -520,7 +387,139 @@ export default {
           }, timeToAppear));
         }
       }
-    }
+    },
+    actions() {
+      //Instance excludeActions prop
+      let excludeActions = this.$clone(Array.isArray(this.excludeActions) ? this.excludeActions : []);
+
+      let response = [
+        //Export Icommerce
+        {
+          label: this.$tr('isite.cms.label.migration'),
+          vIf: (this.syncParams && !excludeActions.includes('sync')),
+          props: {
+            icon: 'fa-light fa-folder-tree'
+          },
+          action: () => this.$refs.syncComponent.show()
+        },
+        //Export
+        {
+          label: this.$tr('isite.cms.label.export'),
+          vIf: (this.exportParams && !excludeActions.includes('export')) && !this.isAppOffline,
+          props: {
+            icon: 'fa-light fa-file-arrow-down'
+          },
+          action: () => this.$refs.exportComponent.showReport()
+        },
+        // Bulk Actions
+        {
+          label: this.$tr('isite.cms.label.newBulkAction'),
+          vIf: this.bulkActionsPermission && this.bulkActionsConfig && !this.isAppOffline,
+          props: {
+            icon: 'fa-light fa-boxes-packing'
+          },
+          action: () => this.$refs.bulkActions.showReport()
+        },
+        //Tour
+        {
+          label: 'Tour',
+          vIf: this.enableTourAction,
+          props: {
+            icon: 'fa-light fa-shoe-prints',
+            id: 'actionStartTour'
+          },
+          action: () => this.startTour(true)
+        },
+        //recommendations
+        {
+          type: 'recommendation',
+          label: this.$trp('isite.cms.label.recommendation'),
+          vIf: (this.params.recommendations && !excludeActions.includes('recommendations')) ? true : false,
+          props: {
+            icon: 'fas fa-hat-wizard'
+          },
+          action: () => eventBus.emit('toggleMasterDrawer', 'recommendation')
+        },
+        //Filter
+        {
+          label: this.$tr('isite.cms.label.filter'),
+          vIf: ( Object.keys(this.dynamicFilter).length && !excludeActions.includes('filter') && !this.isAppOffline),
+          props: {
+            icon: 'fa-light fa-filter',
+            id: 'filter-button-crud'
+          },
+          action: () => this.$emit('toggleDynamicFilterModal')
+        },
+
+        //Refresh
+        {
+          label: !!this.expiresIn ? this.$tr('isite.cms.dateCache', { date: this.getDiffCacheTime() }) : this.$trp('isite.cms.label.refresh'),
+          type: this.multipleRefresh ? 'btn-dropdown' : '',
+          vIf: (this.params.refresh && !excludeActions.includes('refresh') && !this.isAppOffline),
+          props: {
+            icon: 'fa-light fa-rotate-right',
+            id: 'refresh-button-crud'
+          },
+          badge: {
+            vIf: (!!this.expiresIn && this.badgeAppear),
+            floating: true,
+            color: 'warning',
+            rounded: true,
+            show: true
+          },
+          items: [
+            {
+              label: this.$tr('isite.cms.label.refreshAtOnce'),
+              action: () => {this.refreshByTime(0)}
+            },
+            {
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 1 }),
+              action: () => {this.refreshByTime(1)}
+            },
+            {
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 5 }),
+              action: () => {this.refreshByTime(5)}
+            },
+            {
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 10 }),
+              action: () => {this.refreshByTime(10)}
+            },
+            {
+              label: this.$tr('isite.cms.label.refreshEveryMinutes', { min: 15 }),
+              action: () => {this.refreshByTime(15)}
+            }
+          ],
+          action: () => {this.emitRefresh()}
+        }
+      ];
+
+      //Validate extra actions
+      if (this.extraActions) {
+        //Prepend actions
+        response = [...this.extraActions.filter(action => typeof action != 'string'), ...response];
+        //New button action
+        if (this.extraActions.includes('new'))
+          response.unshift({
+            vIf: this.params.create && this.params.hasPermission.create,
+            props: {
+              label: this.$tr(`isite.cms.label.new`),
+              icon: 'fa-light fa-plus',
+              textColor: 'primary',
+              round: false,
+              rounded: true,
+              padding: '5px 15px',
+              id: 'new-button-crud'
+            },
+            action: () => this.$emit('new')
+          });
+      }
+
+      //force styles
+      response = response.map(item => ({ ...item, props: { ...(item.props.label ? { padding: '5px 15px' } : {}), ...item.props, color: 'white', outline: false } }));
+
+      //Response
+      return response.filter(item => item.vIf !== undefined ? item.vIf : true);
+    },
   }
 };
 </script>

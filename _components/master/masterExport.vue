@@ -111,6 +111,7 @@ export default {
     this.$nextTick(function() {
       this.init();
     });
+    eventBus.on('export.data.refresh', () => this.getData());
   },
   data() {
     return {
@@ -214,8 +215,6 @@ export default {
           ]
         });
       });
-      //Listen refresh report
-      eventBus.on('export.data.refresh', () => this.getData);
       //}
     },
     //Get data
@@ -341,27 +340,6 @@ export default {
         console.log(error);
       }
     }
-    /*
-    async storeFilter() {
-      const filterClone = this.filterPlugin.storeFilter
-        ? { values: await this.$helper.convertStringToObject() }
-        : this.$clone(this.filterPlugin);
-      let filter = { ...filterClone };
-      if (this.filterPlugin.storeFilter) {
-        if (filter.values.dateStart && filter.values.dateEnd) {
-          const dateFilter = await this.getCurrentFilterDate(filter.values.dateStart, filter.values.dateEnd);
-          delete filter.values.type;
-          delete filter.values.dateStart;
-          delete filter.values.dateEnd;
-          filter.values = {
-            ...dateFilter,
-            ...filter.values
-          };
-        }
-      }
-      return filter;
-    }
-    */
   }
 };
 </script>

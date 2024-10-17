@@ -380,6 +380,9 @@ export default function controller(props: any, emit: any) {
                   marker.bindPopup(response).openPopup()
                 })
               })
+              marker.on('popupclose', () => {
+                marker.unbindPopup()
+              })
             }
             state.markers.push(marker)
           })
