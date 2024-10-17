@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, onMounted, ref, toRefs } from 'vue'
-import ticker from './components/ticker'
+import tickerChildren from './components/ticker'
 
 const props = defineProps({
   data: {
@@ -40,7 +40,7 @@ onMounted(async () => {
   >
     <div class="tw-inline-flex tw-flex-nowrap tw-gap-8">
       <template v-for="(ticker, index) in tickersData" :key="index">
-        <ticker 
+        <tickerChildren
           :apiRoute="ticker?.apiRoute" 
           :permission="ticker?.permission" 
           :filters="filters" 
