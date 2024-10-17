@@ -15,7 +15,10 @@ export default function controller(props: any, emit: any) {
   }
 
   const computeds = {
-    havePermission: computed(() => permission.value && hasAccess(permission.value))
+    havePermission: computed(() => { 
+      if (!permission.value) return true
+      return hasAccess(permission.value)
+    })
   }
 
   const methods = {
@@ -26,7 +29,10 @@ export default function controller(props: any, emit: any) {
 
   onMounted(async () => {
     refs.isLoading.value = true
-    if (permission.value && !computeds.havePermission.value) return
+    if (permission.value && !hasAccess(permission.value)) {
+      refs.isLoading.value = false
+      return
+    }
     if (apiRoute.value) {
       refs.ticker.value = await methods.getData()
     } else if (data.value) {
