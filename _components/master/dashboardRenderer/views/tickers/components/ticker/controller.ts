@@ -15,7 +15,7 @@ export default function controller(props: any, emit: any) {
   }
 
   const computeds = {
-    havePermission: computed(() => { 
+    havePermission: computed(() => {
       if (!permission.value) return true
       return hasAccess(permission.value)
     })
@@ -28,6 +28,8 @@ export default function controller(props: any, emit: any) {
   }
 
   onMounted(async () => {
+    console.log(apiRoute.value);
+    console.log(refs);
     refs.isLoading.value = true
     if (permission.value && !hasAccess(permission.value)) {
       refs.isLoading.value = false
@@ -41,8 +43,10 @@ export default function controller(props: any, emit: any) {
     refs.isLoading.value = false
 
     eventBus.on('crud.data.refresh', async () => {
+      console.log('ingreso');
       refs.isLoading.value = true
       if (apiRoute.value) {
+        console.log(await methods.getData())
         refs.ticker.value = await methods.getData()
       }
       refs.isLoading.value = false
