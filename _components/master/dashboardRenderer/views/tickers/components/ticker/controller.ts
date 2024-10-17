@@ -15,7 +15,7 @@ export default function controller(props: any, emit: any) {
   }
 
   const computeds = {
-    havePermission: computed(() => hasAccess(permission.value))
+    havePermission: computed(() => permission.value && hasAccess(permission.value))
   }
 
   const methods = {
@@ -26,17 +26,18 @@ export default function controller(props: any, emit: any) {
 
   onMounted(async () => {
     refs.isLoading.value = true
-    if (apiRoute.value && permission.value && computeds.havePermission.value) {
+    if (permission.value && !computeds.havePermission.value) return
+    if (apiRoute.value) {
       refs.ticker.value = await methods.getData()
-    } else if (data.value && permission.value && computeds.havePermission.value) {
+    } else if (data.value) {
       refs.ticker.value = data.value
     }
     refs.isLoading.value = false
 
     eventBus.on('crud.data.refresh', async () => {
       refs.isLoading.value = true
-      if (apiRoute.value && permission.value && computeds.havePermission.value) {
-        refs.ticker.value = await methods.getData(true)
+      if (apiRoute.value) {
+        refs.ticker.value = await methods.getData()
       }
       refs.isLoading.value = false
     })
@@ -49,7 +50,7 @@ export default function controller(props: any, emit: any) {
   watch(filters, async (): Promise<void> => {
     refs.isLoading.value = true
     if (apiRoute.value && permission.value && computeds.havePermission.value) {
-      refs.ticker.value = await methods.getData(false)
+      refs.ticker.value = await methods.getData()
     }
     refs.isLoading.value = false
   }, { deep: true })

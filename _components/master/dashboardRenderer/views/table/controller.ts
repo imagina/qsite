@@ -1,4 +1,4 @@
-import { ref, onMounted, toRefs, watch } from 'vue';
+import { ref, onMounted, toRefs, watch, onBeforeUnmount } from 'vue';
 import { eventBus } from 'src/plugins/utils.ts'
 import service from '../../services'
 import { Table, Column, Row, ColorAssignment } from './interface'
@@ -43,7 +43,8 @@ export default function controller(props: any, emit: any) {
       }
     },
     sort: (col: Column) => {
-      refs.tableData.value.rows.sort((a, b) => {
+      if (!col) return
+      refs.tableData.value?.rows.sort((a, b) => {
         const name = col.name
         const asc = col.asc
     
@@ -53,7 +54,8 @@ export default function controller(props: any, emit: any) {
       })
     },
     sortReverse: (column: Column) => {
-      refs.tableData.value.columns.map(col => {
+      if (!column || !column.sortable) return
+      refs.tableData.value?.columns.map(col => {
         if ((col.name === column.name) && col.sortable) {
           col.asc = !col?.asc
         }
@@ -79,7 +81,7 @@ export default function controller(props: any, emit: any) {
     refs.isLoading.value = true
     if (apiRoute.value) {
       refs.tableData.value = await methods.getData()
-      refs.tableData.value.columns.forEach(col => methods.sort(col))
+      refs.tableData.value?.columns.forEach(col => methods.sort(col))
     } else refs.tableData.value = data.value
     refs.isLoading.value = false
 
@@ -90,6 +92,10 @@ export default function controller(props: any, emit: any) {
       if (apiRoute.value) await methods.getData()
       refs.isLoading.value = false
     })
+  })
+
+  onBeforeUnmount(() => {
+    eventBus.off('crud.data.refresh')
   })
 
   watch(filters, async (): Promise<void> => {

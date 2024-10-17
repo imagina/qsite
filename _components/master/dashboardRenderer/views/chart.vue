@@ -73,6 +73,10 @@ onMounted(async () => {
   })
 })
 
+onBeforeUnmount(() => {
+  eventBus.off('crud.data.refresh')
+})
+
 watch(filters, async () => {
   isLoading.value = true
   if (apiRoute.value) options.value = await service.getQuickCardData()
