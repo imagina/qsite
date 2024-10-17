@@ -8,10 +8,13 @@ export interface Column {
     barColor?: string,
     barTextColor?: string,
     badge?: {
+      bgColor?: string,
       textColor?: string,
     }
   },
   asc?: boolean,
+  headerClass?: string,
+  bodyClass?: string,
 }
 
 export interface Row {

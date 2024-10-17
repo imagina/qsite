@@ -31,7 +31,7 @@ export default defineComponent({
     class="tw-p-5 tw-rounded-2xl tw-bg-white tw-border tw-border-gray-100"
     :class="className"
   >
-    <div v-if="tableData.title">
+    <div v-if="tableData?.title">
       <q-skeleton 
         v-show="isLoading" 
         type="rect" 
@@ -41,12 +41,13 @@ export default defineComponent({
         v-show="!isLoading" 
         class="tw-text-base tw-font-bold tw-text-center tw-mb-5"
       >
-        {{ tableData.title }}
+        {{ tableData?.title }}
       </h1>
     </div>
-    <div class="table tw-overflow-y-auto tw-max-h-[340px]">
+    <div class="tw-flex tw-flex-nowrap tw-overflow-auto tw-max-h-[340px] table">
       <div 
-        v-for="column in tableData.columns"
+        v-for="column in tableData?.columns"
+        class="tw-min-w-24"
         :class="{
           'tw-text-center': column?.align === 'center',
           'tw-text-right': column?.align === 'right',
@@ -68,7 +69,7 @@ export default defineComponent({
           "
         >
           <q-skeleton v-show="isLoading" type="QChip" class="tw-h-7" />
-          <span v-show="!isLoading" :class="column.headerClass">
+          <span v-show="!isLoading" :class="column?.headerClass">
             {{ formatted(column?.label) }}
           </span>
           <q-btn
@@ -77,7 +78,7 @@ export default defineComponent({
             unelevated 
             size="xs" 
             class="tw-p-1 tw-text-sm tw-bg-neutral-200 tw-hidden tw-ml-2"
-            @click="sort(column)"
+            @click="sortReverse(column)"
           >
             <i 
               class="tw-text-sm tw-text-neutral-500" 
@@ -101,7 +102,7 @@ export default defineComponent({
             class="
               tw-flex 
               tw-items-center 
-              tw-h-12
+              tw-min-h-12
               tw-font-medium
               rows
             " 
@@ -111,9 +112,12 @@ export default defineComponent({
               'tw-justify-start': column?.align === 'left',
             }, pickColor(row), column?.bodyClass"
           >
-            <span v-if="!column?.progress">
+            <span v-if="!column?.progress" class="tw-truncate">
               {{ formatted(row[column.name]) }}
             </span>
+            <q-tooltip v-if="!column?.progress">
+              {{ formatted(row[column.name]) }}
+            </q-tooltip>
             <q-linear-progress 
               v-if="column?.progress"
               size="22px" 
@@ -148,8 +152,16 @@ export default defineComponent({
   @apply tw-w-1 tw-h-80;
 }
 
+.table > div:first-child > .show-filter-hover {
+  @apply tw-pl-5;
+}
+
 .table > div:first-child > section > .rows {
   @apply tw-rounded-l-2xl tw-pl-5;
+}
+
+.table > div:last-child > .show-filter-hover {
+  @apply tw-pr-5;
 }
 
 .table > div:last-child > section > .rows {

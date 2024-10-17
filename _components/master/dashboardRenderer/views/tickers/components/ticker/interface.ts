@@ -2,6 +2,7 @@ interface Body {
   title?: string,
   value: string,
   footer?: string,
+  className?: string,
 }
 
 export interface Ticker {

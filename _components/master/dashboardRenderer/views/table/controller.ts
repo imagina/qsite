@@ -42,29 +42,33 @@ export default function controller(props: any, emit: any) {
         return colors[colorIndex]
       }
     },
-    sort: (column: Column) => {
-      refs.tableData.value.columns.map(col => {
-        if ((col.name === column.name) && col.sortable) {
-          if (col.asc) col.asc = !col.asc
-          else col.asc = false
-        }
-      })
-    
+    sort: (col: Column) => {
       refs.tableData.value.rows.sort((a, b) => {
-        const name = column.name
-        const asc = column.asc
+        const name = col.name
+        const asc = col.asc
     
         if (a[name] < b[name]) return asc ? -1 : 1
         if (a[name] > b[name]) return asc ? 1 : -1
         return 0
       })
     },
+    sortReverse: (column: Column) => {
+      refs.tableData.value.columns.map(col => {
+        if ((col.name === column.name) && col.sortable) {
+          col.asc = !col?.asc
+        }
+      })
+
+      methods.sort(column)
+    },
     formatted: (value: string | number) => {
-      if (typeof value === 'number') return value.toLocaleString()
+      if (typeof value === 'number') return value.toLocaleString('en')
       return value
     },
-    formatPercentage: (value: number) => {
-      return `${value * 100}%`
+    formatPercentage: (value: number | string) => {
+      const percentage = Number(value) * 100
+      
+      return `${Math.round(percentage)}%`
     },
     getData: async (): Promise<Table> => {
       return await service.getQuickCardData(apiRoute.value, filters.value)
@@ -75,10 +79,11 @@ export default function controller(props: any, emit: any) {
     refs.isLoading.value = true
     if (apiRoute.value) {
       refs.tableData.value = await methods.getData()
+      refs.tableData.value.columns.forEach(col => methods.sort(col))
     } else refs.tableData.value = data.value
     refs.isLoading.value = false
 
-    refs.maxNumberPerColor = methods.getMaxNumberPerColor(refs.tableData.value.colorAssignment)
+    refs.maxNumberPerColor = methods.getMaxNumberPerColor(refs.tableData.value?.colorAssignment)
   
     eventBus.on('crud.data.refresh', async () => {
       refs.isLoading.value = true
