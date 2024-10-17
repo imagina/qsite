@@ -35,16 +35,18 @@ onMounted(async () => {
 </script>
 <template>
   <div 
-    class="tw-grid tw-grid-flow-col tw-gap-8 tw-overflow-x-auto tw-pb-2" 
+    class="tw-whitespace-normal tw-overflow-x-auto tw-pb-2" 
     :class="className"
   >
-    <template v-for="(ticker, index) in tickersData" :key="index">
-      <ticker 
-        :apiRoute="ticker?.apiRoute" 
-        :permission="ticker?.permission" 
-        :filters="filters" 
-        :data="ticker"
-      />
-    </template>
+    <div class="tw-inline-flex tw-flex-nowrap tw-gap-8">
+      <template v-for="(ticker, index) in tickersData" :key="index">
+        <ticker 
+          :apiRoute="ticker?.apiRoute" 
+          :permission="ticker?.permission" 
+          :filters="filters" 
+          :data="ticker"
+        />
+      </template>
+    </div>
   </div>
 </template>

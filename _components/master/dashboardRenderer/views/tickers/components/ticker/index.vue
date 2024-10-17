@@ -1,10 +1,10 @@
 <script lang="ts">
-import { defineProps, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
 import controller from './controller'
 
 export default defineComponent({
-    props: {
-      apiRoute: {
+  props: {
+    apiRoute: {
       type: String,
       default: null
     },
@@ -28,26 +28,26 @@ export default defineComponent({
 </script>
 <template>
   <div
+    v-if="havePermission"
     class="
       tw-flex 
       tw-justify-between
       tw-gap-5
       tw-w-min
-      tw-min-w-52
-      tw-h-28
+      tw-box-border
+      tw-min-w-40
       tw-rounded-2xl 
       tw-p-5 
-      tw-bg-white
-      tw-border
-      tw-border-gray-100
+      tw-bg-gradient-to-br
+      tw-from-white
+      tw-from-45%
+      tw-to-blue-50
     "
   >
     <section 
-      class="tw-flex tw-w-full tw-flex-col tw-gap-2" 
-      :class="{ 'tw-items-center tw-justify-center': !ticker?.icon }"
-    >
+      class="tw-flex tw-w-full tw-flex-col tw-gap-2 tw-justify-center" >
       <div>
-        <div v-if="ticker.title">
+        <div v-if="ticker?.title">
           <q-skeleton v-show="isLoading" class="tw-w-14 tw-mb-1" type="QBadge"/>
           <div 
             v-show="!isLoading" 
@@ -56,9 +56,9 @@ export default defineComponent({
           />
         </div>
         <section class="tw-flex tw-gap-2 tw-items-center tw-h-auto">
-          <template v-for="(body, index) in ticker.body" :key="index">
-            <div class="tw-flex tw-flex-col tw-justify-center" :class="body.className">
-              <div v-if="body.title">
+          <template v-for="(body, index) in ticker?.body" :key="index">
+            <div class="tw-flex tw-flex-col tw-justify-center" :class="body?.className">
+              <div v-if="body?.title">
                 <q-skeleton v-show="isLoading" class="tw-w-14 tw-mb-1" type="QBadge"/>
                 <div 
                   v-show="!isLoading" 
@@ -66,7 +66,7 @@ export default defineComponent({
                   v-html="body.title"
                 />
               </div>
-              <div v-if="body.value">
+              <div v-if="body?.value">
                 <q-skeleton v-show="isLoading" class="tw-w-20 tw-h-7" type="rect"/>
                 <div 
                   v-show="!isLoading" 
@@ -74,7 +74,7 @@ export default defineComponent({
                   v-html="body.value" 
                 />
               </div>
-              <div v-if="body.footer">
+              <div v-if="body?.footer">
                 <q-skeleton v-show="isLoading" class="tw-w-24" type="QBadge"/>
                 <div 
                   v-show="!isLoading"
@@ -87,7 +87,7 @@ export default defineComponent({
           </template>
         </section>
       </div>
-      <div v-if="ticker.footer">
+      <div v-if="ticker?.footer">
         <q-skeleton v-show="isLoading" class="tw-w-24" type="QBadge"/>
         <div 
           v-show="!isLoading"

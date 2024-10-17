@@ -1,4 +1,4 @@
-import { ref, onMounted, onBeforeUnmount, toRefs, watch, inject } from 'vue'
+import { ref, onMounted, onBeforeUnmount, toRefs, watch, computed } from 'vue'
 import { eventBus, store as storeUtil } from 'src/plugins/utils.ts'
 import service from '../../../../services'
 import { Ticker } from './interface'
@@ -8,36 +8,35 @@ export default function controller(props: any, emit: any) {
 
   const { apiRoute, permission, data, filters } = toRefs(props)
   const { hasAccess } = storeUtil
-  const INTERVAL_TIME = 10000
 
   const refs = {
     isLoading: ref(true),
     ticker: ref<Ticker>({ ...tickerModel }),
   }
 
+  const computeds = {
+    havePermission: computed(() => hasAccess(permission.value))
+  }
+
   const methods = {
-    getData: async (): Promise<Ticker> => {
-      return await service.getQuickCardData(apiRoute.value, filters.value)
+    getData: async (refresh?: boolean): Promise<Ticker> => {
+      return await service.getQuickCardData(apiRoute.value, filters.value, refresh)
     }
   }
 
   onMounted(async () => {
     refs.isLoading.value = true
-    if (apiRoute.value && permission.value && hasAccess(permission.value)) {
+    if (apiRoute.value && permission.value && computeds.havePermission.value) {
       refs.ticker.value = await methods.getData()
-    } else if (data.value) {
+    } else if (data.value && permission.value && computeds.havePermission.value) {
       refs.ticker.value = data.value
     }
     refs.isLoading.value = false
 
-    // intervalId.value = setInterval(async () => {
-    //   if (apiRoute.value) await getData(false)
-    // }, INTERVAL_TIME)
-
     eventBus.on('crud.data.refresh', async () => {
       refs.isLoading.value = true
-      if (apiRoute.value && permission.value && hasAccess(permission.value)) {
-        refs.ticker.value = await methods.getData()
+      if (apiRoute.value && permission.value && computeds.havePermission.value) {
+        refs.ticker.value = await methods.getData(true)
       }
       refs.isLoading.value = false
     })
@@ -49,11 +48,11 @@ export default function controller(props: any, emit: any) {
 
   watch(filters, async (): Promise<void> => {
     refs.isLoading.value = true
-    if (apiRoute.value && permission.value && hasAccess(permission.value)) {
-      refs.ticker.value = await methods.getData()
+    if (apiRoute.value && permission.value && computeds.havePermission.value) {
+      refs.ticker.value = await methods.getData(false)
     }
     refs.isLoading.value = false
   }, { deep: true })
 
-  return {...refs, ...methods }
+  return {...refs, ...methods, ...computeds }
 }

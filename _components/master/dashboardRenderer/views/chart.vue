@@ -9,7 +9,9 @@ import { eventBus } from 'src/plugins/utils.ts'
 import {
   TitleComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
+  DataZoomComponent,
+  GridComponent,
 } from 'echarts/components'
 import { onMounted, provide, ref, toRefs, watch, nextTick } from 'vue'
 
@@ -23,6 +25,8 @@ use([
   TitleComponent,
   TooltipComponent,
   LegendComponent,
+  DataZoomComponent,
+  GridComponent,
 ])
 
 const props = defineProps({
