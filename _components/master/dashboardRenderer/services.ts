@@ -9,7 +9,7 @@ export default {
         refresh: true,
         params: {
           filter: {
-            ...(byModule ? { configNamebyModule: configName } : { configName }),
+            ...(byModule ? { configNameByModule: configName } : { configName }),
           }
         }
       };
