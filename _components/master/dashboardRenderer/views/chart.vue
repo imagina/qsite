@@ -13,7 +13,7 @@ import {
   DataZoomComponent,
   GridComponent,
 } from 'echarts/components'
-import { onMounted, provide, ref, toRefs, watch, nextTick } from 'vue'
+import { onMounted, provide, ref, toRefs, watch, onBeforeUnmount } from 'vue'
 
 use([
   CanvasRenderer,
@@ -79,7 +79,7 @@ onBeforeUnmount(() => {
 
 watch(filters, async () => {
   isLoading.value = true
-  if (apiRoute.value) options.value = await service.getQuickCardData()
+  if (apiRoute.value) options.value = await getData()
   isLoading.value = false
 })
 </script>
