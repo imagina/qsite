@@ -29,7 +29,7 @@ export default function controller(props: any, emit: any) {
   }
 
   onMounted(async () => {
-    console.log('hola permisson ', computed.havePermission.value)
+    console.log('hola permisson ', computeds.havePermission.value)
     console.log(apiRoute.value);
     console.log(refs);
     refs.isLoading.value = true
