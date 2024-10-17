@@ -16,6 +16,7 @@ export default function controller(props: any, emit: any) {
 
   const computeds = {
     havePermission: computed(() => {
+      console.log( hasAccess(permission.value));
       if (!permission.value) return true
       return hasAccess(permission.value)
     })
@@ -28,6 +29,7 @@ export default function controller(props: any, emit: any) {
   }
 
   onMounted(async () => {
+    console.log('hola permisson ', computed.havePermission.value)
     console.log(apiRoute.value);
     console.log(refs);
     refs.isLoading.value = true
