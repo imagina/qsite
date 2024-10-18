@@ -89,7 +89,7 @@ watch(filters, async () => {
       :class="className"
     >
       <section v-show="isLoading">
-        <q-skeleton type="rect" class="tw-mb-4 tw-w-52 tw-h-9" />
+        <q-skeleton type="rect" class="tw-mb-4 tw-w-56 tw-h-9 tw-rounded-2xl" />
         <div class="tw-flex tw-items-end tw-justify-center tw-gap-6">
           <q-skeleton class="tw-rounded-2xl tw-w-16 tw-h-24" animated type="rect" />
           <q-skeleton class="tw-rounded-2xl tw-w-16 tw-h-32" animated type="rect" />
