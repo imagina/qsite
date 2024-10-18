@@ -107,11 +107,15 @@ export default defineComponent({
                 tw-font-medium
                 rows
               " 
-              :class="{
-                'tw-justify-center': column?.align === 'center',
-                'tw-justify-end': column?.align === 'right',
-                'tw-justify-start': column?.align === 'left',
-              }, pickColor(row), column?.bodyClass"
+              :class="[
+                {
+                  'tw-justify-center': column?.align === 'center',
+                  'tw-justify-end': column?.align === 'right',
+                  'tw-justify-start': column?.align === 'left',
+                }, 
+                pickColor(row),
+                column?.bodyClass,
+              ]"
             >
               <span v-if="!column?.progress" class="tw-truncate">
                 {{ formatted(row[column.name]) }}

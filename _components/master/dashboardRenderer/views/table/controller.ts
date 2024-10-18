@@ -74,6 +74,10 @@ export default function controller(props: any, emit: any) {
     },
     getData: async (): Promise<Table> => {
       return await service.getQuickCardData(apiRoute.value, filters.value)
+    },
+    sortAndColor: () => {
+      refs.maxNumberPerColor = methods.getMaxNumberPerColor(refs.tableData.value?.colorAssignment)
+      refs.tableData.value?.columns.forEach(col => methods.sort(col))
     }
   }
 
@@ -81,15 +85,17 @@ export default function controller(props: any, emit: any) {
     refs.isLoading.value = true
     if (apiRoute.value) {
       refs.tableData.value = await methods.getData()
-      refs.tableData.value?.columns.forEach(col => methods.sort(col))
     } else refs.tableData.value = data.value
     refs.isLoading.value = false
 
-    refs.maxNumberPerColor = methods.getMaxNumberPerColor(refs.tableData.value?.colorAssignment)
-  
+    methods.sortAndColor()
+    
     eventBus.on('crud.data.refresh', async () => {
       refs.isLoading.value = true
-      if (apiRoute.value) await methods.getData()
+      if (apiRoute.value) {
+        await methods.getData()
+        methods.sortAndColor()
+      }
       refs.isLoading.value = false
     })
   })
@@ -100,7 +106,10 @@ export default function controller(props: any, emit: any) {
 
   watch(filters, async (): Promise<void> => {
     refs.isLoading.value = true
-    if (apiRoute.value) refs.tableData.value = await methods.getData()
+    if (apiRoute.value) {
+      refs.tableData.value = await methods.getData()
+      methods.sortAndColor()
+    }
     refs.isLoading.value = false
   }, { deep: true })
 
