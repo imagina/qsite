@@ -89,6 +89,7 @@ export default function controller(props: any, emit: any) {
       if(value != null ){
         const from = value?.from ? value?.from : value
         const to = value?.to ? value?.to : value
+        methods.getType({from, to})
 
         toEmit = {
           field,
@@ -139,8 +140,8 @@ export default function controller(props: any, emit: any) {
         
       if (typeDate) {        
         if(typeDate == dateRanges.customRange.value){
-          fromDate = moment(fromDate).format(dateFormat)
-          toDate = moment(toDate).format(dateFormat)
+          fromDate = moment(new Date(fromDate)).format(dateFormat)
+          toDate = moment(new Date (toDate)).format(dateFormat)
         } else {
           fromDate = dateRanges[typeDate].from
           toDate = dateRanges[typeDate].to
@@ -165,10 +166,13 @@ export default function controller(props: any, emit: any) {
         refs.dateRange.value = {from, to}
       }
     },
-    setByType(type){
+    setByType(value){
+      const type = value.type
       if(dateRanges[type]){
-        refs.dateRange.value.from = moment(new Date(dateRanges[type].from)).format(dateFormat)
-        refs.dateRange.value.to = moment(new Date(dateRanges[type].to)).format(dateFormat)
+        const from  = value?.from || dateRanges[type]?.from
+        const to = value?.to || dateRanges[type]?.to
+        refs.dateRange.value.from = moment(new Date(from)).format(dateFormat)
+        refs.dateRange.value.to = moment(new Date(to)).format(dateFormat)
         state.type = type
         methods.changeDate()
       }
@@ -180,7 +184,7 @@ export default function controller(props: any, emit: any) {
         if( (value?.from && value?.to) || value?.type){
           //set value by type
           if(value?.type){
-            methods.setByType(value.type)
+            methods.setByType(value)
           } else {
             refs.dateRange.value.from = moment(new Date(value.from)).format(dateFormat) ?? null
             refs.dateRange.value.to = moment(new Date(value.to)).format(dateFormat) ?? null
