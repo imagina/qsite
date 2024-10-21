@@ -23,12 +23,12 @@
                         v-close-popup @click.native="act.action != undefined ? act.action() : null">
                   <q-item-section class="text-blue-grey">
                     <div>
-                      <q-icon v-if="act.icon" :name="act.icon" class="q-mr-sm" color="primary" size="xs"/>
+                      <q-icon :name="act?.icon" class="q-mr-sm" color="primary" size="xs"/>
                       {{ act.label }}
                     </div>
                   </q-item-section>
-                  <q-item-section v-if="act.rightIcon" side>
-                    <q-icon :name="act.rightIcon" size="12px"/>
+                  <q-item-section side>
+                    <q-icon :name="act?.rightIcon" size="12px"/>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -110,9 +110,9 @@ export default {
     size: {type: String, default: 'small'},
   },
   mounted() {
-    this.$nextTick(async function () {
+    this.$nextTick(function () {
       this.init()
-      this.customActions = await this.getCustomHeaderActions()
+      this.getCustomHeaderActions()
     })
   },
   data() {
@@ -365,7 +365,7 @@ export default {
         else if (config.type === 'menu') customMenus.push(customConfig);
       });
 
-      return {customBtns, customMenus}
+      this.customActions = {customBtns, customMenus}
     },
     logout() {
       this.$router.push({name: 'auth.logout'});
