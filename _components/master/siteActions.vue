@@ -9,25 +9,26 @@
           v-bind="btn.props"
           @click="btn.action != undefined ? btn.action() : null"
         >
+          <q-icon v-if="btn.props.rightIcon" :name="btn.props.rightIcon" class="q-ml-xs" size="12px" color="blue-grey"/>
           <q-menu v-if="btn.menu" fit>
             <div class="q-py-sm q-px-md">
               <div class="text-subtitle1 text-primary">{{ btn.label }}</div>
               <!--Separator-->
               <q-separator class="q-my-sm"/>
               <!-- Description -->
-              <div class="text-caption text-blue-grey">{{ $tr('isite.cms.message.descriptionHelpCenter') }}.</div>
+              <div class="text-caption text-blue-grey" v-if="btn.desc">{{ btn.desc }}.</div>
               <!--Actions-->
               <q-list separator class="no-shadow" style="min-width: 260px">
                 <q-item v-for="(act, keyAction) in btn.menu.actions" :key="keyAction" clickable v-ripple
                         v-close-popup @click.native="act.action != undefined ? act.action() : null">
                   <q-item-section class="text-blue-grey">
                     <div>
-                      <q-icon :name="act.icon" class="q-mr-sm" color="primary" size="xs"/>
+                      <q-icon v-if="act.icon" :name="act.icon" class="q-mr-sm" color="primary" size="xs"/>
                       {{ act.label }}
                     </div>
                   </q-item-section>
-                  <q-item-section side>
-                    <q-icon name="fa-light fa-chevron-right" size="12px"/>
+                  <q-item-section v-if="act.rightIcon" side>
+                    <q-icon :name="act.rightIcon" size="12px"/>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -53,20 +54,20 @@
         <div class="q-ml-xs q-mr-sm text-blue-grey">{{ quserState.userData.firstName }}</div>
         <q-icon name="fas fa-chevron-down" size="14px" color="blue-grey"/>
         <!--Menu-->
-        <q-menu 
-          anchor="bottom right" 
-          self="top right" 
+        <q-menu
+          anchor="bottom right"
+          self="top right"
           :offset="[0, 18]"
           class="
-            tw-rounded-2xl 
-            tw-shadow-none 
-            tw-top-3 
-            tw-border-2 
-            tw-border-gray-100 
+            tw-rounded-2xl
+            tw-shadow-none
+            tw-top-3
+            tw-border-2
+            tw-border-gray-100
             tw-py-5
           "
         >
-          <div 
+          <div
             class="tw-mb-5 tw-mx-5"
             :class="{ 'tw-text-center': profileImage.mediumThumb }"
           >
@@ -86,7 +87,7 @@
                 :key="keyAction"
                 class="tw-px-5"
                 v-bind="btn.props"
-                v-if="btn?.vIf != undefined ? btn.vIf : true" 
+                v-if="btn?.vIf != undefined ? btn.vIf : true"
                 v-close-popup
                 @click="btn.action != undefined ? btn.action() : null"
               />
@@ -109,8 +110,9 @@ export default {
     size: {type: String, default: 'small'},
   },
   mounted() {
-    this.$nextTick(function () {
+    this.$nextTick(async function () {
       this.init()
+      this.customActions = await this.getCustomHeaderActions()
     })
   },
   data() {
@@ -128,7 +130,8 @@ export default {
         class: "btn-small",
         textColor: "blue-grey",
         noCaps: true
-      }
+      },
+      customActions: { customBtns: [], customMenus: [] }
     }
   },
   computed: {
@@ -154,6 +157,7 @@ export default {
     actions() {
       let goToSiteUrl = this.$store.state.qsiteApp.baseUrl;
 
+      const { customBtns, customMenus } = this.customActions;
       //define the organization url if there're someone selected
       if (this.quserState.organizationId) {
         let organizationSelected = this.quserState.organizations.find(organization => organization.id == this.quserState.organizationId)
@@ -234,6 +238,7 @@ export default {
           {
             name: 'helpCenter',
             label: this.$trp('isite.cms.label.helpCenter'),
+            desc: this.$tr('isite.cms.message.descriptionHelpCenter'),
             vIf: parseInt(this.$getSetting('isite::hcStatus') || '0'),
             props: {
               id: 'siteActionHelpCenter',
@@ -245,6 +250,7 @@ export default {
                 {
                   icon: 'fa-light fa-question-circle',
                   label: 'FAQ',
+                  rightIcon: 'fa-light fa-chevron-right\n',
                   action: () => eventBus.emit('toggleHelpSection', {sectionName: 'faq'})
                 }
               ]
@@ -264,6 +270,7 @@ export default {
               query: { fromCache: 1 }
             })
           },
+          ...customBtns
         ],
         menu: [
           //Profile
@@ -308,7 +315,8 @@ export default {
               align: "left"
             },
             action: this.logout
-          }
+          },
+          ...customMenus
         ]
       }
     },
@@ -322,6 +330,42 @@ export default {
       eventBus.on('header.badge.manage', (response) => {
         Object.keys(response).forEach(name => this.badge[name] = response[name])
       })
+    },
+    async getCustomHeaderActions() {
+      const customBtns = [];
+      const customMenus = [];
+
+      const values = Object.values(config('main'))
+      const headerActionsList = await Promise.allSettled(
+        values.flatMap(async (item) => {
+          let headerActions = item.headerActions;
+          if (!headerActions) return [];
+          if (typeof headerActions === 'function') {
+            const result = await headerActions();
+            return result || [];
+          }
+          return headerActions;
+        })
+      )
+      const successfulActions = headerActionsList
+        .filter(result => result.status === 'fulfilled') // Solo los que se cumplieron
+        .flatMap(result => result.value);
+
+      successfulActions.forEach((config) => {
+        const customConfig = {
+          ...config,
+          props: {
+            ...this.defaultButtonProps,
+            ...(config.props || {})
+          }
+        };
+
+        // Clasifica las acciones en botones o menús
+        if (config.type === 'btn') customBtns.push(customConfig);
+        else if (config.type === 'menu') customMenus.push(customConfig);
+      });
+
+      return {customBtns, customMenus}
     },
     logout() {
       this.$router.push({name: 'auth.logout'});
