@@ -345,10 +345,10 @@ export default {
             return result || [];
           }
           return headerActions;
-        })
+        }) // Add await for async request
       )
       const successfulActions = headerActionsList
-        .filter(result => result.status === 'fulfilled') // Solo los que se cumplieron
+        .filter(result => result.status === 'fulfilled')
         .flatMap(result => result.value);
 
       successfulActions.forEach((config) => {
@@ -360,7 +360,7 @@ export default {
           }
         };
 
-        // Clasifica las acciones en botones o menús
+        // Separate btn and menu
         if (config.type === 'btn') customBtns.push(customConfig);
         else if (config.type === 'menu') customMenus.push(customConfig);
       });
