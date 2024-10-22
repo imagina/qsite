@@ -89,7 +89,9 @@ export default function controller(props: any, emit: any) {
   }
 
   const computeds = {
-    thereAreRows: computed(() => Object.keys(refs.tableData.value.rows).length)
+    thereAreRows: computed(() => (
+      refs.tableData.value?.rows && Object.keys(refs.tableData.value?.rows).length
+    ))
   }
 
   onMounted(async () => {
