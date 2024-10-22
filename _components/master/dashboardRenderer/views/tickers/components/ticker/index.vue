@@ -30,10 +30,9 @@ export default defineComponent({
   <div
     v-if="havePermission"
     class="
-      tw-flex 
-      tw-justify-between
+      tw-inline-flex 
+      tw-flex-nowrap
       tw-gap-5
-      tw-w-min
       tw-box-border
       tw-min-w-40
       tw-rounded-2xl 
@@ -78,7 +77,7 @@ export default defineComponent({
                 <q-skeleton v-show="isLoading" class="tw-w-24" type="QBadge"/>
                 <div 
                   v-show="!isLoading"
-                  class="tw-text-xs" 
+                  class="tw-text-xs tw-w-max" 
                   v-html="body.footer" 
                 />
               </div>
@@ -91,7 +90,7 @@ export default defineComponent({
         <q-skeleton v-show="isLoading" class="tw-w-24" type="QBadge"/>
         <div 
           v-show="!isLoading"
-          class="tw-text-xs" 
+          class="tw-text-xs tw-w-max" 
           v-html="ticker.footer" 
         />
       </div>
