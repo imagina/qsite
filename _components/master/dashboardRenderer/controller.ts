@@ -28,11 +28,11 @@ export default function controller(props: any, emit: any) {
   }
 
   const methods = {
-    getDashboardElements: (settings: Setting[]): View[] | [] => {
+    getDashboardElements: async (settings: Setting[]): Promise<View[] | []> => {
       if (!settings) return []
       const { hasAccess } = storeUtil
 
-      return settings.flatMap(quickCard => {
+      return Promise.all(settings.flatMap(quickCard => {
         const { type, permission } = quickCard
         if (!type) return []
         if (permission && !hasAccess(permission)) return []
@@ -40,7 +40,7 @@ export default function controller(props: any, emit: any) {
           component: markRaw(defineAsyncComponent(() => import(`./views/${type}`))),
           ...quickCard
         }
-      })
+      }))
     },
   }
 
@@ -53,7 +53,7 @@ export default function controller(props: any, emit: any) {
       refs.settings.value = await service.getConfig(configName)
     }
 
-    const quickCards = methods.getDashboardElements(refs.settings.value)
+    const quickCards = await methods.getDashboardElements(refs.settings.value)
     state.views = quickCards
   })
 
