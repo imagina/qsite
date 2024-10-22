@@ -5,6 +5,7 @@ import service from 'modules/qsite/_components/master/dynamicFilter/services'
 import { i18n, clone, store, router } from 'src/plugins/utils';
 import moment from "moment";
 import { Screen } from 'quasar'
+import dateRangePickerRanges from 'modules/qsite/_components/master/dateRangePicker/constants'
 
 
 export default function controller(props: any, emit: any) {
@@ -213,8 +214,8 @@ export default function controller(props: any, emit: any) {
               })
               result[key].option = options.join(', ')
             }
-          } else if(field?.type == 'dateRange'){
-            result[key].option = `${moment(state.readOnlyData[key].value.from).format('LL')} - ${moment(state.readOnlyData[key].value.to).format('LL')}`
+          } else if(field?.type == 'dateRange'){            
+            result[key].option  = methods.setReadValuesTypeDateRange(key)            
           } else if(field?.type == 'crud'){
             result[key] = methods.setReadValuesTypeCrud(result[key], key)
           }
@@ -225,6 +226,17 @@ export default function controller(props: any, emit: any) {
       });
       state.readValues = result
       emit('update:summary', toEmit)
+    },
+
+    setReadValuesTypeDateRange(key){
+      if(state.readOnlyData[key].value?.type){
+        const ranges = dateRangePickerRanges.getDateRanges('YYYY/MM/DD')
+        const range = ranges[state.readOnlyData[key].value.type] || null
+        //if(range) result[key].option = `${range.label}, ${moment(range.from).format('LL')} - ${moment(range.to).format('LL')}`
+        if(range) return `${range.label}`
+      } else {
+        return `${moment(state.readOnlyData[key].value.from).format('LL')} - ${moment(state.readOnlyData[key].value.to).format('LL')}`
+      }
     },
 
     //dynamicFiledtype: crud
@@ -293,6 +305,13 @@ export default function controller(props: any, emit: any) {
           delete filters[key];
         } else {
           filters[key] = filters[key].value
+        }
+      })
+      // add props field
+      Object.keys(filters).forEach(key => {
+        if(state.props.filters[key]?.props?.field){          
+          filters[key] = {...filters[key], field: state.props.filters[key].props.field}
+          delete filters[key]?.label 
         }
       })
       state.hasAppliedFilters = (Object.keys(filters).length > 0)
