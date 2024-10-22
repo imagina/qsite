@@ -229,14 +229,18 @@ export default function controller(props: any, emit: any) {
     },
 
     setReadValuesTypeDateRange(key){
-      if(state.readOnlyData[key].value?.type){
-        const ranges = dateRangePickerRanges.getDateRanges('YYYY/MM/DD')
-        const range = ranges[state.readOnlyData[key].value.type] || null
-        //if(range) result[key].option = `${range.label}, ${moment(range.from).format('LL')} - ${moment(range.to).format('LL')}`
-        if(range) return `${range.label}`
-      } else {
-        return `${moment(state.readOnlyData[key].value.from).format('LL')} - ${moment(state.readOnlyData[key].value.to).format('LL')}`
+      const dateFormat = state.props.filters[key].props?.mask || 'YYYY/MM/DD'
+      let result = {
+        from: state.readOnlyData[key].value?.from || null,
+        to: state.readOnlyData[key].value?.to || null
       }
+
+      if(state.readOnlyData[key].value?.type && !result.from && !result.to) {
+        const ranges = dateRangePickerRanges.getDateRanges(dateFormat)
+        const range = ranges[state.readOnlyData[key].value.type] || null
+        if(range.value != ranges.customRange.value) result = range
+      }
+      return `${moment(result.from).format('LL')} - ${moment(result.to).format('LL')}`
     },
 
     //dynamicFiledtype: crud
