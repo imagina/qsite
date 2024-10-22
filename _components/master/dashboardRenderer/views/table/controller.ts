@@ -1,4 +1,11 @@
-import { ref, onMounted, toRefs, watch, onBeforeUnmount } from 'vue';
+import { 
+  ref, 
+  onMounted, 
+  toRefs, 
+  watch, 
+  onBeforeUnmount, 
+  computed 
+} from 'vue';
 import { eventBus } from 'src/plugins/utils.ts'
 import service from '../../services'
 import { Table, Column, Row, ColorAssignment } from './interface'
@@ -81,6 +88,10 @@ export default function controller(props: any, emit: any) {
     }
   }
 
+  const computeds = {
+    thereAreRows: computed(() => Object.keys(refs.tableData.value.rows).length)
+  }
+
   onMounted(async () => {
     refs.isLoading.value = true
     if (apiRoute.value) {
@@ -113,5 +124,5 @@ export default function controller(props: any, emit: any) {
     refs.isLoading.value = false
   }, { deep: true })
 
-  return {...refs, ...methods }
+  return {...refs, ...methods, ...computeds }
 }

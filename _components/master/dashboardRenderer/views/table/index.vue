@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import controller from './controller'
+import cardContainer from '../../components/cardContainer.vue'
+import noData from '../../components/noData.vue'
 
 export default defineComponent({
   props: {
@@ -20,6 +22,14 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    header: {
+      type: Object,
+      default: null,
+    },
+  },
+  components: {
+    cardContainer,
+    noData,
   },
   setup(props, {emit}) {
     return controller(props, emit)
@@ -27,25 +37,40 @@ export default defineComponent({
 })
 </script>
 <template>
-  <div 
-    class="tw-p-5 tw-rounded-2xl tw-bg-white tw-border tw-border-gray-100"
-    :class="className"
+  <card-container 
+    :className="className" 
+    :isLoading="isLoading" 
+    :header="tableData?.header || header"
   >
-    <div v-if="tableData?.title" class="tw-flex tw-justify-center tw-mb-5">
-      <q-skeleton 
+    <div 
+      class="tw-overflow-auto tableContainer"
+      :class="{
+        'tw-flex tw-flex-col tw-justify-center tw-h-2/3': !thereAreRows,
+      }"
+    >
+      <no-data v-if="!thereAreRows && !isLoading" class="tw-h-72"/>
+      <!-- Skeleton -->
+      <div 
         v-show="isLoading" 
-        type="rect" 
-        class="tw-w-52 tw-h-8 tw-rounded-2xl" 
-      />
-      <h1 
-        v-show="!isLoading" 
-        class="tw-text-base tw-font-bold tw-text-center"
+        class="tw-grid tw-grid-flow-col  tw-max-h-[340px] table"
       >
-        {{ tableData?.title }}
-      </h1>
-    </div>
-    <div class="tw-overflow-auto">
-      <div class="tw-grid tw-grid-flow-col  tw-max-h-[340px] table">
+        <!-- Skeleton Column -->
+        <div v-for="column in 3">
+          <q-skeleton type="QChip" class="tw-h-7" />
+          <!-- Skeleton body -->
+          <section 
+            v-for="row in 4"
+            class="tw-flex tw-items-center tw-h-12 tw-my-3.5 tw-mr-3.5" 
+          >
+            <q-skeleton type="QChip" class="tw-w-full tw-h-12" />
+          </section>
+        </div>
+      </div>
+      <div 
+        v-if="thereAreRows && !isLoading" 
+        class="tw-grid tw-grid-flow-col  tw-max-h-[340px] table"
+      >
+        <!-- Columns -->
         <div 
           v-for="column in tableData?.columns"
           class="tw-min-w-24"
@@ -67,15 +92,14 @@ export default defineComponent({
               tw-bg-white 
               tw-z-10
               tw-mb-3.5
+              tw-shadow-[0_-15px_5px_0px_rgba(255,255,255,1)]
             "
           >
-            <q-skeleton v-show="isLoading" type="QChip" class="tw-h-7" />
-            <span v-show="!isLoading" :class="column?.headerClass">
+            <span :class="column?.headerClass">
               {{ formatted(column?.label) }}
             </span>
             <q-btn
               v-if="column?.sortable"
-              v-show="!isLoading"
               unelevated 
               size="xs" 
               class="tw-p-1 tw-text-sm tw-bg-neutral-200 tw-hidden tw-ml-2"
@@ -87,19 +111,10 @@ export default defineComponent({
               />
             </q-btn>
           </section>
-          <!-- Skeleton body -->
-          <section 
-            v-for="row in tableData.rows" 
-            v-show="isLoading" 
-            class="tw-flex tw-items-center tw-h-12 tw-my-3.5 tw-mr-3.5" 
-          >
-            <q-skeleton v-show="isLoading" type="QChip" class="tw-w-full tw-h-12" />
-          </section>
           <!-- Body -->
           <section class="tw-flex tw-flex-col tw-gap-3.5">
             <section 
               v-for="row in tableData.rows" 
-              v-show="!isLoading"
               class="
                 tw-flex 
                 tw-items-center 
@@ -146,12 +161,16 @@ export default defineComponent({
         </div>
       </div>
     </div>
-  </div>
+  </card-container>
 </template>
 <style scoped>
 
-.table::-webkit-scrollbar {
-  @apply tw-w-1 tw-h-80;
+.tableContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tableContainer::-webkit-scrollbar-track {
+  margin: 38px 0 0;
 }
 
 .table > div:first-child > .show-filter-hover {
