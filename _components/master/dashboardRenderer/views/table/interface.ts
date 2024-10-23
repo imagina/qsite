@@ -1,3 +1,5 @@
+import { Header } from '../../interface'
+
 export interface Column {
   name: string,
   label: string,
@@ -28,7 +30,7 @@ export interface ColorAssignment {
 }
 
 export interface Table {
-  title: string,
+  header?: Header, 
   colorAssignment?: ColorAssignment,
   columns: Column[],
   rows: Row[],
