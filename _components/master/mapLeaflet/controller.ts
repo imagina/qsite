@@ -375,15 +375,10 @@ export default function controller(props: any, emit: any) {
             //callback to add data when click
             if(m?.onClick){
               marker.on('click', () => {
-                if(m?.loadingLabel) marker.bindPopup(m.loadingLabel).openPopup()
-                m.onClick().then(response => {
-                  marker.bindPopup(response).openPopup()
-                })
-              })
-              marker.on('popupclose', () => {
-                marker.unbindPopup()
+                methods.onClickMarker(marker, m)
               })
             }
+            if(m?.openPopup) methods.onClickMarker(marker, m)
             state.markers.push(marker)
           })
           /* calculate zoom*/
@@ -391,6 +386,20 @@ export default function controller(props: any, emit: any) {
           state.map.fitBounds(fg.getBounds());
         }
       }
+    }, 
+    onClickMarker(marker, m ){
+
+      if(m?.loadingLabel) marker.bindPopup(m.loadingLabel).openPopup()
+      m.onClick().then(response => {
+        marker.bindPopup(response, {
+          autoClose: false,
+          closeOnClick: false,
+        }).openPopup()
+      })      
+
+      marker.on('popupclose', () => {
+        marker.unbindPopup()
+      })
     }
   }
 
