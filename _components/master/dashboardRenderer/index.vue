@@ -24,6 +24,11 @@ export default defineComponent({
       type: Object,
       default: () => ({})
     },
+    baseFilters: {
+      required: false,
+      type: Object,
+      default: () => ({})
+    }
   },
   setup(props, {emit}) {
     return controller(props, emit)

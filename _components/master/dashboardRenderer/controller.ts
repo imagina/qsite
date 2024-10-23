@@ -24,7 +24,10 @@ export default function controller(props: any, emit: any) {
   })
 
   const computeds = {
-    filters: computed(() => props.dynamicFilterValues)
+    filters: computed(() => ({ 
+      ...props.baseFilters, 
+      ...props.dynamicFilterValues
+    }))
   }
 
   const methods = {
