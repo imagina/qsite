@@ -12,10 +12,6 @@ export default defineComponent({
       type: String,
       default: null
     },
-    filters: {
-      type: Object,
-      default: () => ({})
-    },
     data: {
       type: Object,
       default: () => ({})

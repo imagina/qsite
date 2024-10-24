@@ -3,10 +3,11 @@ import { eventBus, store as storeUtil } from 'src/plugins/utils.ts'
 import service from '../../../../services'
 import { Ticker } from './interface'
 import { tickerModel } from './models'
+import store from '../../../../store'
 
 export default function controller(props: any, emit: any) {
 
-  const { apiRoute, permission, data, filters } = toRefs(props)
+  const { apiRoute, permission, data } = toRefs(props)
   const { hasAccess } = storeUtil
 
   const refs = {
@@ -23,7 +24,7 @@ export default function controller(props: any, emit: any) {
 
   const methods = {
     getData: async (refresh?: boolean): Promise<Ticker> => {
-      return await service.getQuickCardData(apiRoute.value, filters.value, refresh)
+      return await service.getQuickCardData(apiRoute.value, store.globalFilters, refresh)
     }
   }
 
@@ -53,7 +54,7 @@ export default function controller(props: any, emit: any) {
     eventBus.off('crud.data.refresh')
   })
 
-  watch(filters, async (): Promise<void> => {
+  watch(() => store.globalFilters, async (): Promise<void> => {
     refs.isLoading.value = true
     if (apiRoute.value && permission.value && computeds.havePermission.value) {
       refs.ticker.value = await methods.getData()
