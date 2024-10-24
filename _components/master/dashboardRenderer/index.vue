@@ -3,8 +3,7 @@
     <template v-for="quickCard in views">
       <component 
         :is="quickCard.component" 
-        v-bind="quickCard" 
-        :filters="filters"
+        v-bind="quickCard"
       />
     </template>
   </div>
