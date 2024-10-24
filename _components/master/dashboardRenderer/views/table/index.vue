@@ -52,11 +52,11 @@ export default defineComponent({
         'tw-flex tw-flex-col tw-justify-center tw-h-2/3': !thereAreRows,
       }"
     >
-      <no-data v-if="!thereAreRows && !isLoading" class="tw-h-72"/>
+      <no-data v-if="!thereAreRows && !isLoading" class="tw-h-[337px]"/>
       <!-- Skeleton -->
       <div 
         v-show="isLoading" 
-        class="tw-grid tw-grid-flow-col  tw-max-h-[340px] table"
+        class="tw-grid tw-grid-flow-col  tw-h-[337px] table"
       >
         <!-- Skeleton Column -->
         <div v-for="column in 3">
@@ -72,7 +72,7 @@ export default defineComponent({
       </div>
       <div 
         v-if="thereAreRows && !isLoading" 
-        class="tw-grid tw-grid-flow-col  tw-max-h-[340px] table"
+        class="tw-grid tw-grid-flow-col  tw-h-[337px] table"
       >
         <!-- Columns -->
         <div 
