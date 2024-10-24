@@ -39,8 +39,7 @@ export default defineComponent({
       tw-to-blue-50
     "
   >
-    <section 
-      class="tw-flex tw-w-full tw-flex-col tw-gap-2 tw-justify-center" >
+    <section class="tw-flex tw-w-full tw-flex-col tw-gap-2 tw-justify-center" >
       <div>
         <div v-if="ticker?.title">
           <q-skeleton v-show="isLoading" class="tw-w-14 tw-mb-1" type="QBadge"/>
@@ -57,7 +56,7 @@ export default defineComponent({
                 <q-skeleton v-show="isLoading" class="tw-w-14 tw-mb-1" type="QBadge"/>
                 <div 
                   v-show="!isLoading" 
-                  class="tw-text-gray-400 tw-text-xs tw-font-semibold"
+                  class="tw-text-gray-400 tw-text-xs tw-font-semibold tw-w-max"
                   v-html="body.title"
                 />
               </div>
