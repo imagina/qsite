@@ -1,5 +1,9 @@
 import { Header } from '../../interface'
 
+export interface Format {
+  locales: string, 
+  options: any 
+}
 export interface Column {
   name: string,
   label: string,
@@ -17,6 +21,7 @@ export interface Column {
   asc?: boolean,
   headerClass?: string,
   bodyClass?: string,
+  format?: Format,
 }
 
 export interface Row {
