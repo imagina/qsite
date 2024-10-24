@@ -121,7 +121,7 @@ const toolsFilter = tools?.filter(tool => toolbox.value?.features[tool?.name])
                 tw-h-7
                 tw-text-base 
                 tw-bg-white 
-                tw-rounded-md 
+                tw-rounded-lg 
                 custom-border-color
               "
             >
