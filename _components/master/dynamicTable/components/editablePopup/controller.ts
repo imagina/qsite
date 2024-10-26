@@ -79,7 +79,6 @@ export default function controller (props, emit)
   // Mounted
   onMounted(() =>
   {
-    methods.setInitialValue();
   });
 
   // Watch
