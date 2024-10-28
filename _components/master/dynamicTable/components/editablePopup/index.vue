@@ -1,7 +1,8 @@
 <template>
   <q-popup-proxy v-if="canEdit" :cover="false" anchor="bottom start"
                  transition-show="fade-in" transition-hide="fade-out"
-                 :max-width="dynamicField.maxWidth" ref="popupProxy">
+                 :max-width="dynamicField.maxWidth" ref="popupProxy"
+                 @show="setInitialValue">
     <div class="q-pa-md relative-position">
       <!-- Title -->
       <b class="text-blue-grey">
