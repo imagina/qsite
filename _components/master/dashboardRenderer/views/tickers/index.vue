@@ -11,18 +11,13 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  filters: {
-    required: false,
-    type: Object,
-    default: () => ({})
-  },
   className: {
     type: String,
     default: '',
   },
 })
 
-const { tickers, filters, data } = toRefs(props)
+const { tickers, data } = toRefs(props)
 
 const tickersData = ref([])
 
@@ -42,8 +37,7 @@ onMounted(async () => {
       <template v-for="(ticker, index) in tickersData" :key="index">
         <tickerChildren
           :apiRoute="ticker?.apiRoute" 
-          :permission="ticker?.permission" 
-          :filters="filters" 
+          :permission="ticker?.permission"
           :data="ticker"
         />
       </template>

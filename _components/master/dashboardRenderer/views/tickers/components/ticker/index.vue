@@ -12,10 +12,6 @@ export default defineComponent({
       type: String,
       default: null
     },
-    filters: {
-      type: Object,
-      default: () => ({})
-    },
     data: {
       type: Object,
       default: () => ({})
@@ -43,11 +39,14 @@ export default defineComponent({
       tw-to-blue-50
     "
   >
-    <section 
-      class="tw-flex tw-w-full tw-flex-col tw-gap-2 tw-justify-center" >
+    <section class="tw-flex tw-w-full tw-flex-col tw-gap-2 tw-justify-center" >
       <div>
         <div v-if="ticker?.title">
-          <q-skeleton v-show="isLoading" class="tw-w-14 tw-mb-1" type="QBadge"/>
+          <q-skeleton 
+            v-show="isLoading" 
+            class="tw-w-14 tw-mb-1" 
+            type="QBadge"
+          />
           <div 
             v-show="!isLoading" 
             class="tw-text-gray-400 tw-text-xs tw-font-semibold"
@@ -56,17 +55,28 @@ export default defineComponent({
         </div>
         <section class="tw-flex tw-gap-2 tw-items-center tw-h-auto">
           <template v-for="(body, index) in ticker?.body" :key="index">
-            <div class="tw-flex tw-flex-col tw-justify-center" :class="body?.className">
+            <div 
+              class="tw-flex tw-flex-col tw-justify-center" 
+              :class="body?.className"
+            >
               <div v-if="body?.title">
-                <q-skeleton v-show="isLoading" class="tw-w-14 tw-mb-1" type="QBadge"/>
+                <q-skeleton 
+                  v-show="isLoading" 
+                  class="tw-w-14 tw-mb-1" 
+                  type="QBadge"
+                />
                 <div 
                   v-show="!isLoading" 
-                  class="tw-text-gray-400 tw-text-xs tw-font-semibold"
+                  class="tw-text-gray-400 tw-text-xs tw-font-semibold tw-w-max"
                   v-html="body.title"
                 />
               </div>
               <div v-if="body?.value">
-                <q-skeleton v-show="isLoading" class="tw-w-20 tw-h-7" type="rect"/>
+                <q-skeleton 
+                  v-show="isLoading" 
+                  class="tw-w-20 tw-h-7" 
+                  type="rect"
+                />
                 <div 
                   v-show="!isLoading" 
                   class="tw-text-2xl tw-font-bold" 
@@ -74,7 +84,11 @@ export default defineComponent({
                 />
               </div>
               <div v-if="body?.footer">
-                <q-skeleton v-show="isLoading" class="tw-w-24" type="QBadge"/>
+                <q-skeleton 
+                  v-show="isLoading" 
+                  class="tw-w-24" 
+                  type="QBadge"
+                />
                 <div 
                   v-show="!isLoading"
                   class="tw-text-xs tw-w-max" 

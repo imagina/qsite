@@ -5,12 +5,14 @@ import {
   onMounted, 
   toRefs, 
   defineAsyncComponent, 
-  markRaw 
+  markRaw,
+  watch,
 } from 'vue';
 import { store as storeUtil, helper } from 'src/plugins/utils'
 import { useRoute } from 'vue-router'
 import service from './services'
 import { Setting, View } from './interface'
+import store from './store'
 
 export default function controller(props: any, emit: any) {
 
@@ -18,6 +20,8 @@ export default function controller(props: any, emit: any) {
   const refs = {
     settings: ref([])
   }
+
+  const { dynamicFilterValues } = toRefs(props)
   
   const state = reactive<{ views: View[] }>({
     views: [],
@@ -49,6 +53,7 @@ export default function controller(props: any, emit: any) {
 
   onMounted(async () => {
     const { module, entity } = helper.getInfoFromPermission(route?.meta?.permission) || {}
+    store.globalFilters = computeds.filters.value
     if (props.configName) {
       refs.settings.value = await service.getConfig(props.configName)
     } else {
@@ -59,6 +64,10 @@ export default function controller(props: any, emit: any) {
     const quickCards = await methods.getDashboardElements(refs.settings.value)
     state.views = quickCards
   })
+
+  watch(dynamicFilterValues, () => {
+    store.globalFilters = computeds.filters.value
+  }, { deep: true })
 
   return { ...refs, ...(toRefs(state)), ...computeds, ...methods }
 }
