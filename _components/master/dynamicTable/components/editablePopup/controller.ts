@@ -56,20 +56,21 @@ export default function controller (props, emit)
     async updateRow ()
     {
       state.loading = true;
+      const fieldName = computeds.dynamicField.value.name;
       //Instance tmpRow with new value
       let tmpRow = {
         ...props.row,
-        [computeds.dynamicField.value.name]: state.responseValue
+        [fieldName]: state.responseValue
       };
       //Emit the updateRow
       if (props.beforeUpdate)
       {
-        await props.beforeUpdate({ val: state.responseValue, row: tmpRow })
-          .then(val =>
+        await props.beforeUpdate({ val: state.responseValue, row: tmpRow, fieldName })
+          .then(newTmpRow =>
           {
             state.loading = false;
             refs.popupProxy.value.hide();
-            emit('updateRow', tmpRow);
+            emit('updateRow', newTmpRow);
           }).catch((val) => state.loading = false);
       } else emit('updateRow', tmpRow);
     }
@@ -78,7 +79,6 @@ export default function controller (props, emit)
   // Mounted
   onMounted(() =>
   {
-    methods.setInitialValue();
   });
 
   // Watch

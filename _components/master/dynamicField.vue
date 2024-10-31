@@ -520,7 +520,7 @@ import localizedPhone from 'modules/qsite/_components/master/localizedPhone/inde
 import multipleDynamicFields from 'modules/qsite/_components/master/multipleDynamicFields/views';
 import dateRangePicker from 'modules/qsite/_components/master/dateRangePicker';
 import timeSpent from 'modules/qsite/_components/master/timeSpent';
-import previewFile from 'modules/qsite/_components/v3/previewFile/index.vue'
+import previewFile from 'modules/qsite/_components/v3/previewFile/index.vue';
 import { eventBus } from 'src/plugins/utils';
 
 export default {
@@ -1201,8 +1201,8 @@ export default {
         case'previewFile':
           props = {
             imgProps: {
-              height: "100vh",
-              class: 'img-file full-height',
+              height: '100vh',
+              class: 'img-file full-height'
             },
             fileClass: props.class,
             ...props
@@ -1551,7 +1551,8 @@ export default {
           this.responseValue = (Array.isArray(propValue)) ? propValue : [];
           break;
         default :
-          this.responseValue = propValue || null;
+          let value = propValue || null;
+          this.responseValue = this.field.mapValue ? this.field.mapValue(value) : value;
           break;
       }
     },
