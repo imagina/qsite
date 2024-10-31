@@ -1488,7 +1488,8 @@ export default {
           } else this.responseValue = (propValue && propValue.id) ? propValue.id : propValue;
           break;
         case 'input':
-          this.responseValue = (propValue != undefined) ? propValue : null;
+          let inputValue = (propValue != undefined) ? propValue : null;
+          this.responseValue = this.field.mapValue ? this.field.mapValue(inputValue) : inputValue
           break;
         case 'inputStandard':
           this.responseValue = (propValue != undefined) ? propValue : null;

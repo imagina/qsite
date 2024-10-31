@@ -143,46 +143,6 @@ export const GET_CENTRALIZED_BRAND = ({state}, siteSettings) => {
   })
 }
 
-//Get the pages from backend
-export const GET_PAGES = ({commit}) => {
-  return new Promise(async resolve => {
-    //Request params
-    let requestParams = {refresh: true}
-    //Request data
-    await crud.index('apiRoutes.qpage.pagesCms', requestParams).then(({data}) => {
-      commit('SET_PAGES', data)
-      resolve(data)
-    }).catch(error => {
-      console.error("[store-qsite]::GetPage", error)
-      resolve(false)
-    })
-  })
-}
-
-//Get the menu from backend
-export const GET_MENU_SIDEBAR = ({commit}) => {
-  return new Promise(async resolve => {
-    //Instance criteria
-    const criteria = (config('app.mode') == 'iadmin') ? 'cms_admin' : 'cms_panel'
-    //Instance params
-    const params = {
-      refresh: true,
-      params: {
-        filter: {field: 'name'},
-        include: 'menuitems'
-      }
-    }
-    //Request
-    await crud.show('apiRoutes.qmenu.menus', criteria, params).then(({data}) => {
-      commit('SET_MENU', data.menuitems)
-      resolve(data)
-    }).catch(error => {
-      console.error("[store-qsite]::GetMenu", error)
-      resolve(true)
-    })
-  })
-}
-
 //Set site settins
 export const SET_SITE_COLORS = ({state, commit, dispatch}) => {
   let settings = state.settings
