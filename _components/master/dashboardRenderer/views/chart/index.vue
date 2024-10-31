@@ -44,7 +44,7 @@ export default defineComponent({
     :className="className" 
     :isLoading="isLoading"
     :isEmpty="!thereAreData"
-    :toolbox="{ tools, features: toolbox }"
+    :toolbox="{ tools, features: { download: true } }"
     @reloadData="reloadData"
   >
     <section 
