@@ -77,26 +77,30 @@
         <!-- summary chips -->
         <filterChip
           :summary="readValues"
-          :props="{
-            removable: true,
-          }"
-          @remove="(itemKey) => {
-            removeReadValue(itemKey)
-          }"
+          :props="{removable: true}"
+          @remove="(itemKey) => removeReadValue(itemKey)"
         />
       </div>
       <!-- Hiden Filters -->
       <div v-if="Object.keys(hidenFields).length" v-show="false">
-        <dynamic-field v-for="(field, keyField) in hidenFields" :key="keyField" :field="field" :keyField="keyField"/>    
+        <template v-for="(field, keyField) in hidenFields" :key="keyField">
+          <dynamic-field
+            :field="field"
+            :keyField="keyField"
+          />
+        </template>
       </div>
       <!-- Quick Filters-->
       <div v-if="Object.keys(quickFilters).length" class="row q-col-gutter-md q-pt-sm" v-show="showFilters">
-        <dynamic-field v-for="(field, keyField) in quickFilters" :key="keyField" :field="field"
-                        v-model="quickFilterValues[keyField]"
-                        class="col-12 col-md-4 col-xl-3"
-                        @update:modelValue="quickFilterHandler(keyField)"
-                        :keyField="keyField"
-        />    
+        <template v-for="(field, keyField) in quickFilters" :key="keyField">
+          <dynamic-field
+            v-model="quickFilterValues[keyField]"
+            :keyField="keyField"
+            :field="field"
+            class="col-12 col-md-4 col-xl-3"
+            @update:modelValue="quickFilterHandler(keyField)"
+          />
+        </template>
       </div>
     </div>
   </div>
