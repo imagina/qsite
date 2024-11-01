@@ -1600,7 +1600,10 @@ export default {
         //Instance default options keeping the options for the selected values
         let defaultOptions = this.$clone([
           ...(this.field.props?.options || []),
-          ...this.rootOptions.filter(opt => this.responseValue && this.responseValue.includes((opt.value || opt.id).toString()))
+          ...this.rootOptions.filter(opt => {
+              const value = this.fieldProps['emit-value'] ? this.responseValue : (this.responseValue.value || this.responseValue.id)
+              return value && value.includes((opt.value || opt.id).toString())
+          })
         ]);
 
         //==== Request options
@@ -1811,8 +1814,10 @@ export default {
           //Valudate if the response values is not in the root options
           let responseValueTmp = (this.responseValue || []);
           responseValueTmp = Array.isArray(responseValueTmp) ? responseValueTmp : [responseValueTmp];
-          const includeAll = responseValueTmp.every(val =>
-            this.rootOptions.map(val => (val.value || val.id || '').toString()).includes(val.toString())
+          const includeAll = responseValueTmp.every(val => {
+              const value = this.fieldProps['emit-value'] ? val : (val.value || val.id)
+              return this.rootOptions.map(val => (val.value || val.id || '').toString()).includes(value.toString())
+            }
           );
           //Validate if there is the option for the value
           if (loadOptions.filterByQuery && !includeAll) {
