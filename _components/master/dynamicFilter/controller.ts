@@ -23,6 +23,7 @@ export default function controller(props: any, emit: any) {
     },
     tabName: 'tabForm',
     filterValues: {},
+    summary: {},
     readOnlyData: {},
     currentUrlFilter: '',
     dynamicFieldCache: true,
@@ -188,7 +189,7 @@ export default function controller(props: any, emit: any) {
     },
     setReadValues(){
       const result = {}
-      const toEmit = {}
+      const summary = {}
       Object.keys(state.readOnlyData).forEach(key => {
         const field = state.props.filters[key];
         if(state.readOnlyData[key].value != null && state.readOnlyData[key].value && field?.type){
@@ -219,13 +220,17 @@ export default function controller(props: any, emit: any) {
           } else if(field?.type == 'crud'){
             result[key] = methods.setReadValuesTypeCrud(result[key], key)
           }
-
-          if(result[key]['value']) toEmit[key] = {...result[key]}
+          /* add to summary */
+          if(result[key]['value'] ){
+            summary[key] = {...result[key]}
+            if(!summary[key].value || (Array.isArray(summary[key].value) && !summary[key].value?.length)) delete summary[key]
+          }
           if(field?.quickFilter || (Array.isArray(state.readOnlyData[key].value) && !state.readOnlyData[key].value.length) ) delete result[key];
         }
       });
       state.readValues = result
-      emit('update:summary', toEmit)
+      state.summary = summary
+      emit('update:summary', summary)
     },
 
     setReadValuesTypeDateRange(key){
