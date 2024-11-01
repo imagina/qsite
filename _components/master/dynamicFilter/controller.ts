@@ -21,7 +21,6 @@ export default function controller(props: any, emit: any) {
       filters: {},
       systemName: ''
     },
-    tabName: 'tabForm',
     filterValues: {},
     summary: {},
     readOnlyData: {},

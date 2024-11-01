@@ -1,5 +1,7 @@
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, defineEmits } from 'vue'
+
+defineEmits(['remove'])
 defineProps({
     summary: { 
         type: Object, 
@@ -20,6 +22,7 @@ defineProps({
             class="tw-pr-5 tw-bg-gray-100" 
             text-color="primary"
             v-bind="props"
+						@remove="$emit('remove', itemKey)"
         >
             <span class="text-weight-bold">{{ item.label }}</span>
             &nbsp;
