@@ -58,6 +58,19 @@
     >
       {{ description }}
     </span>
+    <!-- dynamicFilter -->
+    <div class="row col-12">
+      <dynamicFilter
+        v-if="dynamicFilter"
+        :systemName="systemName"
+        :filters="dynamicFilter"
+        :modelValue="showDynamicFilterModal"
+        @showModal="showDynamicFilterModal = true"
+        @hideModal="showDynamicFilterModal = false"
+        @update:summary="summary => dynamicFilterSummary = summary"
+        @update:modelValue="filters => updateDynamicFilterValues(filters)"
+      />
+    </div> 
     <!-- Export Component -->
     <master-export
       v-if="!this.isAppOffline && Array.isArray(excludeActions) ? !excludeActions.includes('export') : true"
@@ -78,17 +91,6 @@
       v-model="syncParams"
       v-if="$hasAccess('isite.synchronizables.index')"
       ref="syncComponent"
-    />
-    <!-- dynamicFilter -->
-    <dynamicFilter
-      v-if="dynamicFilter"
-      :systemName="systemName"
-      :filters="dynamicFilter"
-      :modelValue="showDynamicFilterModal"
-      @showModal="showDynamicFilterModal = true"
-      @hideModal="showDynamicFilterModal = false"
-      @update:summary="summary => dynamicFilterSummary = summary"
-      @update:modelValue="filters => updateDynamicFilterValues(filters)"
     />
   </div>
 </template>
