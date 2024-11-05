@@ -36,8 +36,14 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
 
     onMounted(() => {
         const fromFields = reateEmptyObjectFromFields(defaultField.value)
-        if(valueMultiple.value.length > 0) {
-            fields.value = valueMultiple.value;
+        const multipleValue = valueMultiple.value
+        if(multipleValue.length > 0) {
+            fields.value = multipleValue.map(value => {
+              return {
+                ...fromFields,
+                ...value
+              }
+            });
         } else {
             const minQuantity = fieldProps.value?.minQuantity || 0;
             Array.from({ length: minQuantity }).forEach(() => {
