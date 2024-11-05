@@ -45,7 +45,6 @@
 import {defineComponent}  from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicList/controller'
 import dynamicTable from 'modules/qsite/_components/master/dynamicTable'
-import dynamicFilter from 'modules/qsite/_components/master/dynamicFilter';
 
 export default defineComponent({
   props: {
@@ -67,7 +66,7 @@ export default defineComponent({
       actions: {default: []},
     }
   },
-  components: { dynamicTable, dynamicFilter },
+  components: { dynamicTable },
   setup(props, {emit}) {
     return controller(props, emit)
   }
