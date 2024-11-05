@@ -58,6 +58,19 @@
     >
       {{ description }}
     </span>
+    <!-- dynamicFilter -->
+    <div class="row col-12">
+      <dynamicFilter
+        v-if="dynamicFilter"
+        :systemName="systemName"
+        :filters="dynamicFilter"
+        :modelValue="showDynamicFilterModal"
+        @showModal="showDynamicFilterModal = true"
+        @hideModal="showDynamicFilterModal = false"
+        @update:summary="summary => dynamicFilterSummary = summary"
+        @update:modelValue="filters => updateDynamicFilterValues(filters)"
+      />
+    </div> 
     <!-- Export Component -->
     <master-export
       v-if="!this.isAppOffline && Array.isArray(excludeActions) ? !excludeActions.includes('export') : true"
@@ -73,11 +86,7 @@
       @bulkActionsConfig="(value) => bulkActionsConfig = value"
       ref="bulkActions"
     />
-    <!-- Master Filter Component -->
-    <!--<master-filter
-      v-if="filter.load"
-      :show="drawer.filter"
-    />-->
+
     <master-synchronizable
       v-model="syncParams"
       v-if="$hasAccess('isite.synchronizables.index')"
@@ -93,6 +102,7 @@ import masterSynchronizable from 'modules/qsite/_components/master/masterSynchro
 import { eventBus } from 'src/plugins/utils';
 import appConfig from 'src/setup/app'
 import bulkActions from "modules/qsite/_components/master/bulkActions"
+import dynamicFilter from 'modules/qsite/_components/master/dynamicFilter';
 
 export default {
   beforeUnmount() {
@@ -120,6 +130,8 @@ export default {
       }
     },
     expiresIn: {type: Number},
+    /*dynamic filter*/
+    systemName: null,
     dynamicFilter: {
       required: false,
       type: Object,
@@ -127,40 +139,10 @@ export default {
         return {}
       }
     },
-    dynamicFilterValues: {
-      required: false,
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    dynamicFilterSummary: {
-      required: false,
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
+    
   },
-  emits: ['search', 'new', 'refresh', 'toggleDynamicFilterModal', 'activateTour'],
-  /*
-  inject: {
-    filterPlugin: {
-      from: 'filterPlugin',
-      default: {
-        name: false,
-        fields: {},
-        values: {},
-        callBack: false,
-        pagination: {},
-        load: false,
-        hasValues: false,
-        storeFilter: false
-      }
-    }
-  },
-  */
-  components: { masterExport, masterSynchronizable, bulkActions },
+  emits: ['search', 'new', 'refresh', 'activateTour', 'updateDynamicFilterValues'],  
+  components: { masterExport, masterSynchronizable, bulkActions, dynamicFilter },
   mounted() {
     this.$nextTick(function() {
       this.init();
@@ -171,7 +153,6 @@ export default {
       exportParams: false,
       syncParams: false,
       search: null,
-      filterData: {},
       refreshIntervalId: null,
       titleRefresh: this.$tr('isite.cms.label.refreshAtOnce'),
       timeRefresh: 0,
@@ -182,7 +163,12 @@ export default {
       badgeAppear: false,
       timeOuts: [],
       bulkActionsConfig: false,
-      enableTourAction: false
+      enableTourAction: false, 
+      
+      /* dynamic filters */
+      showDynamicFilterModal: false, 
+      dynamicFilterValues: {},
+      dynamicFilterSummary: null
     };
   },
   watch: {
@@ -194,13 +180,6 @@ export default {
   computed: {
     isAppOffline() {
       return this.$store.state.qofflineMaster.isAppOffline;
-    },
-    //Return filter data
-    filter() {
-      this.filterData = this.$clone(this.filterPlugin.values);
-      return this.filterPlugin;
-      //this.filterData = this.$clone(this.$filter.values)
-      //return this.$filter
     },
     //Return params of subHeader
     params() {
@@ -218,27 +197,6 @@ export default {
         class: `btn-${this.size}`,
         noCaps: true
       };
-    },
-    //Quick filters
-    quickFilters() {
-      var response = {};
-      //Get quick filters
-      if (this.$q.platform.is.desktop) {
-        if (this.filter.fields) {
-          Object.keys(this.filter.fields).forEach(fieldName => {
-            var fieldfilter = this.filter.fields[fieldName];
-            if (fieldfilter.quickFilter) {
-              response[fieldName] = {
-                ...fieldfilter,
-                colClass: 'col-12 col-md-4 col-xl-3'
-              };
-              if (!this.filterData[fieldName]) this.filterData[fieldName] = (fieldfilter.value || null);
-            }
-          });
-        }
-      }
-      //Response
-      return response;
     },
     //Page Documentation
     pageDocumentation() {
@@ -316,12 +274,7 @@ export default {
       eventBus.emit('crud.data.refresh');
       eventBus.emit('export.data.refresh');
       this.badgeAppear = false
-    },
-    //Emit filter
-    emitFilter() {
-      this.filterPlugin.addValues(this.filterData);
-      if (this.filterPlugin && this.filterPlugin.callBack) this.filterPlugin.callBack();
-    },
+    },    
     clearInterval() {
       if (this.refreshIntervalId) {
         clearInterval(this.refreshIntervalId);
@@ -342,9 +295,6 @@ export default {
           }
         ]
       });
-    },
-    toggleMasterFilter(value) {
-      this.drawer.filter = value;
     },
     getDiffCacheTime() {
       // Helper function to add a leading zero if the number is less than 10
@@ -448,7 +398,7 @@ export default {
             icon: 'fa-light fa-filter',
             id: 'filter-button-crud'
           },
-          action: () => this.$emit('toggleDynamicFilterModal')
+          action: () => this.showDynamicFilterModal = true
         },
 
         //Refresh
@@ -519,6 +469,10 @@ export default {
 
       //Response
       return response.filter(item => item.vIf !== undefined ? item.vIf : true);
+    },
+    updateDynamicFilterValues(filters) {
+      this.dynamicFilterValues = filters;
+      this.$emit('updateDynamicFilterValues', filters)
     },
   }
 };

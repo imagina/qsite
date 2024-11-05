@@ -244,7 +244,7 @@ export default function controller(props: any, emit: any) {
         const range = ranges[state.readOnlyData[key].value.type] || null
         if(range.value != ranges.customRange.value) result = range
       }
-      return `${moment(result.from).format('LL')} - ${moment(result.to).format('LL')}`
+      return `${moment( new Date(result.from)).format('LL')} - ${moment( new Date(result.to)).format('LL')}`
     },
 
     //dynamicFiledtype: crud
@@ -423,6 +423,7 @@ export default function controller(props: any, emit: any) {
     },
 
     async setAdminFilter(filters){
+      if(!state.systemName) return
       const adminFilters = methods.getAdminFilter()
 
       if(Object.keys(adminFilters).length !== 0){

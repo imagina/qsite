@@ -10,25 +10,13 @@
           :excludeActions="excludeActions"
           :title="title" 
           :help="help"
-          :expires-in="expiresIn"
-          :dynamicFilter="dynamicFilter"
-          :dynamicFilterValues="dynamicFilterValues"
-          :dynamicFilterSummary="dynamicFilterSummary"
-          @toggleDynamicFilterModal="toggleDynamicFilterModal"
+          :expires-in="expiresIn"          
           @new="$emit('new')"
           @search="val => search(val)"
-          @refresh="getData({pagination: {page:1}}, true)"          
-        />
-        <!-- dynamicFilter -->
-        <dynamicFilter
-          v-if="dynamicFilter"
+          @refresh="getData({pagination: {page:1}}, true)"
           :systemName="systemName"
-          :modelValue="showDynamicFilterModal"
-          :filters="dynamicFilter"
-          @showModal="showDynamicFilterModal = true"
-          @hideModal="showDynamicFilterModal = false"
-          @update:modelValue="filters => updateDynamicFilterValues(filters)"
-          @update:summary="summary => dynamicFilterSummary = summary"
+          :dynamicFilter="dynamicFilter"
+          @updateDynamicFilterValues="filters => updateDynamicFilterValues(filters)"
         />
         <!--table title-->
         <div v-if="!loadPageActions" :class="`row text-primary text-weight-bold ellipsis title-content items-center`">
@@ -57,7 +45,6 @@
 import {defineComponent}  from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicList/controller'
 import dynamicTable from 'modules/qsite/_components/master/dynamicTable'
-import dynamicFilter from 'modules/qsite/_components/master/dynamicFilter';
 
 export default defineComponent({
   props: {
@@ -79,7 +66,7 @@ export default defineComponent({
       actions: {default: []},
     }
   },
-  components: { dynamicTable, dynamicFilter },
+  components: { dynamicTable },
   setup(props, {emit}) {
     return controller(props, emit)
   }

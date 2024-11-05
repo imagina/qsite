@@ -25,10 +25,7 @@ export default function controller (props: any, emit: any)
     showModal: false,
     expiresIn: null,
     /* dynamicFilter */
-    showDynamicFilterModal: false,
     dynamicFilterValues: {},
-    dynamicFilterSummary: {},
-    /* dynamicFilter */
     pagination: {
       page: 1,
       rowsNumber: '',
@@ -213,11 +210,7 @@ export default function controller (props: any, emit: any)
       })
       return state.rows[foundIndex]
 
-    },
-    toggleDynamicFilterModal ()
-    {
-      state.showDynamicFilterModal = !state.showDynamicFilterModal;
-    },
+    },    
     updateFilter (key, value)
     {
       state.dynamicFilterValues[key] = value;
