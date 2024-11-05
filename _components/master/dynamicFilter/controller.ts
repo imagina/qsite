@@ -423,6 +423,7 @@ export default function controller(props: any, emit: any) {
     },
 
     async setAdminFilter(filters){
+      if(!state.systemName) return
       const adminFilters = methods.getAdminFilter()
 
       if(Object.keys(adminFilters).length !== 0){
