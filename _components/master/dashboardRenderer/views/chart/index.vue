@@ -60,8 +60,7 @@ export default defineComponent({
     </section>
     <no-data v-if="!thereAreData && !isLoading" class="tw-h-72" />
     <v-chart
-      v-if="thereAreData"
-      v-show="!isLoading"
+      v-if="thereAreData && !isLoading"
       ref="chartRef"
       class="tw-w-full tw-h-[337px]" 
       :option="options" 
