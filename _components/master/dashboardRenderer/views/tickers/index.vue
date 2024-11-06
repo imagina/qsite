@@ -38,6 +38,7 @@ onMounted(async () => {
         <tickerChildren
           :apiRoute="ticker?.apiRoute" 
           :permission="ticker?.permission"
+          :valueHidden="ticker?.valueHidden"
           :data="ticker"
         />
       </template>
