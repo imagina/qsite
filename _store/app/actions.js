@@ -198,7 +198,7 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
     import(`quasar/lang/${locale}`).then(lang => {
       if (params.ssrContext) Quasar.lang.set(lang.default, params.ssrContext)
       else Quasar.lang.set(lang.default)
-    }).catch(error => console.warn(">>>>>>", error))
+    })
 
     //Set default language to i18n
     if(!config('app.useLocalTranslations')) {
