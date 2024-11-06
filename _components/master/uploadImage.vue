@@ -2,7 +2,14 @@
   <div id="uploadImageComponent">
     <div id="contentUploadImage" @click="file == '' ? uploadFile() : false" class="full-width full-height">
       <!--Preview of image-->
-      <avatar-image :height="height" :width="width" :src="getImageUrl" class="img-file" v-if="!hiddePreview"/>
+      <avatar-image 
+        :height="height" 
+        :width="width" 
+        :src="getImageUrl" 
+        class="img-file" 
+        v-if="!hiddePreview"
+        :noOpen="noOpen"
+      />
       <!--Button edit image-->
       <q-btn id="actionbutton" icon="fas fa-camera" :color="color" :loading="loading" rounded>
         <q-menu v-if="file">
@@ -43,7 +50,8 @@
       height: {default: '180px'},
       modelValue: {default: null},
       defaultImage: {default: false},
-      hiddePreview: {type: Boolean, default: false}
+      hiddePreview: {type: Boolean, default: false},
+      noOpen: {type: Boolean, default: false}
     },
     emits: ['update:modelValue'],
     components: {},
@@ -156,8 +164,8 @@
 
     #actionbutton {
       position: absolute;
-      bottom: 0;
-      right: 5%;
+      bottom: 20px;
+      right: 20px;
       height: 45px !important;
       width: 45px !important;
       width: max-content;
