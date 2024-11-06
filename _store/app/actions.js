@@ -194,7 +194,7 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
     axios.defaults.params.setting.locale = locale
 
     //Set default language to Quasar
-    locale = (locale == 'en') ? 'en-us' : locale.toLowerCase()
+    locale = (locale == 'en') ? 'en-US' : locale.toLowerCase()
     import(`quasar/lang/${locale}`).then(lang => {
       if (params.ssrContext) Quasar.lang.set(lang.default, params.ssrContext)
       else Quasar.lang.set(lang.default)
@@ -202,6 +202,7 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
 
     //Set default language to i18n
     if(!config('app.useLocalTranslations')) {
+      locale = locale.toLowerCase()
       dispatch('qtranslationMaster/GET_TRANSLATIONS', {refresh: false}, {root: true}).then(({default: messages}) => {
         try {
           Vue.i18n.locale = locale
