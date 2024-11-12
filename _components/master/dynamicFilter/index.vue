@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="row col-12">
     <!-- Modal -->
     <q-dialog
       v-model="model"
@@ -97,7 +97,7 @@
             v-model="quickFilterValues[keyField]"
             :keyField="keyField"
             :field="field"
-            class="col-12 col-md-4 col-xl-3"
+            :class="[field?.quickFilterClass ? field.quickFilterClass : 'col-12 col-md-3']"
             @update:modelValue="quickFilterHandler(keyField)"
           />
         </template>
