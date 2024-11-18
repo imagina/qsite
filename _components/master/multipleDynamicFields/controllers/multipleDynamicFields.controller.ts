@@ -32,11 +32,11 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
     function deleteItem(index: number): void {
         fields.value.splice(index, 1);
     }
-    function summary(item = null) {
-        if (typeof this.fieldProps?.summary === 'function') {
-          return this.fieldProps.summary(item);
-        } else if (typeof this.fieldProps?.summary === 'string') {
-          return this.fieldProps.summary;
+    function summary(item = null, index = null) {
+        if (typeof fieldProps.value?.summary === 'function') {
+          return fieldProps.value?.summary(item, index);
+        } else if (typeof fieldProps.value?.summary === 'string') {
+          return fieldProps.value?.summary;
         }
         return null;
     }
@@ -84,6 +84,6 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
         maxQuantity,
         isMinQuantity,
         refDraggable,
-        summary
+        summary,
     };
 }

@@ -73,7 +73,7 @@
             </div>
             <div class="tw-w-full tw-flex tw-justify-between">
               <div v-if="summary">
-                <p class="tw-text-sm tw-text-gray-500">{{ summary(fields[index]) }}</p>
+                <p class="tw-text-sm tw-text-gray-500">{{ summary(fields[index], index) }}</p>
               </div>
               <div class="tw-text-right">
                 <q-btn
