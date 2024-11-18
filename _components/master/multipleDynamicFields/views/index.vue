@@ -71,21 +71,28 @@
                 :field="defaultField[key]"
               />
             </div>
-            <div class="tw-w-full tw-text-right">
-              <q-btn
-                color="red"
-                icon="fa-light fa-trash-can"
-                size="xs"
-                flat
-                round
-                :disabled="isMinQuantity"
-                @click="deleteItem(index)"
-              >
-                <q-tooltip>
-                  {{ $tr('isite.cms.label.delete') }}
-                </q-tooltip>
-              </q-btn>
+            <div class="tw-w-full tw-flex tw-justify-between">
+              <div v-if="summary">
+                <p class="tw-text-sm tw-text-gray-500">{{ summary(fields[index]) }}</p>
+              </div>
+              <div class="tw-text-right">
+                <q-btn
+                  color="red"
+                  icon="fa-light fa-trash-can"
+                  size="xs"
+                  flat
+                  round
+                  :disabled="isMinQuantity"
+                  @click="deleteItem(index)"
+                >
+                  <q-tooltip>
+                    {{ $tr('isite.cms.label.delete') }}
+                  </q-tooltip>
+                </q-btn>
+              </div>
             </div>
+
+
           </div>
         </template>
         <div
@@ -138,7 +145,7 @@ export default defineComponent({
     draggable,
   },
   props: {
-    value: {
+    modelValue: {
       type: Array,
       default: () => [],
     },

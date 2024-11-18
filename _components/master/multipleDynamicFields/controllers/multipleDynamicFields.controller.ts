@@ -3,7 +3,7 @@ import reateEmptyObjectFromFields from 'modules/qsite/_components/master/multipl
 import _ from 'lodash'
 
 export default function multipleDynamicFieldsController(props: any, emit: any) {
-    const valueMultiple = computed(() => props.modelValue || []);
+    const valueMultiple = ref(props.modelValue || []);
     const fieldProps: any = computed(() => props.fieldProps);
     const defaultField = computed(() => props.fieldProps.fields);
     const fields: any = ref([]);
@@ -15,7 +15,6 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
         const fromFields = reateEmptyObjectFromFields(defaultField.value);
         if(maxQuantity.value) return;
         fields.value.push(fromFields);
-
         //There is a small delay when adding a new item,
         //so a small delay is added for the
         //scroll is executed correctly
@@ -33,24 +32,48 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
     function deleteItem(index: number): void {
         fields.value.splice(index, 1);
     }
-
-    onMounted(() => {
-        const fromFields = reateEmptyObjectFromFields(defaultField.value)
-        if(valueMultiple.value.length > 0) {
-            fields.value = valueMultiple.value;
-        } else {
-            const minQuantity = fieldProps.value?.minQuantity || 0;
-            Array.from({ length: minQuantity }).forEach(() => {
-                fields.value.push(fromFields);
-            })
+    function summary(item = null) {
+        if (typeof this.fieldProps?.summary === 'function') {
+          return this.fieldProps.summary(item);
+        } else if (typeof this.fieldProps?.summary === 'string') {
+          return this.fieldProps.summary;
         }
+        return null;
+    }
 
-    });
     watch(fields, (newField, oldField): void => {
         if(newField) {
+          console.log(_.cloneDeep(newField))
             emit('update:modelValue', _.cloneDeep(newField));
         }
     }, { deep: true });
+    watch(
+      () => props.modelValue,
+      (newValue) => {
+        valueMultiple.value = newValue
+      }
+    );
+    onMounted(() => {
+      nextTick(() => {
+        setTimeout(() => {
+          const fromFields = reateEmptyObjectFromFields(defaultField.value)
+          const multipleValue = valueMultiple.value
+          if (multipleValue.length > 0) {
+            fields.value = multipleValue.map(value => {
+              return {
+                ...fromFields,
+                ...value
+              }
+            });
+          } else {
+            const minQuantity = fieldProps.value?.minQuantity || 0;
+            Array.from({length: minQuantity}).forEach(() => {
+              fields.value.push(fromFields);
+            })
+          }
+        }, 1500);
+      })
+    });
 
     return {
         fields,
@@ -60,6 +83,7 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
         deleteItem,
         maxQuantity,
         isMinQuantity,
-        refDraggable
+        refDraggable,
+        summary
     };
 }
