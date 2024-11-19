@@ -43,7 +43,6 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
 
     watch(fields, (newField, oldField): void => {
         if(newField) {
-          console.log(_.cloneDeep(newField))
             emit('update:modelValue', _.cloneDeep(newField));
         }
     }, { deep: true });
