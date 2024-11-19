@@ -1,4 +1,4 @@
-import { ref, computed, onMounted, watch, nextTick } from "vue";
+import { ref, computed, onMounted, watch, nextTick, provide } from "vue";
 import reateEmptyObjectFromFields from 'modules/qsite/_components/master/multipleDynamicFields/helpers/reateEmptyObjectFromFields.helper'
 import _ from 'lodash'
 
@@ -10,7 +10,7 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
     const maxQuantity = computed(() => fields.value.length === (fieldProps.value?.maxQuantity || 5))
     const isMinQuantity = computed(() => fields.value.length === (fieldProps.value?.minQuantity || 0))
     const refDraggable: any = ref(null)
-
+    const loading = ref(false);
     function add(): void {
         const fromFields = reateEmptyObjectFromFields(defaultField.value);
         if(maxQuantity.value) return;
@@ -55,6 +55,7 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
     );
     onMounted(() => {
       nextTick(() => {
+        loading.value = true;
         setTimeout(() => {
           const fromFields = reateEmptyObjectFromFields(defaultField.value)
           const multipleValue = valueMultiple.value
@@ -71,6 +72,7 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
               fields.value.push(fromFields);
             })
           }
+          loading.value = false;
         }, 1500);
       })
     });
@@ -85,5 +87,6 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
         isMinQuantity,
         refDraggable,
         summary,
+        loading,
     };
 }

@@ -21,6 +21,7 @@
     >
       {{ fieldProps.label }}
     </div>
+    <inner-loading :visible="loading"/>
     <div>
       <draggable
         v-model="fields"
