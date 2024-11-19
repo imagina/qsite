@@ -22,7 +22,7 @@
       {{ fieldProps.label }}
     </div>
     <inner-loading :visible="loading"/>
-    <div>
+    <div v-if="!loading">
       <draggable
         v-model="fields"
         :animation="200"

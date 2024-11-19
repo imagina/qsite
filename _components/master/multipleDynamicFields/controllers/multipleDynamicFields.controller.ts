@@ -46,13 +46,16 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
             emit('update:modelValue', _.cloneDeep(newField));
         }
     }, { deep: true });
-    watch(
-      () => props.modelValue,
-      (newValue) => {
-        valueMultiple.value = newValue
+
+    watch(props.modelValue, (newField, oldField): void => {
+      if(newField) {
+        init()
       }
-    );
+    }, { deep: true });
     onMounted(() => {
+      init()
+    });
+    function init() {
       nextTick(() => {
         loading.value = true;
         setTimeout(() => {
@@ -74,8 +77,7 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
           loading.value = false;
         }, 1500);
       })
-    });
-
+    }
     return {
         fields,
         fieldProps,
