@@ -47,35 +47,45 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
         }
     }, { deep: true });
 
-    watch(props.modelValue, (newField, oldField): void => {
-      if(newField) {
-        init()
-      }
-    }, { deep: true });
+    watch(
+      () => props.modelValue,
+      (newValue) => {
+        // Solo actualizar si el nuevo valor es diferente
+        if (!_.isEqual(valueMultiple.value, newValue)) {
+          valueMultiple.value = newValue || [];
+          updateFieldsFromValueMultiple()
+        }
+      },
+      { immediate: true }
+    );
+
     onMounted(() => {
       init()
     });
+    function updateFieldsFromValueMultiple() {
+      const fromFields = reateEmptyObjectFromFields(defaultField.value)
+      const multipleValue = valueMultiple.value
+      if (multipleValue.length > 0) {
+        fields.value = multipleValue.map(value => {
+          return {
+            ...fromFields,
+            ...value
+          }
+        });
+      } else {
+        const minQuantity = fieldProps.value?.minQuantity || 0;
+        Array.from({length: minQuantity}).forEach(() => {
+          fields.value.push(fromFields);
+        })
+      }
+    }
     function init() {
       nextTick(() => {
         loading.value = true;
         setTimeout(() => {
-          const fromFields = reateEmptyObjectFromFields(defaultField.value)
-          const multipleValue = valueMultiple.value
-          if (multipleValue.length > 0) {
-            fields.value = multipleValue.map(value => {
-              return {
-                ...fromFields,
-                ...value
-              }
-            });
-          } else {
-            const minQuantity = fieldProps.value?.minQuantity || 0;
-            Array.from({length: minQuantity}).forEach(() => {
-              fields.value.push(fromFields);
-            })
-          }
+          updateFieldsFromValueMultiple();
           loading.value = false;
-        }, 1500);
+        }, 2000);
       })
     }
     return {
