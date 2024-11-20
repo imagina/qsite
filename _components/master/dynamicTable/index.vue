@@ -78,9 +78,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import controller from 'modules/qsite/_components/master/dynamicTable/controller';
-import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup';
+import editablePopup from 'modules/qsite/_components/master/editablePopup';
 import contentType from 'modules/qsite/_components/master/contentType';
-import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu';
+import contextMenu from 'modules/qsite/_components/master/contextMenu';
 import masterPagination from 'modules/qsite/_components/master/masterPagination';
 
 

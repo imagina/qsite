@@ -24,23 +24,10 @@
         </div>
       
         <slot name="top-table" >
-        </slot>
-        <dynamicTable
-          v-if="false"
-          :class="{'q-mt-md q-pt-md': !hasTopTableSlot }"
-          :tableProps="tableProps"
-          :columns="columns"
-          :rows="rows"
-          :actions="actions"
-          :pagination="pagination"
-          :loading="loading"
-          :beforeUpdate="beforeUpdate"
-          @onPagination="(value) => setPagination(value)"
-          @updateRow="(row) => updateRow(row)"
-        />
+        </slot>        
 
         <component
-          :is="component"
+          :is="componentView"
           :class="{'q-mt-md q-pt-md': !hasTopTableSlot }"
           :tableProps="tableProps"
           :columns="columns"
@@ -59,7 +46,6 @@
 <script lang="ts">
 import {defineComponent}  from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicList/controller'
-import dynamicTable from 'modules/qsite/_components/master/dynamicTable'
 
 export default defineComponent({
   props: {
@@ -81,7 +67,6 @@ export default defineComponent({
       actions: {default: []},
     }
   },
-  components: { dynamicTable },
   setup(props, {emit}) {
     return controller(props, emit)
   }

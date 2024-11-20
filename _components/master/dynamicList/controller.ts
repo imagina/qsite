@@ -2,6 +2,7 @@ import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, u
 
 import services from "modules/qsite/_components/master/dynamicList/services";
 import { store, i18n, clone, alert } from 'src/plugins/utils';
+import components from 'modules/qsite/_components/master/dynamicList/components'
 
 export default function controller (props: any, emit: any)
 {
@@ -18,7 +19,8 @@ export default function controller (props: any, emit: any)
   // States
   const state = reactive({
     // Key: Default Value
-    component: shallowRef(),
+    componentView: shallowRef(),
+    view: 'table',
     loading: false,
     columns: [],
     rows: [],
@@ -36,6 +38,23 @@ export default function controller (props: any, emit: any)
       //sortBy: 'desc',
     },
   })
+
+  const extraActions = {
+    table: {
+      label: "change to table",
+        props: {
+          icon: "fa-light fa-list",
+        },
+      action: () => methods.setView('table')
+    },
+    grid: {
+      label: "change to grid",
+      props: {
+        icon: "fa-light fa-grid",
+      },
+      action: () => methods.setView('grid')
+    }
+  }
 
   // Computed
   const computeds = {
@@ -62,6 +81,12 @@ export default function controller (props: any, emit: any)
       let response = [];
       // extras for page action
       if (props.listConfig?.pageActions?.extraActions?.length > 0) response.push(...props.listConfig.pageActions.extraActions)
+      
+      //add grid button
+      if (props.listConfig?.pageActions?.extraActions?.includes('grid')  && (state.view != 'grid')) response.push(extraActions.grid)
+      //add table button        
+      if (state.view != 'table') response.push(extraActions.table)
+
       //remove new action
       if(response.includes('new') && !computeds.hasPermission.value['create'])  response.splice(response.indexOf('new'), 1);
       return response.filter((item) => !item.vIfAction)
@@ -89,14 +114,16 @@ export default function controller (props: any, emit: any)
   // Methods
   const methods = {
     // methodKey: () => {}
+    
+    setView(template){
+      state.view = template
+      state.componentView = markRaw(components[template])
+    },
+
     async init ()
-    {
-      //get view
-      const components = {
-        grid: defineAsyncComponent(() => import('modules/qsite/_components/master/dynamicTable'))
-      }
-      
-      state.component = markRaw(components.grid)
+    { 
+      const view = props.listConfig?.showAs ? props.listConfig.showAs : 'table'
+      methods.setView(view)
       await methods.setColumns()
 
       if (!state.dynamicFilterValues)

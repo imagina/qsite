@@ -1,5 +1,6 @@
 <template>
-  <div id="dynamic-table">
+  <div id="dynamic-grid">
+    <p>this is grid</p>
     <q-table
       v-bind="tableProps"
       :title="title"
@@ -9,6 +10,7 @@
       row-key="name"
       v-model:pagination="paginationModel"
       hide-pagination
+      grid
 
     >
       <template v-slot:loading>
@@ -60,6 +62,19 @@
           </q-td>
         </q-tr>
       </template>
+      <template v-slot:item="props">
+        <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+          <q-card flat bordered>
+            <q-card-section class="text-center">
+              <strong>{{ props.row.title }}</strong>
+            </q-card-section>
+            <q-separator />
+            <q-card-section class="flex flex-center">              
+            </q-card-section>
+          </q-card>
+        </div>
+      </template>
+
       <!-- pagination -->
       <template #bottom="props">
         <!--pagination-->
@@ -77,10 +92,10 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import controller from 'modules/qsite/_components/master/dynamicTable/controller';
-import editablePopup from 'modules/qsite/_components/master/dynamicTable/components/editablePopup';
+import controller from 'modules/qsite/_components/master/dynamicGrid/controller';
+import editablePopup from 'modules/qsite/_components/master/editablePopup';
 import contentType from 'modules/qsite/_components/master/contentType';
-import contextMenu from 'modules/qsite/_components/master/dynamicTable/components/contextMenu';
+import contextMenu from 'modules/qsite/_components/master/contextMenu';
 import masterPagination from 'modules/qsite/_components/master/masterPagination';
 
 
