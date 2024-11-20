@@ -65,11 +65,11 @@
             <div
               v-for="key in Object.keys(element)"
               :key="key"
-              :class="defaultField[key] && defaultField[key].colClass"
+              :class="formFields[index][key] && formFields[index][key].colClass"
             >
               <dynamic-field
                 v-model="fields[index][key]"
-                :field="defaultField[key]"
+                :field="tranformField(formFields[index][key], index, fields[index])"
               />
             </div>
             <div class="tw-w-full tw-flex tw-justify-between">

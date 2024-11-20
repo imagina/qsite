@@ -11,6 +11,7 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
     const isMinQuantity = computed(() => fields.value.length === (fieldProps.value?.minQuantity || 0))
     const refDraggable: any = ref(null)
     const loading = ref(false);
+    const formFields = ref([]);
     function add(): void {
         const fromFields = reateEmptyObjectFromFields(defaultField.value);
         if(maxQuantity.value) return;
@@ -36,9 +37,16 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
         if (typeof fieldProps.value?.summary === 'function') {
           return fieldProps.value?.summary(item, index);
         } else if (typeof fieldProps.value?.summary === 'string') {
-          return fieldProps.value?.summary;
+          return fieldProps.summary;
         }
         return null;
+    }
+    function tranformField(formField, index = null, field = null) {
+      if(fieldProps.value?.customRules) {
+        return fieldProps.value?.customRules(formField, index, field);
+      } else {
+        return formField;
+      }
     }
 
     watch(fields, (newField, oldField): void => {
@@ -78,6 +86,19 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
           fields.value.push(fromFields);
         })
       }
+      multipleValue.forEach((field, index) => {
+        if (formFields.value[index]) {
+          formFields.value[index] = {
+            ...formFields.value[index],
+          };
+        } else {
+          formFields.value.push({
+            ...defaultField.value,
+          });
+        }
+      });
+
+      formFields.value = _.cloneDeep(formFields.value.slice(0, fields.value.length));
     }
     function init() {
       nextTick(() => {
@@ -99,5 +120,7 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
         refDraggable,
         summary,
         loading,
+        formFields,
+        tranformField
     };
 }
