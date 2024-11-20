@@ -1,4 +1,4 @@
-import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, useSlots} from "vue";
+import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, useSlots, markRaw, shallowRef, defineAsyncComponent} from "vue";
 
 import services from "modules/qsite/_components/master/dynamicList/services";
 import { store, i18n, clone, alert } from 'src/plugins/utils';
@@ -18,6 +18,7 @@ export default function controller (props: any, emit: any)
   // States
   const state = reactive({
     // Key: Default Value
+    component: shallowRef(),
     loading: false,
     columns: [],
     rows: [],
@@ -90,6 +91,12 @@ export default function controller (props: any, emit: any)
     // methodKey: () => {}
     async init ()
     {
+      //get view
+      const components = {
+        grid: defineAsyncComponent(() => import('modules/qsite/_components/master/dynamicTable'))
+      }
+      
+      state.component = markRaw(components.grid)
       await methods.setColumns()
 
       if (!state.dynamicFilterValues)

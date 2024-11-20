@@ -26,6 +26,7 @@
         <slot name="top-table" >
         </slot>
         <dynamicTable
+          v-if="false"
           :class="{'q-mt-md q-pt-md': !hasTopTableSlot }"
           :tableProps="tableProps"
           :columns="columns"
@@ -36,7 +37,21 @@
           :beforeUpdate="beforeUpdate"
           @onPagination="(value) => setPagination(value)"
           @updateRow="(row) => updateRow(row)"
-        />        
+        />
+
+        <component
+          :is="component"
+          :class="{'q-mt-md q-pt-md': !hasTopTableSlot }"
+          :tableProps="tableProps"
+          :columns="columns"
+          :rows="rows"
+          :actions="actions"
+          :pagination="pagination"
+          :loading="loading"
+          :beforeUpdate="beforeUpdate"
+          @onPagination="(value) => setPagination(value)"
+          @updateRow="(row) => updateRow(row)"          
+        />
       </div>
     </div>
   </div>
