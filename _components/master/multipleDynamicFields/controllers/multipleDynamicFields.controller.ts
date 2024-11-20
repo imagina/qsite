@@ -88,13 +88,13 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
       }
       multipleValue.forEach((field, index) => {
         if (formFields.value[index]) {
-          formFields.value[index] = {
+          formFields.value[index] = _.cloneDeep({
             ...formFields.value[index],
-          };
-        } else {
-          formFields.value.push({
-            ...defaultField.value,
           });
+        } else {
+          formFields.value.push(_.cloneDeep({
+            ...defaultField.value,
+          }));
         }
       });
 
