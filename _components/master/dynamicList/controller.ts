@@ -83,7 +83,7 @@ export default function controller (props: any, emit: any)
       if (props.listConfig?.pageActions?.extraActions?.length > 0) response.push(...props.listConfig.pageActions.extraActions)
       
       //add grid button
-      if (props.listConfig?.pageActions?.extraActions?.includes('grid')  && (state.view != 'grid')) response.push(extraActions.grid)
+      if (state.view != 'grid') response.push(extraActions.grid)
       //add table button        
       if (state.view != 'table') response.push(extraActions.table)
 
@@ -118,6 +118,10 @@ export default function controller (props: any, emit: any)
     setView(template){
       state.view = template
       state.componentView = markRaw(components[template])
+      methods.setColumns()
+    },
+    getView(){
+      return state.view
     },
 
     async init ()
@@ -146,7 +150,8 @@ export default function controller (props: any, emit: any)
     },
     setColumns ()
     {
-      state.columns = props.listConfig.read.columns
+      
+      state.columns = state.view == 'table' ? props.listConfig.read.columns : props.listConfig.read[state.view]  
       //set isEditable
       state.columns.forEach(col =>
       {

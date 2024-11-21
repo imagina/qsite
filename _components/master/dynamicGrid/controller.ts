@@ -35,6 +35,9 @@ export default function controller(props, emit) {
     init(){
       state.paginationModel = props.pagination
     },
+    isColId(col){
+      return col.name == 'id'
+    },
     isColActions(col){
       return col.name == 'actions'
     },

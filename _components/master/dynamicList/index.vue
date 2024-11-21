@@ -37,7 +37,7 @@
           :loading="loading"
           :beforeUpdate="beforeUpdate"
           @onPagination="(value) => setPagination(value)"
-          @updateRow="(row) => updateRow(row)"          
+          @updateRow="(row) => updateRow(row)"
         />
       </div>
     </div>

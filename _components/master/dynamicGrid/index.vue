@@ -1,6 +1,5 @@
 <template>
   <div id="dynamic-grid">
-    <p>this is grid</p>
     <q-table
       v-bind="tableProps"
       :title="title"
@@ -11,66 +10,73 @@
       v-model:pagination="paginationModel"
       hide-pagination
       grid
-
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
       </template>
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <!---right click --->
-          <contextMenu
-            :v-if="actions"
-            :actions="actions"
-            :action-data="props.row"
-          />
-
-          <q-td
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            :class="getCellClass(col, props.row)"
-            @click="onClick(col, props.row)"
-          >
-            <!-- Keep this to allow unique elements-->
-            <div :key="$uid()">
-              <!---quick click edit popup-->
-              <editablePopup
-                v-if="!isColActions(col) && isColEditable(col, props.row)"
-                :row="props.row"
-                :col="col"
-                :beforeUpdate="beforeUpdate"
-                @updateRow="(row) => $emit('updateRow', row)"
-              />
-
-              <!--Actions column-->
-              <div v-if="isColActions(col)">
-                <btn-menu
-                  :actions="actions"
-                  :action-data="props.row"
-                />
-              </div>
-
-              <!-- dynamic content  -->
-              <contentType
-                v-if="!isColActions(col)"
-                :col="col"
-                :row="props.row"
-                :val="col.value"
-              />
-            </div>
-          </q-td>
-        </q-tr>
-      </template>
       <template v-slot:item="props">
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
-          <q-card flat bordered>
-            <q-card-section class="text-center">
-              <strong>{{ props.row.title }}</strong>
-            </q-card-section>
-            <q-separator />
-            <q-card-section class="flex flex-center">              
-            </q-card-section>
+          <q-card >
+            <!---right click --->
+            <contextMenu
+              :v-if="actions"
+              :actions="actions"
+              :action-data="props.row"
+            />           
+
+
+            <template
+              v-for="col in props.cols"
+              :key="col.name"
+              :props="props"
+              :class="getCellClass(col, props.row)"              
+            >
+
+              <q-card-section class="text-start" v-if="isColId(col)">
+                <div>
+                  id: 
+                  <contentType                  
+                      :col="col"
+                      :row="props.row"
+                      :val="col.value"
+                      @click="onClick(col, props.row)"
+                  />
+                </div>
+                <div>
+                  <!--Actions column-->                
+                  <btn-menu
+                    :actions="actions"
+                    :action-data="props.row"
+                  />
+                </div>
+              </q-card-section>
+              <q-separator v-if="isColId(col)" />
+
+              <q-card-section class="text-start">
+                <!-- Keep this to allow unique elements-->
+                <div :key="$uid()">
+                  <editablePopup
+                    v-if="!isColActions(col) && isColEditable(col, props.row)"
+                    :row="props.row"
+                    :col="col"
+                    :beforeUpdate="beforeUpdate"
+                    @updateRow="(row) => $emit('updateRow', row)"
+                  />
+
+                  <!-- dynamic content  -->                   
+                  <contentType
+                    v-if="!isColActions(col) && !isColId(col)"
+                    :col="col"
+                    :row="props.row"
+                    :val="col.value"
+                    @click="onClick(col, props.row)"
+                  />
+                </div>
+              </q-card-section>
+            </template>
+
+
+            
           </q-card>
         </div>
       </template>
