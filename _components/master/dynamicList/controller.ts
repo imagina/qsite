@@ -83,7 +83,7 @@ export default function controller (props: any, emit: any)
       if (props.listConfig?.pageActions?.extraActions?.length > 0) response.push(...props.listConfig.pageActions.extraActions)
       
       //add grid button
-      if (state.view != 'grid') response.push(extraActions.grid)
+      if ((props.listConfig?.read?.grid?.length > 0) && state.view != 'grid') response.push(extraActions.grid)
       //add table button        
       if (state.view != 'table') response.push(extraActions.table)
 

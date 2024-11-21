@@ -16,67 +16,60 @@
       </template>
       <template v-slot:item="props">
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
-          <q-card >
-            <!---right click --->
-            <contextMenu
-              :v-if="actions"
-              :actions="actions"
-              :action-data="props.row"
-            />           
+          <q-card class="box default-card-grid">
+            <q-card-section>
+              <!---right click --->
+              <contextMenu
+                :v-if="actions"
+                :actions="actions"
+                :action-data="props.row"
+              />
 
-
-            <template
-              v-for="col in props.cols"
-              :key="col.name"
-              :props="props"
-              :class="getCellClass(col, props.row)"              
-            >
-
-              <q-card-section class="text-start" v-if="isColId(col)">
-                <div>
-                  id: 
+              <template
+                v-for="col in props.cols"
+                :key="col.name"
+                :props="props"
+                :class="getCellClass(col, props.row)"              
+              >
+              
+                <!-- id field -->
+                <div class="row justify-between q-py-sm"  v-if="isColId(col)">
                   <contentType                  
                       :col="col"
                       :row="props.row"
-                      :val="col.value"
+                      :val="`ID: ${col.value}`"
                       @click="onClick(col, props.row)"
                   />
-                </div>
-                <div>
-                  <!--Actions column-->                
                   <btn-menu
                     :actions="actions"
                     :action-data="props.row"
                   />
                 </div>
-              </q-card-section>
-              <q-separator v-if="isColId(col)" />
-
-              <q-card-section class="text-start">
+              
+                <q-separator v-if="isColId(col)" />              
                 <!-- Keep this to allow unique elements-->
-                <div :key="$uid()">
+                <div
+                  v-if="!isColActions(col) && !isColId(col)"
+                  :class="getCellClass(col, props.row)"
+                  @click="onClick(col, props.row)"
+                  :key="$uid()"
+                >
                   <editablePopup
-                    v-if="!isColActions(col) && isColEditable(col, props.row)"
+                    v-if="isColEditable(col, props.row)"
                     :row="props.row"
                     :col="col"
                     :beforeUpdate="beforeUpdate"
                     @updateRow="(row) => $emit('updateRow', row)"
                   />
-
                   <!-- dynamic content  -->                   
                   <contentType
-                    v-if="!isColActions(col) && !isColId(col)"
-                    :col="col"
+                    :col="addDefaultContentType(col)"
                     :row="props.row"
                     :val="col.value"
-                    @click="onClick(col, props.row)"
                   />
                 </div>
-              </q-card-section>
-            </template>
-
-
-            
+              </template>
+            </q-card-section>
           </q-card>
         </div>
       </template>
@@ -134,7 +127,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-#dynamic-table {
+#dynamic-grid {
 
   .q-table {
     padding-bottom: 16px;

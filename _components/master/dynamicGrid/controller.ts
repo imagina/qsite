@@ -49,6 +49,20 @@ export default function controller(props, emit) {
     },    
     getCellClass(col, row){
       return (col?.dynamicField || col?.onClick) && !row?.isLoading ? 'cursor-pointer' : ''
+    },
+    addDefaultContentType(col){
+      if(!col.contentType){
+        col.contentType = (row) => {
+          return {
+            template: 'cardField',
+            props: {
+              col,
+              row
+            }
+          }
+        }
+      }
+      return col
     }
   }
 
