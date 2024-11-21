@@ -15,9 +15,9 @@
         <q-inner-loading showing color="primary" />
       </template>
       <template v-slot:item="props">
-        <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
-          <q-card class="box default-card-grid">
-            <q-card-section>
+        <div class="q-pa-xs col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="box default-card-grid">
+            
               <!---right click --->
               <contextMenu
                 :v-if="actions"
@@ -69,8 +69,8 @@
                   />
                 </div>
               </template>
-            </q-card-section>
-          </q-card>
+            
+            </div>
         </div>
       </template>
 

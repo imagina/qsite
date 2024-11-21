@@ -38,6 +38,9 @@ export default function controller(props, emit) {
     isColId(col){
       return col.name == 'id'
     },
+    isColTitle(col){
+      return col.name == 'title'
+    },
     isColActions(col){
       return col.name == 'actions'
     },
@@ -51,7 +54,7 @@ export default function controller(props, emit) {
       return (col?.dynamicField || col?.onClick) && !row?.isLoading ? 'cursor-pointer' : ''
     },
     addDefaultContentType(col){
-      if(!col.contentType){
+      if(!col.contentType && !methods.isColTitle(col)){
         col.contentType = (row) => {
           return {
             template: 'cardField',

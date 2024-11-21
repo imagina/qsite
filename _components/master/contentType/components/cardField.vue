@@ -1,12 +1,17 @@
 <template>
-  <div class="q-py-sm">
-    <div class="row col-12 row justify-between">
-      <div>
-        <span class="text-weight-bold text-subtitle2">{{ col.label }}:</span>
-      </div>
-      <div v-if="isColEditable">
-        <i class="fa-light fa-pen"></i>
-      </div>
+  <div
+    class="q-py-sm"
+  >
+    <div class="row col-12 row justify-between" style="min-height: 24px;">
+        <div class="text-weight-bold text-subtitle2">{{ col.label }}:</div>
+        <q-btn
+          v-if="isColEditable"
+          text-color="blue-grey"
+          icon="fa-light fa-pencil"
+          size="xs"
+          flat
+          round
+        />
     </div>
     <div class="row col-12">
       <span class=" text-body2">{{ col.value }}</span>
@@ -23,7 +28,7 @@ export default defineComponent({
   computed: {
     isColEditable() {
       return this.col?.dynamicField && !this.row?.isLoading
-    }    
+    }
   }
 })
 </script>

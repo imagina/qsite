@@ -38,7 +38,7 @@ export default function controller(props, emit) {
     },    
     loadComponent(){
       if(computeds.isComponent.value){      
-        const component = props.col.contentType(props.row)
+        const component = props.col.contentType(props.row, props.col)
         if(component?.template){            
           state.component = methods.getComponent(component.template)
           if(component?.props) state.componentProps = component.props
