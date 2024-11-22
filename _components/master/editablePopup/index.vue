@@ -31,7 +31,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import controller from 'modules/qsite/_components/master/dynamicTable/components/editablePopup/controller';
+import controller from 'modules/qsite/_components/master/editablePopup/controller';
 
 export default defineComponent({
   props: {

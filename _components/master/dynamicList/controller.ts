@@ -1,7 +1,8 @@
-import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, useSlots} from "vue";
+import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, useSlots, markRaw, shallowRef, defineAsyncComponent} from "vue";
 
 import services from "modules/qsite/_components/master/dynamicList/services";
 import { store, i18n, clone, alert } from 'src/plugins/utils';
+import components from 'modules/qsite/_components/master/dynamicList/components'
 
 export default function controller (props: any, emit: any)
 {
@@ -18,6 +19,8 @@ export default function controller (props: any, emit: any)
   // States
   const state = reactive({
     // Key: Default Value
+    componentView: shallowRef(),
+    view: 'table',
     loading: false,
     columns: [],
     rows: [],
@@ -35,6 +38,23 @@ export default function controller (props: any, emit: any)
       //sortBy: 'desc',
     },
   })
+
+  const extraActions = {
+    table: {
+      label: "change to table",
+        props: {
+          icon: "fa-light fa-list",
+        },
+      action: () => methods.setView('table')
+    },
+    grid: {
+      label: "change to grid",
+      props: {
+        icon: "fa-light fa-grid",
+      },
+      action: () => methods.setView('grid')
+    }
+  }
 
   // Computed
   const computeds = {
@@ -61,6 +81,12 @@ export default function controller (props: any, emit: any)
       let response = [];
       // extras for page action
       if (props.listConfig?.pageActions?.extraActions?.length > 0) response.push(...props.listConfig.pageActions.extraActions)
+      
+      //add grid button
+      if ((props.listConfig?.read?.grid?.length > 0) && state.view != 'grid') response.push(extraActions.grid)
+      //add table button        
+      if (state.view != 'table') response.push(extraActions.table)
+
       //remove new action
       if(response.includes('new') && !computeds.hasPermission.value['create'])  response.splice(response.indexOf('new'), 1);
       return response.filter((item) => !item.vIfAction)
@@ -88,8 +114,22 @@ export default function controller (props: any, emit: any)
   // Methods
   const methods = {
     // methodKey: () => {}
+    
+    setView(template){
+      state.view = template
+      state.loading = true
+      state.componentView = markRaw(components[template])
+      methods.setColumns()
+      state.loading = false
+    },
+    getView(){
+      return state.view
+    },
+
     async init ()
-    {
+    { 
+      const view = props.listConfig?.showAs ? props.listConfig.showAs : 'table'
+      methods.setView(view)
       await methods.setColumns()
 
       if (!state.dynamicFilterValues)
@@ -112,7 +152,8 @@ export default function controller (props: any, emit: any)
     },
     setColumns ()
     {
-      state.columns = props.listConfig.read.columns
+      
+      state.columns = state.view == 'table' ? props.listConfig.read.columns : props.listConfig.read[state.view]  
       //set isEditable
       state.columns.forEach(col =>
       {
