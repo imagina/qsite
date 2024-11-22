@@ -25,14 +25,20 @@
                 :action-data="props.row"
               />
 
+              <!-- image field1-->
+              <div
+                v-if="itemImage(props.row)"
+                class="default-card-grid_item-image"
+                :style="`background-image: url('${itemImage(props.row)}')`">
+              </div>
+
               <template
                 v-for="col in props.cols"
                 :key="col.name"
                 :props="props"
                 :class="getCellClass(col, props.row)"              
               >
-              
-                <!-- id field -->
+                <!-- id field and actions button-->
                 <div class="row justify-between q-py-sm"  v-if="isColId(col)">
                   <contentType                  
                       :col="col"

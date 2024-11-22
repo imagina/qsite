@@ -117,8 +117,10 @@ export default function controller (props: any, emit: any)
     
     setView(template){
       state.view = template
+      state.loading = true
       state.componentView = markRaw(components[template])
       methods.setColumns()
+      state.loading = false
     },
     getView(){
       return state.view

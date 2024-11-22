@@ -66,7 +66,15 @@ export default function controller(props, emit) {
         }
       }
       return col
-    }
+    },
+    itemImage(item) {
+      //instance response
+      let response = false;
+      //search mediumThumb
+      if (item.mediaFiles && item.mediaFiles?.mainimage) response = item.mediaFiles.mainimage.mediumThumb;
+      //response
+      return response;
+    },
   }
 
   // Mounted
