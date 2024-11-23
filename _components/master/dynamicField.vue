@@ -192,6 +192,18 @@
                   @clear="val => field.props.multiple ? responseValue = [] : ''"
                   @input-value="addedNewValue"
                   :class="`${field.help ? 'select-dynamic-field' : ''}`">
+          <template v-slot:selected-item="scope" v-if="field.props.quantityMultiple && field.props.multiple">
+            <q-chip
+              v-if="scope.index < field.props.quantityMultiple"
+              removable
+              dense
+              @remove="scope.removeAtIndex(scope.index)"
+              :tabindex="scope.tabindex"
+              class="q-ma-none"
+            >
+              {{ scope.opt.label }}
+            </q-chip>
+          </template>
           <!--No options slot-->
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
             <slot name="before-options" />
@@ -249,8 +261,18 @@
           <template v-slot:prepend v-if="fieldProps.icon">
             <q-icon :name="fieldProps.icon" size="18px" :color="fieldProps.color" />
           </template>
+          <!--Append Options-->
+          <template v-slot:append v-if="field.props.quantityMultiple && field.props.multiple">
+            <div v-if="(responseValue.length - field.props.quantityMultiple) > 0" style="color: rgba(0, 0, 0, 0.87)">+ {{ responseValue.length - field.props.quantityMultiple}}</div>
+          </template>
           <!-- Before Options -->
           <template v-slot:before-options>
+            <div v-if="field.props.selectAll && field.props.multiple">
+              <q-btn class="full-width" flat color="primary" no-caps @click="selectAllOptions">
+                <q-icon left size="xs" name="fa-light fa-square-check" />
+                <div>{{ $tr('isite.cms.label.selectAll') }}</div>
+              </q-btn>
+            </div>
             <slot name="before-options"></slot>
           </template>
           <!-- After Options -->
@@ -1896,6 +1918,9 @@ export default {
     },
     getRef() {
       return this.$refs[this.fieldProps.field.ref];
+    },
+    selectAllOptions() {
+      this.responseValue = this.formatOptions.map(opt => opt.value)
     }
   }
 };

@@ -484,7 +484,8 @@ export default {
         "bulkPermissions": "Bulk Permissions",
         "entityPermissions": "Entity Permissions",
         "stackTrace": "Stack Trace",
-        "appliedFilters": "You have filters applied, click here to open."
+        "appliedFilters": "You have filters applied, click here to open.",
+        "selectAll": "Select All"
       },
       "message": {
         "requestAdded": "Request added to the offline queue successfully",
