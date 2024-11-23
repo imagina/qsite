@@ -484,7 +484,7 @@ export default {
         'entityPermissions': 'Permisos de entidad',
         'stackTrace': 'Seguimiento de pila',
         "appliedFilters": "Tienes filtros aplicados, haz clic aquí para abrir.",
-        'selectAll': 'Select All'
+        'selectAll': 'Seleccionar todo'
       },
       'message': {
         'requestAdded': 'Petición agregada a la cola sin conexión',
