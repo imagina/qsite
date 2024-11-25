@@ -36,6 +36,7 @@
           :pagination="pagination"
           :loading="loading"
           :beforeUpdate="beforeUpdate"
+          :grid="grid"
           @onPagination="(value) => setPagination(value)"
           @updateRow="(row) => updateRow(row)"
         />
