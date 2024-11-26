@@ -6,6 +6,7 @@
       tw-border-gray-200
       tw-rounded-md
     "
+    :class="{'tw-border-none': fieldProps?.disabledBorder }"
     >
     <div
       class="
@@ -18,10 +19,13 @@
         tw-border-gray-200
         tw-text-gray-500
       "
+      :class="{'tw-hidden': fieldProps?.disabledLabel }"
     >
       {{ fieldProps.label }}
     </div>
-    <inner-loading :visible="loading"/>
+    <div class="tw-flex tw-justify-center tw-py-4" v-if="loading">
+      <i class="fa-solid fa-cog fa-spin tw-text-blue-800 tw-text-3xl" />
+    </div>
     <div v-if="!loading">
       <draggable
         v-model="fields"
