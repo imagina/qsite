@@ -16,8 +16,8 @@
       </template>
       <template v-slot:item="props">
         <div class="q-pa-xs col-12 col-sm-6 col-lg-4 col-xl-3">
-          <div class="box default-card-grid">
-            
+          <q-card class="box default-card-grid">
+            <q-card-section>
               <!---right click --->
               <contextMenu
                 :v-if="actions"
@@ -35,8 +35,6 @@
               <template
                 v-for="col in props.cols"
                 :key="col.name"
-                :props="props"
-                :class="getCellClass(col, props.row)"              
               >
                 <!-- id field and actions button-->
                 <div class="row justify-between q-py-sm"  v-if="isColId(col)">
@@ -75,8 +73,24 @@
                   />
                 </div>
               </template>
-            
-            </div>
+            </q-card-section>
+            <q-card-actions align="around" v-if="grid?.actions">
+                <template
+                  v-for="action in grid.actions"
+                  :key="action.name"
+                >
+                  <q-btn
+                    v-bind="action"
+                    text-color="blue-grey"
+                    @click="action.action(props.row)"
+                    rounded
+                    no-caps
+                    flat
+                    unvelevated
+                  />
+                </template>
+              </q-card-actions>
+            </q-card>
         </div>
       </template>
 
@@ -106,6 +120,7 @@ import masterPagination from 'modules/qsite/_components/master/masterPagination'
 
 export default defineComponent({
   props: {
+    grid: { default: {}},
     tableProps: { default: null },
     loading: { default: false },
     title: { default: '' },
