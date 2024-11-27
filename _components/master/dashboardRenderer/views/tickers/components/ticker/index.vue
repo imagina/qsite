@@ -60,8 +60,7 @@ export default defineComponent({
             v-html="ticker.title"
           />
           <q-btn
-            v-if="valueHidden"
-            v-show="!isLoading"
+            v-if="(valueHidden || ticker?.valueHidden) && !isLoading"
             unelevated 
             size="xs" 
             class="tw-p-0 tw-ml-2"

@@ -30,7 +30,14 @@ onMounted(async () => {
 </script>
 <template>
   <div 
-    class="tw-whitespace-normal tw-overflow-x-auto tw-pb-2" 
+    class="
+      tw-whitespace-normal 
+      scrollbar 
+      hover:tw-overflow-x-auto 
+      hover:tw-pb-2
+      tw--mb-2
+      tw-h-[108px]
+    " 
     :class="className"
   >
     <div class="tw-inline-flex tw-flex-nowrap tw-gap-8">
@@ -45,3 +52,8 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+<style scoped>
+.scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+</style>
