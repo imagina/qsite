@@ -1,7 +1,15 @@
+export interface Tickers {
+  apiRoute: string,
+  permission: string,
+  valueHidden?: boolean
+}
 export interface Setting {
-  apiRoute: string
+  apiRoute?: string
   type: string, 
-  permission: string, 
+  permission: string,
+  className?: string,
+  tickers?: Tickers[],
+  header?: Header,
 }
 
 export interface View {
