@@ -47,7 +47,11 @@ export default defineComponent({
     :toolbox="{ features: toolbox }"
   >
     <div 
-      class="tw-overflow-auto tableContainer"
+      class="
+        tw-overflow-auto 
+        tw-pr-1
+        tableContainer
+      "
       :class="{
         'tw-flex tw-flex-col tw-justify-center tw-h-2/3': !thereAreRows,
       }"
@@ -171,6 +175,7 @@ export default defineComponent({
 
 .tableContainer::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 .tableContainer::-webkit-scrollbar-track {
