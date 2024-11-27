@@ -3,13 +3,26 @@ export interface Tickers {
   permission: string,
   valueHidden?: boolean
 }
+
+export interface Toolbox {
+  tools?: {
+    name: string,
+    icon: string,
+    action: function,
+  },
+  features: {
+    [key: string]: boolean | object,
+  },
+}
+
 export interface Setting {
-  apiRoute?: string
+  apiRoute?: string,
   type: string, 
   permission: string,
   className?: string,
   tickers?: Tickers[],
   header?: Header,
+  toolbox?: Toolbox,
 }
 
 export interface View {
