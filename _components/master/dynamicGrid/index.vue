@@ -74,19 +74,17 @@
                 </div>
               </template>
             </q-card-section>
-            <q-card-actions align="around" v-if="grid?.actions">
+            <q-card-actions align="center" v-if="grid?.actions">
                 <template
                   v-for="action in grid.actions"
                   :key="action.name"
                 >
                   <q-btn
                     v-bind="action"
-                    text-color="blue-grey"
                     @click="action.action(props.row)"
                     rounded
                     no-caps
-                    flat
-                    unvelevated
+                    unelevated
                   />
                 </template>
               </q-card-actions>
