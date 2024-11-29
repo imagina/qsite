@@ -553,7 +553,7 @@ export default {
         "rateYour": "Rate your <b>{name}</b>",
         "withoutIcon": "Without Icon",
         "mustContainAlphanumeric": "Must contain only alphanumeric",
-        "hintUseChips": "Ingrese el valor y presione enter",
+        "hintUseChips": "Type a value and press enter key",
         "finishRegister": "There is little left to finish your registration...",
         "ready": "Ready",
         "noRegistered": "You are not registered yet",
