@@ -269,7 +269,7 @@
           <template v-slot:before-options>
             <div v-if="field.props.selectAll && field.props.multiple">
               <q-btn class="full-width" flat color="primary" no-caps @click="selectAllOptions">
-                <q-icon left size="xs" name="fa-light fa-square-check" />
+                <q-icon left size="xs" :name="`fa-light ${allSelected ? 'fa-square-check' : 'fa-square'}`" />
                 <div>{{ $tr('isite.cms.label.selectAll') }}</div>
               </q-btn>
             </div>
@@ -1474,6 +1474,9 @@ export default {
           ? `tw-bg-${scope.opt.color || scope.opt.value}`
           : `bg-${scope.opt.color || scope.opt.value}`;
       };
+    },
+    allSelected() {
+      return this.formatOptions?.length > 0 && this.formatOptions.length === this.responseValue?.length;
     }
   },
   methods: {
@@ -1920,7 +1923,7 @@ export default {
       return this.$refs[this.fieldProps.field.ref];
     },
     selectAllOptions() {
-      this.responseValue = this.formatOptions.map(opt => opt.value)
+      this.responseValue = this.allSelected ? [] : this.formatOptions.map(opt => opt.value);
     }
   }
 };
