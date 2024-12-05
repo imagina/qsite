@@ -51,14 +51,17 @@ export default function multipleDynamicFieldsController(props: any, emit: any) {
 
     watch(fields, (newField, oldField): void => {
         if(newField) {
-          const filteredField = Object.keys(defaultField.value).reduce((acc, key) => {
-            if (newField[key] !== undefined) {
-              acc[key] = newField[key];
-            }
-            return acc;
-          }, {});
+          const filteredFields = newField.map(field => {
+            const filtered = {};
+            Object.keys(field).forEach(key => {
+              if (key in defaultField.value) {
+                filtered[key] = field[key];
+              }
+            });
 
-          emit('update:modelValue', _.cloneDeep(filteredField));
+            return filtered;
+          });
+          emit('update:modelValue', _.cloneDeep(filteredFields));
         }
     }, { deep: true });
 
