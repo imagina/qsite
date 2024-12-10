@@ -83,9 +83,9 @@ export default function controller (props: any, emit: any)
       if (props.listConfig?.pageActions?.extraActions?.length > 0) response.push(...props.listConfig.pageActions.extraActions)
       
       //add grid button
-      if ((props.listConfig?.read?.grid?.columns.length > 0) && state.view != 'grid') response.push(extraActions.grid)
+      if ((props.listConfig?.read?.grid?.columns?.length > 0) && state.view != 'grid') response.push(extraActions.grid)
       //add table button        
-      if (state.view != 'table') response.push(extraActions.table)
+      if ((props.listConfig?.read?.columns?.length > 0) && state.view != 'table') response.push(extraActions.table)
 
       //remove new action
       if(response.includes('new') && !computeds.hasPermission.value['create'])  response.splice(response.indexOf('new'), 1);
