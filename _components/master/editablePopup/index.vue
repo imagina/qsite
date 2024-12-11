@@ -3,7 +3,7 @@
                  transition-show="fade-in" transition-hide="fade-out"
                  :max-width="dynamicField.maxWidth" ref="popupProxy"
                  @show="setInitialValue">
-    <div class="q-pa-md relative-position">
+    <div class="q-pa-md relative-position bg-white" >
       <!-- Title -->
       <b class="text-blue-grey">
         {{ $tr('isite.cms.label.edit') }}: ID {{ row.id }} | {{ col.label }}
