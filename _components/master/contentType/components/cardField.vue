@@ -4,7 +4,7 @@
   >
     <div class="row col-12 row justify-between" style="min-height: 24px;">
         <div class="text-weight-bold text-subtitle2">
-          <span v-if="col?.icon" :class="col.icon"></span>
+          <span v-if="col?.icon" :class="col.icon" class="q-mr-xs" style="width: 16px;"></span>
           {{ col.label }}:
         </div>
     </div>
