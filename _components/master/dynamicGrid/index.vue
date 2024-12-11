@@ -23,19 +23,19 @@
                 :v-if="actions"
                 :actions="actions"
                 :action-data="props.row"
-              />
-
-              <!-- image field1-->
-              <div
-                v-if="itemImage(props.row)"
-                class="default-card-grid_item-image"
-                :style="`background-image: url('${itemImage(props.row)}')`">
-              </div>
+              />             
 
               <template
                 v-for="col in props.cols"
                 :key="col.name"
               >
+                <!-- mainImage field-->
+                <div
+                  v-if="isColMainimage(col)"
+                  class="default-card-grid_item-image"
+                  :style="`background-image: url('${getMainImage(col, props.row)}')`">
+                </div>
+
                 <!-- id field and actions button-->
                 <div class="row justify-between q-py-sm"  v-if="isColId(col)">
                   <contentType                  
@@ -53,7 +53,7 @@
                 <q-separator v-if="isColId(col)" />              
                 <!-- Keep this to allow unique elements-->
                 <div
-                  v-if="!isColActions(col) && !isColId(col)"
+                  v-if="!isColActions(col) && !isColId(col) && !isColMainimage(col)"
                   :class="getCellClass(col, props.row)"
                   @click="onClick(col, props.row)"
                   :key="$uid()"

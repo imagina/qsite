@@ -44,6 +44,9 @@ export default function controller(props, emit) {
     isColActions(col){
       return col.name == 'actions'
     },
+    isColMainimage(col){
+      return col.name == 'mainImage'
+    },
     isColEditable(col, row){
       return col?.dynamicField && !row?.isLoading
     },
@@ -74,12 +77,10 @@ export default function controller(props, emit) {
       }
       return col
     },
-    itemImage(item) {
-      //instance response
+    getMainImage(col, item) {
       let response = false;
-      //search mediumThumb
-      if (item.mediaFiles && item.mediaFiles?.mainimage) response = item.mediaFiles.mainimage.mediumThumb;
-      //response
+      /*checks and returns  if col.field exist*/
+      if(_.has(item, col.field)) response = _.get(item, col.field)
       return response;
     },
     showAction(action, row){
