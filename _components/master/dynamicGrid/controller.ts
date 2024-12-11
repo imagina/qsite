@@ -55,7 +55,14 @@ export default function controller(props, emit) {
     },
     addDefaultContentType(col){
       if(!col.contentType && !methods.isColTitle(col)){
+
         col.contentType = (row) => {
+
+          if (typeof col?.dynamicField == 'function') {
+            const result = col.dynamicField(row)
+            col.isEditable = result.vIf
+          }
+
           return {
             template: 'cardField',
             props: {
@@ -75,6 +82,13 @@ export default function controller(props, emit) {
       //response
       return response;
     },
+    showAction(action, row){
+      if(action?.vIf != undefined){
+        if (typeof action.vIf == 'function') return action.vIf(row)
+        return action.vIf
+      }
+      return true
+    }
   }
 
   // Mounted
