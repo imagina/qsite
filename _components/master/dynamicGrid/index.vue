@@ -33,7 +33,7 @@
                 <div
                   v-if="isColMainimage(col)"
                   class="default-card-grid_item-image"
-                  :style="`background-image: url('${getMainImage(col, props.row)}')`">
+                  :style="`${getMainImage(col, props.row)}`">
                 </div>
 
                 <!-- id field and actions button-->

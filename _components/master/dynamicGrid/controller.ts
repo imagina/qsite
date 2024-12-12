@@ -78,9 +78,9 @@ export default function controller(props, emit) {
       return col
     },
     getMainImage(col, item) {
-      let response = false;
+      let response = "";
       /*checks and returns  if col.field exist*/
-      if(_.has(item, col.field)) response = _.get(item, col.field)
+      if(_.has(item, col.field)) response = `background-image: url('${_.get(item, col.field)}')`
       return response;
     },
     showAction(action, row){
