@@ -46,6 +46,12 @@ export default function controller(props, emit) {
     },    
     getCellClass(col, row){
       return (col?.dynamicField || col?.onClick) && !row?.isLoading ? 'cursor-pointer' : ''
+    },
+    filterActions(actions, row){
+      return actions.filter((action) => {
+        if(action?.vIf == undefined) return action
+        if ((typeof action?.vIf == 'function') && action.vIf(row)) return action
+      })
     }
   }
 
