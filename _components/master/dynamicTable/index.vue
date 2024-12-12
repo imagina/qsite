@@ -44,7 +44,7 @@
               <!--Actions column-->
               <div v-if="isColActions(col)">
                 <btn-menu
-                  :actions="actions"
+                  :actions="filterActions(actions, props.row)"
                   :action-data="props.row"
                 />
               </div>
