@@ -19,7 +19,7 @@
           <!---right click --->
           <contextMenu
             :v-if="actions"
-            :actions="actions"
+            :actions="filterActions(actions, props.row)"
             :action-data="props.row"
           />
 
