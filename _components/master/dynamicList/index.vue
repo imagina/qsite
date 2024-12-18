@@ -56,6 +56,7 @@ export default defineComponent({
       permission: {default: ''},
       read: {
         columns: {default: []},
+        rows: {default: []},
         requestParams: {default: {}}, 
         filters: { default: {}},
         help: {default: {}}
