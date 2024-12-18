@@ -9,7 +9,6 @@
       row-key="name"
       v-model:pagination="paginationModel"
       hide-pagination
-
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
@@ -18,7 +17,7 @@
         <q-tr :props="props">
           <!---right click --->
           <contextMenu
-            :v-if="actions"
+            :v-if="actions && actions.length"
             :actions="filterActions(actions, props.row)"
             :action-data="props.row"
           />
@@ -42,7 +41,7 @@
               />
 
               <!--Actions column-->
-              <div v-if="isColActions(col)">
+              <div v-if="isColActions(col) && actions.length">
                 <btn-menu
                   :actions="filterActions(actions, props.row)"
                   :action-data="props.row"
@@ -64,6 +63,7 @@
       <template #bottom="props">
         <!--pagination-->
         <master-pagination
+          v-if="paginationModel.rowsNumber"
           v-model="paginationModel"
           :pagesNumber="props.pagesNumber"
           :isFirstPage="props.isFirstPage"

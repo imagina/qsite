@@ -132,6 +132,7 @@ export default function controller (props: any, emit: any)
       const view = props.listConfig?.showAs ? props.listConfig.showAs : 'table'
       methods.setView(view)
       await methods.setColumns()
+      await methods.setRows()
 
       if (!state.dynamicFilterValues)
       {
@@ -163,6 +164,13 @@ export default function controller (props: any, emit: any)
       });
     },
 
+    setRows(){
+      if(props.listConfig.read?.rows){
+        state.rows = props.listConfig.read.rows
+        state.loading = false
+      }
+    },
+
     setPagination (pagination)
     {
       if(pagination.rowsPerPage != state.pagination.rowsPerPage ) pagination.page = 1 //resets pagination
@@ -172,6 +180,7 @@ export default function controller (props: any, emit: any)
 
     async getData (pagination = false, refresh = false)
     {
+      if(!props.listConfig.apiRoute) return
       state.loading = true;
 
       //Instancre the requestParams

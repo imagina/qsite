@@ -48,6 +48,7 @@ export default function controller(props, emit) {
       return (col?.dynamicField || col?.onClick) && !row?.isLoading ? 'cursor-pointer' : ''
     },
     filterActions(actions, row){
+      if(!actions.length) return []
       return actions.filter((action) => {
         if(action?.vIf == undefined) return action
         if ((typeof action?.vIf == 'function') && action.vIf(row)) return action
