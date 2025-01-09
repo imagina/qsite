@@ -657,7 +657,8 @@ export default {
         ]
       },
       sortOptions: true,
-      imageFields: []
+      imageFields: [], 
+      lastQuery: null
     };
   },
   computed: {
@@ -1621,6 +1622,7 @@ export default {
     getOptions(query = false) {
       return new Promise((resolve, reject) => {
         this.loading = true;//Open loading
+        console.log('getOptions')
         let loadOptions = this.$clone(this.field.loadOptions || {});
         //Instance default options keeping the options for the selected values
         let defaultOptions = this.$clone([
@@ -1650,7 +1652,7 @@ export default {
           //add filter
           if (!params.params.filter) params.params.filter = {};
           params.params.filter.allTranslations = true;
-
+          
           //Add Params to get options by query
           if (loadOptions && loadOptions.filterByQuery) {
             if (query && (query.length >= 2)) {
@@ -1666,6 +1668,7 @@ export default {
           const crud = parametersUrl ? this.$crud.get : this.$crud.index;
           //Request
           crud(loadOptions.apiRoute, params, parametersUrl).then(response => {
+            this.lastQuery = query
             if (this.keyField !== '') {
               const keyData = { [this.keyField]: response.data };
               this.$helper.setDynamicSelectList(keyData);
@@ -1833,7 +1836,7 @@ export default {
     },
     //Load the option for default value when is loadOptions
     loadOptionForValue() {
-      if (this.loadField('select')) {
+      if (this.loadField('select') ) {
         let loadOptions = this.field.loadOptions;
         if (loadOptions && loadOptions.apiRoute) {
           //Valudate if the response values is not in the root options
@@ -1844,6 +1847,8 @@ export default {
               return this.rootOptions.map(val => (val.value || val.id || '').toString()).includes(value.toString())
             }
           );
+          
+          if(this.loading) return
           //Validate if there is the option for the value
           if (loadOptions.filterByQuery && !includeAll) {
             let fieldSelect = loadOptions.select || { label: 'title', id: 'id', img: 'mainImage' };
@@ -1858,9 +1863,10 @@ export default {
                 }
               }
             };
-
+            this.loading = true
             //Request
             this.$crud.index(loadOptions.apiRoute, requestParams).then(response => {
+              this.loading = false
               const responseData = response.data;
               if (responseData.length) {
                 if (Array.isArray(this.modelValue)) {
