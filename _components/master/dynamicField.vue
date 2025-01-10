@@ -1654,15 +1654,9 @@ export default {
           if (!params.params.filter) params.params.filter = {};
           params.params.filter.allTranslations = true;
 
-          if(this.lastQuery == query){
-            this.loading = false;
-            this.rootOptions = defaultOptions;
-            return resolve(false);
-          }
-          
           //Add Params to get options by query
           if (loadOptions && loadOptions.filterByQuery) {
-            if (query && (query.length >= 2)) {
+            if (query && (query.length >= 2) && (this.lastQuery != query)) {
               params.params.filter.search = query;
               params.params.take = 25;
             } else {
