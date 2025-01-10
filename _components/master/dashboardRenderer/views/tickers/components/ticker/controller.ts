@@ -63,7 +63,7 @@ export default function controller(props: any, emit: any) {
 
   watch(() => store.globalFilters, async (): Promise<void> => {
     refs.isLoading.value = true
-    if (apiRoute.value && permission.value && computeds.havePermission.value) {
+    if (apiRoute.value && computeds.havePermission.value) {
       refs.ticker.value = await methods.getData()
     }
     refs.isLoading.value = false
