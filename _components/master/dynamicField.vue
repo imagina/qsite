@@ -187,7 +187,6 @@
                          :class="`${field.help ? 'full-date-dynamic-field' : ''}`"
         />
         <!--Select-->
-        {{ lastQuery }}
         <q-select v-model="responseValue" v-bind="fieldProps" :label="fieldLabel" use-input :options="formatOptions"
                   @update:modelValue="matchTags(field)" v-if="loadField('select')" @filter="filterSelectOptions"
                   @clear="val => field.props.multiple ? responseValue = [] : ''"
@@ -1623,7 +1622,6 @@ export default {
     getOptions(query = false) {
       return new Promise((resolve, reject) => {
         this.loading = true;//Open loading
-        console.log('getOptions')
         let loadOptions = this.$clone(this.field.loadOptions || {});
         //Instance default options keeping the options for the selected values
         let defaultOptions = this.$clone([
