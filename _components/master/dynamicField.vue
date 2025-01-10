@@ -657,7 +657,8 @@ export default {
         ]
       },
       sortOptions: true,
-      imageFields: []
+      imageFields: [], 
+      lastQuery: null
     };
   },
   computed: {
@@ -1653,7 +1654,7 @@ export default {
 
           //Add Params to get options by query
           if (loadOptions && loadOptions.filterByQuery) {
-            if (query && (query.length >= 2)) {
+            if (query && (query.length >= 2) && (this.lastQuery != query)) {
               params.params.filter.search = query;
               params.params.take = 25;
             } else {
@@ -1666,6 +1667,7 @@ export default {
           const crud = parametersUrl ? this.$crud.get : this.$crud.index;
           //Request
           crud(loadOptions.apiRoute, params, parametersUrl).then(response => {
+            this.lastQuery = query
             if (this.keyField !== '') {
               const keyData = { [this.keyField]: response.data };
               this.$helper.setDynamicSelectList(keyData);
@@ -1833,7 +1835,7 @@ export default {
     },
     //Load the option for default value when is loadOptions
     loadOptionForValue() {
-      if (this.loadField('select')) {
+      if (this.loadField('select') ) {
         let loadOptions = this.field.loadOptions;
         if (loadOptions && loadOptions.apiRoute) {
           //Valudate if the response values is not in the root options
@@ -1844,6 +1846,8 @@ export default {
               return this.rootOptions.map(val => (val.value || val.id || '').toString()).includes(value.toString())
             }
           );
+          
+          if(this.loading) return
           //Validate if there is the option for the value
           if (loadOptions.filterByQuery && !includeAll) {
             let fieldSelect = loadOptions.select || { label: 'title', id: 'id', img: 'mainImage' };
@@ -1858,9 +1862,10 @@ export default {
                 }
               }
             };
-
+            this.loading = true
             //Request
             this.$crud.index(loadOptions.apiRoute, requestParams).then(response => {
+              this.loading = false
               const responseData = response.data;
               if (responseData.length) {
                 if (Array.isArray(this.modelValue)) {
