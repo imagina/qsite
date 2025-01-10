@@ -187,6 +187,7 @@
                          :class="`${field.help ? 'full-date-dynamic-field' : ''}`"
         />
         <!--Select-->
+        {{ lastQuery }}
         <q-select v-model="responseValue" v-bind="fieldProps" :label="fieldLabel" use-input :options="formatOptions"
                   @update:modelValue="matchTags(field)" v-if="loadField('select')" @filter="filterSelectOptions"
                   @clear="val => field.props.multiple ? responseValue = [] : ''"
@@ -1652,6 +1653,12 @@ export default {
           //add filter
           if (!params.params.filter) params.params.filter = {};
           params.params.filter.allTranslations = true;
+
+          if(this.lastQuery == query){
+            this.loading = false;
+            this.rootOptions = defaultOptions;
+            return resolve(false);
+          }
           
           //Add Params to get options by query
           if (loadOptions && loadOptions.filterByQuery) {
