@@ -46,13 +46,13 @@
         </q-btn>
         <!-- menu dropdown-->
         <q-btn-dropdown
-          v-else-if="btn.type == 'btn-menu' && tableColumns?.length"
+          v-else-if="btn.type == 'columns'"
           :icon="btn.props.icon"
           v-bind="{...buttonProps, ...btn.props}"
         >
           <q-list>
             <template v-for="(action, key) in btn.actions" :key="key">
-              <q-item clickable v-close-popup>
+              <q-item clickable v-close-popup v-if="action.name != 'id' && action.name != 'actions'">
                 <q-item-section>
                   <q-item-label>
                     <q-checkbox
@@ -162,9 +162,10 @@ export default {
         return {}
       }
     },
-    tableColumns: null
+    tableColumns: null,
+    showColumnsButton: false
   },
-  emits: ['search', 'new', 'refresh', 'activateTour', 'updateDynamicFilterValues'],  
+  emits: ['search', 'new', 'refresh', 'activateTour', 'updateDynamicFilterValues', 'visibleColumns'],
   components: { masterExport, masterSynchronizable, bulkActions, dynamicFilter },
   mounted() {
     this.$nextTick(function() {
@@ -192,7 +193,6 @@ export default {
       showDynamicFilterModal: false, 
       dynamicFilterValues: {},
       dynamicFilterSummary: null,
-      columnsModal: false,
       visibleColumns: null
     };
   },
@@ -419,12 +419,12 @@ export default {
         //visibleColumns
         {
           label: "show columns",
-          type: "btn-menu",
+          type: "columns",
+          vIf: this.showColumnsButton,
           actions: this.tableColumns,
           props: {
             icon: "fa-light fa-table-columns",
-          },
-          action: () => this.columnsModal = !this.columnsModal
+          }
         },
         //Filter
         {
@@ -511,7 +511,7 @@ export default {
       this.$emit('updateDynamicFilterValues', filters)
     },
     getVisibleColumns(){
-      this.visibleColumns = this.tableColumns ? this.tableColumns.map(item => item.name) : []
+      this.visibleColumns = this.tableColumns ? this.tableColumns.map(item => item.name) : []      
       this.$emit('visibleColumns', this.visibleColumns)
     }
   }
