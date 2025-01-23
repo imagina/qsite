@@ -421,7 +421,6 @@ export default {
         },
         //visibleColumns
         {
-          label: "show columns",
           type: "columns",
           vIf: this.showColumnsButton,
           actions: this.tableColumns,

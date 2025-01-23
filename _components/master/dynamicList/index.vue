@@ -27,8 +27,7 @@
         </div>
       
         <slot name="top-table" >
-        </slot>        
-        visibleColumns => {{ getVisibleColumns()}}
+        </slot>
         <component
           :is="componentView"
           :class="{'q-mt-md q-pt-md': !hasTopTableSlot }"
