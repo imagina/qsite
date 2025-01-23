@@ -50,7 +50,7 @@
           :icon="btn.props.icon"
           v-bind="{...buttonProps, ...btn.props}"
         >
-          <q-list>
+          <q-list dense>
             <template v-for="(action, key) in btn.actions" :key="key">
               <q-item clickable v-close-popup v-if="action.name != 'id' && action.name != 'actions'">
                 <q-item-section>
@@ -162,8 +162,11 @@ export default {
         return {}
       }
     },
-    tableColumns: null,
-    showColumnsButton: false
+    tableColumns: { default: [] },
+    showColumnsButton: {
+      type: Boolean,
+      default: () => false
+    },
   },
   emits: ['search', 'new', 'refresh', 'activateTour', 'updateDynamicFilterValues', 'visibleColumns'],
   components: { masterExport, masterSynchronizable, bulkActions, dynamicFilter },
@@ -193,7 +196,7 @@ export default {
       showDynamicFilterModal: false, 
       dynamicFilterValues: {},
       dynamicFilterSummary: null,
-      visibleColumns: null
+      visibleColumns: []
     };
   },
   watch: {
@@ -423,7 +426,7 @@ export default {
           vIf: this.showColumnsButton,
           actions: this.tableColumns,
           props: {
-            icon: "fa-light fa-table-columns",
+            icon: "fa-duotone fa-line-columns",
           }
         },
         //Filter
@@ -511,7 +514,7 @@ export default {
       this.$emit('updateDynamicFilterValues', filters)
     },
     getVisibleColumns(){
-      this.visibleColumns = this.tableColumns ? this.tableColumns.map(item => item.name) : []      
+      this.visibleColumns = this.tableColumns.length ? this.tableColumns.map(item => item.name) : []
       this.$emit('visibleColumns', this.visibleColumns)
     }
   }
