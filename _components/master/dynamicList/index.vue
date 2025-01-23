@@ -17,6 +17,9 @@
           :systemName="systemName"
           :dynamicFilter="dynamicFilter"
           @updateDynamicFilterValues="filters => updateDynamicFilterValues(filters)"
+          :tableColumns="columns"
+          :showColumnsButton="showColumnsButton"
+          @visibleColumns="value => this.visibleColumns = value"
         />
         <!--table title-->
         <div v-if="!loadPageActions" :class="`row text-primary text-weight-bold ellipsis title-content items-center`">
@@ -24,8 +27,7 @@
         </div>
       
         <slot name="top-table" >
-        </slot>        
-
+        </slot>
         <component
           :is="componentView"
           :class="{'q-mt-md q-pt-md': !hasTopTableSlot }"
@@ -39,6 +41,7 @@
           :grid="grid"
           @onPagination="(value) => setPagination(value)"
           @updateRow="(row) => updateRow(row)"
+          :visibleColumns="getVisibleColumns()"
         />
       </div>
     </div>

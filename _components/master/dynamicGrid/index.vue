@@ -10,6 +10,7 @@
       v-model:pagination="paginationModel"
       hide-pagination
       grid
+      :visible-columns="visibleColumns"
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
@@ -131,7 +132,8 @@ export default defineComponent({
     beforeUpdate: {
       type: Function,
       default: false
-    }
+    },
+    visibleColumns: { default: [] }
   },
   components: {
     editablePopup,

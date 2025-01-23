@@ -44,6 +44,29 @@
                @click="btn.action !=    undefined ? btn.action() : null">
           <q-tooltip v-if="btn.label">{{ btn.label }}</q-tooltip>
         </q-btn>
+        <!-- menu dropdown-->
+        <q-btn-dropdown
+          v-else-if="btn.type == 'columns'"
+          :icon="btn.props.icon"
+          v-bind="{...buttonProps, ...btn.props}"
+        >
+          <q-list dense>
+            <template v-for="(action, key) in btn.actions" :key="key">
+              <q-item clickable v-close-popup v-if="action.name != 'id' && action.name != 'actions'">
+                <q-item-section>
+                  <q-item-label>
+                    <q-checkbox
+                      v-model="visibleColumns"
+                      :val="action.name"
+                      @update:model-value="(value) => this.$emit('visibleColumns', value)"
+                    />
+                    {{action.label}}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-list>
+        </q-btn-dropdown>
         <q-btn v-else v-bind="{...buttonProps, ...btn.props}" @click="btn.action != undefined ? btn.action() : null">
           <q-badge v-if="btn?.badge?.vIf" v-bind="{...btn?.badge }" />
           <q-tooltip v-if="btn.label && btn.badge?.show" v-model="showExpires" class="tw-z-10">{{ btn.label }}</q-tooltip>
@@ -139,9 +162,13 @@ export default {
         return {}
       }
     },
-    
+    tableColumns: { default: [] },
+    showColumnsButton: {
+      type: Boolean,
+      default: () => false
+    },
   },
-  emits: ['search', 'new', 'refresh', 'activateTour', 'updateDynamicFilterValues'],  
+  emits: ['search', 'new', 'refresh', 'activateTour', 'updateDynamicFilterValues', 'visibleColumns'],
   components: { masterExport, masterSynchronizable, bulkActions, dynamicFilter },
   mounted() {
     this.$nextTick(function() {
@@ -168,7 +195,8 @@ export default {
       /* dynamic filters */
       showDynamicFilterModal: false, 
       dynamicFilterValues: {},
-      dynamicFilterSummary: null
+      dynamicFilterSummary: null,
+      visibleColumns: []
     };
   },
   watch: {
@@ -240,6 +268,7 @@ export default {
     init() {
       this.showBadgeRefresh(this.expiresIn)
       this.validateEnableTour();
+      this.getVisibleColumns()
     },
     async validateEnableTour() {
       if(this.tourName && !config('app.disableTours') &&
@@ -390,6 +419,15 @@ export default {
           },
           action: () => eventBus.emit('toggleMasterDrawer', 'recommendation')
         },
+        //visibleColumns
+        {
+          type: "columns",
+          vIf: this.showColumnsButton,
+          actions: this.tableColumns,
+          props: {
+            icon: "fa-duotone fa-line-columns",
+          }
+        },
         //Filter
         {
           label: this.$tr('isite.cms.label.filter'),
@@ -474,6 +512,10 @@ export default {
       this.dynamicFilterValues = filters;
       this.$emit('updateDynamicFilterValues', filters)
     },
+    getVisibleColumns(){
+      this.visibleColumns = this.tableColumns.length ? this.tableColumns.map(item => item.name) : []
+      this.$emit('visibleColumns', this.visibleColumns)
+    }
   }
 };
 </script>
