@@ -37,6 +37,7 @@ export default function controller (props: any, emit: any)
       maxPages: 6
       //sortBy: 'desc',
     },
+    visibleColumns: []
   })
 
   const extraActions = {
@@ -109,7 +110,8 @@ export default function controller (props: any, emit: any)
     {
       return props.listConfig.read?.systemName || props.listConfig?.permission || props.listConfig?.entityName;
     }),
-    grid: computed(() => props.listConfig.read?.grid || {})
+    grid: computed(() => props.listConfig.read?.grid || {}),
+    showColumnsButton: computed(() => ['table', 'grid'].includes(state.view))
   }
 
   // Methods
@@ -273,6 +275,9 @@ export default function controller (props: any, emit: any)
       state.pagination.page = 1
       methods.getData();
     },
+    getVisibleColumns(){
+      return state.visibleColumns.length ? state.visibleColumns : state.columns.map(item => item.name)
+    }
     }
 
   // Mounted
