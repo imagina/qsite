@@ -7,6 +7,7 @@
         :list="items"
         :group="{ name: 'g1' }"
         item-key="id"
+        ghost-class="ghost"
     >
       <template #item="{ element }">
         <div
@@ -14,11 +15,11 @@
           :key="element.id"
         >
           <!-- list -->
-          <div class="row justify-between items-center q-mb-xs q-mt-xs">
+          <div class="row justify-between items-center q-my-md q-ml-sm item">
             <!-- name -->
             <div class="col-10 row q-py-xs blue-green items-center">
-              <div class="q-px-xs" :class="{'q-py-md': element.subTitle }">
-                <q-icon class="cursor-pointer q-px-sm" color="blue-grey" name="fa-light fa-bars"/>
+              <div :class="{'q-py-md': element.subTitle }">
+                <q-icon class="cursor-pointer q-pr-sm" color="blue-grey" name="fa-light fa-bars"/>
               </div>
               <div class="text-subtitle2 text-weight-light" :class="{'q-py-xs': element.subTitle}">
                 {{ element.title }}
@@ -38,7 +39,7 @@
           </div>
           <!-- recursive dragabble -->
           <nestedDraggable
-            :class="`${element.children.length} ?: q-mb-xs`"
+            :class="`${element.children.length} ?: q-mb-sm q-ml-md`"
             :items="element.children"
             v-if="nested"
           />
@@ -92,9 +93,19 @@ export default {
     margin-bottom: 5px;
     cursor: move;
     display: block;
-    padding: 0 5px;
-    border: lightgray 1px solid;
-    border-radius: $custom-radius;
+    .item {
+      border-bottom: lightgray 1px solid;
+    }
+  }
+
+  .ghost {
+    border: 1px dashed #0088F8;
+    background: rgba(0, 136, 249, 0.09);
+    font-size: 0px;
+
+    button {
+      display: none;
+    }
   }
 }
 </style>
