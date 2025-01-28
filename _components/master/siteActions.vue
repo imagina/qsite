@@ -48,7 +48,7 @@
       <!--Auth section-->
       <q-btn v-if="quserState.authenticated && (configMode == 'iadmin')" id="profileButton" rounded no-caps
              padding="2px 8px" color="white" unelevated>
-        <div id="profileImage" class="img-as-bg"
+        <div id="profileImage" class="img-as-bg" v-if="profileImage.smallThumb"
              :style="`background-image: url('${profileImage.smallThumb}')`"></div>
         <div class="q-ml-xs q-mr-sm text-blue-grey">{{ quserState.userData.firstName }}</div>
         <q-icon name="fas fa-chevron-down" size="14px" color="blue-grey" />

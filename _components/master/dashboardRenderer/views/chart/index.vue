@@ -59,8 +59,8 @@ export default defineComponent({
       <q-skeleton class="tw-rounded-2xl tw-w-16 tw-h-72" animated type="rect" />
     </section>
     <no-data v-if="!thereAreData && !isLoading" class="tw-h-72" />
-    <v-chart 
-      v-show="thereAreData && !isLoading"
+    <v-chart
+      v-if="thereAreData && !isLoading"
       ref="chartRef"
       class="tw-w-full tw-h-[337px]" 
       :option="options" 

@@ -7,11 +7,12 @@ import store from '../../../../store'
 
 export default function controller(props: any, emit: any) {
 
-  const { apiRoute, permission, data } = toRefs(props)
+  const { apiRoute, permission, data, valueHidden } = toRefs(props)
   const { hasAccess } = storeUtil
 
   const refs = {
     isLoading: ref(true),
+    isValueHidden: ref(true),
     ticker: ref<Ticker>({ ...tickerModel }),
   }
 
@@ -19,12 +20,18 @@ export default function controller(props: any, emit: any) {
     havePermission: computed(() => {
       if (!permission.value) return true
       return hasAccess(permission.value)
-    })
+    }),
+    showValue: computed(() => {
+      return valueHidden.value ? !refs.isValueHidden.value : true
+    }),
   }
 
   const methods = {
     getData: async (refresh?: boolean): Promise<Ticker> => {
       return await service.getQuickCardData(apiRoute.value, store.globalFilters, refresh)
+    },
+    hideValue: () => {
+      refs.isValueHidden.value = !refs.isValueHidden.value
     }
   }
 
@@ -56,7 +63,7 @@ export default function controller(props: any, emit: any) {
 
   watch(() => store.globalFilters, async (): Promise<void> => {
     refs.isLoading.value = true
-    if (apiRoute.value && permission.value && computeds.havePermission.value) {
+    if (apiRoute.value && computeds.havePermission.value) {
       refs.ticker.value = await methods.getData()
     }
     refs.isLoading.value = false

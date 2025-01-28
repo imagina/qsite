@@ -16,6 +16,10 @@ export default defineComponent({
       type: Object,
       default: () => ({})
     },
+    valueHidden: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props, {emit}) {
     return controller(props, emit)
@@ -41,7 +45,10 @@ export default defineComponent({
   >
     <section class="tw-flex tw-w-full tw-flex-col tw-gap-2 tw-justify-center" >
       <div>
-        <div v-if="ticker?.title">
+        <div 
+          v-if="ticker?.title" 
+          class="tw-flex tw-items-center tw-text-gray-400 tw-w-full"
+        >
           <q-skeleton 
             v-show="isLoading" 
             class="tw-w-14 tw-mb-1" 
@@ -49,9 +56,25 @@ export default defineComponent({
           />
           <div 
             v-show="!isLoading" 
-            class="tw-text-gray-400 tw-text-xs tw-font-semibold"
+            class="tw-text-xs tw-font-semibold tw-w-max"
             v-html="ticker.title"
           />
+          <q-btn
+            v-if="(valueHidden || ticker?.valueHidden) && !isLoading"
+            unelevated 
+            size="xs" 
+            class="tw-p-0 tw-ml-2"
+            @click="hideValue"
+            flat
+          >
+            <i 
+              class="fa-regular tw-text-xs" 
+              :class="{
+                'fa-eye': isValueHidden,
+                'fa-eye-slash': !isValueHidden
+              }" 
+            />
+          </q-btn>
         </div>
         <section class="tw-flex tw-gap-2 tw-items-center tw-h-auto">
           <template v-for="(body, index) in ticker?.body" :key="index">
@@ -77,11 +100,18 @@ export default defineComponent({
                   class="tw-w-20 tw-h-7" 
                   type="rect"
                 />
-                <div 
-                  v-show="!isLoading" 
+                <div
+                  v-if="showValue"
+                  v-show="!isLoading"
                   class="tw-text-2xl tw-font-bold" 
                   v-html="body.value" 
                 />
+                <h1 
+                  v-show="!isLoading && isValueHidden && valueHidden" 
+                  class="tw-text-2xl"
+                >
+                  ********
+                </h1>
               </div>
               <div v-if="body?.footer">
                 <q-skeleton 

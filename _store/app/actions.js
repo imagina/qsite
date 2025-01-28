@@ -39,13 +39,13 @@ export const CLEAR_CACHE_STORAGE = async ({}, excludedKeyList=[]) => {
 
 //Refresh page
 export const REFRESH_PAGE = async ({state, commit, dispatch, getters}) => {
-    await Promise.allSettled([
-      crud.post('apiRoutes.qsite.cacheClear'),//Clear laravel cache
-      cache.restore(config('app.saveCache.refresh')),//Reset cache
-      dispatch('quserAuth/AUTH_UPDATE', null, {root: true}),//Update user data
-      dispatch('qsiteApp/GET_SITE_SETTINGS', null, {root: true})//update settings sites
-    ])
-    dispatch('qsiteApp/SET_SITE_COLORS', null, {root: true})//Load colors
+  await Promise.allSettled([
+    crud.post('apiRoutes.qsite.cacheClear'),//Clear laravel cache
+    cache.restore(config('app.saveCache.refresh')),//Reset cache
+    dispatch('quserAuth/AUTH_UPDATE', null, {root: true}),//Update user data
+    dispatch('qsiteApp/GET_SITE_SETTINGS', null, {root: true})//update settings sites
+  ])
+  dispatch('qsiteApp/SET_SITE_COLORS', null, {root: true})//Load colors
 }
 
 export const DELETE_SW = async () => {
@@ -194,46 +194,30 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
     axios.defaults.params.setting.locale = locale
 
     //Set default language to Quasar
-    locale = (locale == 'en') ? 'en-us' : locale.toLowerCase()
+    locale = (locale == 'en') ? 'en-US' : locale.toLowerCase()
     import(`quasar/lang/${locale}`).then(lang => {
       if (params.ssrContext) Quasar.lang.set(lang.default, params.ssrContext)
       else Quasar.lang.set(lang.default)
     })
 
     //Set default language to i18n
-    //import(`modules/qsite/_i18n/master/index`).then(({default: messages}) => {
-    dispatch('qtranslationMaster/GET_TRANSLATIONS', {refresh: false}, {root: true}).then(({default: messages}) => {
-      try {
-        Vue.i18n.locale = locale
-        Vue.i18n.setLocaleMessage(locale, messages[locale])
-      } catch (e) {
+    if(!config('app.useLocalTranslations')) {
+      locale = locale.toLowerCase()
+      dispatch('qtranslationMaster/GET_TRANSLATIONS', { refresh: false }, { root: true }).then(({ default: messages }) => {
+        try {
+          Vue.i18n.locale = locale
+          Vue.i18n.setLocaleMessage(locale, messages[locale])
+        } catch (e) {
 
-      }
+        }
 
-      try {
-        Vue.$i18n.locale = locale
-        Vue.$i18n.setLocaleMessage(locale, messages[locale])
-      } catch (e) {
+        try {
+          Vue.$i18n.locale = locale
+          Vue.$i18n.setLocaleMessage(locale, messages[locale])
+        } catch (e) {
 
-      }
-    })
-
-    //Change language in URL
-    if (Vue.$route) {
-      //Add language to route name
-      let nextRoute = cloneDeep(Vue.$route)
-
-      //Change route locale
-      if (helper.getLocaleRouteName(nextRoute.name)) {
-        let routeNameSegments = cloneDeep(nextRoute.name.split('.'))
-        routeNameSegments[0] = locale
-        nextRoute.name = routeNameSegments.join('.')
-      } else {//Add locale
-        nextRoute = {...nextRoute, name: `${locale}.${nextRoute.name}`}
-      }
-
-      //Redirect
-      if (nextRoute.name != Vue.$route.name) Vue.$router.push(nextRoute)
+        }
+      })
     }
 
     resolve(true)

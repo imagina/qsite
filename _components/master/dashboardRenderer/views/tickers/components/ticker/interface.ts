@@ -9,6 +9,7 @@ export interface Ticker {
   title?: string,
   body: Body[],
   footer?: string,
+  valueHidden?: boolean,
   icon?: {
     name: string,
     className?: string,
