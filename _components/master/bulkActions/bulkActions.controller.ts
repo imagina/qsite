@@ -4,6 +4,7 @@ import {
     onMounted, 
     nextTick, 
     computed,
+    onBeforeUnmount,
 } from 'vue'
 import { useRoute } from 'vue-router'
 import { 
@@ -147,13 +148,16 @@ export const bulkActionsController = (props, { expose, emit }) => {
         messages.value = [];
         selectedAction.value = null;
         optionsForSelectedBulkActions.value = {};
-        eventBus.off('bulkActionRefresh')
     }
 
     onMounted(() => {
         nextTick(async () => {
             await init()
         })
+    })
+
+    onBeforeUnmount(() => {
+        eventBus.off('bulkActionRefresh')
     })
 
     //Page title
