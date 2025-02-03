@@ -71,9 +71,7 @@
           size="20px"
           class="tw-mr-2.5 tw-mt-1"
         />
-        <p class="tw-max-w-80">
-          {{ description }}
-        </p>
+        <p v-if="description" class="tw-max-w-80" v-html="description" />
         <q-btn
           v-if="!title"
           icon="fas fa-times"
