@@ -23,7 +23,11 @@
             class="tw-ml-3 tw-font-semibold tw-text-gray-500 tw-text-sm"
             v-bind="chip"
           />
-          <help-text class="tw-ml-2" v-if="help" v-bind="help" />
+          <help-text 
+            class="tw-ml-2" 
+            v-if="help" 
+            v-bind="help" 
+          />
         </div>
         <!--Close Button-->
         <q-btn v-close-popup icon="fa-light fa-xmark" round textColor="blue-grey" unelevated class="btn-medium"
@@ -54,7 +58,6 @@
 </template>
 
 <script>
-import {} from 'src/modules/qsite/_components/master/helpText.vue'
 export default {
   props: {
     modelValue: { type: Boolean, default: false },
