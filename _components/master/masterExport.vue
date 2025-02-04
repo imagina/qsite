@@ -263,7 +263,7 @@ export default {
           refresh: true,
           params: {
             exportParams: this.exportItem ? { ...this.params, ...(this.paramsItem.exportParams || {}) } : this.params,
-            filter: this.exportItem ? (this.paramsItem.filter || {}) : (filter ? filter.values : {})
+            filter: this.exportItem ? (this.paramsItem.filter || {}) : (filter ? filter : {})
           }
         };
 
