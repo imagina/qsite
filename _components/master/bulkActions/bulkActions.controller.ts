@@ -17,7 +17,7 @@ import {
 import { constants } from './models/defaultModels/constants'
 import { prepareMessageObject } from './helpers'
 import { sendReport, getDataLog, getConfig } from './services'
-import { helper, i18n, store, eventBus } from 'src/plugins/utils'
+import { helper, i18n, store, eventBus, cache } from 'src/plugins/utils'
 
 export const bulkActionsController = (props, { expose, emit }) => {
     const loading = ref(false)
@@ -31,6 +31,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const messages = ref<Message[] | []>([])
     const log = ref([])
     const route = useRoute()
+    const token = ref('')
 
     const { dynamicFilterValues, dynamicFilterSummary } = toRefs(props)
 
@@ -42,7 +43,8 @@ export const bulkActionsController = (props, { expose, emit }) => {
         columns, 
         initialPagination, 
         typesOfMessages,
-        fieldMassiveActions
+        fieldMassiveActions,
+        help
     } = constants()
 
     const filterAndSortBulkActions = (bulkActions: BulkActions[]) => {
@@ -108,6 +110,15 @@ export const bulkActionsController = (props, { expose, emit }) => {
         return description
     }
 
+    const getToken = async () => {
+        try {
+            const sessionData = await cache.get.item('sessionData')
+            return sessionData.userToken.split(' ')[1]
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const newReport = async (confirmed=false) => {
         processing.value = true;
         
@@ -153,6 +164,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
     onMounted(() => {
         nextTick(async () => {
             await init()
+            token.value = await getToken()
         })
     })
 
@@ -214,6 +226,8 @@ export const bulkActionsController = (props, { expose, emit }) => {
         i18n,
         dynamicFilterSummary,
         isDynamicFilterSummary,
+        help,
+        token,
         init,
         newReport,
         showReport,
