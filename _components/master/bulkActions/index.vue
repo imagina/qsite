@@ -6,7 +6,8 @@
         :loading="loading"
         :title="modalTitle" 
         @hide="reset()" 
-        @show="init()" 
+        @show="init()"
+        :help="help(token)"
         custom-position
     >
         <div v-if="!loading">
