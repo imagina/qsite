@@ -144,7 +144,7 @@ export default {
               type: 'a',
               id: 'siteActionGoToSite',
               href: goToSiteUrl,
-              //target: '_blank',
+              target: '_blank',
               round: false,
               rounded: true,
               padding: 'xs md'
