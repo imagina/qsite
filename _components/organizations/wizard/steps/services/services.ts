@@ -19,7 +19,7 @@ export default function services() {
     try {
       const requestParams = {refresh: true}
       const response = await baseService.index('apiRoutes.qsite.categories', requestParams);
-      const categories = response.data.sort((a, b) => a.title.localeCompare(b.title));      
+      const categories = response.data.sort((a, b) => a.title.localeCompare(b.title));
       return categories;
     } catch (error) {
       console.log('Error in wizard/services.getCategories ' + error);
@@ -55,7 +55,7 @@ export default function services() {
       const paramsProducts = {
         refresh: true, params: {
           filter: {id: plans.data.map(plan => plan.product.id), status: true, validationInternal:true},
-          include: 'productOptions,optionValues,relatedProducts'
+          include: 'productOptions,optionValues,relatedProducts.files'
         }
       };
       let products = await baseService.index('apiRoutes.qcommerce.products', paramsProducts);
@@ -67,7 +67,7 @@ export default function services() {
           products.data[index].optionValues = [{optionValue: plan.frequency, price: plan.price,}]
         }
       })
-      
+
       return products.data;
     } catch
       (error) {
@@ -82,7 +82,7 @@ export default function services() {
         filter: {
           id: planId,
         },
-        include: 'productOptions,optionValues,relatedProducts,categories'
+        include: 'productOptions,optionValues,relatedProducts.files,categories'
       };
       let response = await baseService.index('apiRoutes.qcommerce.products', {refresh: true, params});
       return response.data;
