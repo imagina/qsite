@@ -7,7 +7,7 @@
         :title="modalTitle" 
         @hide="reset()" 
         @show="init()"
-        :help="help(token)"
+        :help="helpText"
         custom-position
     >
         <div v-if="!loading">
