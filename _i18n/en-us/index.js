@@ -484,7 +484,8 @@ export default {
         "bulkPermissions": "Bulk Permissions",
         "entityPermissions": "Entity Permissions",
         "stackTrace": "Stack Trace",
-        "appliedFilters": "You have filters applied, click here to open."
+        "appliedFilters": "You have filters applied, click here to open.",
+        "selectAll": "Select All"
       },
       "message": {
         "requestAdded": "Request added to the offline queue successfully",
@@ -552,7 +553,7 @@ export default {
         "rateYour": "Rate your <b>{name}</b>",
         "withoutIcon": "Without Icon",
         "mustContainAlphanumeric": "Must contain only alphanumeric",
-        "hintUseChips": "Ingrese el valor y presione enter",
+        "hintUseChips": "Type a value and press enter key",
         "finishRegister": "There is little left to finish your registration...",
         "ready": "Ready",
         "noRegistered": "You are not registered yet",

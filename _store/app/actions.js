@@ -143,46 +143,6 @@ export const GET_CENTRALIZED_BRAND = ({state}, siteSettings) => {
   })
 }
 
-//Get the pages from backend
-export const GET_PAGES = ({commit}) => {
-  return new Promise(async resolve => {
-    //Request params
-    let requestParams = {refresh: true}
-    //Request data
-    await crud.index('apiRoutes.qpage.pagesCms', requestParams).then(({data}) => {
-      commit('SET_PAGES', data)
-      resolve(data)
-    }).catch(error => {
-      console.error("[store-qsite]::GetPage", error)
-      resolve(false)
-    })
-  })
-}
-
-//Get the menu from backend
-export const GET_MENU_SIDEBAR = ({commit}) => {
-  return new Promise(async resolve => {
-    //Instance criteria
-    const criteria = (config('app.mode') == 'iadmin') ? 'cms_admin' : 'cms_panel'
-    //Instance params
-    const params = {
-      refresh: true,
-      params: {
-        filter: {field: 'name'},
-        include: 'menuitems'
-      }
-    }
-    //Request
-    await crud.show('apiRoutes.qmenu.menus', criteria, params).then(({data}) => {
-      commit('SET_MENU', data.menuitems)
-      resolve(data)
-    }).catch(error => {
-      console.error("[store-qsite]::GetMenu", error)
-      resolve(true)
-    })
-  })
-}
-
 //Set site settins
 export const SET_SITE_COLORS = ({state, commit, dispatch}) => {
   let settings = state.settings
@@ -234,46 +194,30 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
     axios.defaults.params.setting.locale = locale
 
     //Set default language to Quasar
-    locale = (locale == 'en') ? 'en-us' : locale.toLowerCase()
+    locale = (locale == 'en') ? 'en-US' : locale.toLowerCase()
     import(`quasar/lang/${locale}`).then(lang => {
       if (params.ssrContext) Quasar.lang.set(lang.default, params.ssrContext)
       else Quasar.lang.set(lang.default)
     })
 
     //Set default language to i18n
-    //import(`modules/qsite/_i18n/master/index`).then(({default: messages}) => {
-    dispatch('qtranslationMaster/GET_TRANSLATIONS', {refresh: false}, {root: true}).then(({default: messages}) => {
-      try {
-        Vue.i18n.locale = locale
-        Vue.i18n.setLocaleMessage(locale, messages[locale])
-      } catch (e) {
-
-      }
-
-      try {
-        Vue.$i18n.locale = locale
-        Vue.$i18n.setLocaleMessage(locale, messages[locale])
-      } catch (e) {
-
-      }
-    })
-
-    //Change language in URL
-    if (Vue.$route) {
-      //Add language to route name
-      let nextRoute = cloneDeep(Vue.$route)
-
-      //Change route locale
-      if (helper.getLocaleRouteName(nextRoute.name)) {
-        let routeNameSegments = cloneDeep(nextRoute.name.split('.'))
-        routeNameSegments[0] = locale
-        nextRoute.name = routeNameSegments.join('.')
-      } else {//Add locale
-        nextRoute = {...nextRoute, name: `${locale}.${nextRoute.name}`}
-      }
-
-      //Redirect
-      if (nextRoute.name != Vue.$route.name) Vue.$router.push(nextRoute)
+    if(!config('app.useLocalTranslations')) {
+      locale = locale.toLowerCase()
+      dispatch('qtranslationMaster/GET_TRANSLATIONS', {refresh: false}, {root: true}).then(({default: messages}) => {
+        try {
+          Vue.i18n.locale = locale
+          Vue.i18n.setLocaleMessage(locale, messages[locale])
+        } catch (e) {
+  
+        }
+  
+        try {
+          Vue.$i18n.locale = locale
+          Vue.$i18n.setLocaleMessage(locale, messages[locale])
+        } catch (e) {
+  
+        }
+      })
     }
 
     resolve(true)

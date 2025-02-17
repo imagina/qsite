@@ -192,6 +192,18 @@
                   @clear="val => field.props.multiple ? responseValue = [] : ''"
                   @input-value="addedNewValue"
                   :class="`${field.help ? 'select-dynamic-field' : ''}`">
+          <template v-slot:selected-item="scope" v-if="field.props.quantityMultiple && field.props.multiple">
+            <q-chip
+              v-if="scope.index < field.props.quantityMultiple"
+              removable
+              dense
+              @remove="scope.removeAtIndex(scope.index)"
+              :tabindex="scope.tabindex"
+              class="q-ma-none"
+            >
+              {{ scope.opt.label }}
+            </q-chip>
+          </template>
           <!--No options slot-->
           <template v-slot:no-option v-if="!fieldProps.hideDropdownIcon">
             <slot name="before-options" />
@@ -249,8 +261,18 @@
           <template v-slot:prepend v-if="fieldProps.icon">
             <q-icon :name="fieldProps.icon" size="18px" :color="fieldProps.color" />
           </template>
+          <!--Append Options-->
+          <template v-slot:append v-if="field.props.quantityMultiple && field.props.multiple">
+            <div v-if="(responseValue.length - field.props.quantityMultiple) > 0" style="color: rgba(0, 0, 0, 0.87)">+ {{ responseValue.length - field.props.quantityMultiple}}</div>
+          </template>
           <!-- Before Options -->
           <template v-slot:before-options>
+            <div v-if="field.props.selectAll && field.props.multiple">
+              <q-btn class="full-width" flat color="primary" no-caps @click="selectAllOptions">
+                <q-icon left size="xs" :name="`fa-light ${allSelected ? 'fa-square-check' : 'fa-square'}`" />
+                <div>{{ $tr('isite.cms.label.selectAll') }}</div>
+              </q-btn>
+            </div>
             <slot name="before-options"></slot>
           </template>
           <!-- After Options -->
@@ -635,7 +657,8 @@ export default {
         ]
       },
       sortOptions: true,
-      imageFields: []
+      imageFields: [], 
+      lastQuery: null
     };
   },
   computed: {
@@ -1452,6 +1475,9 @@ export default {
           ? `tw-bg-${scope.opt.color || scope.opt.value}`
           : `bg-${scope.opt.color || scope.opt.value}`;
       };
+    },
+    allSelected() {
+      return this.formatOptions?.length > 0 && this.formatOptions.length === this.responseValue?.length;
     }
   },
   methods: {
@@ -1488,7 +1514,8 @@ export default {
           } else this.responseValue = (propValue && propValue.id) ? propValue.id : propValue;
           break;
         case 'input':
-          this.responseValue = (propValue != undefined) ? propValue : null;
+          let inputValue = (propValue != undefined) ? propValue : null;
+          this.responseValue = this.field.mapValue ? this.field.mapValue(inputValue) : inputValue
           break;
         case 'inputStandard':
           this.responseValue = (propValue != undefined) ? propValue : null;
@@ -1599,7 +1626,10 @@ export default {
         //Instance default options keeping the options for the selected values
         let defaultOptions = this.$clone([
           ...(this.field.props?.options || []),
-          ...this.rootOptions.filter(opt => this.responseValue && this.responseValue.includes((opt.value || opt.id).toString()))
+          ...this.rootOptions.filter(opt => {
+              const value = this.fieldProps['emit-value'] ? this.responseValue : (this.responseValue.value || this.responseValue.id)
+              return value && value.includes((opt.value || opt.id).toString())
+          })
         ]);
 
         //==== Request options
@@ -1624,7 +1654,7 @@ export default {
 
           //Add Params to get options by query
           if (loadOptions && loadOptions.filterByQuery) {
-            if (query && (query.length >= 2)) {
+            if (query && (query.length >= 2) && (this.lastQuery != query)) {
               params.params.filter.search = query;
               params.params.take = 25;
             } else {
@@ -1637,6 +1667,7 @@ export default {
           const crud = parametersUrl ? this.$crud.get : this.$crud.index;
           //Request
           crud(loadOptions.apiRoute, params, parametersUrl).then(response => {
+            this.lastQuery = query
             if (this.keyField !== '') {
               const keyData = { [this.keyField]: response.data };
               this.$helper.setDynamicSelectList(keyData);
@@ -1804,15 +1835,19 @@ export default {
     },
     //Load the option for default value when is loadOptions
     loadOptionForValue() {
-      if (this.loadField('select')) {
+      if (this.loadField('select') ) {
         let loadOptions = this.field.loadOptions;
         if (loadOptions && loadOptions.apiRoute) {
           //Valudate if the response values is not in the root options
           let responseValueTmp = (this.responseValue || []);
           responseValueTmp = Array.isArray(responseValueTmp) ? responseValueTmp : [responseValueTmp];
-          const includeAll = responseValueTmp.every(val =>
-            this.rootOptions.map(val => (val.value || val.id || '').toString()).includes(val.toString())
+          const includeAll = responseValueTmp.every(val => {
+              const value = this.fieldProps['emit-value'] ? val : (val.value || val.id)
+              return this.rootOptions.map(val => (val.value || val.id || '').toString()).includes(value.toString())
+            }
           );
+          
+          if(this.loading) return
           //Validate if there is the option for the value
           if (loadOptions.filterByQuery && !includeAll) {
             let fieldSelect = loadOptions.select || { label: 'title', id: 'id', img: 'mainImage' };
@@ -1827,9 +1862,10 @@ export default {
                 }
               }
             };
-
+            this.loading = true
             //Request
             this.$crud.index(loadOptions.apiRoute, requestParams).then(response => {
+              this.loading = false
               const responseData = response.data;
               if (responseData.length) {
                 if (Array.isArray(this.modelValue)) {
@@ -1890,6 +1926,9 @@ export default {
     },
     getRef() {
       return this.$refs[this.fieldProps.field.ref];
+    },
+    selectAllOptions() {
+      this.responseValue = this.allSelected ? [] : this.formatOptions.map(opt => opt.value);
     }
   }
 };

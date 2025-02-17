@@ -10,25 +10,16 @@
           :excludeActions="excludeActions"
           :title="title" 
           :help="help"
-          :expires-in="expiresIn"
-          :dynamicFilter="dynamicFilter"
-          :dynamicFilterValues="dynamicFilterValues"
-          :dynamicFilterSummary="dynamicFilterSummary"
-          @toggleDynamicFilterModal="toggleDynamicFilterModal"
+          :expires-in="expiresIn"          
           @new="$emit('new')"
           @search="val => search(val)"
-          @refresh="getData({pagination: {page:1}}, true)"          
-        />
-        <!-- dynamicFilter -->
-        <dynamicFilter
-          v-if="dynamicFilter"
+          @refresh="getData({pagination: {page:1}}, true)"
           :systemName="systemName"
-          :modelValue="showDynamicFilterModal"
-          :filters="dynamicFilter"
-          @showModal="showDynamicFilterModal = true"
-          @hideModal="showDynamicFilterModal = false"
-          @update:modelValue="filters => updateDynamicFilterValues(filters)"
-          @update:summary="summary => dynamicFilterSummary = summary"
+          :dynamicFilter="dynamicFilter"
+          @updateDynamicFilterValues="filters => updateDynamicFilterValues(filters)"
+          :tableColumns="columns"
+          :showColumnsButton="showColumnsButton"
+          @visibleColumns="value => this.visibleColumns = value"
         />
         <!--table title-->
         <div v-if="!loadPageActions" :class="`row text-primary text-weight-bold ellipsis title-content items-center`">
@@ -37,7 +28,8 @@
       
         <slot name="top-table" >
         </slot>
-        <dynamicTable
+        <component
+          :is="componentView"
           :class="{'q-mt-md q-pt-md': !hasTopTableSlot }"
           :tableProps="tableProps"
           :columns="columns"
@@ -46,9 +38,11 @@
           :pagination="pagination"
           :loading="loading"
           :beforeUpdate="beforeUpdate"
+          :grid="grid"
           @onPagination="(value) => setPagination(value)"
           @updateRow="(row) => updateRow(row)"
-        />        
+          :visibleColumns="getVisibleColumns()"
+        />
       </div>
     </div>
   </div>
@@ -56,8 +50,6 @@
 <script lang="ts">
 import {defineComponent}  from 'vue'
 import controller from 'modules/qsite/_components/master/dynamicList/controller'
-import dynamicTable from 'modules/qsite/_components/master/dynamicTable'
-import dynamicFilter from 'modules/qsite/_components/master/dynamicFilter';
 
 export default defineComponent({
   props: {
@@ -67,6 +59,7 @@ export default defineComponent({
       permission: {default: ''},
       read: {
         columns: {default: []},
+        rows: {default: []},
         requestParams: {default: {}}, 
         filters: { default: {}},
         help: {default: {}}
@@ -79,7 +72,6 @@ export default defineComponent({
       actions: {default: []},
     }
   },
-  components: { dynamicTable, dynamicFilter },
   setup(props, {emit}) {
     return controller(props, emit)
   }

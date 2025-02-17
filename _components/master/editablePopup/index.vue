@@ -1,8 +1,9 @@
 <template>
   <q-popup-proxy v-if="canEdit" :cover="false" anchor="bottom start"
                  transition-show="fade-in" transition-hide="fade-out"
-                 :max-width="dynamicField.maxWidth" ref="popupProxy">
-    <div class="q-pa-md relative-position">
+                 :max-width="dynamicField.maxWidth" ref="popupProxy"
+                 @show="setInitialValue">
+    <div class="q-pa-md relative-position bg-white" >
       <!-- Title -->
       <b class="text-blue-grey">
         {{ $tr('isite.cms.label.edit') }}: ID {{ row.id }} | {{ col.label }}
@@ -30,7 +31,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import controller from 'modules/qsite/_components/master/dynamicTable/components/editablePopup/controller';
+import controller from 'modules/qsite/_components/master/editablePopup/controller';
 
 export default defineComponent({
   props: {

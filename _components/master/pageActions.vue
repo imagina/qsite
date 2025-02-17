@@ -44,6 +44,29 @@
                @click="btn.action !=    undefined ? btn.action() : null">
           <q-tooltip v-if="btn.label">{{ btn.label }}</q-tooltip>
         </q-btn>
+        <!-- menu dropdown-->
+        <q-btn-dropdown
+          v-else-if="btn.type == 'columns'"
+          :icon="btn.props.icon"
+          v-bind="{...buttonProps, ...btn.props}"
+        >
+          <q-list dense>
+            <template v-for="(action, key) in btn.actions" :key="key">
+              <q-item clickable v-close-popup v-if="action.name != 'id' && action.name != 'actions'">
+                <q-item-section>
+                  <q-item-label>
+                    <q-checkbox
+                      v-model="visibleColumns"
+                      :val="action.name"
+                      @update:model-value="(value) => this.$emit('visibleColumns', value)"
+                    />
+                    {{action.label}}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-list>
+        </q-btn-dropdown>
         <q-btn v-else v-bind="{...buttonProps, ...btn.props}" @click="btn.action != undefined ? btn.action() : null">
           <q-badge v-if="btn?.badge?.vIf" v-bind="{...btn?.badge }" />
           <q-tooltip v-if="btn.label && btn.badge?.show" v-model="showExpires" class="tw-z-10">{{ btn.label }}</q-tooltip>
@@ -58,6 +81,19 @@
     >
       {{ description }}
     </span>
+    <!-- dynamicFilter -->
+    <div class="row col-12">
+      <dynamicFilter
+        v-if="dynamicFilter"
+        :systemName="systemName"
+        :filters="dynamicFilter"
+        :modelValue="showDynamicFilterModal"
+        @showModal="showDynamicFilterModal = true"
+        @hideModal="showDynamicFilterModal = false"
+        @update:summary="summary => dynamicFilterSummary = summary"
+        @update:modelValue="filters => updateDynamicFilterValues(filters)"
+      />
+    </div> 
     <!-- Export Component -->
     <master-export
       v-if="!this.isAppOffline && Array.isArray(excludeActions) ? !excludeActions.includes('export') : true"
@@ -73,11 +109,7 @@
       @bulkActionsConfig="(value) => bulkActionsConfig = value"
       ref="bulkActions"
     />
-    <!-- Master Filter Component -->
-    <!--<master-filter
-      v-if="filter.load"
-      :show="drawer.filter"
-    />-->
+
     <master-synchronizable
       v-model="syncParams"
       v-if="$hasAccess('isite.synchronizables.index')"
@@ -93,6 +125,7 @@ import masterSynchronizable from 'modules/qsite/_components/master/masterSynchro
 import { eventBus } from 'src/plugins/utils';
 import appConfig from 'src/setup/app'
 import bulkActions from "modules/qsite/_components/master/bulkActions"
+import dynamicFilter from 'modules/qsite/_components/master/dynamicFilter';
 
 export default {
   beforeUnmount() {
@@ -120,6 +153,8 @@ export default {
       }
     },
     expiresIn: {type: Number},
+    /*dynamic filter*/
+    systemName: null,
     dynamicFilter: {
       required: false,
       type: Object,
@@ -127,40 +162,14 @@ export default {
         return {}
       }
     },
-    dynamicFilterValues: {
-      required: false,
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    dynamicFilterSummary: {
-      required: false,
-      type: Object,
-      default: () => {
-        return {}
-      }
+    tableColumns: { default: [] },
+    showColumnsButton: {
+      type: Boolean,
+      default: () => false
     },
   },
-  emits: ['search', 'new', 'refresh', 'toggleDynamicFilterModal', 'activateTour'],
-  /*
-  inject: {
-    filterPlugin: {
-      from: 'filterPlugin',
-      default: {
-        name: false,
-        fields: {},
-        values: {},
-        callBack: false,
-        pagination: {},
-        load: false,
-        hasValues: false,
-        storeFilter: false
-      }
-    }
-  },
-  */
-  components: { masterExport, masterSynchronizable, bulkActions },
+  emits: ['search', 'new', 'refresh', 'activateTour', 'updateDynamicFilterValues', 'visibleColumns'],
+  components: { masterExport, masterSynchronizable, bulkActions, dynamicFilter },
   mounted() {
     this.$nextTick(function() {
       this.init();
@@ -171,7 +180,6 @@ export default {
       exportParams: false,
       syncParams: false,
       search: null,
-      filterData: {},
       refreshIntervalId: null,
       titleRefresh: this.$tr('isite.cms.label.refreshAtOnce'),
       timeRefresh: 0,
@@ -182,7 +190,13 @@ export default {
       badgeAppear: false,
       timeOuts: [],
       bulkActionsConfig: false,
-      enableTourAction: false
+      enableTourAction: false, 
+      
+      /* dynamic filters */
+      showDynamicFilterModal: false, 
+      dynamicFilterValues: {},
+      dynamicFilterSummary: null,
+      visibleColumns: []
     };
   },
   watch: {
@@ -194,13 +208,6 @@ export default {
   computed: {
     isAppOffline() {
       return this.$store.state.qofflineMaster.isAppOffline;
-    },
-    //Return filter data
-    filter() {
-      this.filterData = this.$clone(this.filterPlugin.values);
-      return this.filterPlugin;
-      //this.filterData = this.$clone(this.$filter.values)
-      //return this.$filter
     },
     //Return params of subHeader
     params() {
@@ -218,27 +225,6 @@ export default {
         class: `btn-${this.size}`,
         noCaps: true
       };
-    },
-    //Quick filters
-    quickFilters() {
-      var response = {};
-      //Get quick filters
-      if (this.$q.platform.is.desktop) {
-        if (this.filter.fields) {
-          Object.keys(this.filter.fields).forEach(fieldName => {
-            var fieldfilter = this.filter.fields[fieldName];
-            if (fieldfilter.quickFilter) {
-              response[fieldName] = {
-                ...fieldfilter,
-                colClass: 'col-12 col-md-4 col-xl-3'
-              };
-              if (!this.filterData[fieldName]) this.filterData[fieldName] = (fieldfilter.value || null);
-            }
-          });
-        }
-      }
-      //Response
-      return response;
     },
     //Page Documentation
     pageDocumentation() {
@@ -282,6 +268,7 @@ export default {
     init() {
       this.showBadgeRefresh(this.expiresIn)
       this.validateEnableTour();
+      this.getVisibleColumns()
     },
     async validateEnableTour() {
       if(this.tourName && !config('app.disableTours') &&
@@ -316,12 +303,7 @@ export default {
       eventBus.emit('crud.data.refresh');
       eventBus.emit('export.data.refresh');
       this.badgeAppear = false
-    },
-    //Emit filter
-    emitFilter() {
-      this.filterPlugin.addValues(this.filterData);
-      if (this.filterPlugin && this.filterPlugin.callBack) this.filterPlugin.callBack();
-    },
+    },    
     clearInterval() {
       if (this.refreshIntervalId) {
         clearInterval(this.refreshIntervalId);
@@ -342,9 +324,6 @@ export default {
           }
         ]
       });
-    },
-    toggleMasterFilter(value) {
-      this.drawer.filter = value;
     },
     getDiffCacheTime() {
       // Helper function to add a leading zero if the number is less than 10
@@ -440,6 +419,15 @@ export default {
           },
           action: () => eventBus.emit('toggleMasterDrawer', 'recommendation')
         },
+        //visibleColumns
+        {
+          type: "columns",
+          vIf: this.showColumnsButton,
+          actions: this.tableColumns,
+          props: {
+            icon: "fa-duotone fa-line-columns",
+          }
+        },
         //Filter
         {
           label: this.$tr('isite.cms.label.filter'),
@@ -448,7 +436,7 @@ export default {
             icon: 'fa-light fa-filter',
             id: 'filter-button-crud'
           },
-          action: () => this.$emit('toggleDynamicFilterModal')
+          action: () => this.showDynamicFilterModal = true
         },
 
         //Refresh
@@ -520,6 +508,14 @@ export default {
       //Response
       return response.filter(item => item.vIf !== undefined ? item.vIf : true);
     },
+    updateDynamicFilterValues(filters) {
+      this.dynamicFilterValues = filters;
+      this.$emit('updateDynamicFilterValues', filters)
+    },
+    getVisibleColumns(){
+      this.visibleColumns = this.tableColumns.length ? this.tableColumns.map(item => item.name) : []
+      this.$emit('visibleColumns', this.visibleColumns)
+    }
   }
 };
 </script>

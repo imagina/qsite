@@ -1,7 +1,8 @@
-import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, useSlots} from "vue";
+import {computed, reactive, ref, onMounted, toRefs, watch, getCurrentInstance, useSlots, markRaw, shallowRef, defineAsyncComponent} from "vue";
 
 import services from "modules/qsite/_components/master/dynamicList/services";
 import { store, i18n, clone, alert } from 'src/plugins/utils';
+import components from 'modules/qsite/_components/master/dynamicList/components'
 
 export default function controller (props: any, emit: any)
 {
@@ -18,6 +19,8 @@ export default function controller (props: any, emit: any)
   // States
   const state = reactive({
     // Key: Default Value
+    componentView: shallowRef(),
+    view: 'table',
     loading: false,
     columns: [],
     rows: [],
@@ -25,10 +28,7 @@ export default function controller (props: any, emit: any)
     showModal: false,
     expiresIn: null,
     /* dynamicFilter */
-    showDynamicFilterModal: false,
     dynamicFilterValues: {},
-    dynamicFilterSummary: {},
-    /* dynamicFilter */
     pagination: {
       page: 1,
       rowsNumber: '',
@@ -37,7 +37,25 @@ export default function controller (props: any, emit: any)
       maxPages: 6
       //sortBy: 'desc',
     },
+    visibleColumns: []
   })
+
+  const extraActions = {
+    table: {
+      label: "change to table",
+        props: {
+          icon: "fa-light fa-list",
+        },
+      action: () => methods.setView('table')
+    },
+    grid: {
+      label: "change to grid",
+      props: {
+        icon: "fa-light fa-grid",
+      },
+      action: () => methods.setView('grid')
+    }
+  }
 
   // Computed
   const computeds = {
@@ -64,6 +82,12 @@ export default function controller (props: any, emit: any)
       let response = [];
       // extras for page action
       if (props.listConfig?.pageActions?.extraActions?.length > 0) response.push(...props.listConfig.pageActions.extraActions)
+      
+      //add grid button
+      if ((props.listConfig?.read?.grid?.columns?.length > 0) && state.view != 'grid') response.push(extraActions.grid)
+      //add table button        
+      if ((props.listConfig?.read?.columns?.length > 0) && state.view != 'table') response.push(extraActions.table)
+
       //remove new action
       if(response.includes('new') && !computeds.hasPermission.value['create'])  response.splice(response.indexOf('new'), 1);
       return response.filter((item) => !item.vIfAction)
@@ -86,14 +110,31 @@ export default function controller (props: any, emit: any)
     {
       return props.listConfig.read?.systemName || props.listConfig?.permission || props.listConfig?.entityName;
     }),
+    grid: computed(() => props.listConfig.read?.grid || {}),
+    showColumnsButton: computed(() => ['table', 'grid'].includes(state.view))
   }
 
   // Methods
   const methods = {
     // methodKey: () => {}
+    
+    setView(template){
+      state.view = template
+      state.loading = true
+      state.componentView = markRaw(components[template])
+      methods.setColumns()
+      state.loading = false
+    },
+    getView(){
+      return state.view
+    },
+
     async init ()
-    {
+    { 
+      const view = props.listConfig?.showAs ? props.listConfig.showAs : 'table'
+      methods.setView(view)
       await methods.setColumns()
+      await methods.setRows()
 
       if (!state.dynamicFilterValues)
       {
@@ -115,13 +156,21 @@ export default function controller (props: any, emit: any)
     },
     setColumns ()
     {
-      state.columns = props.listConfig.read.columns
+      
+      state.columns = state.view == 'table' ? props.listConfig.read.columns : props.listConfig.read[state.view]['columns']
       //set isEditable
       state.columns.forEach(col =>
       {
         col.align = col?.align || 'center'
         col['isEditable'] = computeds.hasPermission.value['edit'] && col.hasOwnProperty('dynamicField')
       });
+    },
+
+    setRows(){
+      if(props.listConfig.read?.rows){
+        state.rows = props.listConfig.read.rows
+        state.loading = false
+      }
     },
 
     setPagination (pagination)
@@ -133,6 +182,7 @@ export default function controller (props: any, emit: any)
 
     async getData (pagination = false, refresh = false)
     {
+      if(!props.listConfig.apiRoute) return
       state.loading = true;
 
       //Instancre the requestParams
@@ -213,11 +263,7 @@ export default function controller (props: any, emit: any)
       })
       return state.rows[foundIndex]
 
-    },
-    toggleDynamicFilterModal ()
-    {
-      state.showDynamicFilterModal = !state.showDynamicFilterModal;
-    },
+    },    
     updateFilter (key, value)
     {
       state.dynamicFilterValues[key] = value;
@@ -229,6 +275,9 @@ export default function controller (props: any, emit: any)
       state.pagination.page = 1
       methods.getData();
     },
+    getVisibleColumns(){
+      return state.visibleColumns.length ? state.visibleColumns : state.columns.map(item => item.name)
+    }
     }
 
   // Mounted

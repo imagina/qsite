@@ -1,147 +1,114 @@
 <template>
-  <div id="dynamicFilter">
-    <!-- modal -->
+  <div class="row col-12">
+    <!-- Modal -->
     <q-dialog
-        id="drawerFilterMaster"
-        v-model="model"
-        persistent
-        maximized
-        position="right"
+      v-model="model"
+      persistent
+      maximized
+      position="right"
     >
       <q-card style="width: 350px;" v-if="filter">
-        <div id="masterFilterComponent" >
-          <!-- Header -->
-          <div id="masterFilterContent">
-            <!--Title-->            
-            <div class="row justify-between items-center q-pa-md">
-              <div class="text-subtitle1 row items-center text-blue-grey">
-                <q-icon name="fa-light fa-filter" size="20px" class="q-mr-sm"/>
-                <label class="text-weight-bold">{{ $trp('isite.cms.label.filter', {capitalize: true}) }}</label>
-              </div>
-              <!-- Close icon -->
-              <q-icon name="fas fa-times" color="blue-grey" size="20px" class="cursor-pointer"
-                      @click="hideModal()"/>
+        <!-- Header -->
+        <div>
+          <div class="row justify-between items-center q-pa-md">
+            <!--Title-->
+            <div class="text-subtitle1 row items-center text-blue-grey">
+              <q-icon name="fa-light fa-filter" size="20px" class="q-mr-sm"/>
+              <label class="text-weight-bold">{{ $trp('isite.cms.label.filter', {capitalize: true}) }}</label>
             </div>
-
-            <!--Tabs-->
-            <q-separator class="tw-h-0.5" />
-            <div id="tabsContent" class="full-width" v-if="false">
-              <q-tabs v-model="tabName" dense class="text-grey" active-color="primary" indicator-color="primary"
-                      align="justify" v-if="filter.hasValues" :breakpoint="0">
-                <q-tab name="tabForm" :label="$tr('isite.cms.label.filter')"/>
-              </q-tabs>
-            </div>
+            <!-- Close icon -->
+            <q-icon name="fas fa-times" color="blue-grey" size="20px" class="cursor-pointer" @click="hideModal()"/>
           </div>
+          <q-separator class="tw-h-0.5" />
+        </div>
 
-          <!--Content-->
-          <q-scroll-area id="contentMasterField" class="tw-mt-3.5" style="height: calc(100vh - 253px)">
-            <!--Tab panels-->
-            <q-tab-panels v-model="tabName" animated keep-alive>
-              <!--Tab form-->
-              <q-tab-panel name="tabForm" class="q-pa-none q-px-xs">
-                <div id="filtersContent" class="q-px-sm" style="height: calc(100vh - 253px)">
-                  <!--Search-->
-                  <div v-if="filter.fields && filter.fields.search" class="q-mb-sm">
-                    <!--Label-->
-                    <div class="full-width text-primary q-mb-xs">
-                      <q-icon name="fas fa-search" class="q-mr-xs"/>
-                      {{ $tr('isite.cms.label.search', {capitalize: true}) }}
-                    </div>
-                    <!--Input search-->
-                    <dynamic-field v-model="filterValues.search"
-                                   :field="{...filter.fields.search, props : {debounce : '0'}}" :enableCache="dynamicFieldCache" />
-                  </div>
-                  <!--Date-->
-                  <div v-if="filter.fields && filter.fields.date" class="q-mb-sm">
-                    <!--Fields date-->
-                  </div>
-                  <!--Pagination-->
-                  <div v-if="filter.fields && filter.fields.pagination" class="q-mb-sm">
-                    <!--Label-->
-                    <div class="full-width text-primary q-mb-xs">
-                      <q-icon name="fab fa-buffer" class="q-mr-xs"/>
-                      {{ $tr('isite.cms.label.pagination', {capitalize: true}) }}
-                    </div>
-                    <!--Fields pagination-->
-                    <dynamic-field v-for="(fieldPagination, key) in paginationFields" :field="fieldPagination" class="q-mb-sm"
-                                   v-model="pagination[fieldPagination.name || key]" :key="key" :enableCache="dynamicFieldCache" />
-                  </div>
-                  <!--others Fields-->
-                  <template v-for="(field, key) in filter.fields" :key="key">
-                    <dynamic-field  
-                      v-model="filterValues[field.name || key]"
-                      v-if="['search','pagination'].indexOf(key) == -1" 
-                      class="q-mb-sm" :field="field"
-                      :enableCache="dynamicFieldCache" 
-                      @inputReadOnly="data => setInputReadOnly((field.name || key), data)"
-                    />
-                  </template>                                 
-                </div>
-              </q-tab-panel>
-            </q-tab-panels>
-          </q-scroll-area>
-
-          <!--footer -->
-          <div class="absolute-bottom text-center bg-white tw-p-3" ref="footerContent">
-            <q-separator class="tw-mb-3"/>
-            <q-btn :label="$tr('isite.cms.label.search')" unelevated color="primary" no-caps class="tw-w-full" rounded
-                   @click="emitValues(true)"/>
+        <!--Filters-->
+        <q-scroll-area class="tw-mt-3.5" style="height: calc(100vh - 253px)">
+          <div class="q-px-sm" style="height: calc(100vh - 253px)">
+            <!--Fields-->
+            <template v-for="(field, key) in filter.fields" :key="key">
+              <dynamic-field
+                v-model="filterValues[field.name || key]"
+                :field="field"
+                class="q-mb-sm"
+                :enableCache="dynamicFieldCache"
+                @inputReadOnly="data => setInputReadOnly((field.name || key), data)"
+              />
+            </template>
           </div>
+        </q-scroll-area>
+
+        <!-- Footer -->
+        <div class="absolute-bottom text-center bg-white tw-p-3" ref="footerContent">
+          <q-separator class="tw-mb-3"/>
+          <q-btn
+            :label="$tr('isite.cms.label.search')"
+            color="primary"
+            class="tw-w-full"
+            no-caps
+            unelevated
+            rounded
+            @click="emitValues(true)"
+          />
         </div>
       </q-card>
     </q-dialog>
-      <!-- show only on mobile -->
-      <div class="row col-12 q-pt-md" v-if="!showFilters && hasAppliedFilters">
-        <q-btn flat no-caps bordered  @click="showModal()" class="full-width">
-          <span class="text-blue-grey">
-            <q-icon name="fa-light fa-filter" color="amber" size="18px" />
-            &nbsp;
-            {{ $tr('isite.cms.label.appliedFilters') }}
-          </span>
+
+    <!-- summary message, only on mobile -->
+    <div class="row col-12 q-pt-md" v-if="!showFilters && hasAppliedFilters">
+      <q-btn flat no-caps bordered  @click="showModal()" class="full-width">
+        <span class="text-blue-grey">
+          <q-icon name="fa-light fa-filter" color="amber" size="18px" />
+          &nbsp;
+          {{ $tr('isite.cms.label.appliedFilters') }}
+        </span>
+      </q-btn>
+    </div>
+
+    <!-- Summary --->
+    <div class="col-12 tw-mt-1" v-if="(Object.keys(readValues).length > 0) || (Object.keys(quickFilters).length > 0)" >
+      <!-- show only desktop -->
+      <div class="text-blue-grey ellipsis text-caption items-center row" v-if="showFilters">
+        <!-- summary button -->
+        <q-btn flat no-caps @click="showModal()">
+          <q-icon name="fa-light fa-filter" class="q-mr-xs" color="amber" size="18px" />
+          <b>{{ $trp('isite.cms.label.filter') }}:</b>
         </q-btn>
+        <!-- summary chips -->
+        <filterChip
+          :summary="readValues"
+          :props="{removable: true}"
+          @remove="(itemKey) => removeReadValue(itemKey)"
+        />
       </div>
-    <!-- quick filters --->
-      <div class="col-12 tw-mt-1" v-if="(Object.keys(readValues).length > 0) || (Object.keys(quickFilters).length > 0)" >
-        <!-- show only desktop -->
-        <div class="text-blue-grey ellipsis text-caption items-center row" v-if="showFilters">
-          <q-btn flat no-caps @click="showModal()">
-            <q-icon name="fa-light fa-filter" class="q-mr-xs" color="amber" size="18px" />
-            <b>{{ $trp('isite.cms.label.filter') }}:</b>
-          </q-btn>          
-          <template v-for="(item, itemKey) in readValues"  :key="itemKey">
-            <q-chip
-              v-if="item.label !== ''"
-              class="tw-pr-5 tw-bg-gray-100"
-              removable 
-              text-color="primary"
-              @remove="removeReadValue(itemKey)" 
-            >
-              <span class="text-weight-bold">{{ item.label }}</span>
-              &nbsp;
-              <span class="tw-mr-1">{{ item.option }}</span>
-            </q-chip>
-          </template>
-        </div>        
-        <!-- Hiden Filters -->
-        <div v-if="Object.keys(hidenFields).length" v-show="false">
-          <dynamic-field v-for="(field, keyField) in hidenFields" :key="keyField" :field="field" :keyField="keyField"/>    
-        </div>
-        <!-- Quick Filters-->
-        <div v-if="Object.keys(quickFilters).length" class="row q-col-gutter-md q-pt-sm" v-show="showFilters">
-          <dynamic-field v-for="(field, keyField) in quickFilters" :key="keyField" :field="field"
-                         v-model="quickFilterValues[keyField]"
-                         class="col-12 col-md-4 col-xl-3"
-                         @update:modelValue="quickFilterHandler(keyField)"
-                         :keyField="keyField"
-         />    
-        </div>
+      <!-- Hiden Filters -->
+      <div v-if="Object.keys(hidenFields).length" v-show="false">
+        <template v-for="(field, keyField) in hidenFields" :key="keyField">
+          <dynamic-field
+            :field="field"
+            :keyField="keyField"
+          />
+        </template>
       </div>
-    
+      <!-- Quick Filters-->
+      <div v-if="Object.keys(quickFilters).length" class="row q-col-gutter-md q-pt-sm" v-show="showFilters">
+        <template v-for="(field, keyField) in quickFilters" :key="keyField">
+          <dynamic-field
+            v-model="quickFilterValues[keyField]"
+            :keyField="keyField"
+            :field="field"
+            :class="[field?.quickFilterClass ? field.quickFilterClass : 'col-12 col-md-3']"
+            @update:modelValue="quickFilterHandler(keyField)"
+          />
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import {defineComponent} from 'vue'
 import controller from '@imagina/qsite/_components/master/dynamicFilter/controller'
+import filterChip from '@imagina/qsite/_components/master/dynamicFilter/components/filterChip'
 
 export default defineComponent({
   props: {    
@@ -151,7 +118,9 @@ export default defineComponent({
     showOnMobile: { default: false}
   },
   emits:['update:modelValue', 'hideModal', 'showModal', 'update:summary'],
-  components: {},
+  components: {
+    filterChip
+  },
   setup(props, {emit}) {
     return controller(props, emit)
   }

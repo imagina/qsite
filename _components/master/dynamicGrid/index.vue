@@ -1,5 +1,5 @@
 <template>
-  <div id="dynamic-table">
+  <div id="dynamic-grid">
     <q-table
       v-bind="tableProps"
       :title="title"
@@ -9,62 +9,96 @@
       row-key="name"
       v-model:pagination="paginationModel"
       hide-pagination
+      grid
       :visible-columns="visibleColumns"
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
       </template>
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <!---right click --->
-          <contextMenu
-            :v-if="actions && actions.length"
-            :actions="filterActions(actions, props.row)"
-            :action-data="props.row"
-          />
+      <template v-slot:item="props">
+        <div class="q-pa-xs col-12 col-sm-6 col-lg-4 col-xl-3">
+          <q-card class="box default-card-grid">
+            <q-card-section>
+              <!---right click --->
+              <contextMenu
+                :v-if="actions"
+                :actions="actions"
+                :action-data="props.row"
+              />             
 
-          <q-td
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            :class="getCellClass(col, props.row)"
-            @click="onClick(col, props.row)"
-          >
-            <!-- Keep this to allow unique elements-->
-            <div :key="$uid()">
-              <!---quick click edit popup-->
-              <editablePopup
-                v-if="!isColActions(col) && isColEditable(col, props.row)"
-                :row="props.row"
-                :col="col"
-                :beforeUpdate="beforeUpdate"
-                @updateRow="(row) => $emit('updateRow', row)"
-              />
+              <template
+                v-for="col in props.cols"
+                :key="col.name"
+              >
+                <!-- mainImage field-->
+                <div
+                  v-if="isColMainimage(col)"
+                  class="default-card-grid_item-image"
+                  :style="`${getMainImage(col, props.row)}`">
+                </div>
 
-              <!--Actions column-->
-              <div v-if="isColActions(col) && actions.length">
-                <btn-menu
-                  :actions="filterActions(actions, props.row)"
-                  :action-data="props.row"
-                />
-              </div>
-
-              <!-- dynamic content  -->
-              <contentType
-                v-if="!isColActions(col)"
-                :col="col"
-                :row="props.row"
-                :val="col.value"
-              />
-            </div>
-          </q-td>
-        </q-tr>
+                <!-- id field and actions button-->
+                <div class="row justify-between q-py-sm"  v-if="isColId(col)">
+                  <contentType                  
+                      :col="col"
+                      :row="props.row"
+                      :val="`ID: ${col.value}`"
+                      @click="onClick(col, props.row)"
+                  />
+                  <btn-menu
+                    :actions="actions"
+                    :action-data="props.row"
+                  />
+                </div>
+              
+                <q-separator v-if="isColId(col)" />              
+                <!-- Keep this to allow unique elements-->
+                <div
+                  v-if="!isColActions(col) && !isColId(col) && !isColMainimage(col)"
+                  :class="getCellClass(col, props.row)"
+                  @click="onClick(col, props.row)"
+                  :key="$uid()"
+                >
+                  <editablePopup
+                    v-if="isColEditable(col, props.row)"
+                    :row="props.row"
+                    :col="col"
+                    :beforeUpdate="beforeUpdate"
+                    @updateRow="(row) => $emit('updateRow', row)"
+                  />
+                  <!-- dynamic content  -->                   
+                  <contentType
+                    :col="addDefaultContentType(col)"
+                    :row="props.row"
+                    :val="col.value"
+                  />
+                </div>
+              </template>
+            </q-card-section>
+            <q-card-actions class="row" v-if="grid?.actions">
+                <template
+                  v-for="action in grid.actions"
+                  :key="action.name"
+                >
+                  <q-btn
+                    v-if="showAction(action, props.row)"
+                    v-bind="action"
+                    @click="action.action(props.row)"
+                    rounded
+                    no-caps
+                    unelevated
+                    class="col"
+                  />
+                </template>
+              </q-card-actions>
+            </q-card>
+        </div>
       </template>
+
       <!-- pagination -->
       <template #bottom="props">
         <!--pagination-->
         <master-pagination
-          v-if="paginationModel.rowsNumber"
           v-model="paginationModel"
           :pagesNumber="props.pagesNumber"
           :isFirstPage="props.isFirstPage"
@@ -78,7 +112,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import controller from 'modules/qsite/_components/master/dynamicTable/controller';
+import controller from 'modules/qsite/_components/master/dynamicGrid/controller';
 import editablePopup from 'modules/qsite/_components/master/editablePopup';
 import contentType from 'modules/qsite/_components/master/contentType';
 import contextMenu from 'modules/qsite/_components/master/contextMenu';
@@ -87,6 +121,7 @@ import masterPagination from 'modules/qsite/_components/master/masterPagination'
 
 export default defineComponent({
   props: {
+    grid: { default: {}},
     tableProps: { default: null },
     loading: { default: false },
     title: { default: '' },
@@ -115,7 +150,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-#dynamic-table {
+#dynamic-grid {
 
   .q-table {
     padding-bottom: 16px;

@@ -482,9 +482,9 @@ export default {
         'dispatch': 'Despachar',
         'bulkPermissions': 'Permisos masivos',
         'entityPermissions': 'Permisos de entidad',
-        'cancelled': 'Cancelado',
         'stackTrace': 'Seguimiento de pila',
-        "appliedFilters": "Tienes filtros aplicados, haz clic aquí para abrir."
+        "appliedFilters": "Tienes filtros aplicados, haz clic aquí para abrir.",
+        'selectAll': 'Seleccionar todo'
       },
       'message': {
         'requestAdded': 'Petición agregada a la cola sin conexión',

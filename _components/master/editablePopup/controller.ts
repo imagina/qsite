@@ -31,6 +31,7 @@ export default function controller (props, emit)
     canEdit: computed(() =>
     {
       if (!computeds.dynamicField.value || !props.col.isEditable) return false;
+      if (_.has(computeds.dynamicField.value, 'vIf')) return computeds.dynamicField.value.vIf
       return true;
     })
   };
@@ -79,7 +80,6 @@ export default function controller (props, emit)
   // Mounted
   onMounted(() =>
   {
-    methods.setInitialValue();
   });
 
   // Watch

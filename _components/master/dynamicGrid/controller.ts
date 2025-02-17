@@ -35,8 +35,17 @@ export default function controller(props, emit) {
     init(){
       state.paginationModel = props.pagination
     },
+    isColId(col){
+      return col.name == 'id'
+    },
+    isColTitle(col){
+      return col.name == 'title'
+    },
     isColActions(col){
       return col.name == 'actions'
+    },
+    isColMainimage(col){
+      return col.name == 'mainImage'
     },
     isColEditable(col, row){
       return col?.dynamicField && !row?.isLoading
@@ -47,12 +56,39 @@ export default function controller(props, emit) {
     getCellClass(col, row){
       return (col?.dynamicField || col?.onClick) && !row?.isLoading ? 'cursor-pointer' : ''
     },
-    filterActions(actions, row){
-      if(!actions.length) return []
-      return actions.filter((action) => {
-        if(action?.vIf == undefined) return action
-        if ((typeof action?.vIf == 'function') && action.vIf(row)) return action
-      })
+    addDefaultContentType(col){
+      if(!col.contentType && !methods.isColTitle(col)){
+
+        col.contentType = (row) => {
+
+          if (typeof col?.dynamicField == 'function') {
+            const result = col.dynamicField(row)
+            col.isEditable = result.vIf
+          }
+
+          return {
+            template: 'cardField',
+            props: {
+              col,
+              row
+            }
+          }
+        }
+      }
+      return col
+    },
+    getMainImage(col, item) {
+      let response = "";
+      /*checks and returns  if col.field exist*/
+      if(_.has(item, col.field)) response = `background-image: url('${_.get(item, col.field)}')`
+      return response;
+    },
+    showAction(action, row){
+      if(action?.vIf != undefined){
+        if (typeof action.vIf == 'function') return action.vIf(row)
+        return action.vIf
+      }
+      return true
     }
   }
 
