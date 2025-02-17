@@ -209,6 +209,13 @@ export default {
         this.loading = true
         //Get base 64
         let base64 = this.$refs.cropper.getCroppedCanvas().toDataURL(this.imgType)
+
+        /* if didn't crop returns original image */
+        if( this.information.image.naturalWidth == this.information.cropper.width &&
+          this.information.image.naturalHeight == this.information.cropper.height){
+          base64 = this.imgSrc
+        }
+
         //Data response
         let dataResponse = {
           base64: base64,
