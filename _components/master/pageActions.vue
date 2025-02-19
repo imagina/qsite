@@ -52,7 +52,11 @@
         >
           <q-list dense>
             <template v-for="(action, key) in btn.actions" :key="key">
-              <q-item clickable v-close-popup v-if="action.name != 'id' && action.name != 'actions'">
+              <q-item
+                v-if="action.name != 'id' && action.name != 'actions'"
+                tag="label"
+                v-ripple
+              >
                 <q-item-section>
                   <q-item-label>
                     <q-checkbox
@@ -422,7 +426,7 @@ export default {
         //visibleColumns
         {
           type: "columns",
-          vIf: this.showColumnsButton,
+          vIf: this.showColumnsButton && (!config('app.disableColumnsButton')),
           actions: this.tableColumns,
           props: {
             icon: "fa-duotone fa-line-columns",
