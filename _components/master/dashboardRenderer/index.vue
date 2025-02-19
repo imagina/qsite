@@ -3,8 +3,7 @@
     <template v-for="quickCard in views">
       <component 
         :is="quickCard.component" 
-        v-bind="quickCard" 
-        :filters="filters"
+        v-bind="quickCard"
       />
     </template>
   </div>
@@ -24,6 +23,11 @@ export default defineComponent({
       type: Object,
       default: () => ({})
     },
+    baseFilters: {
+      required: false,
+      type: Object,
+      default: () => ({})
+    }
   },
   setup(props, {emit}) {
     return controller(props, emit)
@@ -33,7 +37,7 @@ export default defineComponent({
 <style lang="scss">
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 20px;
 }
 </style>

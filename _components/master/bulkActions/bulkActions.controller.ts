@@ -31,6 +31,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const messages = ref<Message[] | []>([])
     const log = ref([])
     const route = useRoute()
+    const token = ref('')
 
     const { dynamicFilterValues, dynamicFilterSummary } = toRefs(props)
 
@@ -42,8 +43,18 @@ export const bulkActionsController = (props, { expose, emit }) => {
         columns, 
         initialPagination, 
         typesOfMessages,
-        fieldMassiveActions
+        fieldMassiveActions,
     } = constants()
+
+    const helpText = computed(() => {
+        return {
+            title: 'Bulk Actions',
+            description: `
+                Need help? See the documentation for more information on Bulk actions.
+                ${helper.documentationLink(`/docs/agione/bulk-actions`, token.value)}
+            `,
+        }
+    })
 
     const filterAndSortBulkActions = (bulkActions: BulkActions[]) => {
         if (!bulkActions) return []
@@ -153,6 +164,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
     onMounted(() => {
         nextTick(async () => {
             await init()
+            token.value = await helper.getToken()
         })
     })
 
@@ -214,6 +226,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
         i18n,
         dynamicFilterSummary,
         isDynamicFilterSummary,
+        helpText,
         init,
         newReport,
         showReport,

@@ -23,6 +23,11 @@
             class="tw-ml-3 tw-font-semibold tw-text-gray-500 tw-text-sm"
             v-bind="chip"
           />
+          <help-text 
+            class="tw-ml-2" 
+            v-if="help" 
+            v-bind="help" 
+          />
         </div>
         <!--Close Button-->
         <q-btn v-close-popup icon="fa-light fa-xmark" round textColor="blue-grey" unelevated class="btn-medium"
@@ -69,7 +74,8 @@ export default {
     customPosition: { type: Boolean, default: false },
     modalWidthSize: { type: String, default: '65vw' },
     customClass: { type: String, default: '' },
-    chip: { type: Object || null, default: null }
+    chip: { type: Object || null, default: null },
+    help: { type: Object || null, default: null },
   },
   emits: ['update:modelValue'],
   components: {},

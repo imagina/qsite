@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, onMounted, ref, toRefs } from 'vue'
-import ticker from './components/ticker'
+import tickerChildren from './components/ticker'
 
 const props = defineProps({
   data: {
@@ -11,18 +11,13 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  filters: {
-    required: false,
-    type: Object,
-    default: () => ({})
-  },
   className: {
     type: String,
     default: '',
   },
 })
 
-const { tickers, filters, data } = toRefs(props)
+const { tickers, data } = toRefs(props)
 
 const tickersData = ref([])
 
@@ -35,16 +30,30 @@ onMounted(async () => {
 </script>
 <template>
   <div 
-    class="tw-grid tw-grid-flow-col tw-gap-8 tw-overflow-x-auto tw-pb-2" 
+    class="
+      tw-whitespace-normal 
+      scrollbar 
+      hover:tw-overflow-x-auto 
+      hover:tw-pb-2
+      tw--mb-2
+      tw-h-[108px]
+    " 
     :class="className"
   >
-    <template v-for="(ticker, index) in tickersData" :key="index">
-      <ticker 
-        :apiRoute="ticker?.apiRoute" 
-        :permission="ticker?.permission" 
-        :filters="filters" 
-        :data="ticker"
-      />
-    </template>
+    <div class="tw-inline-flex tw-flex-nowrap tw-gap-8">
+      <template v-for="(ticker, index) in tickersData" :key="index">
+        <tickerChildren
+          :apiRoute="ticker?.apiRoute" 
+          :permission="ticker?.permission"
+          :valueHidden="ticker?.valueHidden"
+          :data="ticker"
+        />
+      </template>
+    </div>
   </div>
 </template>
+<style scoped>
+.scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+</style>

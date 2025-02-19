@@ -1,3 +1,9 @@
+import { Header } from '../../interface'
+
+export interface Format {
+  locales: string, 
+  options: any 
+}
 export interface Column {
   name: string,
   label: string,
@@ -8,10 +14,14 @@ export interface Column {
     barColor?: string,
     barTextColor?: string,
     badge?: {
+      bgColor?: string,
       textColor?: string,
     }
   },
   asc?: boolean,
+  headerClass?: string,
+  bodyClass?: string,
+  format?: Format,
 }
 
 export interface Row {
@@ -25,7 +35,7 @@ export interface ColorAssignment {
 }
 
 export interface Table {
-  title: string,
+  header?: Header, 
   colorAssignment?: ColorAssignment,
   columns: Column[],
   rows: Row[],
