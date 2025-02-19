@@ -8,17 +8,19 @@ import {
 } from 'vue';
 import { eventBus } from 'src/plugins/utils.ts'
 import service from '../../services'
-import { Table, Column, Row, ColorAssignment } from './interface'
+import { Table, Column, Row, ColorAssignment, Format } from './interface'
 import { tableModel } from './models'
+import store from '../../store'
 
 export default function controller(props: any, emit: any) {
 
-  const { apiRoute, filters, data } = toRefs(props)
+  const { apiRoute, data } = toRefs(props)
   
   const refs = {
     isLoading: ref(true),
     tableData: ref<Table>({ ...tableModel }),
-    maxNumberPerColor: 0
+    maxNumberPerColor: 0,
+    localFilters: ref({}),
   }
 
   const methods = {
@@ -70,8 +72,8 @@ export default function controller(props: any, emit: any) {
 
       methods.sort(column)
     },
-    formatted: (value: string | number) => {
-      if (typeof value === 'number') return value.toLocaleString('en')
+    formatted: (value: string | number, format?: Format) => {
+      if (format) return value.toLocaleString(format.locales, format.options)
       return value
     },
     formatPercentage: (value: number | string) => {
@@ -79,13 +81,29 @@ export default function controller(props: any, emit: any) {
       
       return `${Math.round(percentage)}%`
     },
-    getData: async (): Promise<Table> => {
-      return await service.getQuickCardData(apiRoute.value, filters.value)
+    getData: async (filters): Promise<Table> => {
+      return await service.getQuickCardData(apiRoute.value, filters)
     },
     sortAndColor: () => {
       refs.maxNumberPerColor = methods.getMaxNumberPerColor(refs.tableData.value?.colorAssignment)
       refs.tableData.value?.columns.forEach(col => methods.sort(col))
-    }
+    },
+    fetchTableData: async () => {
+      refs.isLoading.value = true
+      if (apiRoute.value) {
+        const mergingFilter = {
+          ...store.globalFilters || {},
+          ...refs.localFilters.value || {}
+        }
+        refs.tableData.value = await methods.getData(mergingFilter)
+      } else refs.tableData.value = data.value
+      refs.isLoading.value = false
+      methods.sortAndColor()
+    },
+    updateFilters: async (filters) => {
+      refs.localFilters.value = filters
+      await methods.fetchTableData()
+    },
   }
 
   const computeds = {
@@ -95,21 +113,10 @@ export default function controller(props: any, emit: any) {
   }
 
   onMounted(async () => {
-    refs.isLoading.value = true
-    if (apiRoute.value) {
-      refs.tableData.value = await methods.getData()
-    } else refs.tableData.value = data.value
-    refs.isLoading.value = false
-
-    methods.sortAndColor()
+    await methods.fetchTableData()
     
     eventBus.on('crud.data.refresh', async () => {
-      refs.isLoading.value = true
-      if (apiRoute.value) {
-        await methods.getData()
-        methods.sortAndColor()
-      }
-      refs.isLoading.value = false
+      await methods.fetchTableData()
     })
   })
 
@@ -117,13 +124,8 @@ export default function controller(props: any, emit: any) {
     eventBus.off('crud.data.refresh')
   })
 
-  watch(filters, async (): Promise<void> => {
-    refs.isLoading.value = true
-    if (apiRoute.value) {
-      refs.tableData.value = await methods.getData()
-      methods.sortAndColor()
-    }
-    refs.isLoading.value = false
+  watch(() => store.globalFilters, async (): Promise<void> => {
+    await methods.fetchTableData()
   }, { deep: true })
 
   return {...refs, ...methods, ...computeds }

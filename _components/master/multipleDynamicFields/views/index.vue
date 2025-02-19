@@ -6,6 +6,7 @@
       tw-border-gray-200
       tw-rounded-md
     "
+    :class="{'tw-border-none': fieldProps?.disabledBorder }"
     >
     <div
       class="
@@ -18,10 +19,14 @@
         tw-border-gray-200
         tw-text-gray-500
       "
+      :class="{'tw-hidden': fieldProps?.disabledLabel }"
     >
       {{ fieldProps.label }}
     </div>
-    <div>
+    <div class="tw-flex tw-justify-center tw-py-4" v-if="loading">
+      <i class="fa-solid fa-cog fa-spin tw-text-blue-800 tw-text-3xl" />
+    </div>
+    <div v-if="!loading">
       <draggable
         v-model="fields"
         :animation="200"
@@ -64,28 +69,35 @@
             <div
               v-for="key in Object.keys(element)"
               :key="key"
-              :class="defaultField[key] && defaultField[key].colClass"
+              :class="formFields[index][key] && formFields[index][key].colClass"
             >
               <dynamic-field
                 v-model="fields[index][key]"
-                :field="defaultField[key]"
+                :field="tranformField(formFields[index][key], index, fields[index])"
               />
             </div>
-            <div class="tw-w-full tw-text-right">
-              <q-btn
-                color="red"
-                icon="fa-light fa-trash-can"
-                size="xs"
-                flat
-                round
-                :disabled="isMinQuantity"
-                @click="deleteItem(index)"
-              >
-                <q-tooltip>
-                  {{ $tr('isite.cms.label.delete') }}
-                </q-tooltip>
-              </q-btn>
+            <div class="tw-w-full tw-flex tw-justify-between">
+              <div v-if="summary">
+                <p class="tw-text-sm tw-text-gray-500">{{ summary(fields[index], index) }}</p>
+              </div>
+              <div class="tw-text-right">
+                <q-btn
+                  color="red"
+                  icon="fa-light fa-trash-can"
+                  size="xs"
+                  flat
+                  round
+                  :disabled="isMinQuantity"
+                  @click="deleteItem(index)"
+                >
+                  <q-tooltip>
+                    {{ $tr('isite.cms.label.delete') }}
+                  </q-tooltip>
+                </q-btn>
+              </div>
             </div>
+
+
           </div>
         </template>
         <div

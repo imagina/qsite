@@ -10,10 +10,6 @@ export default defineComponent({
       type: String,
       default: null,
     },
-    filters: {
-      type: Object,
-      default: () => ({}),
-    },
     data: {
       type: Object,
       default: {},
@@ -25,6 +21,10 @@ export default defineComponent({
     header: {
       type: Object,
       default: null,
+    },
+    toolbox: {
+      type: Object,
+      default: () => ({}),
     },
   },
   components: {
@@ -40,19 +40,27 @@ export default defineComponent({
   <card-container 
     :className="className" 
     :isLoading="isLoading" 
+    :isEmpty="!thereAreRows"
     :header="tableData?.header || header"
+    @reloadData="fetchTableData"
+    @updateFilters="filters => updateFilters(filters)"
+    :toolbox="{ features: toolbox }"
   >
     <div 
-      class="tw-overflow-auto tableContainer"
+      class="
+        tw-overflow-auto 
+        tw-pr-1
+        tableContainer
+      "
       :class="{
         'tw-flex tw-flex-col tw-justify-center tw-h-2/3': !thereAreRows,
       }"
     >
-      <no-data v-if="!thereAreRows && !isLoading" class="tw-h-72"/>
+      <no-data v-if="!thereAreRows && !isLoading" class="tw-h-[337px]"/>
       <!-- Skeleton -->
       <div 
         v-show="isLoading" 
-        class="tw-grid tw-grid-flow-col  tw-max-h-[340px] table"
+        class="tw-grid tw-grid-flow-col  tw-h-[337px] table"
       >
         <!-- Skeleton Column -->
         <div v-for="column in 3">
@@ -68,7 +76,7 @@ export default defineComponent({
       </div>
       <div 
         v-if="thereAreRows && !isLoading" 
-        class="tw-grid tw-grid-flow-col  tw-max-h-[340px] table"
+        class="tw-grid tw-grid-flow-col  tw-h-[337px] table"
       >
         <!-- Columns -->
         <div 
@@ -96,7 +104,7 @@ export default defineComponent({
             "
           >
             <span :class="column?.headerClass">
-              {{ formatted(column?.label) }}
+              {{ formatted(column?.label, column?.format) }}
             </span>
             <q-btn
               v-if="column?.sortable"
@@ -133,10 +141,10 @@ export default defineComponent({
               ]"
             >
               <span v-if="!column?.progress" class="tw-truncate">
-                {{ formatted(row[column.name]) }}
+                {{ formatted(row[column.name], column?.format) }}
               </span>
               <q-tooltip v-if="!column?.progress">
-                {{ formatted(row[column.name]) }}
+                {{ formatted(row[column.name], column?.format) }}
               </q-tooltip>
               <q-linear-progress 
                 v-if="column?.progress"
@@ -167,6 +175,7 @@ export default defineComponent({
 
 .tableContainer::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 .tableContainer::-webkit-scrollbar-track {
