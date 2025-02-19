@@ -426,7 +426,7 @@ export default {
         //visibleColumns
         {
           type: "columns",
-          vIf: this.showColumnsButton,
+          vIf: this.showColumnsButton && (!config('app.disableColumnsButton')),
           actions: this.tableColumns,
           props: {
             icon: "fa-duotone fa-line-columns",
