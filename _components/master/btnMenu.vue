@@ -11,7 +11,6 @@
     v-if="showBtnMenu"
   >
     <q-menu
-      max-width="200px"
       content-class="btn-menu-component__menu"
       anchor="bottom right"
       self="top right"
@@ -61,15 +60,19 @@ export default {
           if (item.toRoute) item.props.href = item.toRoute;
 
           //Instance vue route redirect
-          if (item.route)
+          if (item.route) {
             item.props.to = {
               name: item.route,
-              params: this.$clone(this.actionData || {}),
+              params: this.$helper.getRouteParams(
+                this.$router.options.routes.find(route => route.children[0].name === item.route),
+                this.actionData
+              ),
             };
+          }
 
           // Formatting all instances
           if (item.format)
-            item = { ...item, ...(item.format(this.actionData) || {}) };
+            item = { ...item, ...(item.format(this.actionData, item) || {}) };
 
           //Return item
           return item;
