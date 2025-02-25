@@ -664,6 +664,19 @@ class Helper {
 
     return result;
   }
+
+  // Function to get route params that match keys from data
+  getRouteParams(route, data) {
+    // Extract param names from the resolved route (using regex on route.path)
+    const paramNames = (route.path.match(/:(\w+)/g) || []).map((param) => param.substring(1));
+
+    // Filter data to include only keys that match param names
+    const params = Object.fromEntries(
+      Object.entries(data).filter(([key]) => paramNames.includes(key))
+    );
+
+    return params;
+  }
 }
 
 const helper = new Helper();
