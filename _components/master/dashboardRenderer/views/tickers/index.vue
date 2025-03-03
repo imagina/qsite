@@ -32,8 +32,10 @@ onMounted(async () => {
   <div 
     class="
       tw-whitespace-normal 
-      scrollbar 
-      hover:tw-overflow-x-auto 
+      scrollbar
+      tw-overflow-x-auto
+      md:tw-overflow-x-hidden
+      md:hover:tw-overflow-x-auto
       hover:tw-pb-2
       tw--mb-2
       tw-h-[108px]
