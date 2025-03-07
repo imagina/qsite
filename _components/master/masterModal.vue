@@ -25,7 +25,7 @@
           />
           <help-text 
             class="tw-ml-2" 
-            v-if="help" 
+            v-if="help?.description" 
             v-bind="help" 
           />
         </div>
