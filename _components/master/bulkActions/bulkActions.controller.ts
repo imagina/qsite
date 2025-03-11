@@ -17,7 +17,7 @@ import {
 import { constants } from './models/defaultModels/constants'
 import { prepareMessageObject } from './helpers'
 import { sendReport, getDataLog, getConfig } from './services'
-import { helper, i18n, store, eventBus, router } from 'src/plugins/utils'
+import { helper, i18n, store, eventBus } from 'src/plugins/utils'
 
 export const bulkActionsController = (props, { expose, emit }) => {
     const loading = ref(false)
