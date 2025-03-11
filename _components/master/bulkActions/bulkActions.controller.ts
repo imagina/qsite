@@ -32,6 +32,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const log = ref([])
     const route = useRoute()
     const token = ref('')
+    const path = ref('')
 
     const { dynamicFilterValues, dynamicFilterSummary } = toRefs(props)
 
@@ -69,6 +70,15 @@ export const bulkActionsController = (props, { expose, emit }) => {
                 value: option.name,
                 apiRoute: option.apiRoute,
                 fields: option?.fields,
+                ...(option?.help && {
+                    help: {
+                        title: option?.title,
+                        description: `
+                            ${option?.help?.description}
+                            ${helper.documentationLink(option?.help?.url, token.value, false)}
+                        `,
+                    }
+                })
             }))
     }
 
@@ -197,7 +207,8 @@ export const bulkActionsController = (props, { expose, emit }) => {
             props: {
                 ...fieldMassiveActions.props,
                 options: bulkActions.value,
-            }
+            },
+            help: selectedAction.value?.help
         }
     })
 
