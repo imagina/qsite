@@ -21,8 +21,11 @@
         </div>
         <!-- Help btn -->
         <div v-if="helpLoad.load && field.help && field.help.description" :class="helpLoad.class">
-          <help-text :title="fieldLabel" :description="field.help.description"
-                     :btn-style="`margin:${helpLoad.margin}`" />
+          <help-text 
+            :title="field.help?.title || fieldLabel" 
+            :description="field.help.description"
+            :btn-style="`margin:${helpLoad.margin}`" 
+          />
         </div>
         <!--Crud-->
         <crud v-model="responseValue" v-bind="fieldProps" :key="field.name" :type="field.props.crudType || 'select'"
@@ -254,6 +257,18 @@
 
               <q-item-section @click.stop.prevent side>
                 <slot name="actions" :opt="scope.opt"></slot>
+              </q-item-section>
+
+              <q-item-section 
+                v-if="scope.opt?.help?.description" 
+                :class="helpLoad.class" 
+                @click.stop.prevent
+              >
+                <help-text 
+                  :title="scope.opt.help?.title" 
+                  :description="scope.opt.help?.description"
+                  :btn-style="`margin:${helpLoad.margin}`" 
+                />
               </q-item-section>
             </q-item>
           </template>
