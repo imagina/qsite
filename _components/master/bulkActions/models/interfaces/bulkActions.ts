@@ -20,4 +20,8 @@ export interface BulkActions {
     title: string,
     fields?: Fields,
     permission?: string,
+    help?: {
+        description: string,
+        url: string,
+    }
 }
