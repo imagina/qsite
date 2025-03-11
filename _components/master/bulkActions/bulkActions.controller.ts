@@ -17,7 +17,7 @@ import {
 import { constants } from './models/defaultModels/constants'
 import { prepareMessageObject } from './helpers'
 import { sendReport, getDataLog, getConfig } from './services'
-import { helper, i18n, store, eventBus } from 'src/plugins/utils'
+import { helper, i18n, store, eventBus, router } from 'src/plugins/utils'
 
 export const bulkActionsController = (props, { expose, emit }) => {
     const loading = ref(false)
@@ -32,6 +32,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const log = ref([])
     const route = useRoute()
     const token = ref('')
+    const path = ref('')
 
     const { dynamicFilterValues, dynamicFilterSummary } = toRefs(props)
 
@@ -69,6 +70,15 @@ export const bulkActionsController = (props, { expose, emit }) => {
                 value: option.name,
                 apiRoute: option.apiRoute,
                 fields: option?.fields,
+                ...(option?.help && {
+                    help: {
+                        title: option?.title,
+                        description: `
+                            ${option?.help?.description}
+                            ${helper.documentationLink(option?.help?.url, token.value, false)}
+                        `,
+                    }
+                })
             }))
     }
 
@@ -197,7 +207,8 @@ export const bulkActionsController = (props, { expose, emit }) => {
             props: {
                 ...fieldMassiveActions.props,
                 options: bulkActions.value,
-            }
+            },
+            help: selectedAction.value?.help
         }
     })
 

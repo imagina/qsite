@@ -5,4 +5,8 @@ export interface SelectedAction {
     value: string,
     apiRoute: string,
     fields?: Fields
+    help?: {
+        description: string,
+        title: string,
+    }
 }
