@@ -1,6 +1,9 @@
-import { i18n, cache } from "src/plugins/utils"
+import { i18n } from "src/plugins/utils"
+import { ActionsStatus } from '../interfaces'
 
-const status = () => ({
+export const NUMBER_OF_ROWS = 10
+
+const status = (): ActionsStatus => ({
     1: {
         label: i18n.tr('isite.cms.label.pending'),
         icon: {
@@ -38,19 +41,13 @@ const status = () => ({
     }
 })
 
-const help = (token) => ({
-    title: 'Bulk Actions',
-    description: `
-        Need help? Check the
-        <a 
-            href='https://delightful-ground-0eae6c50f.4.azurestaticapps.net/docs/documentation/bulk-actions?token=${token}' 
-            target='_blank'
-            class='tw-text-blue-500'>
-            documentation
-        </a>
-        for more information on creating Work Orders.
-    `
-})
+export const initialPagination = {
+    sortBy: 'id',
+    descending: true,
+    rowsPerPage: NUMBER_OF_ROWS,
+    pagesNumber: 1,
+    page: 1
+}
 
 export const constants = () => ({
     status: {
@@ -95,11 +92,6 @@ export const constants = () => ({
             style: 'padding-left: 0; width: 20px' 
         },
     ],
-    initialPagination: {
-        sortBy: 'id',
-        descending: true,
-        rowsPerPage: 10
-    },
     typesOfMessages: {
         info: {
             icon: 'fa-solid fa-circle-info',
@@ -121,6 +113,5 @@ export const constants = () => ({
             emitValue: false,
             'map-options': false,
         }
-    },
-    help
+    }
 })
