@@ -95,7 +95,8 @@
                 <logTable
                     :rows="log"
                     :columns="columns"
-                    :pagination="initialPagination"
+                    :initialPagination="pagination"
+                    @get-data-log="fetchDataLog"
                 />
             </section>
         </div>
