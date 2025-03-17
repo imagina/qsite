@@ -9,7 +9,11 @@ export const getDataLog = async (permission: string | null, page: number = 1) =>
                 refresh: true, 
                 params: { 
                     filter: { 
-                        type: permission
+                        type: permission,
+                        order: {
+                            field:'id',
+                            way:'desc'
+                        }
                     },
                     take: NUMBER_OF_ROWS,
                     page,
