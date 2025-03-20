@@ -14,7 +14,7 @@ import {
     Message, 
     Filters 
 } from './models/interfaces'
-import { constants } from './models/defaultModels/constants'
+import { constants, initialPagination } from './models/defaultModels/constants'
 import { prepareMessageObject } from './helpers'
 import { sendReport, getDataLog, getConfig } from './services'
 import { helper, i18n, store, eventBus } from 'src/plugins/utils'
@@ -42,10 +42,13 @@ export const bulkActionsController = (props, { expose, emit }) => {
     const { 
         status, 
         columns, 
-        initialPagination, 
         typesOfMessages,
         fieldMassiveActions,
     } = constants()
+
+    const pagination = ref({
+        ...initialPagination,
+    })
 
     const helpText = computed(() => {
         return {
@@ -90,8 +93,17 @@ export const bulkActionsController = (props, { expose, emit }) => {
         bulkActions.value = filterAndSortBulkActions(data)
     }
 
-    const fetchDataLog = async () => {
-        const data = await getDataLog(status, permission)
+    const fetchDataLog = async ({ page=1 } = {}) => {
+        const response = await getDataLog(permission, page)
+        if (response?.meta) {
+			const total = response.meta.page.total
+			const pagesNumber = Math.ceil(total / pagination.value.rowsPerPage)
+			pagination.value.pagesNumber = pagesNumber
+		}
+        const data = response?.data
+        data.map(item => {
+            item.icon = status[item.statusId].icon;
+        })
         log.value = data;
     }
 
@@ -230,7 +242,7 @@ export const bulkActionsController = (props, { expose, emit }) => {
         field,
         log,
         columns,
-        initialPagination,
+        pagination,
         selectedAction,
         optionsForBulkActions,
         optionsForSelectedBulkActions,
@@ -244,5 +256,6 @@ export const bulkActionsController = (props, { expose, emit }) => {
         reset,
         handleChangeBulkActions,
         updateOptionsBulkActions,
+        fetchDataLog,
     }
 }

@@ -1,7 +1,7 @@
 import baseService from 'modules/qcrud/_services/baseService'
-import { ActionsStatus } from '../models/interfaces'
+import { NUMBER_OF_ROWS } from '../models/defaultModels/constants'
 
-export const getDataLog = async (status: ActionsStatus, permission: string | null) => {
+export const getDataLog = async (permission: string | null, page: number = 1) => {
     try {
         const response = await baseService.index(
             'apiRoutes.qsite.bulkActions', 
@@ -9,16 +9,18 @@ export const getDataLog = async (status: ActionsStatus, permission: string | nul
                 refresh: true, 
                 params: { 
                     filter: { 
-                        type: permission
-                    }
+                        type: permission,
+                        order: {
+                            field:'id',
+                            way:'desc'
+                        }
+                    },
+                    take: NUMBER_OF_ROWS,
+                    page,
                 }
             }
         )
-        const data = response.data
-        data.map(item => {
-            item.icon = status[item.statusId].icon;
-        })
-        return data;
+        return response;
     } catch (error) {
         console.error(error)
     }

@@ -20,7 +20,7 @@ export default {
         console.error(error)
     }
   },
-  async getQuickCardData(apiRoute: string, filters: {}, refresh: boolean = true): Promise<any> {
+  async getQuickCardData(apiRoute: string, filters: {}, refresh: boolean = false): Promise<any> {
     try {
       const requestParams = {
         refresh,
