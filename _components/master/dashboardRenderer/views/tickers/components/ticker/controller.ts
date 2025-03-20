@@ -27,7 +27,7 @@ export default function controller(props: any, emit: any) {
   }
 
   const methods = {
-    getData: async (refresh?: boolean): Promise<Ticker> => {
+    getData: async (refresh: boolean = false): Promise<Ticker> => {
       return await service.getQuickCardData(apiRoute.value, store.globalFilters, refresh)
     },
     hideValue: () => {
@@ -51,7 +51,7 @@ export default function controller(props: any, emit: any) {
     eventBus.on('crud.data.refresh', async () => {
       refs.isLoading.value = true
       if (apiRoute.value) {
-        refs.ticker.value = await methods.getData()
+        refs.ticker.value = await methods.getData(true)
       }
       refs.isLoading.value = false
     })
