@@ -62,8 +62,8 @@ export default function controller(props: any, emit: any) {
   }
 
   const methods = {
-    getData: async () => {
-      return await service.getQuickCardData(apiRoute.value, store.globalFilters)
+    getData: async (refresh: boolean = false) => {
+      return await service.getQuickCardData(apiRoute.value, store.globalFilters, refresh)
     },
     reloadData: async () => {
       refs.isLoading.value = true
@@ -112,7 +112,7 @@ export default function controller(props: any, emit: any) {
   
     eventBus.on('crud.data.refresh', async () => {
       refs.isLoading.value = true
-      if (apiRoute.value) refs.options.value = await methods.getData()
+      if (apiRoute.value) refs.options.value = await methods.getData(true)
       refs.isLoading.value = false
     })
   })

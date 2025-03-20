@@ -81,21 +81,21 @@ export default function controller(props: any, emit: any) {
       
       return `${Math.round(percentage)}%`
     },
-    getData: async (filters): Promise<Table> => {
-      return await service.getQuickCardData(apiRoute.value, filters)
+    getData: async (filters, refresh: boolean = false): Promise<Table> => {
+      return await service.getQuickCardData(apiRoute.value, filters, refresh)
     },
     sortAndColor: () => {
       refs.maxNumberPerColor = methods.getMaxNumberPerColor(refs.tableData.value?.colorAssignment)
       refs.tableData.value?.columns.forEach(col => methods.sort(col))
     },
-    fetchTableData: async () => {
+    fetchTableData: async (refresh: boolean=false) => {
       refs.isLoading.value = true
       if (apiRoute.value) {
         const mergingFilter = {
           ...store.globalFilters || {},
           ...refs.localFilters.value || {}
         }
-        refs.tableData.value = await methods.getData(mergingFilter)
+        refs.tableData.value = await methods.getData(mergingFilter, refresh)
       } else refs.tableData.value = data.value
       refs.isLoading.value = false
       methods.sortAndColor()
@@ -116,7 +116,7 @@ export default function controller(props: any, emit: any) {
     await methods.fetchTableData()
     
     eventBus.on('crud.data.refresh', async () => {
-      await methods.fetchTableData()
+      await methods.fetchTableData(true)
     })
   })
 
