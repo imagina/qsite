@@ -1743,7 +1743,23 @@
           "copy": "Copy",
           "insert": "Insert",
           "phoneNumber": "Phone number",
-          "quickLook": "Quick look"
+          "quickLook": "Quick look",
+          "solveConflict": "Solve conflict",
+          "deletedAt": "Deleted at",
+          "restore": "Restore",
+          "registerId": "Registro ID {id}",
+          "recycleBin": {
+            "label": "Papelera de reciclaje",
+            "infoMessage": "<strong>The Recycle Bin</strong> serves as a temporary storage area for deleted files and registers. When you remove a register (or any item), it is not permanently deleted immediately; instead, it is transferred to the Recycle Bin. This allows you to easily recover accidentally deleted items.<br><br>From the Recycle Bin, you can either:<br><br><strong>Restore:</strong> Quickly return a deleted item to its original location.<br/><strong>Permanent Deletion:</strong> Remove the item permanently, making it unrecoverable.",
+            "restoreMessage": "Do you want to restore this register?, this action will move the register to its original table.",
+            "restoreLabel": "Restore this register",
+            "deleteMessage": "Do you want to delete Permanently this register?, Once you delete this register, there is no going back. Please be certain.",
+            "deleteLabel": "Delete this register permanently"
+          },
+          "conflict": {
+            "deletedMessage": "The record cannot be saved because there is already one in the recycle bin with the same information. Please manage the record in the recycle bin and try again.", 
+            "duplicatedMessage": "The record cannot be saved due to a conflict with an existing record. Please ensure the information provided is unique and try again."
+          }
         },
         "message": {
           "showDemo": "Demo",
@@ -1974,6 +1990,7 @@
         "emailsToNotify": "Emails To Notify",
         "details": "Details"
       }
+
     },
     "setupagione": {
       "cms": {
@@ -3675,7 +3692,23 @@
           "copy": "Copiar",
           "insert": "Insertar",
           "phoneNumber": "Número de teléfono",
-          "quickLook": "Vistazo rápido"
+          "quickLook": "Vistazo rápido",
+          "solveConflict": "Solucionar conflicto",
+          "deletedAt": "Eliminado en",
+          "restore": "Restaurar",
+          "registerId": "Registro ID {id}",
+          "recycleBin": {
+            "label": "Recycle bin",
+            "infoMessage": "<strong>La Papelera de reciclaje</strong> sirve como un área de almacenamiento temporal para archivos y registros eliminados. Cuando eliminas un registro (o cualquier elemento), no se borra de forma permanente de inmediato; en su lugar, se transfiere a la Papelera de reciclaje. Esto te permite recuperar fácilmente los elementos eliminados por accidente.<br><br>Desde la Papelera de reciclaje, puedes:<br><br><strong>Restaurar:</strong> Devolver rápidamente un elemento eliminado a su ubicación original.<br/><strong>Eliminación permanente:</strong> Eliminar el elemento de forma permanente, haciéndolo irrecuperable.",
+            "restoreMessage": "¿Deseas restaurar este registro? Esta acción moverá el registro a su tabla original.",
+            "restoreLabel": "Restaurar este registro",
+            "deleteMessage": "¿Deseas eliminar permanentemente este registro? Una vez que elimines este registro, no habrá vuelta atrás. Por favor, asegúrate.",
+            "deleteLabel": "Eliminar este registro permanentemente."
+          }, 
+          "conflict": {
+            "deletedMessage": "No se puede guardar el registro debido a que existe uno en la papelera de reciclaje con la misma informacion. Por favor, gestione el registro en la papelera y vuelva a intentarlo.", 
+            "duplicatedMessage": "No se puede guardar el registro debido a un conflicto con otro registro existente. Asegúrese de que la información proporcionada sea única y vuelva a intentarlo."
+          }
         },
         "message": {
           "showDemo": "Ver Demo",
