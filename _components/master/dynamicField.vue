@@ -21,10 +21,10 @@
         </div>
         <!-- Help btn -->
         <div v-if="helpLoad.load && field.help && field.help.description" :class="helpLoad.class">
-          <help-text 
-            :title="field.help?.title || fieldLabel" 
+          <help-text
+            :title="field.help?.title || fieldLabel"
             :description="field.help.description"
-            :btn-style="`margin:${helpLoad.margin}`" 
+            :btn-style="`margin:${helpLoad.margin}`"
           />
         </div>
         <!--Crud-->
@@ -259,15 +259,15 @@
                 <slot name="actions" :opt="scope.opt"></slot>
               </q-item-section>
 
-              <q-item-section 
-                v-if="scope.opt?.help?.description" 
-                :class="helpLoad.class" 
+              <q-item-section
+                v-if="scope.opt?.help?.description"
+                :class="helpLoad.class"
                 @click.stop.prevent
               >
-                <help-text 
-                  :title="scope.opt.help?.title" 
+                <help-text
+                  :title="scope.opt.help?.title"
                   :description="scope.opt.help?.description"
-                  :btn-style="`margin:${helpLoad.margin}`" 
+                  :btn-style="`margin:${helpLoad.margin}`"
                 />
               </q-item-section>
             </q-item>
@@ -672,7 +672,7 @@ export default {
         ]
       },
       sortOptions: true,
-      imageFields: [], 
+      imageFields: [],
       lastQuery: null
     };
   },
@@ -1861,7 +1861,7 @@ export default {
               return this.rootOptions.map(val => (val.value || val.id || '').toString()).includes(value.toString())
             }
           );
-          
+
           if(this.loading) return
           //Validate if there is the option for the value
           if (loadOptions.filterByQuery && !includeAll) {
@@ -1960,6 +1960,7 @@ export default {
 
   .q-field--outlined .q-field__control {
     padding-left: 12px;
+    border-radius: $custom-radius-items;
   }
 
   .expression-dinamyc-field {
@@ -1982,6 +1983,7 @@ export default {
       padding: 0 !important;
       overflow: hidden;
       border-radius: $custom-radius-items;
+      background-color: transparent;
 
       .q-field__control-container {
         padding: 0 !important;
