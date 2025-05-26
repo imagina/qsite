@@ -67,7 +67,6 @@ export default {
           '//iframe.ly/api/oembed?url={url}&callback={callback}&api_key=7e0aa12b0cd2c01651346b',
         contentsCss: [
           'https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css',
-          '/src/plugins/ckEditorPlugins/simpleButton/styles/bootstrap.css',
           `.button-custom-ckeditor{
             box-sizing: border-box;
             background-color: buttonface;
