@@ -226,6 +226,12 @@ export default function controller (props: any, emit: any)
     updateRow (row)
     {
       const foundIndex = state.rows.findIndex(r => r.id == row.id);
+      if(!!row.skipRowUpdate) {
+        delete row.skipRowUpdate;
+        state.rows[foundIndex] = row
+        return;
+      }
+
       state.rows[foundIndex]['isLoading'] = true
 
       services.updateItem(props.listConfig.apiRoute, row.id, row).then((response) =>
