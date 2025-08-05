@@ -2060,6 +2060,43 @@
           "sureCreateQr": "Do you want to generate a QR code for this record?"
         }
       }
+    },
+    "icertificate": {
+      "cms": {
+        "sidebar": {
+          "adminGroup": "Certificados",
+          "adminCustomers": "Clientes",
+          "adminCompanies": "Empresas",
+          "adminTrainingTypes": "Tipos de entrenamiento",
+          "adminTrainers": "Entrenadores",
+          "adminCourses": "Cursos",
+          "adminCertificates": "Certificados"
+        },
+        "form": {
+          "idDocument": "Documento de Identidad",
+          "nit": "NIT",
+          "businessName": "Nombre de la empresa",
+          "fullName": "Nombre completo",
+          "position": "Cargo",
+          "standardDuration": "Duración estándar",
+          "trainer": "Entrenador",
+          "trainingType": "Tipo de entrenamiento",
+          "customer": "Cliente",
+          "company": "Empresa",
+          "course": "Curso"
+        },
+        "message": {
+          "invalidNIT": "El NIT no es válido."
+        },
+        "newCustomer": "Nuevo cliente",
+        "updateCustomer": "Actualizar cliente",
+        "newCompany": "Nueva empresa",
+        "updateCompany": "Actualizar empresa",
+        "newTrainingtype": "Nuevo tipo de entrenamiento",
+        "updateTrainingtype": "Actualizar tipo de entrenamiento",
+        "newTrainer": "Nuevo entrenador",
+        "updateTrainer": "Actualizar entrenador"
+      }
     }
   },
   "es": {
@@ -3983,6 +4020,43 @@
         "messages": {
           "sureCreateQr": "¿Quieres generar un código QR para este registro?"
         }
+      }
+    },
+    "icertificate": {
+      "cms": {
+        "sidebar": {
+          "adminGroup": "Certificados",
+          "adminCustomers": "Clientes",
+          "adminCompanies": "Empresas",
+          "adminTrainingTypes": "Tipos de entrenamiento",
+          "adminTrainers": "Entrenadores",
+          "adminCourses": "Cursos",
+          "adminCertificates": "Certificados"
+        },
+        "form": {
+          "idDocument": "Documento de Identidad",
+          "nit": "NIT", 
+          "businessName": "Nombre de la empresa",
+          "fullName": "Nombre Completo",
+          "position": "Posición",
+          "standardDuration": "Duración estándar",
+          "trainer": "Entrenador",
+          "trainingType": "Tipo de Entrenador",
+          "customer": "Cliente",
+          "company": "Empresa",
+          "course": "Curso"
+        }, 
+        "message": {
+          "invalidNIT": "El NIT no es válido."
+        },        
+        "newCustomer": "Nuevo Cliente",
+        "updateCustomer": "Actualizar Cliente",
+        "newCompany": "Nueva Empresa",
+        "updateCompany": "Actualizar Empresa",
+        "newTrainingtype": "Nuevo Tipo de entrenamiento",
+        "updateTrainingtype": "Actualizar Tipo de entrenamiento",
+        "newTrainer": "Nuevo Entrenador",
+        "updateTrainer": "Actualizar Entrenador"
       }
     }
   }
