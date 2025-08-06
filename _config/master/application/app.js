@@ -48,7 +48,8 @@ export default {
     'qsite',
     'qcredit',
     'qoffline',
-    'qwebhook'
+    'qwebhook',
+    'qcertificate'
   ],
   //Cache
   saveCache: {
