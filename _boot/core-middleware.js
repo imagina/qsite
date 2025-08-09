@@ -42,8 +42,6 @@ class Middleware {
       let isAuthenticated = process.env.CLIENT ? this.store.state.quserAuth.authenticated : true
       //try login
       if (!isAuthenticated) isAuthenticated = await this.store.dispatch('quserAuth/AUTH_TRYAUTOLOGIN')
-      //Update user data
-      else this.store.dispatch('quserAuth/AUTH_UPDATE')
       //Check if should change password
       this.store.dispatch('quserAuth/AUTH_FORCE_PASSWORD')
       //Response
@@ -136,7 +134,7 @@ class Middleware {
 
             //validate last navigator history route to redirect
             if (windowLastRoute && windowLastRoute.length &&
-              (windowLastRoute.indexOf(origenUrl) >= 0) && (windowLastRoute.indexOf("login") == -1) &&
+              (windowLastRoute.indexOf("login") == -1) &&
               (windowLastRoute.indexOf("logout") == -1)) {
               //Redirect last
               return location.href = windowLastRoute;
