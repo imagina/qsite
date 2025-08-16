@@ -80,27 +80,21 @@ export const GET_IP_ADDRESS = ({commit}) => {
 export const GET_SITE_SETTINGS = ({commit, dispatch, state, getters}, params = {}) => {
   return new Promise((resolve, reject) => {
     params = {centralizedBrand: true, setToSite: true, refresh: true, ...params}
-    let requestParams = {refresh: params.refresh, cacheKey: 'qsite.settings'}
+    let requestParams = {
+      refresh: params.refresh,
+      cacheKey: 'qsite.settings',
+      params: {include: 'translations,files'}
+    }
     let configName = 'apiRoutes.qsite.siteSettings'
     let configApp = config('app')
 
     //Request main settings
     crud.index(configName, requestParams).then(async response => {
       let data = response.data
-      //Get centralized brand
-      if (params.centralizedBrand) data.siteSettings = await dispatch("GET_CENTRALIZED_BRAND", data.siteSettings)
+      console.warn(">>>>>>",data)
       //Set the settings
       if (params.setToSite) {
-        commit('SET_SITE_SETTINGS', data.siteSettings)
-        commit('SET_AVAILABLE_LOCALES', data.availableLocales)
-        commit('SET_AVAILABLE_THEMES', data.availableThemes)
-        commit('SET_DEFAULT_LOCALE', data.defaultLocale)
-        commit('SET_MODULES_DATA', data.modulesEnabled)
-        commit('SET_SELECTED_LOCALES')
-        //Set logo
-        let logo = getters.getSettingMediaByName('isite::logoIadmin')
-        if (!logo || !logo.path || logo.path.includes('defaultLogo')) logo = getters.getSettingMediaByName('isite::logo1')
-        commit('SET_SITE_LOGO', logo.path)
+        commit('SET_SITE_SETTINGS', data)
       }
       //Set filters
       filter.setFilters(data.filters)
@@ -126,7 +120,7 @@ export const GET_CENTRALIZED_BRAND = ({state}, siteSettings) => {
     //Request the centralized brand
     axios.get(`${centralizedBrand.value}/api/isite/v1/site/settings`).then(response => {
       //Get brand settings values
-      const brandSettingNames = ["isite::logoIadmin", "isite::logo1", "core::site-name"];
+      const brandSettingNames = ["isite::logoIadmin", "isite::logo1", "isite::site-name"];
       const centralizedBrandSettings = response.data.data.siteSettings.filter(item =>
         item.name.includes('brand') || brandSettingNames.includes(item.name)
       );
@@ -145,23 +139,17 @@ export const GET_CENTRALIZED_BRAND = ({state}, siteSettings) => {
 
 //Set site settins
 export const SET_SITE_COLORS = ({state, commit, dispatch}) => {
-  let settings = state.settings
-  let dataColors = {}
-
-  for (let i in settings) {
-    //Get setting name
-    let settingName = settings[i].name.split('::')[1]
-    //Set colors
-    if (settingName.indexOf('brand') != -1) {
-      let nameBrand = settingName.replace('brand', '').toLowerCase() //Get brand name
-      let color = settings[i].path ? settings[i].path : settings[i].plainValue//Get color
-      //Validate if exist color
-      if (color) {
-        if (nameBrand.indexOf('addressbar') != -1) AddressbarColor.set(color)//Set bar color
-        else setCssVar(nameBrand, color)//Set color
+  const brandSettings = state.settings.filter(item => item.systemName.includes('brand'))
+  brandSettings.forEach(item => {
+    //Set the brand colors
+    if (item.plainValue) {
+      if(item.systemName.includes('addressbar')) {
+        AddressbarColor.set(item.plainValue)
+      }else{
+        setCssVar(item.systemName.replace('isite::brand', '').toLowerCase(), item.plainValue)
       }
     }
-  }
+  })
 }
 
 //Set locale
@@ -188,7 +176,6 @@ export const SET_LOCALE = ({commit, dispatch, state}, params = {}) => {
 
     //Set in store
     commit('SET_DEFAULT_LOCALE', locale)
-    commit('SET_SELECTED_LOCALES')
 
     //Set in axios how default params
     axios.defaults.params.setting.locale = locale
@@ -242,27 +229,6 @@ export const SET_EXTRA = ({state, commit, dispatch}, params = false) => {
     await cache.set('app.state.extra', extraData)
     commit('SET_EXTRA', extraData)
     resolve(true)
-  })
-}
-
-//Get module configs
-export const GET_MODULE_CONFIGS = ({commit, dispatch, state}, params = {}) => {
-  return new Promise((resolve, reject) => {
-    params = {refresh: true, ...params}
-    //Request params
-    let requestParams = {
-      refresh: params.refresh,
-      cacheKey: 'qsite.module.configs',
-      params: {filter: {configNameByModule: 'config'}}
-    }
-    //Request
-    crud.index('apiRoutes.qsite.configs', requestParams).then(async response => {
-      commit('SET_MODULE_CONFIGS', response.data)
-      resolve(true)
-    }).catch(error => {
-      console.error('[store-qsite]Error:: Store getting site hooks - ', error)
-      reject(error)
-    })
   })
 }
 

@@ -65,22 +65,18 @@ export const availableThemesTreeSelect = (state) => {
 
 export const getSettingValueByName = (state) => (filter) => {
 //Search and return the setting
-  let response = state.settings.find(item => item.name == filter)
+  let response = state.settings.find(item => item.systemName == filter)
   //Intercept this setting t ever show the legacyStructure (temporally)
   if (filter == "isite::legacyStructureCMS") response = {value: 1}
+
+  if(!response) console.warn('missing setting =>', filter)
   //Response
-  return response ? response.value : undefined
+  return response ? response.plainValue : undefined
 };
 
 export const getSettingMediaByName = (state) => (filter) => {
-  let settings = state.settings
-  let response = ''
-
-  settings.forEach(item => {
-    if (item.name == filter) response = item.media
-  })
-
-  return response
+  let setting = state.settings.find(item => item.systemName == filter)
+  return setting?.files.mainimage ?? null
 };
 
 export const getSelectedLocalesSelect = (state) => {

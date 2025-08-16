@@ -12,15 +12,33 @@ export const RESET = (state) => {
 
 export function SET_SITE_SETTINGS(state, data) {
   state.settings = data;
+
+  //SET_AVAILABLE_LOCALES
+  const locales = data.find(e => e?.systemName == 'isite::locales')
+  state.availableLocales = locales.plainValue ?? locales.default;
+  state.selectedLocales = state.availableLocales
+
+  //SET_DEFAULT_LOCALE
+  const locale = data.find(e => e?.systemName == 'isite::defaultLocale')
+  state.defaultLocale = locale.plainValue ?? locales.default;
+
+  //Set module data
+  const modules = [...new Set(data.map(item => item.systemName.split('::')[0]))]
+  state.modules = modules.reduce((acc, key) => {
+    acc[key] = { title: key, alias: key };
+    return acc;
+  }, {});
+
+  //set site logo
+  let logoIadmin = data.find(e => e.systemName == 'isite::logoIadmin')
+  if(logoIadmin.files.mainimage.path.includes('default')) logoIadmin = data.find(e => e.systemName == 'isite::logo1')
+  state.logo = logoIadmin?.files.mainimage.url ?? null;
 }
 
-export function SET_AVAILABLE_LOCALES(state, data) {
-  state.availableLocales = data;
+export function SET_DEFAULT_LOCALE(state, data) {
+  state.defaultLocale = data;
 }
 
-export function SET_AVAILABLE_THEMES(state, data) {
-  state.availableThemes = data;
-}
 export function SET_PAGES(state, data) {
   state.pages = data;
 }
@@ -29,26 +47,6 @@ export function SET_IP_ADDRESS(state, data) {
 }
 export function SET_MENU(state, data) {
   state.menu = data;
-}
-
-export function SET_SELECTED_LOCALES(state) {
-  //Search locale settigns
-  let locales = state.settings.find(item => item.name == 'core::locales');
-  locales = locales ? locales.value : [];
-
-  //Validate if there is selected locales, and set defaultLocale if not exist
-  if (!locales.length) locales = [state.defaultLocale]
-
-  //Set locales to state. sort
-  state.selectedLocales = locales.sort();
-}
-
-export function SET_DEFAULT_LOCALE(state, data) {
-  state.defaultLocale = data;
-}
-
-export function SET_MODULES_DATA(state, data) {
-  state.modules = data;
 }
 
 export function LOAD_PAGE(state, data) {
@@ -82,8 +80,4 @@ export function SET_SITE_HOOKS(state, data) {
 
 export function SET_MODULE_CONFIGS(state, data) {
   state.configs = data
-}
-
-export function SET_SITE_LOGO(state, data) {
-  state.logo = data;
 }
