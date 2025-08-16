@@ -97,15 +97,15 @@
         @update:summary="summary => dynamicFilterSummary = summary"
         @update:modelValue="filters => updateDynamicFilterValues(filters)"
       />
-    </div> 
-    <!-- Export Component -->
-    <master-export
+    </div>
+    <!-- v12 Export Component -->
+<!--    <master-export
       v-if="!this.isAppOffline && Array.isArray(excludeActions) ? !excludeActions.includes('export') : true"
       v-model="exportParams"
       ref="exportComponent"
       :dynamicFilterValues="dynamicFilterValues"
       :dynamicFilterSummary="dynamicFilterSummary"
-    />
+    />-->
     <bulk-actions
       v-if="bulkActionsPermission"
       :dynamicFilterValues="dynamicFilterValues"
@@ -194,10 +194,10 @@ export default {
       badgeAppear: false,
       timeOuts: [],
       bulkActionsConfig: false,
-      enableTourAction: false, 
-      
+      enableTourAction: false,
+
       /* dynamic filters */
-      showDynamicFilterModal: false, 
+      showDynamicFilterModal: false,
       dynamicFilterValues: {},
       dynamicFilterSummary: null,
       visibleColumns: []
@@ -307,7 +307,7 @@ export default {
       eventBus.emit('crud.data.refresh');
       eventBus.emit('export.data.refresh');
       this.badgeAppear = false
-    },    
+    },
     clearInterval() {
       if (this.refreshIntervalId) {
         clearInterval(this.refreshIntervalId);
