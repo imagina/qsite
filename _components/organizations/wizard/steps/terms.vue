@@ -65,9 +65,9 @@ export default {
   computed: {
     termsAndConditions() {
       let settings = {
-        politics: this.$getSetting('iprofile::registerUserWithPoliticsOfPrivacy') ??
+        politics: this.$getSetting('iuser::registerUserWithPoliticsOfPrivacy') ??
             `${this.urlBase}/politica-de-privacidad`,
-        terms: this.$getSetting('iprofile::registerUserWithTermsAndConditions') ??
+        terms: this.$getSetting('iuser::registerUserWithTermsAndConditions') ??
             `${this.urlBase}/terminos-y-condiciones`,
       }
 
