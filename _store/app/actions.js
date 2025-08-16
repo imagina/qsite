@@ -91,7 +91,6 @@ export const GET_SITE_SETTINGS = ({commit, dispatch, state, getters}, params = {
     //Request main settings
     crud.index(configName, requestParams).then(async response => {
       let data = response.data
-      console.warn(">>>>>>",data)
       //Set the settings
       if (params.setToSite) {
         commit('SET_SITE_SETTINGS', data)

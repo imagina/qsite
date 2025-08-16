@@ -273,7 +273,13 @@
           let configName = 'apiRoutes.qsite.permissions'
 
           //Request
-          this.$crud.index(configName, {refresh: true}).then(response => {
+          this.$crud.index(configName, {
+            params: {
+              configNameByModule: 1,
+              configName: 'permissions'
+            },
+            refresh: true
+          }).then(response => {
             this.loading = false
             this.dataPermission = response.data
             resolve(response.data)
@@ -288,6 +294,14 @@
       },
       //Order permissions as list to render
       formatPermissions() {
+        //v12
+        Object.keys(this.dataPermission).forEach(moduleName => {
+          Object.keys(this.dataPermission[moduleName]).forEach(category => {
+            Object.keys(this.dataPermission[moduleName][category]).forEach(action => {
+              this.dataPermission[moduleName][category][action] = this.dataPermission[moduleName][category][action]['title']
+            })
+          })
+        })
         let permissions = this.$clone(this.dataPermission)
         this.modal.listPermissions = []
         let listToRender = {}//Default List to render
