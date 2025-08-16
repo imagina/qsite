@@ -90,7 +90,7 @@
         <!--Roles-->
         <label class="block text-grey-8" style="line-height: 1.4">
           {{
-            quserState.userData.roles.map(role => {
+            quserState.userData?.roles.map(role => {
               return role.name
             }).join(', ')
           }}
@@ -106,11 +106,13 @@
         </div>
 
         <!--Departments-->
-        <label class="block text-grey-8" style="line-height: 1.4">
+        
+        <!--v12--->
+        <label class="block text-grey-8" style="line-height: 1.4" v-if="false">
           {{
-            quserState.userData.departments.map(department => {
-              return department.title
-            }).join(', ')
+            quserState.userData?.departments.map(department => {
+              return department?.title || ''
+            }).join(', ') || ''
           }}
         </label>
       </div>
@@ -159,7 +161,7 @@
 
         <!--Current language selected-->
         <label v-else class="block ellipsis">
-          {{ options.locales[0].label }}
+          {{ options.locales[0]?.label }}
         </label>
       </div>
     </div>

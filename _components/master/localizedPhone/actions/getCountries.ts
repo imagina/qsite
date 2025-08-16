@@ -5,7 +5,9 @@ export default async function getCountries(refresh = false) {
     try {
         const params = {
             refresh,
-            params: {},
+            params: {
+                include: 'translations'
+            },
         };
         const response = await crud.index(
             "apiRoutes.qlocations.countries",

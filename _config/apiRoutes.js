@@ -2,14 +2,18 @@ const moduleName = 'isite';
 const moduleVersion = 'v1';
 const urlBase = `/${moduleName}/${moduleVersion}`
 
+const moduleNameSetting = 'isetting';
+const moduleVersionSetting = 'v1';
+const urlBaseSetting = `/${moduleNameSetting}/${moduleVersionSetting}`
+
 export default {
   urlBase: urlBase,
   version: moduleVersion,
   settings: `${urlBase}/settings`,
-  configs: `${urlBase}/configs`,
+  configs: `${urlBaseSetting}/settings/get/all`,
   appVersion: `${urlBase}/site/version`,
-  siteSettings: `${urlBase}/site/settings`,
-  permissions: `${urlBase}/site/permissions`,
+  siteSettings: `${urlBaseSetting}/settings/get/all`,
+  permissions: `isite/v1/configs`,
   cacheClear: `${urlBase}/site/cache-clear`,
   export: `${urlBase}/export`,
   recommendations: `${urlBase}/recommendations`,
