@@ -5,6 +5,7 @@ export default async ({app, router, store, Vue}) => {
     //store.dispatch('qsiteApp/GET_MENU_SIDEBAR'),
     store.dispatch('qsiteApp/GET_SITE_SETTINGS', {refresh: false}),
     store.dispatch('qsiteApp/GET_MODULE_CONFIGS', {refresh: false}),
-    store.dispatch('qsiteApp/GET_SITE_HOOKS', {refresh: false}),
+    store.dispatch('qsiteApp/GET_SITE_MODULES_INFO', {refresh: false}),
+    store.dispatch('qsiteApp/GET_SITE_HOOKS', {refresh: false})
   ])
 }

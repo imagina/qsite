@@ -345,3 +345,15 @@ export const SET_AXIOS_TIMEZONE = ({commit, dispatch, state}) => {
     }
   })
 }
+
+export const GET_SITE_MODULES_INFO = ({commit, dispatch, state, getters}, params = {}) => {
+  return new Promise((resolve, reject) => {    
+    crud.index('apiRoutes.qsite.siteModulesInfo', {}).then(async response => {
+      if (response.data) commit('SET_SITE_MODULES_INFO', response.data)
+      resolve(true)
+    }).catch(error => {
+      console.error('[store-qsite]Error:: Store getting modules info - ', error)
+      reject(error)
+    })
+  })
+}

@@ -8,6 +8,7 @@ export const RESET = (state) => {
   state.filters = {};
   state.configs = [];
   state.logo = null;
+  state.siteModulesInfo = [];
 };
 
 export function SET_SITE_SETTINGS(state, data) {
@@ -86,4 +87,8 @@ export function SET_MODULE_CONFIGS(state, data) {
 
 export function SET_SITE_LOGO(state, data) {
   state.logo = data;
+}
+
+export function SET_SITE_MODULES_INFO(state, data) {
+  state.siteModulesInfo = data;
 }
