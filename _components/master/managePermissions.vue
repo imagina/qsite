@@ -1,6 +1,6 @@
 <template>
   <q-card id="componentSelectPermissions" class="no-shadow col-12"
-          v-if="$hasAccess('profile.permissions.manage')">
+          v-if="$hasAccess('iuser.permissions.manage')">
     <!--===== Title =====-->
     <div>
       <div 
