@@ -15,12 +15,12 @@ export function SET_SITE_SETTINGS(state, data) {
 
   //SET_AVAILABLE_LOCALES
   const locales = data.find(e => e?.systemName == 'isite::locales')
-  state.availableLocales = locales.plainValue ?? locales.default;
+  state.availableLocales = locales?.plainValue.length ? locales.plainValue : locales.default;
   state.selectedLocales = state.availableLocales
 
   //SET_DEFAULT_LOCALE
   const locale = data.find(e => e?.systemName == 'isite::defaultLocale')
-  state.defaultLocale = locale.plainValue ?? locales.default;
+  state.defaultLocale = locale?.plainValue ?? locales.default;
 
   //Set module data
   const modules = [...new Set(data.map(item => item.systemName.split('::')[0]))]

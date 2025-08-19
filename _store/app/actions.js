@@ -252,25 +252,6 @@ export const GET_SITE_HOOKS = ({commit, dispatch, state}, params = {}) => {
   })
 }
 
-//Get site hooks
-export const LOAD_CLARITY = ({commit, dispatch, state}) => {
-  return new Promise((resolve, reject) => {
-    //Request params
-    let requestParams = {
-      refresh: true,
-      params: {filter: {configName: 'isite.config.msClarityScript'}}
-    }
-    //Request
-    crud.index('apiRoutes.qsite.configs', requestParams).then(async response => {
-      if (response.data) helper.appendScriptStringHead(response.data)
-      resolve(true)
-    }).catch(error => {
-      console.error('[store-qsite]Error:: Store getting site hooks - ', error)
-      reject(error)
-    })
-  })
-}
-
 //Set the navigator timezone into the azios settings payload
 export const SET_AXIOS_TIMEZONE = ({commit, dispatch, state}) => {
   return new Promise((resolve, reject) => {

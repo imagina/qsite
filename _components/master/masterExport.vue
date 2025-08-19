@@ -220,6 +220,7 @@ export default {
     },
     //Get data
     async getData() {
+      return false //v12
       this.loading = true;
       await this.getExportConfig();//get export config
       await this.getExportData();//Get export data
