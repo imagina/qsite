@@ -93,7 +93,7 @@ export default {
     },
     settings() {
       return {
-        allowedImageTypes: this.$getSetting('media::allowedImageTypes'),
+        allowedImageTypes: this.$getSetting('imedia::allowedImageTypes'),
       }
     }
   },

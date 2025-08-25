@@ -88,7 +88,7 @@ export default {
     },
     //default disk
     mediaDisk() {
-      return this.disk || this.$getSetting('media::filesystem');
+      return this.disk || this.$getSetting('imedia::filesystem');
     },
   },
   methods: {

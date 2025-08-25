@@ -667,7 +667,7 @@ export default {
     },
     //Get Image Url depends of Disk
     getImage(file) {
-      return file.disk == 'privatemedia' ? file.url : file.mediumThumb;
+      return file.disk == 'privatemedia' ? file.url : file.thumbnails.mediumThumb;
     }
   }
 };
