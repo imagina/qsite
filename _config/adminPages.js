@@ -1,7 +1,7 @@
 export default {
   //Home Page
   index: {
-    permission: 'isite.settings.manage',
+    permission: 'isetting.settings.manage',
     activated: true,
     path: '/site/settings',
     name: 'app.site.settings',

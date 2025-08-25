@@ -13,6 +13,7 @@ export default {
   configs: `${urlBase}/configs`,
   appVersion: `${urlBase}/site/version`,
   siteSettings: `${urlBaseSetting}/settings/get/all`,
+  settingsSet: `${urlBaseSetting}/settings/set`,
   permissions: `${urlBase}/configs`,
   cacheClear: `${urlBase}/site/cache-clear`,
   export: `${urlBase}/export`,
