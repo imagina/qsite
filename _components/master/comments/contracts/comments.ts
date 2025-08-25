@@ -1,5 +1,5 @@
 export const apiRouteDefault: string = 'apiRoutes.qrequestable.comments';
-export const commentableTypeDefault: string = 'Modules\\Requestable\\Entities\\Requestable';
+export const commentableTypeDefault: string = 'Modules\\Requestable\\Models\\Requestable';
 export const permissionsCommentsDefault: String = 'icomments.comments';
 import defaultImg from 'src/modules/quser/_assets/default.jpg'
 
