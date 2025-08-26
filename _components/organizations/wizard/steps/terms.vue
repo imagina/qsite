@@ -81,7 +81,7 @@ export default {
       //Response
       return this.$tr('iprofile.cms.message.privacyData', {
         concatData: concatData,
-        siteName: this.$getSetting('isite::site-name')
+        siteName: this.$getSetting('isite::siteName')
       })
     },
   },

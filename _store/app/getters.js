@@ -69,9 +69,13 @@ export const getSettingValueByName = (state) => (filter) => {
   //Intercept this setting t ever show the legacyStructure (temporally)
   if (filter == "isite::legacyStructureCMS") response = {value: 1}
 
-  if(!response) console.warn('missing setting =>', filter)
+  if(!response) {
+    console.warn('missing setting =>', filter)
+    return null
+  }
+
   //Response
-  return response ? response.plainValue : undefined
+  return response.isTranslatable ? response.value : response.plainValue;
 };
 
 export const getSettingMediaByName = (state) => (filter) => {

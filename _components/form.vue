@@ -73,7 +73,7 @@
         translatableCollapse: true,
         noTranslatableCollapse: true,
         submitModule: false,
-        selectedLocales: this.$getSetting('core::locales'),
+        selectedLocales: this.$getSetting('isite::locales'),
         defaultLocale: this.$store.getters['qsiteApp/getDefaultLocale']
       }
     },

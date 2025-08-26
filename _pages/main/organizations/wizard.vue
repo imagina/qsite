@@ -123,7 +123,7 @@ export default {
       })
     },
     siteName() {
-      return this.$getSetting('isite::site-name')
+      return this.$getSetting('isite::siteName')
     },
     showStepperNavigation(){
       return  this.currentStep != STEP_WELCOME

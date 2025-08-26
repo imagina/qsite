@@ -119,7 +119,7 @@ export const GET_CENTRALIZED_BRAND = ({state}, siteSettings) => {
     //Request the centralized brand
     axios.get(`${centralizedBrand.value}/api/isite/v1/site/settings`).then(response => {
       //Get brand settings values
-      const brandSettingNames = ["isite::logoIadmin", "isite::logo1", "isite::site-name"];
+      const brandSettingNames = ["isite::logoIadmin", "isite::logo1", "isite::siteName"];
       const centralizedBrandSettings = response.data.data.siteSettings.filter(item =>
         item.name.includes('brand') || brandSettingNames.includes(item.name)
       );
