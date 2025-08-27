@@ -106,6 +106,7 @@
       :dynamicFilterValues="dynamicFilterValues"
       :dynamicFilterSummary="dynamicFilterSummary"
     />-->
+    <!-- disabled for v12
     <bulk-actions
       v-if="bulkActionsPermission"
       :dynamicFilterValues="dynamicFilterValues"
@@ -113,6 +114,7 @@
       @bulkActionsConfig="(value) => bulkActionsConfig = value"
       ref="bulkActions"
     />
+    -->
 
     <master-synchronizable
       v-model="syncParams"
@@ -395,6 +397,7 @@ export default {
           action: () => this.$refs.exportComponent.showReport()
         },
         // Bulk Actions
+        /* disabled for v12
         {
           label: this.$tr('isite.cms.label.newBulkAction'),
           vIf: this.bulkActionsPermission && this.bulkActionsConfig && !this.isAppOffline,
@@ -403,6 +406,7 @@ export default {
           },
           action: () => this.$refs.bulkActions.showReport()
         },
+        */
         //Tour
         {
           label: 'Tour',
