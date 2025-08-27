@@ -230,7 +230,7 @@ export default {
           {
             name: 'helpCenter',
             label: this.$trp('isite.cms.label.helpCenter'),
-            vIf: parseInt(this.$getSetting('isite::hcStatus') || '0'),
+            vIf: false,//parseInt(this.$getSetting('isite::hcStatus') || '0'),
             props: {
               id: 'siteActionHelpCenter',
               icon: 'fal fa-question-circle'
