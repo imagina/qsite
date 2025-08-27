@@ -769,7 +769,7 @@ export default {
       .file-chip__icon {
         position: absolute;
         left: 5px;
-        top: 6.5px;
+        top: 7.5px;
         font-size: 18px;
         margin-right: 5px;
       }
@@ -783,7 +783,7 @@ export default {
       .file-chip__actions {
         position: absolute;
         right: 2px;
-        top: 0;
+        top: 5.5px;
       }
     }
   }
