@@ -129,8 +129,8 @@ export default {
           event.data.dataValue = '';
 
           this.uploadImage(src, notification).then((response) => {
-            if (response?.relativePath) {
-              const imgElement = `<img src="${response.relativePath}"/>`;
+            if (response?.url) {
+              const imgElement = `<img src="${response.url}"/>`;
               const element = ckEditor.dom.element.createFromHtml(imgElement);
               editor.insertElement(element);
               notification.hide();
