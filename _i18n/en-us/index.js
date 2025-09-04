@@ -51,7 +51,8 @@ export default {
         "oagStations": "OAG Stations",
         "adminOrganizationForm": "Form",
         "adminBlocks": "Blocks",
-        "adminLayouts": "Layouts"
+        "adminLayouts": "Layouts",
+        "adminContacts": "Contacts",
       },
       "crud": {
         "message": {
@@ -69,6 +70,8 @@ export default {
       "deleteRecommendation": "Delete Recommendation",
       "newCategory": "New Category",
       "updateCategory": "Update Category",
+      'newContact': 'New Contact',
+      'updateContact': 'Update Contact',
       "messages": {
         "replaceLang": "Replace all languages with <b class=\"text-primary\">{lang}</b>",
         "duplicateLang": "Replace <b class=\"text-primary\">{lang}</b> with...",

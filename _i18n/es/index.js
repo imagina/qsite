@@ -51,7 +51,8 @@ export default {
         'oagStations': 'OAG staciones',
         'adminOrganizationForm': 'Formulario',
         'adminBlocks': 'Bloques',
-        'adminLayouts': 'Layouts'
+        'adminLayouts': 'Layouts',
+        "adminContacts": "Contactos",
       },
       'crud': {
         'message': {
@@ -69,6 +70,8 @@ export default {
       'deleteRecommendation': 'Eliminar Recomendación',
       'newCategory': 'Nueva Categoría',
       'updateCategory': 'Actualizar Categoría',
+      'newContact': 'Nueva Contacto',
+      'updateContact': 'Actualizar Contacto',
       'messages': {
         'replaceLang': 'Reemplazar todos los idiomas con <b class="text-primary">{lang}</b>',
         'duplicateLang': 'Reemplazar <b class="text-primary">{lang}</b> con...',
