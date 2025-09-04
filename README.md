@@ -1,4 +1,4 @@
-# QSITE  | 1.0.0
+# QSITE  | 1.0.0.
 root component of the app, where all global subcomponents are located
 
 # Installation
