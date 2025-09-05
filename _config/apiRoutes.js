@@ -30,4 +30,8 @@ export default {
   sync: `${urlBase}/synchronizables/sync`,
   bulkActions: `${urlBase}/bulk-actions`,
   favourites: `${urlBase}/favourites`,
+  statuses: `${urlBase}/statuses`,
+  contacts: `${urlBase}/contacts`,
+  contactTypes: `${urlBase}/contact-types`,
+  whatsapps: `${urlBase}/whatsapps`
 }

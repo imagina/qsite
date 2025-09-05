@@ -113,7 +113,7 @@ export default {
     permission: 'isite.layouts.manage',
     activated: true,
     path: '/site/layouts',
-    name: 'qsite.admin.ayouts.index',
+    name: 'qsite.admin.layouts.index',
     crud: import('modules/qsite/_crud/layouts'),
     page: () => import('modules/qcrud/_pages/admin/crudPage'),
     layout: () => import('layouts/master.vue'),
@@ -124,4 +124,36 @@ export default {
       refresh: true
     }
   },
+  contacts: {
+    permission: 'isite.contacts.manage',
+    activated: true,
+    path: '/site/contacts',
+    name: 'qsite.admin.contacts.index',
+    crud: import('modules/qsite/_crud/contacts'),
+    page: () => import('modules/qcrud/_pages/admin/crudPage'),
+    layout: () => import('layouts/master.vue'),
+    title: 'isite.cms.sidebar.adminContacts',
+    icon: 'fal fa-users-rectangle',
+    authenticated: true,
+    subHeader: {
+      refresh: true
+    }
+  },
+  whatsapps: {
+    permission: 'isite.whatsapps.manage',
+    activated: true,
+    path: '/site/whatsapps',
+    name: 'qsite.admin.whatsapps.index',
+    crud: import('modules/qsite/_crud/whatsapps'),
+    page: () => import('modules/qcrud/_pages/admin/crudPage'),
+    layout: () => import('layouts/master.vue'),
+    title: 'isite.cms.sidebar.adminWhatsapps',
+    icon: 'fa-brands fa-whatsapp',
+    authenticated: true,
+    subHeader: {
+      refresh: true
+    }
+  },
 }
+
+

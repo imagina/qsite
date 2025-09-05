@@ -51,7 +51,9 @@ export default {
         "oagStations": "OAG Stations",
         "adminOrganizationForm": "Form",
         "adminBlocks": "Blocks",
-        "adminLayouts": "Layouts"
+        "adminLayouts": "Layouts",
+        "adminContacts": "Contacts",
+        "adminWhatsapps": "WhatsApps"
       },
       "crud": {
         "message": {
@@ -69,6 +71,10 @@ export default {
       "deleteRecommendation": "Delete Recommendation",
       "newCategory": "New Category",
       "updateCategory": "Update Category",
+      'newContact': 'New Contact',
+      'updateContact': 'Update Contact',
+      'newWhatsapp': 'New Whatsapp',
+      'updateContact': 'Update Whatsapp',
       "messages": {
         "replaceLang": "Replace all languages with <b class=\"text-primary\">{lang}</b>",
         "duplicateLang": "Replace <b class=\"text-primary\">{lang}</b> with...",
@@ -99,6 +105,7 @@ export default {
       "perzonalizationTitle": "Welcome to the editor of your website",
       "perzonalizationDescription": "Easily change the logo, colors and the main information of your website",
       "label": {
+        'label': 'Label',
         "resposible": "Responsible",
         "clickToAction": "Click to Action",
         "offlineSync": "Offline sync",
