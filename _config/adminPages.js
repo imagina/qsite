@@ -139,4 +139,21 @@ export default {
       refresh: true
     }
   },
+  whatsapps: {
+    permission: 'isite.whatsapps.manage',
+    activated: true,
+    path: '/site/whatsapps',
+    name: 'qsite.admin.whatsapps.index',
+    crud: import('modules/qsite/_crud/whatsapps'),
+    page: () => import('modules/qcrud/_pages/admin/crudPage'),
+    layout: () => import('layouts/master.vue'),
+    title: 'isite.cms.sidebar.adminWhatsapps',
+    icon: 'fa-brands fa-whatsapp',
+    authenticated: true,
+    subHeader: {
+      refresh: true
+    }
+  },
 }
+
+

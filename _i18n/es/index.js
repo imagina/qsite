@@ -53,6 +53,7 @@ export default {
         'adminBlocks': 'Bloques',
         'adminLayouts': 'Layouts',
         "adminContacts": "Contactos",
+        "adminWhatsapps": "WhatsApps"
       },
       'crud': {
         'message': {
@@ -72,6 +73,8 @@ export default {
       'updateCategory': 'Actualizar Categoría',
       'newContact': 'Nueva Contacto',
       'updateContact': 'Actualizar Contacto',
+      'newWhatsapp': 'Nuevo Whatsapp',
+      'updateContact': 'Actualizar Whatsapp',
       'messages': {
         'replaceLang': 'Reemplazar todos los idiomas con <b class="text-primary">{lang}</b>',
         'duplicateLang': 'Reemplazar <b class="text-primary">{lang}</b> con...',
@@ -103,6 +106,7 @@ export default {
       'perzonalizationTitle': 'Bienvenid@ al editor de tu sitio web',
       'perzonalizationDescription': 'De manera fácil, cambia el logo, colores y la información principal de tu página web',
       'label': {
+        'label': 'Etiqueta',
         'resposible': 'Responsable',
         'clickToAction': 'Click para Acción',
         'top': 'Arriba',

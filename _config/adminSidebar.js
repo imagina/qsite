@@ -9,7 +9,8 @@ export default [
       pages.qsite.categories,//organization categories
       pages.qsite.icruds,//Cruds
       pages.qsite.layouts,
-      pages.qsite.contacts
+      pages.qsite.contacts,
+      pages.qsite.whatsapps
     ]
   },
   pages.qsite.organizationsAll,//organizations
