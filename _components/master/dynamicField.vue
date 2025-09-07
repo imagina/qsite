@@ -967,7 +967,8 @@ export default {
             field: {
               clearable: props?.clearable || false,
               multiple: props?.multiple || false,
-              sortValueBy: props?.sortValueBy || 'INDEX'
+              sortValueBy: props?.sortValueBy || 'INDEX',
+              disableBranchNodes: props?.disableBranchNodes ?? false
             },
             fieldComponent: {
               outlined: true,
