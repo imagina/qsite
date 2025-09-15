@@ -6,11 +6,15 @@ const moduleNameSetting = 'isetting';
 const moduleVersionSetting = 'v1';
 const urlBaseSetting = `/${moduleNameSetting}/${moduleVersionSetting}`
 
+const moduleNameCore = 'icore';
+const moduleVersionCore = 'v1';
+const urlBaseCore = `/${moduleNameCore}/${moduleVersionCore}`
+
 export default {
   urlBase: urlBase,
   version: moduleVersion,
   settings: `${urlBase}/settings`,
-  configs: `${urlBase}/configs`,
+  configs: `${urlBaseCore}/configs`,
   appVersion: `${urlBase}/site/version`,
   siteSettings: `${urlBaseSetting}/settings/get/all`,
   settingsSet: `${urlBaseSetting}/settings/set`,
