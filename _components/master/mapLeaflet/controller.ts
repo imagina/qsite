@@ -241,7 +241,7 @@ export default function controller(props: any, emit: any) {
       state.marker.setLatLng([lat, lng])
     },
     getCountries(){
-      const value = store.getSetting('ilocations::availableCountries') || ["co"]
+      const value = store.getSetting('ilocation::availableCountries') || ["co"]
       return value.map(val => val.toLowerCase())
     },
     //
@@ -386,7 +386,7 @@ export default function controller(props: any, emit: any) {
           state.map.fitBounds(fg.getBounds());
         }
       }
-    }, 
+    },
     onClickMarker(marker, m ){
 
       if(m?.loadingLabel) marker.bindPopup(m.loadingLabel).openPopup()
@@ -395,7 +395,7 @@ export default function controller(props: any, emit: any) {
           autoClose: false,
           closeOnClick: false,
         }).openPopup()
-      })      
+      })
 
       marker.on('popupclose', () => {
         marker.unbindPopup()
