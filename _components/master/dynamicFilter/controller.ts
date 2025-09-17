@@ -83,7 +83,7 @@ export default function controller(props: any, emit: any) {
       state.props = clone(props)
       state.props.filters = methods.removeNullValues(state.props.filters)
       state.systemName = state.props?.systemName || ''
-      state.useAdminFilter = state.userData.hasOwnProperty('fields')
+      //v12 state.useAdminFilter = state.userData.hasOwnProperty('fields')
       await methods.setFilterValues()
       await methods.getUrlFilters()
       await methods.addLoadedOptionsCallback()
